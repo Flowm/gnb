@@ -31,16 +31,16 @@ $page = "client.php";
 <head>
     <meta charset="UTF-8">
     <title></title>
-    <script type="text/javascript" src="js/client.js"></script>
-    <script type="text/javascript" src="js/postRequest.js"></script>
-    <script type="text/javascript" src="js/account.js"></script>
+    <script type="text/javascript" src="../js/client.js"></script>
+    <script type="text/javascript" src="../js/postRequest.js"></script>
+    <script type="text/javascript" src="../js/account.js"></script>
 </head>
 <body>
 <h2>Welcome to the Goliath National Bank!</h2><br>
 <h4>Welcome back, <?php echo $_SESSION["username"] ?>!</h4><br>
 <div>
     <button type="button" onclick="goToOverview()">Overview</button>
-    <button type="button" onclick="goToAccounts()">Accounts</button>
+    <button type="button" onclick="goToMyAccounts()">My Accounts</button>
     <button type="button" onclick="logout()">Logout</button>
 </div><br><hr><br>
 <?php

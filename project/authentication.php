@@ -31,7 +31,7 @@ if ($username == null || $pw == null || $pin == null) {
 
 //HARDCODED!!
 if ($username == "ted" && $pw == "ted" && $pin == "1234") {
-    header("Location:employee.php");
+    header("Location:employee/employee.php");
     $_SESSION["username"] = $username;
     $_SESSION["role"] = "employee";
     exit();
@@ -39,7 +39,7 @@ if ($username == "ted" && $pw == "ted" && $pin == "1234") {
 else if ($username == "tum" && $pw == "tum" && $pin == "1234") {
     $_SESSION["username"] = $username;
     $_SESSION["role"] = "client";
-    header("Location:client.php");
+    header("Location:client/client.php");
     exit();
 }
 

@@ -7,20 +7,18 @@ function goToOverview(frame) {
         params["frame"] = frame;
     }
     return performPostRequest("employee.php",params);
-    //location.href = "employee.php?section=employee_overview";
 }
 
-function goToManageClients(frame) {
-    var params = {section:"manage_clients"};
+function goToEmployeeArea(frame) {
+    var params = {section:"employee_area"};
     if (frame != undefined) {
         params["frame"] = frame;
     }
     return performPostRequest("employee.php",params);
-    //location.href = "employee.php?section=manage_clients";
 }
 
-function goToAccounts(frame, account) {
-    var params = {section:"client_accounts"};
+function goToMyAccounts(frame, account) {
+    var params = {section:"../accounts/my_accounts"};
     if (frame != undefined) {
         params["frame"] = frame;
     }
@@ -28,9 +26,8 @@ function goToAccounts(frame, account) {
         params["account"] = account;
     }
     return performPostRequest("employee.php",params);
-    //location.href = "employee.php?section=client_accounts";
 }
 
 function logout() {
-    location.href="logout.php";
+    location.href="../logout.php";
 }

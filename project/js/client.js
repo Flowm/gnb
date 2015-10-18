@@ -7,11 +7,10 @@ function goToOverview(frame) {
         params["frame"] = frame;
     }
     performPostRequest("client.php",params);
-    //location.href = "client.php?section=client_overview";
 }
 
-function goToAccounts(frame, account) {
-    var params = {section:"client_accounts"};
+function goToMyAccounts(frame, account) {
+    var params = {section:"../accounts/my_accounts"};
     if (frame != undefined) {
         params["frame"] = frame;
     }
@@ -19,9 +18,8 @@ function goToAccounts(frame, account) {
         params["account"] = account;
     }
     performPostRequest("client.php",params);
-    //location.href = "client.php?section=client_accounts";
 }
 
 function logout() {
-    location.href="logout.php";
+    location.href="../logout.php";
 }

@@ -35,11 +35,11 @@ global $page;
     <div class="frameMenu">
         <ul>
             <li><a href="javascript:void(0)"
-                   onclick="goToAccounts('account_overview','<?php echo $selected; ?>')">Account Overview</a></li>
+                   onclick="goToMyAccounts('account_overview','<?php echo $selected; ?>')">Account Overview</a></li>
             <li><a href="javascript:void(0)"
-                   onclick="goToAccounts('new_transaction','<?php echo $selected; ?>')">New transaction</a></li>
+                   onclick="goToMyAccounts('new_transaction','<?php echo $selected; ?>')">New transaction</a></li>
             <li><a href="javascript:void(0)"
-                   onclick="goToAccounts('transaction_history','<?php echo $selected; ?>')">Transaction History</a></li>
+                   onclick="goToMyAccounts('transaction_history','<?php echo $selected; ?>')">Transaction History</a></li>
         </ul>
     </div>
     <div class="frameContent">

@@ -9,11 +9,11 @@
 session_start();
 if (isset($_SESSION["username"]) && isset($_SESSION["role"])) {
     if ($_SESSION["role"] == "client") {
-        header("Location:client.php");
+        header("Location:client/client.php");
         exit();
     }
     else if ($_SESSION["role"] == "employee") {
-        header("Location:employee.php");
+        header("Location:employee/employee.php");
         exit();
     }
 }

@@ -19,11 +19,11 @@ $frame = $frame.".php";
     <div class="frameMenu">
         <ul>
             <li><a href="javascript:void(0)"
-                   onclick="goToManageClients('manage_client')">Client Overview</a></li>
+                   onclick="goToEmployeeArea('manage_client')">Client Overview</a></li>
             <li><a href="javascript:void(0)"
-                   onclick="goToManageClients('manage_transfer')">Pending transfer approvals</a></li>
+                   onclick="goToEmployeeArea('manage_transfer')">Pending transfer approvals</a></li>
             <li><a href="javascript:void(0)"
-                    onclick="goToManageClients('manage_registration')">New registration requests</a></li>
+                   onclick="goToEmployeeArea('manage_registration')">New registration requests</a></li>
         </ul>
     </div>
     <div class="frameContent">

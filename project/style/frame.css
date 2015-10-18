@@ -1,0 +1,22 @@
+.frameContainer {
+    width: 100%;
+    position: absolute;
+    padding: 10px;
+    display: inline-table;
+}
+
+.frameMenu {
+    position: relative;
+    display: table-cell;
+    left: 0;
+    top: 10px;
+    width: 300px;
+}
+
+.frameContent {
+    position: relative;
+    display: table-cell;
+    left: 0;
+    top: 10px;
+    width: 800px;
+}

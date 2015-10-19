@@ -2,7 +2,7 @@
 
 include 'dbheader.php' ; 
 
-RecordInTable($record_value,$record_name,$table_name)
+function RecordInTable($record_value,$record_name,$table_name)
 {
 	$SQL_STATEMENT	= "
 		SELECT *
@@ -12,7 +12,7 @@ RecordInTable($record_value,$record_name,$table_name)
 	" ;
 	if (is_null(executeSelectStatement($SQL_STATEMENT)))
 	{
-		return false 
+		return false;
 	}
 	else 
 	{
@@ -156,12 +156,14 @@ function processTransaction($src, $dest, $ammount, $desc, $tan)
 function approvePendingTransaction($approver,$transaction_code)
 {
 	# Check if approver exists
-	if (! RecordInTable($approver,$USER_TABLE_KEY, $USER_TABLE_NAME){
+	if (! RecordInTable($approver,$USER_TABLE_KEY, $USER_TABLE_NAME))
+	{
 		return null ; 
 	}
 	
 	# Check if transaction code exists and is not approved 
-	if (! RecordInTable($transaction_code,$TRANSACTION_TABLE_KEY, $TRANSACTION_TABLE_NAME){
+	if (! RecordInTable($transaction_code,$TRANSACTION_TABLE_KEY, $TRANSACTION_TABLE_NAME))
+	{
 		return null ; 
 	}
 	
@@ -179,7 +181,7 @@ function approvePendingTransaction($approver,$transaction_code)
 }
 	
 
-function approveUser($approver_id, $user_id, $role_filter, )
+function approveUser($approver_id, $user_id, $role_filter )
 {
 
 	$role		= USER_ROLES($role_filter)	; 
@@ -201,7 +203,7 @@ function approveUser($approver_id, $user_id, $role_filter, )
 	
 function approveEmployee($approver_id, $employee_id )
 {	
-	function approveUser($approver_id, $employee_id, 'employee' )
+	approveUser($approver_id, $employee_id, 'employee' ) ;
 	# Send mail function here
 }	
 
@@ -213,7 +215,7 @@ function approveClient($approver_id, $client_id )
 	# Send mail function here
 	
 
-	generateTANCodes(
+	//generateTANCodes(
 }	
 
 function addAccountClient($client_id){

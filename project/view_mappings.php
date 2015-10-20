@@ -12,7 +12,7 @@ $root = realpath($_SERVER["DOCUMENT_ROOT"]);
 $root = $root."/project";
 
 //PAGES (main pages of the client application)
-$pages = [];
+//$pages = [];
 $pages["index"] = "$root/index.php";
 $pages["home"] = "$root/index.php";
 $pages["login"] = "$root/login.php";
@@ -22,7 +22,7 @@ $pages["employee"] = "$root/employee/employee.php";
 $pages["client"] = "$root/client/client.php";
 
 //SECTIONS (each section is triggered by a button)
-$sections = [];
+//$sections = [];
 $sections["employee_overview"] = "$root/employee/employee_overview.php";
 $sections["employee_home"] = "$root/employee/employee_overview.php";
 $sections["employee_area"] = "$root/employee/employee_area.php";
@@ -31,7 +31,7 @@ $sections["client_home"] = "$root/client/client_overview.php";
 $sections["my_accounts"] = "$root/accounts/my_accounts.php";
 
 //FRAMES (each frame is used inside a section, triggered by a submenu button)
-$frames = [];
+//$frames = [];
 $frames["manage_client"] = "$root/employee/manage_client.php";
 $frames["manage_registration"] = "$root/employee/manage_registration.php";
 $frames["manage_transfer"] = "$root/employee/manage_transfer.php";

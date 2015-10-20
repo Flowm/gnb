@@ -3,38 +3,38 @@
 $DB_HOST				= "localhost" ;
 $DB_USERNAME			= "samurai" ;
 $DB_PASSWORD			= "samurai" ;
-$DB_SCHEMA				= "GNBDB" ;
+$DB_SCHEMA				= "gnbdb" ;
 
-$USER_TABLE_NAME		= "$DB_SCHEMA.USER" ;
-$USER_TABLE_KEY			= "ID" ;
-$USER_TABLE_ROLE		= "ROLE" ;
-$USER_TABLE_STATUS		= "STATUS" ;
-$USER_TABLE_APPROVER		= "APPROVED_BY" ;
+$USER_TABLE_NAME		= "$DB_SCHEMA.user" ;
+$USER_TABLE_KEY			= "id" ;
+$USER_TABLE_ROLE		= "role" ;
+$USER_TABLE_STATUS		= "status" ;
+$USER_TABLE_APPROVER	= "approved_by" ;
 
-$TAN_TABLE_NAME			= "$DB_SCHEMA.TAN" ;
-$TAN_TABLE_KEY			= "ID" ;
-$TAN_TABLE_ACCOUNT_ID	= "ACCOUNT_ID" ;
-$TAN_TABLE_USED_TS		= "USED_TIMESTAMP" ;
+$TAN_TABLE_NAME			= "$DB_SCHEMA.tan" ;
+$TAN_TABLE_KEY			= "id" ;
+$TAN_TABLE_ACCOUNT_ID	= "account_id" ;
+$TAN_TABLE_USED_TS		= "used_timestamp" ;
 
-$TRANSACTION_TABLE_NAME		= "$DB_SCHEMA.TRANSACTION" ;
-$TRANSACTION_TABLE_KEY		= "ID" ;
-$TRANSACTION_TABLE_TO		= "SOURCE_ACCOUNT_ID" ;
-$TRANSACTION_TABLE_FROM		= "DESTINATION_ACCOUNT_ID" ;
-$TRANSACTION_TABLE_AP_AT	= "APPROVED_AT" ;
-$TRANSACTION_TABLE_AP_BY	= "APPROVED_BY_USER_ID" ;
-$TRANSACTION_TABLE_AMOUNT	= "AMOUNT" ;
-$TRANSACTION_TABLE_DESC		= "DESCRIPTION" ;
-$TRANSACTION_TABLE_TAN		= "TAN_ID" ;
-$TRANSACTION_TABLE_C_TS		= "CREATION_TIMESTAMP" ;
+$TRANSACTION_TABLE_NAME		= "$DB_SCHEMA.transaction" ;
+$TRANSACTION_TABLE_KEY		= "id" ;
+$TRANSACTION_TABLE_TO		= "source_account_id" ;
+$TRANSACTION_TABLE_FROM		= "destination_account_id" ;
+$TRANSACTION_TABLE_AP_AT	= "approved_at" ;
+$TRANSACTION_TABLE_AP_BY	= "approved_by_user_id" ;
+$TRANSACTION_TABLE_AMOUNT	= "amount" ;
+$TRANSACTION_TABLE_DESC		= "description" ;
+$TRANSACTION_TABLE_TAN		= "tan_id" ;
+$TRANSACTION_TABLE_C_TS		= "creation_timestamp" ;
 
 #$TRANSACTION_TABLE_STATUS	= "TRANSACTION_TABLE_STATUS" ;
-$BANKACCOUNTS_TABLE_NAME	= "$DB_SCHEMA.ACCOUNT" ;
-$BANKACCOUNTS_TABLE_KEY		= "ID" ;
+$BANKACCOUNTS_TABLE_NAME	= "$DB_SCHEMA.account" ;
+$BANKACCOUNTS_TABLE_KEY		= "id" ;
 
 # ROLES in USER TABLE
 $USER_ROLES = array(
-	'employee'		=> 0
-	,'client'		=> 1
+	'client'		=> 0
+	,'employee'		=> 1
 ); 
 	
 # STATUS for USER TABLE
@@ -63,7 +63,7 @@ function executeSelectStatement($sql)
 
 		die($message);
 	} else {
-		$data = array(mysql_num_rows(), mysql_fetch_assoc($result));
+		$data = array(mysql_num_rows($result), mysql_fetch_assoc($result));
 	}
 
 	closeDatabaseConnection($connection);
@@ -107,10 +107,10 @@ function getDatabaseConnection() {
 		return NULL; //TODO: Do something with error message?
 	}
 
-	if (mysql_select_db($DB_SCHEMA, $connection)) {
+	if (mysql_select_db($DB_SCHEMA, $connection) == false) {
 		return NULL; //TODO: Do something with error message?
 	}
-
+	
 	return $connection;
 }
 

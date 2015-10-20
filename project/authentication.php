@@ -32,7 +32,7 @@ if ($username == null || $pw == null || $pin == null) {
     exit();
 }
 
-if (RecordInTable('Barney', 'first_name', 'user')) {
+if (RecordIsInTable($username, 'first_name', 'user')) {
 	header("Location:employee/employee.php");
     $_SESSION["username"] = $username;
     $_SESSION["role"] = "employee";

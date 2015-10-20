@@ -2,6 +2,33 @@
 
 include 'dbheader.php' ; 
 
+
+global $USER_TABLE_NAME;
+global $USER_TABLE_KEY;
+global $USER_TABLE_ROLE;
+global $USER_TABLE_STATUS;
+global $USER_TABLE_APPROVER;
+
+global $TAN_TABLE_NAME;
+global $TAN_TABLE_KEY;
+global $TAN_TABLE_ACCOUNT_ID;
+global $TAN_TABLE_USED_TS;
+
+global $TRANSACTION_TABLE_NAME;
+global $TRANSACTION_TABLE_KEY;
+global $TRANSACTION_TABLE_TO;
+global $TRANSACTION_TABLE_FROM;
+global $TRANSACTION_TABLE_AP_AT;
+global $TRANSACTION_TABLE_AP_BY;
+global $TRANSACTION_TABLE_AMOUNT;
+global $TRANSACTION_TABLE_DESC;
+global $TRANSACTION_TABLE_TAN;
+global $TRANSACTION_TABLE_C_TS;
+
+global $BANKACCOUNTS_TABLE_NAME;
+global $BANKACCOUNTS_TABLE_KEY;
+
+
 function RecordIsInTable($record_value,$record_name,$table_name)
 {
 	$SQL_STATEMENT	= "
@@ -10,13 +37,15 @@ function RecordIsInTable($record_value,$record_name,$table_name)
 		WHERE 
 			$record_name = '$record_value'
 	" ;
-	if (is_null(executeSelectStatement($SQL_STATEMENT)))
-	{
-		return false;
+
+	list($rows, $data) = executeSelectStatement($SQL_STATEMENT);
+
+	if ($rows == 1) {
+		return true;
 	}
 	else 
 	{
-		return true ;  
+		return false;  
 	}
 }
 
@@ -24,7 +53,12 @@ function RecordIsInTable($record_value,$record_name,$table_name)
 # Function to get user details ( Employee or Client ) 
 function getUserDetails($user_ID,$filter)
 {
-	$role			= $USER_ROLES($filter) ; 
+	global $USER_ROLES;
+	global $USER_TABLE_NAME;
+	global $USER_TABLE_KEY;
+	global $USER_TABLE_ROLE;
+
+	$role			= $USER_ROLES[$filter] ; 
 	$SQL_STATEMENT	= "
 		SELECT *
 		FROM $USER_TABLE_NAME
@@ -47,6 +81,10 @@ function getEmployeeDetails($employee_ID)
 
 function getAccountTransactions($account_ID, $filter ='ALL')
 {
+	global $TRANSACTION_TABLE_TO;
+	global $TRANSACTION_TABLE_FROM;
+	global $TRANSACTION_TABLE_NAME;
+
 	# only get transfers to said account 
 	if ( $filter == 'TO' )
 	{
@@ -77,6 +115,9 @@ function getAccountTransactions($account_ID, $filter ='ALL')
 
 function getPendingTransactions()
 {
+	global $TRANSACTION_TABLE_NAME;
+	global $TRANSACTION_TABLE_AP_AT;
+
 	$SQL_STATEMENT	= "
 		SELECT *
 		FROM $TRANSACTION_TABLE_NAME
@@ -87,6 +128,12 @@ function getPendingTransactions()
 
 function getPendingRequests($filter)
 {
+	global $USER_STATUS;
+	global $USER_ROLES;
+	global $USER_TABLE_NAME;
+	global $USER_TABLE_ROLE;
+	global $USER_TABLE_STATUS;
+
 	$status = $USER_STATUS('unapproved') ; 
 	$role	= $USER_ROLES($filter) ; 
 	
@@ -112,6 +159,10 @@ function getPendingEmployeeRequests()
 
 function verifyTANCode($account_id,$tan_code)
 {
+	global $TAN_TABLE_NAME;
+	global $TAN_TABLE_KEY;
+	global $TAN_TABLE_USED_IS;
+
 	$SQL_STATEMENT	= "
 		SELECT *
 		FROM $TAN_TABLE_NAME
@@ -124,6 +175,14 @@ function verifyTANCode($account_id,$tan_code)
 	
 function processTransaction($src, $dest, $amount, $desc, $tan)
 {
+	global $TRANSACTION_TABLE_NAME;
+	global $TRANSACTION_TABLE_FROM;
+	global $TRANSACTION_TABLE_TO;
+	global $TRANSACTION_TABLE_C_TS;
+	global $TRANSACTION_TABLE_AMOUNT;
+	global $TRANSACTION_TABLE_DESC;
+	global $TRANSACTION_TABLE_TAN;
+	global $TRANSACTION_TABLE_AP_AT;
 	
 	$approved_at	= ( amount >= 10000 ? 'NULL' : 'now()' ) ; 
 	
@@ -155,6 +214,13 @@ function processTransaction($src, $dest, $amount, $desc, $tan)
 	
 function approvePendingTransaction($approver,$transaction_code)
 {
+	global $USER_TABLE_KEY;
+	global $USER_TABLE_NAME;
+	global $TRANSACTION_TABLE_KEY;
+	global $TRANSACTION_TABLE_NAME;
+	global $TRANSACTION_TABLE_AP_AT;
+	global $TRANSACTION_TABLE_AP_BY;
+
 	# Check if approver exists
 	if (! RecordInTable($approver,$USER_TABLE_KEY, $USER_TABLE_NAME))
 	{
@@ -183,6 +249,13 @@ function approvePendingTransaction($approver,$transaction_code)
 
 function approveUser($approver_id, $user_id, $role_filter )
 {
+	global $USER_ROLES;
+	global $USER_STATUS;
+	global $USER_TABLE_NAME;
+	global $USER_TABLE_STATUS;
+	global $USER_TABLE_APPROVER;
+	global $USER_TABLE_KEY;
+	global $USER_TABLE_ROLE;
 
 	$role		= USER_ROLES($role_filter)	; 
 	$new_status	= USER_STATUS('approved')	; 

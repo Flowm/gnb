@@ -6,11 +6,12 @@
  * Time: 16:04
  */
 
-$frame = "manage_client";
+global $frames;
+
+$frame = $frames["manage_client"]; //static default
 if (isset($_POST["frame"])) {
-    $frame = $_POST["frame"];
+    $frame = $frames[$_POST["frame"]];
 }
-$frame = $frame.".php";
 ?>
 
 <div>Show the existing clients and maybe their pending requests, who is currently and so on</div>
@@ -28,7 +29,9 @@ $frame = $frame.".php";
     </div>
     <div class="frameContent">
         <?php
-        include $frame;
+        if ($frame != null) {
+            include $frame;
+        }
         ?>
     </div>
 </div>

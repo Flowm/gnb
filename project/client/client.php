@@ -6,24 +6,29 @@
  * Time: 15:05
  */
 
+include "../view_mappings.php"; //All view mappings are loaded in here
+
+global $pages;
+global $sections;
+global $frames;
+
 session_start();
 
 if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
-    header("Location:index.php");
+    header("Location:".$pages["home"]);
     exit();
 }
 $role = $_SESSION["role"];
 if ($role != "client") {
-    header("Location:index.php");
+    header("Location:".$pages["home"]);
 }
 
-$section = "client_overview";
+$page = $pages["client"]; //static
+
+$section = $sections["client_home"]; //static default
 if (isset($_POST["section"])) {
-    $section = $_POST["section"];
+    $section = $sections[$_POST["section"]];
 }
-$section = $section.".php";
-
-$page = "client.php";
 ?>
 
 <!DOCTYPE html>

@@ -1,11 +1,9 @@
 <?php
 
-$pdo;
-
-$DB_HOST			= "localhost" ;
+$DB_HOST				= "localhost" ;
 $DB_USERNAME			= "samurai" ;
 $DB_PASSWORD			= "samurai" ;
-$DB_SCHEMA			= "GNBDB" ;
+$DB_SCHEMA				= "GNBDB" ;
 
 $USER_TABLE_NAME		= "$DB_SCHEMA.USER" ;
 $USER_TABLE_KEY			= "ID" ;
@@ -15,7 +13,7 @@ $USER_TABLE_APPROVER		= "APPROVED_BY" ;
 
 $TAN_TABLE_NAME			= "$DB_SCHEMA.TAN" ;
 $TAN_TABLE_KEY			= "ID" ;
-$TAN_TABLE_ACCOUNT_ID		= "ACCOUNT_ID" ;
+$TAN_TABLE_ACCOUNT_ID	= "ACCOUNT_ID" ;
 $TAN_TABLE_USED_TS		= "USED_TIMESTAMP" ;
 
 $TRANSACTION_TABLE_NAME		= "$DB_SCHEMA.TRANSACTION" ;
@@ -50,54 +48,74 @@ $USER_STATUS = array(
 
 function executeSelectStatementOneRecord($sql)
 {
-	global $pdo;
-
-	$statement = $pdo->query($sql);
-	$results = $stmt->fetchAll(PDO::FETCH_ASSOC);	
-
-
-	return array(1, $results);
+	return executeSelectStatement($sql);
 }
 
 function executeSelectStatement($sql)
 {
-	global $pdo;
+	$connection = getDatabaseConnection();
 
-	$statement = $pdo->query($sql);
-	$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	$result = mysql_query($sql, $connection);
 
-	return array($statement->rowCount(), $results);
+	if ($result == false) {
+		$message = 'Invalid query: ' . mysql_error() . '\n';
+		$message .= 'Query: ' . $sql;
+
+		die($message);
+	} else {
+		$data = array(mysql_num_rows(), mysql_fetch_assoc($result));
+	}
+
+	closeDatabaseConnection($connection);
+	return $data;
 }
  
 function executeAddStatement($sql)
 {
-	$changedOrDeletedLines = $db->exec($sql);
-	$insertId = $db->lastInsertId();
+	$connection = getDatabaseConnection();
 
-	return array($changedOrDeletedLines, $insertId);
+	$result = mysql_query($sql, $connection);
+
+	if ($result == false) {
+		$message = 'Invalid query: ' . mysql_error() . '\n';
+		$message .= 'Query: ' . $sql;
+
+		die($message);
+	} else {
+		$data = array(mysql_affected_rows());
+	}
+
+	closeDatabaseConnection($connection);
+	return $data;
 }
 
 function executeSetStatement($sql)
 {
 	return executeAddStatement($sql);
-	//return array($number_of_rows, $results);
 }
 
-function getDatabaseConnection($host, $schema, $username, $password)
-{
-	try {
-		return new PDO('mysql:host=' . $host . ';dbname=' . $schema . ';charset=utf8', $username, $password);
-        } catch(PDOException $ex) {
-		//TODO: To something with this error message?
-		return NULL;
-        }
+function getDatabaseConnection() {
+
+	global $DB_HOST;
+	global $DB_USERNAME;
+	global $DB_PASSWORD;
+	global $DB_SCHEMA;
+
+	$connection = mysql_connect($DB_HOST, $DB_USERNAME, $DB_PASSWORD);
+
+	if ($connection == false) {
+		return NULL; //TODO: Do something with error message?
+	}
+
+	if (mysql_select_db($DB_SCHEMA, $connection)) {
+		return NULL; //TODO: Do something with error message?
+	}
+
+	return $connection;
 }
 
-$pdo = getDatabaseConnection($DB_HOST, $DB_SCHEMA, $DB_USERNAME, $DB_PASSWORD);
-
-echo $pdo;
-
-//TODO: Testing only
-print_r(executeSelectStatementOneRecord('SELECT * FROM user LIMIT 1;'));
+function closeDatabaseConnection($connection) {
+	mysql_close($connection);
+}
 
 ?>

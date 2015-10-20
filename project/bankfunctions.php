@@ -2,7 +2,7 @@
 
 include 'dbheader.php' ; 
 
-function RecordInTable($record_value,$record_name,$table_name)
+function RecordIsInTable($record_value,$record_name,$table_name)
 {
 	$SQL_STATEMENT	= "
 		SELECT *
@@ -122,10 +122,10 @@ function verifyTANCode($account_id,$tan_code)
 	return executeSelectStatement($SQL_STATEMENT) ; 
 }
 	
-function processTransaction($src, $dest, $ammount, $desc, $tan)
+function processTransaction($src, $dest, $amount, $desc, $tan)
 {
 	
-	$approved_at	= ( amount >= 10000 ? 'NULL' : 'now' ) ; 
+	$approved_at	= ( amount >= 10000 ? 'NULL' : 'now()' ) ; 
 	
 	$SQL_STATEMENT	= "
 		INSERT INTO $TRANSACTION_TABLE_NAME
@@ -142,8 +142,8 @@ function processTransaction($src, $dest, $ammount, $desc, $tan)
 			(
 				'$src'
 				, '$dest'
-				, 'now'
-				, '$ammount'
+				, 'now()'
+				, '$amount'
 				, '$desc'
 				, '$tan'
 				, $approved_at
@@ -171,7 +171,7 @@ function approvePendingTransaction($approver,$transaction_code)
 	$SQL_STATEMENT	= "
 		UPDATE $TRANSACTION_TABLE_NAME
 		SET
-			$TRANSACTION_TABLE_AP_AT 	= 'now'
+			$TRANSACTION_TABLE_AP_AT 	= 'now()'
 			,$TRANSACTION_TABLE_AP_BY 	= '$approver' 
 		
 		WHERE

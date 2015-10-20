@@ -6,23 +6,22 @@
  * Time: 15:14
  */
 
-$frame = "account_overview";
+global $frames;
+
+$frame = $frames["account_home"]; //static default
 if (isset($_POST["frame"])) {
-    $frame = $_POST["frame"];
+    $frame = $frames[$_POST["frame"]];
 }
-$frame = $frame.".php";
 
 $selected = "account1";
 if (isset($_POST["account"])) {
     $selected = $_POST["account"];
 }
-
-global $page;
 ?>
 
 <p>Current selected account is account1</p><br>
 <span>Select a different account: </span>
-<select id="account_select" onchange="onSelectedAccount('<?php echo $page?>')">
+<select id="account_select" onchange="onSelectedAccount()">
     <option value="account1" <?php if($selected == "account1") {
         echo "selected";
     }?>>Account 1</option>
@@ -44,7 +43,9 @@ global $page;
     </div>
     <div class="frameContent">
         <?php
-        include $frame;
+        if ($frame != null) {
+            include $frame;
+        }
         ?>
     </div>
 </div>

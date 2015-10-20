@@ -18,7 +18,7 @@ function goToEmployeeArea(frame) {
 }
 
 function goToMyAccounts(frame, account) {
-    var params = {section:"../accounts/my_accounts"};
+    var params = {section:"my_accounts"};
     if (frame != undefined) {
         params["frame"] = frame;
     }
@@ -26,6 +26,23 @@ function goToMyAccounts(frame, account) {
         params["account"] = account;
     }
     return performPostRequest("employee.php",params);
+}
+
+function approveRegistration() {
+    var selected = document.getElementsByName("action_check");
+    var ids = "";
+    for (var i=0; i<selected.length; i++) {
+        ids += selected[i].id;
+        if ((i + 1) < selected.length) {
+            ids += ";";
+        }
+    }
+    var params = {section:"employee_area", frame:"manage_registration", approved_registrations:ids};
+    return performPostRequest("employee.php",params);
+}
+
+function rejectRegistration() {
+    //TODO: TO IMPLEMENT
 }
 
 function logout() {

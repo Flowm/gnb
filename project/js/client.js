@@ -10,7 +10,7 @@ function goToOverview(frame) {
 }
 
 function goToMyAccounts(frame, account) {
-    var params = {section:"../accounts/my_accounts"};
+    var params = {section:"my_accounts"};
     if (frame != undefined) {
         params["frame"] = frame;
     }

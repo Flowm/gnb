@@ -30,9 +30,9 @@ if (isset($_SESSION["username"]) && isset($_SESSION["role"])) {
     <h2>Welcome to the Goliath National Bank!</h2><br>
     <h4>Login with personal PIN</h4>
     <form method="post" action="authentication.php">
-        Enter your username: <input type="text" name="username"><br>
-        Enter your password: <input type="password" name="password"><br>
-        Enter your PIN: <input type="text" name="pin"><br>
+        <label for="user_input">Enter your username: </label><input type="text" name="username" id="user_input"><br>
+        <label for="pw_input">Enter your password: </label><input type="password" name="password" id="pw_input"><br>
+        <label for="pin_input">Enter your PIN: </label><input type="text" name="pin" id="pin_input"><br>
         <?php
         $error = null;
         if (isset($_GET) && isset($_GET["error"])) {

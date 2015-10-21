@@ -66,7 +66,9 @@ function getUserDetails($user_ID,$filter)
 			$USER_TABLE_KEY 		= '$user_ID'
 			AND $USER_TABLE_ROLE 	= '$role'
 	" ;
-	return executeSelectStatement($SQL_STATEMENT) ; 
+	
+	list($numberOfRows, $data) = executeSelectStatement($SQL_STATEMENT) ;
+	return $data;
 }
 
 function getClientDetails($client_ID)
@@ -134,8 +136,8 @@ function getPendingRequests($filter)
 	global $USER_TABLE_ROLE;
 	global $USER_TABLE_STATUS;
 
-	$status = $USER_STATUS('unapproved') ; 
-	$role	= $USER_ROLES($filter) ; 
+	$status = $USER_STATUS['unapproved'] ; 
+	$role	= $USER_ROLES[$filter] ; 
 	
 	$SQL_STATEMENT	= "
 		SELECT *
@@ -184,7 +186,7 @@ function processTransaction($src, $dest, $amount, $desc, $tan)
 	global $TRANSACTION_TABLE_TAN;
 	global $TRANSACTION_TABLE_AP_AT;
 	
-	$approved_at	= ( amount >= 10000 ? 'NULL' : 'now()' ) ; 
+	$approved_at	= ( $amount >= 10000 ? 'NULL' : 'now()' ) ; 
 	
 	$SQL_STATEMENT	= "
 		INSERT INTO $TRANSACTION_TABLE_NAME
@@ -208,7 +210,7 @@ function processTransaction($src, $dest, $amount, $desc, $tan)
 				, $approved_at
 			)
 	" ; 
-	executeAddStatement($SQL_STATEMENT) ; 
+	$transactionId = executeAddStatementOneRecord($SQL_STATEMENT) ; 
 	
 }
 	
@@ -257,8 +259,8 @@ function approveUser($approver_id, $user_id, $role_filter )
 	global $USER_TABLE_KEY;
 	global $USER_TABLE_ROLE;
 
-	$role		= USER_ROLES($role_filter)	; 
-	$new_status	= USER_STATUS('approved')	; 
+	$role		= $USER_ROLES[$role_filter]	; 
+	$new_status	= $USER_STATUS['approved']	; 
 	
 	#Approve User
 	$SQL_STATEMENT	= "
@@ -271,7 +273,11 @@ function approveUser($approver_id, $user_id, $role_filter )
 			$USER_TABLE_KEY			= '$user_id'
 			AND $USER_TABLE_ROLE	= '$role'
 	" ;
-	return executeSetStatement($SQL_STATEMENT) ; 
+	if (executeSetStatement($SQL_STATEMENT) == 1) {
+		return true;
+	} else {
+		return false;
+	} 
 }	
 	
 function approveEmployee($approver_id, $employee_id )
@@ -296,6 +302,49 @@ function addAccountClient($client_id){
 	# insert code about crearting account 
 }
 
+function addClient($first_name, $last_name, $email) { //TODO: Add salt and Hash?
+	return addUser($first_name, $last_name, $email, 'client');
+}
+
+function addEmployee($first_name, $last_name, $email) { //TODO: Add salt and Hash?
+	return addUser($first_name, $last_name, $email, 'employee');
+}
+
+function addUser($first_name, $last_name, $email, $role_filter) { //TODO: Add salt and Hash?
+
+	global $USER_ROLES;
+	global $USER_TABLE_NAME;
+	global $USER_TABLE_FIRSTNAME;
+	global $USER_TABLE_LASTNAME;
+	global $USER_TABLE_EMAIL;
+	global $USER_TABLE_ROLE;
+	global $USER_TABLE_SALT;
+	global $USER_TABLE_HASH;
+
+	$role       = $USER_ROLES[$role_filter] ;
+
+	$SQL_STATEMENT	= "
+		INSERT INTO $USER_TABLE_NAME
+			(
+				$USER_TABLE_FIRSTNAME
+				,$USER_TABLE_LASTNAME
+				,$USER_TABLE_EMAIL
+				,$USER_TABLE_ROLE
+				,$USER_TABLE_SALT
+				,$USER_TABLE_HASH
+			)
+		VALUES
+			(
+				'$first_name'
+				, '$last_name'
+				, '$email'
+				, '$role'
+				, 'somesalt'
+				, 'somehash'
+			)
+	" ; 
+	return executeAddStatementOneRecord($SQL_STATEMENT) ;
+}	
 
 function generateTANCodes($account_id)
 {

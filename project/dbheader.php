@@ -9,7 +9,12 @@ $USER_TABLE_NAME		= "$DB_SCHEMA.user" ;
 $USER_TABLE_KEY			= "id" ;
 $USER_TABLE_ROLE		= "role" ;
 $USER_TABLE_STATUS		= "status" ;
-$USER_TABLE_APPROVER	= "approved_by" ;
+$USER_TABLE_APPROVER	= "approved_by_user_id" ;
+$USER_TABLE_FIRSTNAME	= "first_name" ;
+$USER_TABLE_LASTNAME	= "last_name" ;
+$USER_TABLE_EMAIL		= "email" ;
+$USER_TABLE_SALT		= "pw_salt" ;
+$USER_TABLE_HASH		= "pw_hash" ;
 
 $TAN_TABLE_NAME			= "$DB_SCHEMA.tan" ;
 $TAN_TABLE_KEY			= "id" ;
@@ -70,19 +75,19 @@ function executeSelectStatement($sql)
 	return $data;
 }
  
-function executeAddStatement($sql)
+function executeAddStatementOneRecord($sql)
 {
 	$connection = getDatabaseConnection();
 
 	$result = mysql_query($sql, $connection);
 
 	if ($result == false) {
-		$message = 'Invalid query: ' . mysql_error() . '\n';
+		$message = 'Invalid query: ' . mysql_error() . '<\br>';
 		$message .= 'Query: ' . $sql;
 
 		die($message);
 	} else {
-		$data = array(mysql_affected_rows());
+		$data = mysql_insert_id();
 	}
 
 	closeDatabaseConnection($connection);
@@ -91,7 +96,21 @@ function executeAddStatement($sql)
 
 function executeSetStatement($sql)
 {
-	return executeAddStatement($sql);
+	$connection = getDatabaseConnection();
+
+	$result = mysql_query($sql, $connection);
+
+	if ($result == false) {
+		$message = 'Invalid query: ' . mysql_error() . '<\br>';
+		$message .= 'Query: ' . $sql;
+
+		die($message);
+	} else {
+		$data = mysql_affected_rows();
+	}
+
+	closeDatabaseConnection($connection);
+	return $data;
 }
 
 function getDatabaseConnection() {

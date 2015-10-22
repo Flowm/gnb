@@ -33,8 +33,10 @@ $TRANSACTION_TABLE_TAN		= "tan_id" ;
 $TRANSACTION_TABLE_C_TS		= "creation_timestamp" ;
 
 #$TRANSACTION_TABLE_STATUS	= "TRANSACTION_TABLE_STATUS" ;
-$BANKACCOUNTS_TABLE_NAME	= "$DB_SCHEMA.account" ;
-$BANKACCOUNTS_TABLE_KEY		= "id" ;
+$ACCOUNT_TABLE_NAME			= "$DB_SCHEMA.account" ;
+$ACCOUNT_TABLE_KEY			= "id" ;
+$ACCOUNT_TABLE_BALANCE		= "balance" ;
+$ACCOUNT_TABLE_USER_ID		= "user_id" ;
 
 # ROLES in USER TABLE
 $USER_ROLES = array(
@@ -53,7 +55,9 @@ $USER_STATUS = array(
 
 function executeSelectStatementOneRecord($sql)
 {
-	return executeSelectStatement($sql);
+	list($numberOfRows, $data) = executeSelectStatement($sql);
+
+	return array($numberOfRows, $data[0]);
 }
 
 function executeSelectStatement($sql)
@@ -68,7 +72,14 @@ function executeSelectStatement($sql)
 
 		die($message);
 	} else {
-		$data = array(mysql_num_rows($result), mysql_fetch_assoc($result));
+
+		$numberOfRows = mysql_num_rows($result);
+
+		while($row = mysql_fetch_assoc($result)) {
+			$rows[] = $row;
+		}
+
+		$data = array($numberOfRows, $rows);
 	}
 
 	closeDatabaseConnection($connection);

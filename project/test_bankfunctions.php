@@ -16,7 +16,10 @@ $USER2_EMAIL		= $TESTPREFIX . 'E2@example.com';
 $USER2_ROLE			= 'client';
 $USER2_ID;
 
-print 'Running tests...\n';
+print 'Running tests...<br>';
+
+removeTestAccounts();
+removeTestUsers();
 
 addTestUsers();
 if (! checkForTestUsers()) die('Test users not found!1!');
@@ -24,6 +27,18 @@ if (! checkForTestUsers()) die('Test users not found!1!');
 approveTestUsers();
 if (! checkForApprovedTestUsers()) die('Test users not approved!');
 
+addTestAccounts();
+if (! checkForTestAccounts()) die('Test accounts not found!');
+
+
+
+die();
+
+
+
+
+removeTestAccounts();
+removeTestUsers();
 
 
 
@@ -41,14 +56,14 @@ function addTestUsers() {
 	global $USER2_ROLE;
 	global $USER2_ID;
 
-	print 'Adding Users ' . $USER1_FIRSTNAME . ' and ' . $USER2_FIRSTNAME . '\n';
+	print 'Adding Users ' . $USER1_FIRSTNAME . ' and ' . $USER2_FIRSTNAME . '<br>';
 
 	//function addUser($first_name, $last_name, $email, $role_filter) 
 	$USER1_ID = addUser($USER1_FIRSTNAME, $USER1_LASTNAME, $USER1_EMAIL, $USER1_ROLE);
-	print $USER1_ID . '\n';
+	print $USER1_ID . '<br>';
 
 	$USER2_ID = addUser($USER2_FIRSTNAME, $USER2_LASTNAME, $USER2_EMAIL, $USER2_ROLE);
-	print $USER2_ID . '\n';
+	print $USER2_ID . '<br>';
 }
 
 function checkForTestUsers() {
@@ -91,11 +106,11 @@ function approveTestUsers() {
 	global $USER2_ROLE;
 	global $USER2_ID;
 
-	print 'Approving users ' . $USER1_ID . ' and ' . $USER2_ID . '\n';
+	print 'Approving users ' . $USER1_ID . ' and ' . $USER2_ID . '<br>';
 
 	//function approveUser($approver_id, $user_id, $role_filter )
-	if (approveUser(1, $USER1_ID, 'employee') == false) die('Could not approve ' . $USER1_ID);
-	if (approveUser(1, $USER2_ID, 'client') == false) die('Could not approve ' . $USER2_ID);
+	if (approveEmployee(1, $USER1_ID) == false) die('Could not approve ' . $USER1_ID);
+	if (approveClient(1, $USER2_ID) == false) die('Could not approve ' . $USER2_ID);
 }
 
 function checkForApprovedTestUsers() {
@@ -118,24 +133,73 @@ function checkForApprovedTestUsers() {
 	$userinfo = getEmployeeDetails($USER1_ID);
 
 	if ($userinfo['status'] == 1 && $userinfo['approved_by_user_id'] != NULL) {
-		print 'User ' . $USER1_ID . ' approved!';
+		print 'User ' . $USER1_ID . ' approved!<br>';
 	} else {
-		print 'User ' . $USER1_ID . ' not approved!';
+		print 'User ' . $USER1_ID . ' not approved!<br>';
 		return false;
 	}
 
 	$userinfo = getClientDetails($USER2_ID);
 
 	if ($userinfo['status'] == 1 && $userinfo['approved_by_user_id'] != NULL) {
-		print 'User ' . $USER2_ID . ' approved!';
+		print 'User ' . $USER2_ID . ' approved!<br>';
 	} else {
-		print 'User ' . $USER2_ID . ' not approved!';
+		print 'User ' . $USER2_ID . ' not approved!<br>';
 		return false;
 	}
+
+	return true;
+}
+
+function addTestAccounts() {
+
+	global $USER1_ID;
+	global $USER2_ID;
+
+//function addAccountForClient($client_id) {
+//function addAccountForClient($client_id, $balance){
+
+	addAccountForClient($USER1_ID);
+	addAccountForClientWithBalance($USER2_ID, 5555.55);
 
 	return true;
 
 }
 
+function checkForTestAccounts() {
+
+	global $USER1_ID;
+	global $USER2_ID;
+
+	list($numberOfRows, $data) = getAccountsForClient($USER1_ID);
+	print 'Rows: ' . $numberOfRows . ' Data: ';
+	var_dump($data);
+
+	list($numberOfRows, $data) = getAccountsForClient($USER2_ID);
+	print 'Rows: ' . $numberOfRows . ' Data: ';
+	var_dump($data);
+
+	return true;
+}
+
+
+
+
+
+
+function removeTestUsers() {
+
+	global $TESTPREFIX;
+
+	executeSetStatement('DELETE FROM user WHERE first_name LIKE "%' . $TESTPREFIX . '%"');
+}
+
+function removeTestAccounts() {
+
+	global $TESTPREFIX;
+
+	executeSetStatement('DELETE FROM account WHERE user_id IN (
+						 SELECT id FROM user WHERE first_name LIKE "%' . $TESTPREFIX . '%")');
+}
 
 ?>

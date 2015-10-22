@@ -28,7 +28,7 @@ global $TRANSACTION_TABLE_C_TS;
 global $BANKACCOUNTS_TABLE_NAME;
 global $BANKACCOUNTS_TABLE_KEY;
 
-
+//tested
 function RecordIsInTable($record_value,$record_name,$table_name)
 {
 	$SQL_STATEMENT	= "
@@ -49,8 +49,7 @@ function RecordIsInTable($record_value,$record_name,$table_name)
 	}
 }
 
-
-# Function to get user details ( Employee or Client ) 
+//tested
 function getUserDetails($user_ID,$filter)
 {
 	global $USER_ROLES;
@@ -67,15 +66,18 @@ function getUserDetails($user_ID,$filter)
 			AND $USER_TABLE_ROLE 	= '$role'
 	" ;
 	
-	list($numberOfRows, $data) = executeSelectStatement($SQL_STATEMENT) ;
+	list($numberOfRows, $data) = executeSelectStatementOneRecord($SQL_STATEMENT) ;
+
 	return $data;
 }
 
+//tested
 function getClientDetails($client_ID)
 {
 	return getUserDetails($client_ID,'client') ;
 }
 
+//tested
 function getEmployeeDetails($employee_ID)
 {
 	return getUserDetails($employee_ID,'employee') ;
@@ -248,7 +250,7 @@ function approvePendingTransaction($approver,$transaction_code)
 	return executeSetStatement($SQL_STATEMENT) ; 
 }
 	
-
+//tested
 function approveUser($approver_id, $user_id, $role_filter )
 {
 	global $USER_ROLES;
@@ -266,8 +268,8 @@ function approveUser($approver_id, $user_id, $role_filter )
 	$SQL_STATEMENT	= "
 		UPDATE $USER_TABLE_NAME
 		SET
-			$USER_TABLE_STATUS 			= '$new_status'
-			,$USER_TABLE_APPROVER 		= '$approver_id' 
+			$USER_TABLE_STATUS 		= '$new_status'
+			,$USER_TABLE_APPROVER 	= '$approver_id' 
 		
 		WHERE
 			$USER_TABLE_KEY			= '$user_id'
@@ -279,37 +281,55 @@ function approveUser($approver_id, $user_id, $role_filter )
 		return false;
 	} 
 }	
-	
+
+//tested
 function approveEmployee($approver_id, $employee_id )
 {	
-	approveUser($approver_id, $employee_id, 'employee' ) ;
-	# Send mail function here
+	return approveUser($approver_id, $employee_id, 'employee' ) ;
 }	
 
+//tested
 function approveClient($approver_id, $client_id )
 {	
-	approveUser($approver_id, $client_id, 'client' ) ; 
-	addAccountClient($client_id) ;	
-	
-	# Send mail function here
-	
-
-	//generateTANCodes(
+	return approveUser($approver_id, $client_id, 'client' ) ; 
 }	
 
-function addAccountClient($client_id){
+function getAccountsForClient($client_id) {
 
-	# insert code about crearting account 
+	//TODO: Check for client status?
+
+	global $ACCOUNT_TABLE_NAME;
+	global $ACCOUNT_TABLE_USER_ID;
+
+	$SQL_STATEMENT	= "
+		SELECT *
+		FROM $ACCOUNT_TABLE_NAME
+		WHERE 
+			$ACCOUNT_TABLE_USER_ID	= $client_id;
+	" ;
+	return executeSelectStatement($SQL_STATEMENT) ; 	
 }
 
-function addClient($first_name, $last_name, $email) { //TODO: Add salt and Hash?
-	return addUser($first_name, $last_name, $email, 'client');
+function addAccountForClient($client_id) {
+	return addAccountForClientWithBalance($client_id, 0);
 }
 
-function addEmployee($first_name, $last_name, $email) { //TODO: Add salt and Hash?
-	return addUser($first_name, $last_name, $email, 'employee');
+function addAccountForClientWithBalance($client_id, $balance) {
+
+	global $ACCOUNT_TABLE_NAME;
+	global $ACCOUNT_TABLE_USER_ID;
+	global $ACCOUNT_TABLE_BALANCE;
+
+	$SQL_STATEMENT	= "
+		INSERT
+		INTO $ACCOUNT_TABLE_NAME ( $ACCOUNT_TABLE_USER_ID, $ACCOUNT_TABLE_BALANCE )
+		VALUES
+			($client_id, $balance) ;
+	" ;
+	return executeSelectStatement($SQL_STATEMENT) ; 	
 }
 
+//tested
 function addUser($first_name, $last_name, $email, $role_filter) { //TODO: Add salt and Hash?
 
 	global $USER_ROLES;
@@ -345,6 +365,16 @@ function addUser($first_name, $last_name, $email, $role_filter) { //TODO: Add sa
 	" ; 
 	return executeAddStatementOneRecord($SQL_STATEMENT) ;
 }	
+
+//tested
+function addClient($first_name, $last_name, $email) { //TODO: Add salt and Hash?
+	return addUser($first_name, $last_name, $email, 'client');
+}
+
+//tested
+function addEmployee($first_name, $last_name, $email) { //TODO: Add salt and Hash?
+	return addUser($first_name, $last_name, $email, 'employee');
+}
 
 function generateTANCodes($account_id)
 {

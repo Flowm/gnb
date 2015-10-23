@@ -376,17 +376,8 @@ function addEmployee($first_name, $last_name, $email) { //TODO: Add salt and Has
 	return addUser($first_name, $last_name, $email, 'employee');
 }
 
-function generateTANCodes($account_id)
-{
-	# generate codes 
-	
-	# upload codes in DB
-	
-	# get Client ID from account ID 
-	
-	# Send client email
+function insertTAN($account_id, $tan) {
+	// Inserts TAN in DB
+	// Returns true if successful
+	// Returns false in case of error
 }
-
-
-
-

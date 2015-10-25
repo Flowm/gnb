@@ -38,6 +38,9 @@ $ACCOUNT_TABLE_KEY			= "id" ;
 $ACCOUNT_TABLE_BALANCE		= "balance" ;
 $ACCOUNT_TABLE_USER_ID		= "user_id" ;
 
+$FAKE_APPROVER_USER_ID		= 0;
+
+
 # ROLES in USER TABLE
 $USER_ROLES = array(
 	'client'		=> 0

@@ -18,10 +18,13 @@ $USER2_LASTNAME		= $TESTPREFIX . ' LN2';
 $USER2_EMAIL		= $TESTPREFIX . 'E2@example.com';
 $USER2_ROLE			= 'client';
 $USER2_ID;
+$USER2_ACCOUNTID;
+$USER2_TESTTAN		= 'QWERTZUIOPASDFG';
 $USER2_PASSWORD		= 'youwontguess';
 
 print 'Running tests...<br>';
 
+removeTestTransactions();
 removeTestTANs();
 removeTestAccounts();
 removeTestUsers();
@@ -33,7 +36,8 @@ if (checkForTestUsers()) {
 	die('<br>##### Test users not found!1!');
 }
 
-addTestUsers();
+// Check if duplicate users are prohibited
+//addTestUsers();
 
 if (checkTestUserRequests() == 2) {
 	print '<br>##### User requests are there!<br>';
@@ -68,14 +72,25 @@ if (checkForTestTANs()) {
 	die('<br>##### Test TAN not found!<br>');
 }
 
-addTestTANs();
+// Check if duplicate TANs are prohibited
+//addTestTANs();
 
+addTestTransactions();
+
+
+
+die();
+if (checkForTestTransactions()) {
+	print '<br>##### Test Transactions added!<br>';
+} else {
+	die('<br>##### Test Transactions not found!<br>');
+}
 
 
 //die();
 
 
-
+removeTestTransactions();
 removeTestTANs();
 removeTestAccounts();
 removeTestUsers();
@@ -264,6 +279,10 @@ function addTestTANs() {
 	global $USER1_ACCOUNTID;
 	global $USER1_TESTTAN;
 
+	global $USER2_ID;
+	global $USER2_ACCOUNTID;
+	global $USER2_TESTTAN;
+
 	$data = getAccountsForClient($USER1_ID);
 
 	$USER1_ACCOUNTID = $data[0]['id'];
@@ -275,6 +294,19 @@ function addTestTANs() {
 	} else {
 		print "Could not insert TAN $USER1_TESTTAN for account $USER1_ACCOUNTID!<br>";
 	}
+
+
+    $data = getAccountsForClient($USER2_ID);
+
+    $USER2_ACCOUNTID = $data[0]['id'];
+
+    $result = insertTAN($USER2_TESTTAN, $USER2_ACCOUNTID);
+
+    if ($result != false) {
+        print "Inserted TAN $USER2_TESTTAN for account $USER2_ACCOUNTID<br>";
+    } else {
+        print "Could not insert TAN $USER2_TESTTAN for account $USER2_ACCOUNTID!<br>";
+    }
 }
 
 function checkForTestTANs() {
@@ -290,6 +322,52 @@ function checkForTestTANs() {
 		print "Could not verify TAN $USER1_TESTTAN for Account $USER1_ACCOUNTID<br>";
 		return false;
 	}
+}
+
+function addTestTransactions() {
+
+	//function processTransaction($src, $dest, $amount, $desc, $tan)
+
+	global $USER1_ID;
+	global $USER2_ID;
+	global $USER1_TESTTAN;
+	global $USER2_TESTTAN;
+	global $TESTPREFIX;
+
+	$SRCACCOUNT = getAccountsForClient($USER1_ID);
+	$SRCACC = $SRCACCOUNT[0]['id'];
+
+	$DSTACCOUNT = getAccountsForClient($USER2_ID);
+	$DSTACC = $DSTACCOUNT[0]['id'];
+
+	$DESC   = $TESTPREFIX . '_DESC' . 1;
+	$result = processTransaction($SRCACC, $DSTACC, 1000, $DESC, $USER1_TESTTAN);
+
+	if ($result != false) {
+		print "Added transaction NR $result<br>";
+	} else {
+		print "Could not add transaction: $DESC<br>";
+	}
+
+	global $USER2_TESTTAN;
+	$TEMP = $SRCACC;
+	$SRCACC = $DSTACC;
+	$DSTACC = $TEMP;
+
+	$DESC   = $TESTPREFIX . '_DESC' . 2;
+	$result = processTransaction($SRCACC, $DSTACC, 10000, $DESC, $USER2_TESTTAN);
+
+    if ($result != false) {
+        print "Added transaction NR $result<br>";
+    } else {
+        print "Could not add transaction: $DESC<br>";
+    }
+
+
+}
+
+function checkForTestTransactions() {
+	return true;
 }
 
 
@@ -311,12 +389,16 @@ function removeTestAccounts() {
 
 function removeTestTANs() {
 
-	global $TESTPREFIX;
-
 	executeSetStatement('DELETE FROM tan WHERE account_id IN (
 						 SELECT ACC.id FROM account AS ACC JOIN user AS U ON ACC.user_id = U.id
 							WHERE U.first_name LIKE "%MYMAGICSTRING%");');
+}
 
+function removeTestTransactions() {
+
+	global $TESTPREFIX;
+
+	executeSetStatement('DELETE FROM transaction WHERE description LIKE "%' . $TESTPREFIX . '%"');
 }
 
 

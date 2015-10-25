@@ -191,7 +191,9 @@ function verifyTANCode($account_id,$tan_code)
 		return false;
 	}
 }
-	
+
+//TODO: Set TAN to used
+//TODO: Check if inserted TAN is valid (at insertTAN)
 function processTransaction($src, $dest, $amount, $desc, $tan)
 {
 	global $TRANSACTION_TABLE_NAME;
@@ -202,32 +204,44 @@ function processTransaction($src, $dest, $amount, $desc, $tan)
 	global $TRANSACTION_TABLE_DESC;
 	global $TRANSACTION_TABLE_TAN;
 	global $TRANSACTION_TABLE_AP_AT;
+	global $TRANSACTION_TABLE_AP_BY;
+	global $FAKE_APPROVER_USER_ID;
 	
-	$approved_at	= ( $amount >= 10000 ? 'NULL' : 'now()' ) ; 
+	$approved_at	= ( $amount >= 10000 ? 'NULL' : 'now()' ) ;
+	$approver		= ( $amount >= 10000 ? 'NULL' : $FAKE_APPROVER_USER_ID ) ;
 	
 	$SQL_STATEMENT	= "
 		INSERT INTO $TRANSACTION_TABLE_NAME
 			(
 				$TRANSACTION_TABLE_FROM
-				,$TRANSACTION_TABLE_TO
-				,$TRANSACTION_TABLE_C_TS
-				,$TRANSACTION_TABLE_AMOUNT
-				,$TRANSACTION_TABLE_DESC
-				,$TRANSACTION_TABLE_TAN
-				,$TRANSACTION_TABLE_AP_AT
+				, $TRANSACTION_TABLE_TO
+				, $TRANSACTION_TABLE_C_TS
+				, $TRANSACTION_TABLE_AMOUNT
+				, $TRANSACTION_TABLE_DESC
+				, $TRANSACTION_TABLE_TAN
+				, $TRANSACTION_TABLE_AP_AT
+				, $TRANSACTION_TABLE_AP_BY
 			)
 		VALUES
 			(
 				'$src'
 				, '$dest'
-				, 'now()'
+				, now()
 				, '$amount'
 				, '$desc'
 				, '$tan'
 				, $approved_at
+				, $approver
 			)
-	" ; 
-	$transactionId = executeAddStatementOneRecord($SQL_STATEMENT) ; 
+	" ;
+
+	$result =  executeAddStatementOneRecord($SQL_STATEMENT) ;
+
+	if ($result != -1) {
+		return $result;
+	} else {
+		return false;
+	}
 	
 }
 	
@@ -256,8 +270,8 @@ function approvePendingTransaction($approver,$transaction_code)
 	$SQL_STATEMENT	= "
 		UPDATE $TRANSACTION_TABLE_NAME
 		SET
-			$TRANSACTION_TABLE_AP_AT 	= 'now()'
-			,$TRANSACTION_TABLE_AP_BY 	= '$approver' 
+			$TRANSACTION_TABLE_AP_AT 	= now()
+			, $TRANSACTION_TABLE_AP_BY 	= '$approver' 
 		
 		WHERE
 			$TRANSACTION_TABLE_KEY	= '$transaction_code'
@@ -284,7 +298,7 @@ function approveUser($approver_id, $user_id, $role_filter )
 		UPDATE $USER_TABLE_NAME
 		SET
 			$USER_TABLE_STATUS 		= '$new_status'
-			,$USER_TABLE_APPROVER 	= '$approver_id' 
+			, $USER_TABLE_APPROVER 	= '$approver_id' 
 		
 		WHERE
 			$USER_TABLE_KEY			= '$user_id'
@@ -350,7 +364,8 @@ function addAccountForClientWithBalance($client_id, $balance) {
 
 	$SQL_STATEMENT	= "
 		INSERT
-		INTO $ACCOUNT_TABLE_NAME ( $ACCOUNT_TABLE_USER_ID, $ACCOUNT_TABLE_BALANCE )
+		INTO $ACCOUNT_TABLE_NAME
+			( $ACCOUNT_TABLE_USER_ID, $ACCOUNT_TABLE_BALANCE )
 		VALUES
 			($client_id, $balance) ;
 	" ;
@@ -384,11 +399,11 @@ function addUser($first_name, $last_name, $email, $password, $role_filter) {
 		INSERT INTO $USER_TABLE_NAME
 			(
 				$USER_TABLE_FIRSTNAME
-				,$USER_TABLE_LASTNAME
-				,$USER_TABLE_EMAIL
-				,$USER_TABLE_ROLE
-				,$USER_TABLE_SALT
-				,$USER_TABLE_HASH
+				, $USER_TABLE_LASTNAME
+				, $USER_TABLE_EMAIL
+				, $USER_TABLE_ROLE
+				, $USER_TABLE_SALT
+				, $USER_TABLE_HASH
 			)
 		VALUES
 			(

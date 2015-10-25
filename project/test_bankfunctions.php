@@ -9,34 +9,74 @@ $USER1_LASTNAME		= $TESTPREFIX . ' LN1';
 $USER1_EMAIL		= $TESTPREFIX . 'E1@example.com';
 $USER1_ROLE			= 'employee';
 $USER1_ID;
+$USER1_ACCOUNTID;
+$USER1_TESTTAN		= '1234567890ABCDE';
+$USER1_PASSWORD		= 'supersecret';
 
 $USER2_FIRSTNAME	= $TESTPREFIX . ' FN2';
 $USER2_LASTNAME		= $TESTPREFIX . ' LN2';
 $USER2_EMAIL		= $TESTPREFIX . 'E2@example.com';
 $USER2_ROLE			= 'client';
 $USER2_ID;
+$USER2_PASSWORD		= 'youwontguess';
 
 print 'Running tests...<br>';
 
+removeTestTANs();
 removeTestAccounts();
 removeTestUsers();
 
 addTestUsers();
-if (! checkForTestUsers()) die('Test users not found!1!');
+if (checkForTestUsers()) {
+	print '<br>##### Test users are there!<br>';
+} else {
+	die('<br>##### Test users not found!1!');
+}
+
+addTestUsers();
+
+if (checkTestUserRequests() == 2) {
+	print '<br>##### User requests are there!<br>';
+} else {
+	die('<br>##### User requests are not there!<br>');
+}
 
 approveTestUsers();
-if (! checkForApprovedTestUsers()) die('Test users not approved!');
+if (checkForApprovedTestUsers()) {
+	print '<br>##### Test users approved!<br>';
+} else {
+	 die('<br>##### Test users not approved!<br>');
+}
+
+if (checkTestUserRequests() == 0) {
+	print '<br>##### User requests are done!<br>';
+} else {
+	die('<br>##### User requests are not done!<br>');
+}
 
 addTestAccounts();
-if (! checkForTestAccounts()) die('Test accounts not found!');
+if (checkForTestAccounts()) {
+	print '<br>##### Test accounts added!<br>';
+} else {
+	die('<br>##### Test accounts not found!<br>');
+}
+
+addTestTANs();
+if (checkForTestTANs()) {
+	print '<br>##### Test TAN added!<br>';
+} else {
+	die('<br>##### Test TAN not found!<br>');
+}
+
+addTestTANs();
 
 
 
-die();
+//die();
 
 
 
-
+removeTestTANs();
 removeTestAccounts();
 removeTestUsers();
 
@@ -44,26 +84,43 @@ removeTestUsers();
 
 function addTestUsers() {
 
+	//function addEmployee($first_name, $last_name, $email, $password) 
+	//function addClient($first_name, $last_name, $email, $password) 
+
 	global $USER1_FIRSTNAME;
 	global $USER1_LASTNAME;
 	global $USER1_EMAIL;
 	global $USER1_ROLE;
 	global $USER1_ID;
+	global $USER1_PASSWORD;
 
 	global $USER2_FIRSTNAME;
 	global $USER2_LASTNAME;
 	global $USER2_EMAIL;
 	global $USER2_ROLE;
 	global $USER2_ID;
+	global $USER2_PASSWORD;
 
 	print 'Adding Users ' . $USER1_FIRSTNAME . ' and ' . $USER2_FIRSTNAME . '<br>';
 
-	//function addUser($first_name, $last_name, $email, $role_filter) 
-	$USER1_ID = addUser($USER1_FIRSTNAME, $USER1_LASTNAME, $USER1_EMAIL, $USER1_ROLE);
-	print $USER1_ID . '<br>';
+	$result = addEmployee($USER1_FIRSTNAME, $USER1_LASTNAME, $USER1_EMAIL, $USER1_PASSWORD);
 
-	$USER2_ID = addUser($USER2_FIRSTNAME, $USER2_LASTNAME, $USER2_EMAIL, $USER2_ROLE);
-	print $USER2_ID . '<br>';
+	if ($result != false) {
+		$USER1_ID= $result;
+		print "USER1_ID: $USER1_ID<br>";
+	} else {
+		print "Could not add USER1<br>";
+	}
+
+
+	$result = addClient($USER2_FIRSTNAME, $USER2_LASTNAME, $USER2_EMAIL, $USER2_PASSWORD);
+
+	if ($result != false) {
+		$USER2_ID= $result;
+		print "USER2_ID: $USER2_ID<br>";
+	} else {
+		print "Could not add USER2<br>";
+	}
 }
 
 function checkForTestUsers() {
@@ -92,7 +149,27 @@ function checkForTestUsers() {
 	return true;
 }
 
+
+function checkTestUserRequests() {
+
+	//function getPendingClientRequests()
+	//function getPendingEmployeeRequests()
+
+	$numberOfRowsForClients = sizeof(getPendingClientRequests());
+	print 'PendingClientRequests: ' . $numberOfRowsForClients . '<br>';
+
+	$numberOfRowsForEmployees = sizeof(getPendingEmployeeRequests());
+	print 'PendingEmployeeRequests: ' . $numberOfRowsForEmployees . '<br>';
+
+	return $numberOfRowsForClients + $numberOfRowsForEmployees;
+}
+
+
+
+
 function approveTestUsers() {
+
+	//function approveUser($approver_id, $user_id, $role_filter )
 
 	global $USER1_FIRSTNAME;
 	global $USER1_LASTNAME;
@@ -108,7 +185,6 @@ function approveTestUsers() {
 
 	print 'Approving users ' . $USER1_ID . ' and ' . $USER2_ID . '<br>';
 
-	//function approveUser($approver_id, $user_id, $role_filter )
 	if (approveEmployee(1, $USER1_ID) == false) die('Could not approve ' . $USER1_ID);
 	if (approveClient(1, $USER2_ID) == false) die('Could not approve ' . $USER2_ID);
 }
@@ -153,17 +229,17 @@ function checkForApprovedTestUsers() {
 
 function addTestAccounts() {
 
+	//function addAccountForClient($client_id) {
+	//function addAccountForClient($client_id, $balance){
+
 	global $USER1_ID;
 	global $USER2_ID;
 
-//function addAccountForClient($client_id) {
-//function addAccountForClient($client_id, $balance){
-
 	addAccountForClient($USER1_ID);
 	addAccountForClientWithBalance($USER2_ID, 5555.55);
+	addAccountForClientWithBalance($USER2_ID, 7777.77);
 
 	return true;
-
 }
 
 function checkForTestAccounts() {
@@ -171,19 +247,50 @@ function checkForTestAccounts() {
 	global $USER1_ID;
 	global $USER2_ID;
 
-	list($numberOfRows, $data) = getAccountsForClient($USER1_ID);
-	print 'Rows: ' . $numberOfRows . ' Data: ';
-	var_dump($data);
+	$USER1_data = getAccountsForClient($USER1_ID);
+	var_dump($USER1_data);
 
-	list($numberOfRows, $data) = getAccountsForClient($USER2_ID);
-	print 'Rows: ' . $numberOfRows . ' Data: ';
-	var_dump($data);
+	$USER2_data = getAccountsForClient($USER2_ID);
+	var_dump($USER2_data);
 
-	return true;
+	return (sizeof($USER1_data) == 1) && (sizeof($USER2_data) == 2);
 }
 
+function addTestTANs() {
 
+	//function insertTAN($tan, $account_id) {
 
+	global $USER1_ID;
+	global $USER1_ACCOUNTID;
+	global $USER1_TESTTAN;
+
+	$data = getAccountsForClient($USER1_ID);
+
+	$USER1_ACCOUNTID = $data[0]['id'];
+
+	$result = insertTAN($USER1_TESTTAN, $USER1_ACCOUNTID);
+
+	if ($result != false) {
+		print "Inserted TAN $USER1_TESTTAN for account $USER1_ACCOUNTID<br>";
+	} else {
+		print "Could not insert TAN $USER1_TESTTAN for account $USER1_ACCOUNTID!<br>";
+	}
+}
+
+function checkForTestTANs() {
+
+	global $USER1_ACCOUNTID;
+	global $USER1_TESTTAN;
+
+	//function verifyTANCode($account_id,$tan_code)
+	if (verifyTANCode($USER1_ACCOUNTID, $USER1_TESTTAN)) {
+		print "Successfully verified TAN $USER1_TESTTAN for Account $USER1_ACCOUNTID<br>";
+		return true;
+	} else {
+		print "Could not verify TAN $USER1_TESTTAN for Account $USER1_ACCOUNTID<br>";
+		return false;
+	}
+}
 
 
 
@@ -201,5 +308,16 @@ function removeTestAccounts() {
 	executeSetStatement('DELETE FROM account WHERE user_id IN (
 						 SELECT id FROM user WHERE first_name LIKE "%' . $TESTPREFIX . '%")');
 }
+
+function removeTestTANs() {
+
+	global $TESTPREFIX;
+
+	executeSetStatement('DELETE FROM tan WHERE account_id IN (
+						 SELECT ACC.id FROM account AS ACC JOIN user AS U ON ACC.user_id = U.id
+							WHERE U.first_name LIKE "%MYMAGICSTRING%");');
+
+}
+
 
 ?>

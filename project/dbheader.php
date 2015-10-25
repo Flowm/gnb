@@ -55,9 +55,9 @@ $USER_STATUS = array(
 
 function executeSelectStatementOneRecord($sql)
 {
-	list($numberOfRows, $data) = executeSelectStatement($sql);
+	$data = executeSelectStatement($sql);
 
-	return array($numberOfRows, $data[0]);
+	return $data[0];
 }
 
 function executeSelectStatement($sql)
@@ -67,19 +67,21 @@ function executeSelectStatement($sql)
 	$result = mysql_query($sql, $connection);
 
 	if ($result == false) {
-		$message = 'Invalid query: ' . mysql_error() . '\n';
-		$message .= 'Query: ' . $sql;
 
-		die($message);
+		$message = 'Invalid query: ' . mysql_error() . '<br>';
+		$message .= 'Query: ' . $sql . '<br>';
+
+		closeDatabaseConnection($connection);
+		print "ERROR: $message";
+		return -1;
+
 	} else {
 
-		$numberOfRows = mysql_num_rows($result);
+		$data = array();
 
 		while($row = mysql_fetch_assoc($result)) {
-			$rows[] = $row;
+			$data[] = $row;
 		}
-
-		$data = array($numberOfRows, $rows);
 	}
 
 	closeDatabaseConnection($connection);
@@ -93,10 +95,14 @@ function executeAddStatementOneRecord($sql)
 	$result = mysql_query($sql, $connection);
 
 	if ($result == false) {
-		$message = 'Invalid query: ' . mysql_error() . '<\br>';
-		$message .= 'Query: ' . $sql;
 
-		die($message);
+		$message = 'Invalid query: ' . mysql_error() . '<br>';
+		$message .= 'Query: ' . $sql . '<br>';
+
+		closeDatabaseConnection($connection);
+		print "ERROR: $message";
+		return -1;
+
 	} else {
 		$data = mysql_insert_id();
 	}
@@ -112,10 +118,12 @@ function executeSetStatement($sql)
 	$result = mysql_query($sql, $connection);
 
 	if ($result == false) {
-		$message = 'Invalid query: ' . mysql_error() . '<\br>';
-		$message .= 'Query: ' . $sql;
+		$message = 'Invalid query: ' . mysql_error() . '<br>';
+		$message .= 'Query: ' . $sql . '<br>';
 
-		die($message);
+		closeDatabaseConnection($connection);
+		print "ERROR: $message";
+		return -1;
 	} else {
 		$data = mysql_affected_rows();
 	}

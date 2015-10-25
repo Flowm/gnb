@@ -2,32 +2,6 @@
 
 include 'dbheader.php' ; 
 
-
-global $USER_TABLE_NAME;
-global $USER_TABLE_KEY;
-global $USER_TABLE_ROLE;
-global $USER_TABLE_STATUS;
-global $USER_TABLE_APPROVER;
-
-global $TAN_TABLE_NAME;
-global $TAN_TABLE_KEY;
-global $TAN_TABLE_ACCOUNT_ID;
-global $TAN_TABLE_USED_TS;
-
-global $TRANSACTION_TABLE_NAME;
-global $TRANSACTION_TABLE_KEY;
-global $TRANSACTION_TABLE_TO;
-global $TRANSACTION_TABLE_FROM;
-global $TRANSACTION_TABLE_AP_AT;
-global $TRANSACTION_TABLE_AP_BY;
-global $TRANSACTION_TABLE_AMOUNT;
-global $TRANSACTION_TABLE_DESC;
-global $TRANSACTION_TABLE_TAN;
-global $TRANSACTION_TABLE_C_TS;
-
-global $BANKACCOUNTS_TABLE_NAME;
-global $BANKACCOUNTS_TABLE_KEY;
-
 //tested
 function RecordIsInTable($record_value,$record_name,$table_name)
 {
@@ -38,14 +12,12 @@ function RecordIsInTable($record_value,$record_name,$table_name)
 			$record_name = '$record_value'
 	" ;
 
-	list($rows, $data) = executeSelectStatement($SQL_STATEMENT);
+	$result = executeSelectStatement($SQL_STATEMENT);
 
-	if ($rows == 1) {
+	if ($result != -1 && sizeof($result) > 0) {
 		return true;
-	}
-	else 
-	{
-		return false;  
+	} else {
+		return false;
 	}
 }
 
@@ -56,19 +28,36 @@ function getUserDetails($user_ID,$filter)
 	global $USER_TABLE_NAME;
 	global $USER_TABLE_KEY;
 	global $USER_TABLE_ROLE;
+	global $USER_TABLE_FIRSTNAME;
+	global $USER_TABLE_LASTNAME;
+	global $USER_TABLE_EMAIL;
+	global $USER_TABLE_STATUS;
+	global $USER_TABLE_APPROVER;
 
 	$role			= $USER_ROLES[$filter] ; 
+
 	$SQL_STATEMENT	= "
-		SELECT *
+		SELECT
+			$USER_TABLE_KEY
+			, $USER_TABLE_FIRSTNAME
+			, $USER_TABLE_LASTNAME
+			, $USER_TABLE_EMAIL
+			, $USER_TABLE_STATUS
+			, $USER_TABLE_ROLE
+			, $USER_TABLE_APPROVER
 		FROM $USER_TABLE_NAME
 		WHERE 
 			$USER_TABLE_KEY 		= '$user_ID'
 			AND $USER_TABLE_ROLE 	= '$role'
 	" ;
 	
-	list($numberOfRows, $data) = executeSelectStatementOneRecord($SQL_STATEMENT) ;
+	$result = executeSelectStatementOneRecord($SQL_STATEMENT) ;
 
-	return $data;
+	if ($result != -1) {
+		return $result;
+	} else {
+		return false;
+	}
 }
 
 //tested
@@ -127,9 +116,17 @@ function getPendingTransactions()
 		FROM $TRANSACTION_TABLE_NAME
 		WHERE $TRANSACTION_TABLE_AP_AT is EMPTY
 	" ;
-	return executeSelectStatement($SQL_STATEMENT) ; 
+
+	$result = executeSelectStatement($SQL_STATEMENT) ; 
+
+	if ($result != -1) {
+		return $result;
+	} else {
+		return false;
+	}
 }
 
+//tested
 function getPendingRequests($filter)
 {
 	global $USER_STATUS;
@@ -148,33 +145,51 @@ function getPendingRequests($filter)
 			$USER_TABLE_ROLE 		= $role
 			AND $USER_TABLE_STATUS	= $status
 	" ;
-	return executeSelectStatement($SQL_STATEMENT) ; 
+	$result = executeSelectStatement($SQL_STATEMENT) ; 
+
+	if ($result != -1) {
+		return $result;
+	} else {
+		return false;
+	}
 }
 
+//tested
 function getPendingClientRequests()
 {	
 	return getPendingRequests('client') ; 
 }
 
+//tested
 function getPendingEmployeeRequests()
 {
 	return getPendingRequests('employee') ; 
 }
 
+//tested
 function verifyTANCode($account_id,$tan_code)
 {
 	global $TAN_TABLE_NAME;
 	global $TAN_TABLE_KEY;
-	global $TAN_TABLE_USED_IS;
+	global $TAN_TABLE_USED_TS;
+	global $TAN_TABLE_ACCOUNT_ID;
 
 	$SQL_STATEMENT	= "
 		SELECT *
 		FROM $TAN_TABLE_NAME
 		WHERE
 			$TAN_TABLE_KEY	= '$tan_code'
-			AND $TAN_TABLE_USED_TS is EMPTY
+			AND $TAN_TABLE_ACCOUNT_ID = '$account_id'
+			AND $TAN_TABLE_USED_TS IS NULL
 	" ;
-	return executeSelectStatement($SQL_STATEMENT) ; 
+	
+	$result = executeSelectStatement($SQL_STATEMENT) ;
+
+	if ($result != -1) {
+		return $result;
+	} else {
+		return false;
+	}
 }
 	
 function processTransaction($src, $dest, $amount, $desc, $tan)
@@ -275,7 +290,10 @@ function approveUser($approver_id, $user_id, $role_filter )
 			$USER_TABLE_KEY			= '$user_id'
 			AND $USER_TABLE_ROLE	= '$role'
 	" ;
-	if (executeSetStatement($SQL_STATEMENT) == 1) {
+	
+	$result = executeSetStatement($SQL_STATEMENT) ;
+
+	if ($result != false && $result == 1) {
 		return true;
 	} else {
 		return false;
@@ -294,6 +312,7 @@ function approveClient($approver_id, $client_id )
 	return approveUser($approver_id, $client_id, 'client' ) ; 
 }	
 
+//tested
 function getAccountsForClient($client_id) {
 
 	//TODO: Check for client status?
@@ -307,13 +326,22 @@ function getAccountsForClient($client_id) {
 		WHERE 
 			$ACCOUNT_TABLE_USER_ID	= $client_id;
 	" ;
-	return executeSelectStatement($SQL_STATEMENT) ; 	
+	
+	$result = executeSelectStatement($SQL_STATEMENT) ;
+
+	if ($result != -1) {
+		return $result;
+	} else {
+		return false;
+	}
 }
 
+//tested
 function addAccountForClient($client_id) {
 	return addAccountForClientWithBalance($client_id, 0);
 }
 
+//tested
 function addAccountForClientWithBalance($client_id, $balance) {
 
 	global $ACCOUNT_TABLE_NAME;
@@ -326,11 +354,17 @@ function addAccountForClientWithBalance($client_id, $balance) {
 		VALUES
 			($client_id, $balance) ;
 	" ;
-	return executeSelectStatement($SQL_STATEMENT) ; 	
+	$result = executeSetStatement($SQL_STATEMENT) ;
+
+	if ($result != -1) {
+		return $result;
+	} else {
+		return false;
+	}
 }
 
 //tested
-function addUser($first_name, $last_name, $email, $role_filter) { //TODO: Add salt and Hash?
+function addUser($first_name, $last_name, $email, $password, $role_filter) {
 
 	global $USER_ROLES;
 	global $USER_TABLE_NAME;
@@ -342,6 +376,9 @@ function addUser($first_name, $last_name, $email, $role_filter) { //TODO: Add sa
 	global $USER_TABLE_HASH;
 
 	$role       = $USER_ROLES[$role_filter] ;
+
+	//TODO: Generate salt
+	//TODO: Generate hash from password
 
 	$SQL_STATEMENT	= "
 		INSERT INTO $USER_TABLE_NAME
@@ -360,24 +397,60 @@ function addUser($first_name, $last_name, $email, $role_filter) { //TODO: Add sa
 				, '$email'
 				, '$role'
 				, 'somesalt'
-				, 'somehash'
+				, 'unhashedPW$password'
 			)
 	" ; 
-	return executeAddStatementOneRecord($SQL_STATEMENT) ;
+
+	$result = executeAddStatementOneRecord($SQL_STATEMENT) ;
+
+	if ($result != -1) {
+		return $result;
+	} else {
+		return false;
+	}
 }	
 
 //tested
-function addClient($first_name, $last_name, $email) { //TODO: Add salt and Hash?
-	return addUser($first_name, $last_name, $email, 'client');
+function addClient($first_name, $last_name, $email, $password) {
+	return addUser($first_name, $last_name, $email, $password, 'client');
 }
 
 //tested
-function addEmployee($first_name, $last_name, $email) { //TODO: Add salt and Hash?
-	return addUser($first_name, $last_name, $email, 'employee');
+function addEmployee($first_name, $last_name, $email, $password) {
+	return addUser($first_name, $last_name, $email, $password, 'employee');
 }
 
-function insertTAN($account_id, $tan) {
+//tested
+function insertTAN($tan, $account_id) {
 	// Inserts TAN in DB
 	// Returns true if successful
 	// Returns false in case of error
+
+	global $TAN_TABLE_NAME;
+	global $TAN_TABLE_KEY;
+	global $TAN_TABLE_ACCOUNT_ID;
+
+	$SQL_STATEMENT	= "
+		INSERT INTO $TAN_TABLE_NAME
+			(
+				$TAN_TABLE_KEY
+				, $TAN_TABLE_ACCOUNT_ID
+			)
+		VALUES
+			(
+				'$tan'
+				, '$account_id'
+			)
+	" ;
+
+	$result = executeAddStatementOneRecord($SQL_STATEMENT);
+
+	if ($result != -1) {
+		return true;
+	} else {
+		return false;
+	}
 }
+
+
+

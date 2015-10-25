@@ -6,13 +6,13 @@
  * Time: 15:51
  */
 
-include "../view_mappings.php"; //All view mappings are loaded in here
+include "../resource_mappings.php"; //All view mappings are loaded in here
+
+session_start();
 
 global $pages;
 global $sections;
 global $frames;
-
-session_start();
 
 if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
     header("Location:".$pages["home"]);
@@ -26,7 +26,7 @@ if ($role != "employee") {
 $page = $pages["employee"]; //static
 
 $section = $sections["employee_home"]; //static default
-if (isset($_POST["section"])) {
+if (isset($_POST["section"]) && isset($sections[$_POST["section"]])) {
     $section = $sections[$_POST["section"]];
 }
 ?>
@@ -40,6 +40,7 @@ if (isset($_POST["section"])) {
     <script type="text/javascript" src="../js/employee.js"></script>
     <script type="text/javascript" src="../js/postRequest.js"></script>
     <script type="text/javascript" src="../js/account.js"></script>
+    <script type="text/javascript" src="../js/asyncRequest.js"></script>
 </head>
 <body>
 <h2>Welcome to the Goliath National Bank!</h2><br>

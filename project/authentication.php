@@ -9,7 +9,6 @@
 //Check credentials: if ok proceed to the correct overview, otherwise return to login.php and print some error
 //If authentication successful, set some session variables
 
-//TODO: Is that the right position for that include?
 include 'bankfunctions.php';
 
 session_start();
@@ -32,12 +31,12 @@ if ($username == null || $pw == null || $pin == null) {
     exit();
 }
 
-if (RecordIsInTable($username, 'first_name', 'user')) {
+/*if (RecordIsInTable($username, 'first_name', 'user')) {
 	header("Location:employee/employee.php");
     $_SESSION["username"] = $username;
     $_SESSION["role"] = "employee";
     exit();
-}
+}*/
 
 
 //HARDCODED!!

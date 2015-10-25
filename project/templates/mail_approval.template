@@ -1,0 +1,10 @@
+Hello <?php echo $cust_name; ?>!
+
+We are pleased to announce, that your registration to GNB was approved!
+Below you'll find 100 TANs for your Bank account:
+<?php echo $cust_tans ?>
+
+It's gonna be legen... wait for it... dary! Legendary!
+
+Sincerley Barney Stinson
+CEO of GNB

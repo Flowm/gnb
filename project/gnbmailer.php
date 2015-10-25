@@ -50,91 +50,53 @@ class GNBMailer {
 		return $this->send();
 	}
 
-	public function sendWelcomeMail($cust_addr, $cust_name) {
+	public function sendMail_Welcome($cust_addr, $cust_name) {
 		$subject = "Welcome to GNB!";
-		$body_txt = <<<EOTXT
-Hello $cust_name!
-
-We are pleased to welcome you at GNB.
-
-It's gonna be legen... wait for it... dary! Legendary!
-
-Sincerley Barney Stinson
-CEO of GNB
-EOTXT;
+		$body_txt = $this->getTemplate_Welcome($cust_name);
 		$body_html = $this->getHTMLMail($body_txt);
+
 		$this->sendMail($cust_addr, $cust_name, $subject, $body_txt, $body_html);
 	}
 
-	public function sendApprovalMail($cust_addr, $cust_name, $cust_tans) {
+	public function sendMail_Approval($cust_addr, $cust_name, $cust_tans) {
 		$subject = "Your registration to GNB was approved!";
-		$body_txt = <<<EOTXT
-Hello $cust_name!
-
-We are pleased to announce, that your registration to GNB was approved!
-Below you'll find 100 TANs for your Bank account:
-$cust_tans
-
-It's gonna be legen... wait for it... dary! Legendary!
-
-Sincerley Barney Stinson
-CEO of GNB
-EOTXT;
+		$body_txt = $this->getTemplate_Approval($cust_name, $cust_tans);
 		$body_html = $this->getHTMLMail($body_txt);
+
 		$this->sendMail($cust_addr, $cust_name, $subject, $body_txt, $body_html);
 	}
 
-	//PRIVATE
-	private function getHTMLMail($body_txt) {
-		$path = 'media/gnb_logo.png';
-		$type = pathinfo($path, PATHINFO_EXTENSION);
-		$data = file_get_contents($path);
-		$base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+	// PRIVATE
+	private function getTemplate_Welcome($cust_name) {
+		ob_start();
+		include "templates/mail_welcome.template";
+		$template = ob_get_contents();
+		ob_end_clean();
+		return $template;
+	}
 
-		$html_mail = <<<EOHTML
-<html>
-	<head>
-		<style type="text/css">
-			body {
-				background-color: #e0ddd6;
-			}
-			#frame {
-				width: 500px;
-				margin: 0 auto;
-				border-radius: 8px;
-				background-color: #ffffff;
-			}
-			#content {
-				font-family: Arial, Helvetica, sans-serif;
-				white-space: pre;
-				color: #454545;
-				font-size: 16px;
-				padding: 30px 25px 30px 24px;
-				line-height: 24px;
-			}
-			#logo {
-				display: block;
-				margin: auto;
-				padding: 50px 0px 0px 0px;
-				width: 60%;
-			}
-		</style>
-	</head>
-	<body>
-		<div id="frame">
-			<img id="logo" src="$base64" alt="GNB"/>
-			<div id="content">
-$body_txt
-			</div>
-		</div>
-	</body>
-</html>
-EOHTML;
+	private function getTemplate_Approval($cust_name, $cust_tans) {
+		ob_start();
+		include "templates/mail_approval.template";
+		$template = ob_get_contents();
+		ob_end_clean();
+		return $template;
+	}
+
+	private function getHTMLMail($body_txt) {
+		$logo_path = 'media/gnb_logo.png';
+		$logo_type = pathinfo($logo_path, PATHINFO_EXTENSION);
+		$logo_data = file_get_contents($logo_path);
+		$logo_base64 = 'data:image/' . $logo_type . ';base64,' . base64_encode($logo_data);
+
+		ob_start();
+		include "templates/mail_html.template";
+		$html_mail = ob_get_contents();
+		ob_end_clean();
 		return $html_mail;
 	}
 }
 
-$gnbmailer = new GNBMailer();
-//$gnbmailer->send('florian.mauracher@tum.de', 'Florian Mauracher', "TESTMAIL", "foo", "<h1>foobar</h1>");
-$gnbmailer->sendWelcomeMail('florian.mauracher@tum.de', 'Florian Mauracher');
-//$gnbmailer->sendWelcomeMail('alexander.lill@tum.de', 'Alexander Lill');
+//$gnbmailer = new GNBMailer();
+//$gnbmailer->sendMail_Welcome('florian.mauracher@tum.de', 'Florian Mauracher');
+//$gnbmailer->sendMail_Welcome('alexander.lill@tum.de', 'Alexander Lill');

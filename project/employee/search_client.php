@@ -12,9 +12,6 @@ include "../resource_mappings.php";
 include "../bankfunctions.php";
 include "../user.php";
 
-ini_set("display_errors",2);
-ini_set("error_reporting",E_ALL|E_STRICT);
-
 if (isset($_POST['surname'])) {
     //query by surname
     $search = getClientBySurname($_POST['surname']);

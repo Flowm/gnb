@@ -9,7 +9,7 @@
 include "../user.php";
 include "../bankfunctions.php";
 
-$data = getPendingRequests(null);
+$data = getPendingRequests();
 $newUsers = array();
 if ($data != null) {
     foreach ($data as $u) {

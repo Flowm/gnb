@@ -89,12 +89,14 @@ function getClientBySurname($client_surname)
             $USER_TABLE_LASTNAME = '$client_surname'
     ";
 
-    $test = executeSelectStatement($SQL_STATEMENT);
-    list($nRows, $data) = $test;
-    return $data;
+    $result = executeSelectStatement($SQL_STATEMENT);
+
+    if ($result != -1) {
+        return $result;
+    } else {
+        return false;
+    }
 }
-
-
 
 function getAccountTransactions($account_ID, $filter ='ALL')
 {
@@ -177,13 +179,13 @@ function getPendingRequests($filter = null)
 			$USER_TABLE_ROLE 		= $role
 			AND $USER_TABLE_STATUS	= $status
 	";
-        $result = executeSelectStatement($SQL_STATEMENT);
+    }
+    $result = executeSelectStatement($SQL_STATEMENT);
 
-        if ($result != -1) {
-            return $result;
-        } else {
-            return false;
-        }
+    if ($result != -1) {
+        return $result;
+    } else {
+        return false;
     }
 }
 

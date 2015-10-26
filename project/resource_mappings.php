@@ -8,8 +8,7 @@
 
 //THIS FILE CONTAINS THE MAPPINGS BETWEEN LOGICAL NAMES AND VIEWS
 
-$root = realpath($_SERVER["DOCUMENT_ROOT"]);
-$root = $root."/project";
+$root = realpath(dirname(__FILE__));
 
 //PAGES (main pages of the client application)
 $pages = array();

@@ -11,11 +11,16 @@
 include_once ('../main_include.php') ; 
 # need account ID 
 #except Account Number 
+foreach ($_POST as $var => $value ){
+	$$var	= $value ; 
+}
+
 $account_id = '10000001' ;  
 list($n_cols, $acc_info) = getAccountDetails($account_id) ;
 drawSingleRecordTable($acc_info,'Account #'.$account_id) ; 
 
 $available_funds 	= 	$acc_info["balance"] ; 
+
 ?>
 
 <!DOCTYPE html>
@@ -29,10 +34,10 @@ $available_funds 	= 	$acc_info["balance"] ;
     <h4>This form is used to perform a single transaction for multiple transactions please click <a href="">here</a></h4>
     <h5>Note: Any Transaction over 10,000 will be need to be processed which may take up to 48 hours</h5> 
 	<form method="post" action="verify_transaction.php">
-        IBAN# <input type="text" name="dest_code"><br>
-		Amount <input type="text" name="amount"><br>
-		Descrition <input type="text" name="description"><br>
-		TAN Code <input type="text" name="tan_code"><br>
+        IBAN# <input type="text" name="dest_code"	value="<?=dest_code?>"><br>
+		Amount <input type="text" name="amount" value="<?=amount?>"><br>
+		Descrition <input type="text" name="description" value="<?=description?>"><br>
+		TAN Code <input type="text" name="tan_code" value="<?=tan_code?>"><br>
         <?php
         $error = null;
         if (isset($_GET) && isset($_GET["error"])) {

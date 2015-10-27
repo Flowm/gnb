@@ -569,3 +569,88 @@ function getUser($user_mail, $user_password) {
 	}
 }
 
+# need to test MN 
+function getAccountListForClient($client_ID)
+{
+	global $BANKACCOUNTS_TABLE_NAME;
+	global $BANKACCOUNTS_TABLE_KEY;
+	global $BANKACCOUNTS_TABLE_OWNER ;
+	global $BANKACCOUNTS_TABLE_AMOUNT ;
+	global $USER_TABLE_NAME;
+	global $USER_TABLE_KEY;
+	
+	$SQL_STATEMENT	= "
+		SELECT
+			b.$BANKACCOUNTS_TABLE_KEY
+			,b.$BANKACCOUNTS_TABLE_AMOUNT
+			,b.$BANKACCOUNTS_TABLE_OWNER
+		FROM 
+			$BANKACCOUNTS_TABLE_NAME	b
+			,$USER_TABLE_NAME			u
+		WHERE 
+			u.$USER_TABLE_KEY 		= b.$BANKACCOUNTS_TABLE_OWNER
+	" ;
+	
+	  ;
+	 
+	return executeSelectStatement($SQL_STATEMENT) ;
+}
+
+
+# need to test MN 
+function getAllAccountDetails()
+{
+	global $BANKACCOUNTS_TABLE_NAME;
+	
+	$SQL_STATEMENT	= "
+		SELECT *
+		FROM $BANKACCOUNTS_TABLE_NAME
+	" ;
+	return executeSelectStatement($SQL_STATEMENT) ; 
+}
+
+function verify_transaction($account_id, $dest_code, $amount , $description , $tan_code )
+{
+	global $BANKACCOUNTS_TABLE_NAME;
+	global $BANKACCOUNTS_TABLE_KEY;
+	$var_res = array (
+		"result"	=> false,
+		"message"	=> "[Default] No test has been completed"
+	) ; 
+	
+	$SQL_STATEMENT = "
+		SELECT 	* 
+		FROM  	$BANKACCOUNTS_TABLE_NAME
+		WHERE	$BANKACCOUNTS_TABLE_KEY = $account_id
+	" ; 
+	
+	$account_info 	= executeSelectStatement($SQL_STATEMENT) ;
+	
+	# checking account ID 
+	if (sizeof($account_info) == 0 ){
+		$var_res["message"]	= '[Account] account not found' ;
+		return $var_res ; 
+	}
+	
+	# Add check for Destination Account  
+	# no check needed at this stage 
+	
+	# Add check for Description  
+	# no check needed at this stage 
+	
+	if ( $amount > $account_info[0]["balance"] ){
+		$var_res["message"]	= '[Funds] Insuffecient funds' ;
+		return $var_res ; 
+	}	
+
+	$tan_ver 	= verifyTANCode($account_id, $tan_code);  
+	if (sizeof($tan_ver) == 0 ){
+		$var_res["message"]	= '[Tan Code] Invalid or used Tan code' ;
+		return $var_res ; 
+	}
+ 
+	# Add check for TAN Codes   
+	$var_res["message"]	= '[Success] Passed all tests' ;
+	return $var_res ; 
+	 	
+}

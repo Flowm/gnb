@@ -182,7 +182,7 @@ function getPendingTransactions()
 }
 
 //tested
-function getPendingRequests($filter = null)
+function getPendingRequests($filter = 'ALL')
 {
     global $USER_STATUS;
     global $USER_ROLES;
@@ -193,13 +193,13 @@ function getPendingRequests($filter = null)
     $status = $USER_STATUS['unapproved'];
     $role = ($filter != null) ? $USER_ROLES[$filter] : null;
 
-    if ($role == null) {
+    if ($filter == 'ALL') {
         $SQL_STATEMENT = "
 		SELECT *
 		FROM $USER_TABLE_NAME
 		WHERE
 			$USER_TABLE_STATUS	    = $status
-	";
+		";
     } else {
         $SQL_STATEMENT = "
 		SELECT *
@@ -207,8 +207,9 @@ function getPendingRequests($filter = null)
 		WHERE
 			$USER_TABLE_ROLE 		= $role
 			AND $USER_TABLE_STATUS	= $status
-	";
+		";
     }
+
     $result = executeSelectStatement($SQL_STATEMENT);
 
     if ($result != -1) {
@@ -551,19 +552,20 @@ function getUser($user_mail, $user_password) {
 	$hash = ''; //TODO: Use hash
 
     $SQL_STATEMENT = "
-			SELECT $USER_TABLE_KEY
-			FROM $USER_TABLE_NAME
-			WHERE
-				$USER_TABLE_EMAIL = '$user_mail'
-				AND
-				$USER_TABLE_HASH = '$user_password'
+		SELECT $USER_TABLE_KEY
+		FROM $USER_TABLE_NAME
+		WHERE
+			$USER_TABLE_EMAIL = '$user_mail'
+			AND
+			$USER_TABLE_HASH = '$user_password'
 		" ;
 
-    $result = executeSelectStatementOneRecord($SQL_STATEMENT);
+	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
 
-    if ($result != -1) {
-        return getUserDetails($result[$USER_TABLE_KEY]);
-    }
-    return false;
+	if ($result != -1) {
+		return getUserDetails($result[$USER_TABLE_KEY]);
+    } else {
+		return false;
+	}
 }
 

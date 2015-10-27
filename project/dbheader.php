@@ -76,7 +76,9 @@ $R_USER_STATUS = array(
 function executeSelectStatementOneRecord($sql)
 {
 	$data = executeSelectStatement($sql);
-	return $data[0];
+	$result = $data[0];
+
+	return $result;
 }
 
 function executeSelectStatement($sql)
@@ -91,16 +93,14 @@ function executeSelectStatement($sql)
 		$message .= 'Query: ' . $sql . '<br>';
 
 		closeDatabaseConnection($connection);
-		die("ERROR: $message");
+		print "ERROR: $message";
 		return -1;
 
 	} else {
 
 		$data = array();
-
 		while($row = mysql_fetch_assoc($result)) {
 			$data[] = $row;
-			print "SQLLLLLLLLLLLLLLL $sql AND ROW=$row";
 		}
 	}
 

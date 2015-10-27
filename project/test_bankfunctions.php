@@ -36,9 +36,6 @@ test('Checking users', checkForTestUsers(), true);
 // Check if duplicate users are prohibited
 test('Checking user requests', checkTestUserRequests(), 2);
 
-
-print_r(getUser($USER1_EMAIL, $USER1_PASSWORD));
-
 approveTestUsers();
 test('Checking approved users', checkForApprovedTestUsers(), true);
 test('Checking user requests', checkTestUserRequests(), 0);
@@ -52,7 +49,7 @@ test('Adding TANs', checkForTestTANs(), true);
 
 addTestTransactions();
 test('Checking transactions', checkForTestTransactions(), true);
-die();
+
 approveTransactions();
 
 

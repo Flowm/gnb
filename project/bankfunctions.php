@@ -394,7 +394,7 @@ function approveClient($approver_id, $client_id)
 }
 
 //tested
-function getAccountsForClient($client_id)
+function getAccountsForUser($user_id)
 {
 
     //TODO: Check for client status? A: Server side check maybe, instead of db?!
@@ -406,7 +406,7 @@ function getAccountsForClient($client_id)
 		SELECT *
 		FROM $ACCOUNT_TABLE_NAME
 		WHERE 
-			$ACCOUNT_TABLE_USER_ID	= $client_id;
+			$ACCOUNT_TABLE_USER_ID	= $user_id;
 	";
 
     $result = executeSelectStatement($SQL_STATEMENT);
@@ -419,13 +419,13 @@ function getAccountsForClient($client_id)
 }
 
 //tested
-function addAccountForClient($client_id)
+function addAccountForUser($user_id)
 {
-    return addAccountForClientWithBalance($client_id, 0);
+    return addAccountForUserWithBalance($user_id, 0);
 }
 
 //tested
-function addAccountForClientWithBalance($client_id, $balance)
+function addAccountForUserWithBalance($user_id, $balance)
 {
 
     global $ACCOUNT_TABLE_NAME;
@@ -437,7 +437,7 @@ function addAccountForClientWithBalance($client_id, $balance)
 		INTO $ACCOUNT_TABLE_NAME
 			( $ACCOUNT_TABLE_USER_ID, $ACCOUNT_TABLE_BALANCE )
 		VALUES
-			($client_id, $balance) ;
+			($user_id, $balance) ;
 	";
     $result = executeSetStatement($SQL_STATEMENT);
 

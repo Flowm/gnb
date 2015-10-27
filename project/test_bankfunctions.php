@@ -222,15 +222,15 @@ function checkForApprovedTestUsers() {
 
 function addTestAccounts() {
 
-	//function addAccountForClient($client_id) {
-	//function addAccountForClient($client_id, $balance){
+	//function addAccountForUser($user_id) {
+	//function addAccountForUser($user_id, $balance){
 
 	global $USER1_ID;
 	global $USER2_ID;
 
-	addAccountForClient($USER1_ID);
-	addAccountForClientWithBalance($USER2_ID, 5555.55);
-	addAccountForClientWithBalance($USER2_ID, 7777.77);
+	addAccountForUser($USER1_ID);
+	addAccountForUserWithBalance($USER2_ID, 5555.55);
+	addAccountForUserWithBalance($USER2_ID, 7777.77);
 
 	return true;
 }
@@ -240,10 +240,10 @@ function checkForTestAccounts() {
 	global $USER1_ID;
 	global $USER2_ID;
 
-	$USER1_data = getAccountsForClient($USER1_ID);
+	$USER1_data = getAccountsForUser($USER1_ID);
 	var_dump($USER1_data);
 
-	$USER2_data = getAccountsForClient($USER2_ID);
+	$USER2_data = getAccountsForUser($USER2_ID);
 	var_dump($USER2_data);
 
 	return (sizeof($USER1_data) == 1) && (sizeof($USER2_data) == 2);
@@ -262,7 +262,7 @@ function addTestTANs() {
 	global $USER2_TESTTAN;
 	global $USER2_TESTTAN2;
 
-	$data = getAccountsForClient($USER1_ID);
+	$data = getAccountsForUser($USER1_ID);
 
 	$USER1_ACCOUNTID = $data[0]['id'];
 
@@ -275,7 +275,7 @@ function addTestTANs() {
 	}
 
 
-    $data = getAccountsForClient($USER2_ID);
+    $data = getAccountsForUser($USER2_ID);
 
     $USER2_ACCOUNTID = $data[0]['id'];
 
@@ -287,7 +287,7 @@ function addTestTANs() {
         print "Could not insert TAN $USER2_TESTTAN for account $USER2_ACCOUNTID!<br>";
     }
 
-    $data = getAccountsForClient($USER2_ID);
+    $data = getAccountsForUser($USER2_ID);
 
     $USER2_ACCOUNTID = $data[0]['id'];
 
@@ -341,10 +341,10 @@ function addTestTransactions() {
 	global $USER2_TESTTAN2;
 	global $TESTPREFIX;
 
-	$SRCACCOUNT = getAccountsForClient($USER1_ID);
+	$SRCACCOUNT = getAccountsForUser($USER1_ID);
 	$SRCACC = $SRCACCOUNT[0]['id'];
 
-	$DSTACCOUNT = getAccountsForClient($USER2_ID);
+	$DSTACCOUNT = getAccountsForUser($USER2_ID);
 	$DSTACC = $DSTACCOUNT[0]['id'];
 
 	$DESC   = $TESTPREFIX . '_DESC' . 1;

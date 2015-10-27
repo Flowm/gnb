@@ -20,7 +20,7 @@ if ($user == null) {
     exit();
 }
 
-$data = getAccountsForClient($user->id);
+$data = getAccountsForUser($user->id);
 $user->setAccounts($data);
 $accounts = $user->accounts;
 

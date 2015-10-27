@@ -9,48 +9,59 @@
 //Check credentials: if ok proceed to the correct overview, otherwise return to login.php and print some error
 //If authentication successful, set some session variables
 
-include 'bankfunctions.php';
+include 'resource_mappings.php';
+include getPageAbsolute('user');
+include getPageAbsolute('db_functions');
 
 session_start();
 
 $username = null;
 $pw = null;
-$pin = null;
+$error = '?error=0';
 if (isset($_POST["username"])) {
     $username = $_POST["username"];
 }
 if (isset($_POST["password"])) {
     $pw = $_POST["password"];
 }
-if (isset($_POST["pin"])) {
-    $pin = $_POST["pin"];
-}
 
-if ($username == null || $pw == null || $pin == null) {
-    header("Location:login.php?error=invalid");
+if ($username == null || $pw == null) {
+    header("Location:".getPageURL('login').$error);
     exit();
 }
 
-/*if (RecordIsInTable($username, 'first_name', 'user')) {
-	header("Location:employee/employee.php");
-    $_SESSION["username"] = $username;
-    $_SESSION["role"] = "employee";
-    exit();
-}*/
-
-
-//HARDCODED!!
-if ($username == "ted" && $pw == "ted" && $pin == "1234") {
-    header("Location:employee/employee.php");
+//HARDCODED!! NEED LOGIN FUNCTION TO ACTUALLY DO THIS RIGHT
+if ($username == "ted" && $pw == "ted") {
+    header("Location:".getPageURL('employee'));
     $_SESSION["username"] = $username;
     $_SESSION["role"] = "employee";
     exit();
 }
-else if ($username == "tum" && $pw == "tum" && $pin == "1234") {
-    $_SESSION["username"] = $username;
-    $_SESSION["role"] = "client";
-    header("Location:client/client.php");
+
+$result = getUser($username, $pw);
+if (!$result) {
+    header("Location:".getPageURL('login').$error);
+}
+else {
+    $user = new user($result);
+    $role = array_search($user->role, $USER_ROLES);
+    $_SESSION["username"] = $user->email;
+    $_SESSION["role"] = $role;
+    $_SESSION["user_id"] = $user->id;
+    $_SESSION["firstname"] = $user->firstname;
+    $_SESSION["lastname"] = $user->lastname;
+    if ($role == 'client') {
+        header("Location:".getPageURL('client'));
+    }
+    elseif ($role == 'employee') {
+        header("Location:".getPageURL('employee'));
+    }
+    else {
+        //TODO: ERROR? WTF?
+    }
     exit();
 }
 
-header("Location:login.php?error=invalid");
+header("Location:".getPageURL('login').$error);
+
+?>

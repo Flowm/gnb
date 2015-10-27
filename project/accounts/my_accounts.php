@@ -6,11 +6,9 @@
  * Time: 15:14
  */
 
-global $frames;
-
-$frame = $frames["account_home"]; //static default
+$frame = getFrameAbsolute('account_home'); //static default
 if (isset($_POST["frame"])) {
-    $frame = $frames[$_POST["frame"]];
+    $frame = getFrameAbsolute($_POST["frame"]);
 }
 
 $selected = "account1";

@@ -6,11 +6,9 @@
  * Time: 16:04
  */
 
-global $frames;
-
-$frame = $frames["manage_clients"]; //static default
-if (isset($_POST["frame"]) && isset($frames[$_POST["frame"]])) {
-    $frame = $frames[$_POST["frame"]];
+$frame = getFrameAbsolute('manage_clients'); //static default
+if (isset($_POST["frame"])) {
+    $frame = getFrameAbsolute($_POST['frame']);
 }
 ?>
 

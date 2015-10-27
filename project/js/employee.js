@@ -29,6 +29,14 @@ function goToMyAccounts(frame, account) {
 }
 
 function approveRegistration() {
+    return handleRegistrations('approved_registrations');
+}
+
+function rejectRegistration() {
+    return handleRegistrations('rejected_registrations');
+}
+
+function handleRegistrations(action) {
     var selected = document.getElementsByName("action_check");
     var ids = "";
     for (var i=0; i<selected.length; i++) {
@@ -37,12 +45,8 @@ function approveRegistration() {
             ids += ";";
         }
     }
-    var params = {section:"employee_area", frame:"manage_registration", approved_registrations:ids};
+    var params = {section:"employee_area", frame:"manage_registration", action:ids};
     return performPostRequest("employee.php",params);
-}
-
-function rejectRegistration() {
-    //TODO: TO IMPLEMENT
 }
 
 //THE FOLLOWING FUNCTIONS ARE NEEDED INSIDE THE manage_clients.php FILE

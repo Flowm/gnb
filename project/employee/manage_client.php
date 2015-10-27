@@ -9,8 +9,6 @@
 include "../user.php";
 include "../bankfunctions.php";
 
-global $sections;
-
 $user = null;
 if (isset($_POST['client_id'])) {
     $search = getClientDetails($_POST['client_id']);
@@ -18,7 +16,7 @@ if (isset($_POST['client_id'])) {
 }
 
 if ($user == null) {
-    include $sections['manage_clients'];
+    include getSectionAbsolute('manage_clients');
     exit();
 }
 

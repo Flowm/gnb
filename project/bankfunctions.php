@@ -26,7 +26,7 @@ function RecordIsInTable($record_value,$record_name,$table_name)
 }
 
 //tested
-function getUserDetails($user_ID,$filter)
+function getUserDetails($user_ID,$filter = null)
 {
 	global $USER_ROLES;
 	global $USER_TABLE_NAME;
@@ -38,9 +38,13 @@ function getUserDetails($user_ID,$filter)
 	global $USER_TABLE_STATUS;
 	global $USER_TABLE_APPROVER;
 
-	$role			= $USER_ROLES[$filter] ; 
+    $role = null;
+    if (isset($USER_ROLES[$filter])) {
+        $role			= $USER_ROLES[$filter] ;
+    }
 
-	$SQL_STATEMENT	= "
+    if ($role != null) {
+        $SQL_STATEMENT	= "
 		SELECT
 			$USER_TABLE_KEY
 			, $USER_TABLE_FIRSTNAME
@@ -50,10 +54,26 @@ function getUserDetails($user_ID,$filter)
 			, $USER_TABLE_ROLE
 			, $USER_TABLE_APPROVER
 		FROM $USER_TABLE_NAME
-		WHERE 
+		WHERE
 			$USER_TABLE_KEY 		= '$user_ID'
 			AND $USER_TABLE_ROLE 	= '$role'
-	" ;
+	    " ;
+    }
+    else {
+        $SQL_STATEMENT	= "
+		SELECT
+			$USER_TABLE_KEY
+			, $USER_TABLE_FIRSTNAME
+			, $USER_TABLE_LASTNAME
+			, $USER_TABLE_EMAIL
+			, $USER_TABLE_STATUS
+			, $USER_TABLE_ROLE
+			, $USER_TABLE_APPROVER
+		FROM $USER_TABLE_NAME
+		WHERE
+			$USER_TABLE_KEY 		= '$user_ID'
+	    " ;
+    }
 	
 	$result = executeSelectStatementOneRecord($SQL_STATEMENT) ;
 
@@ -520,28 +540,6 @@ function insertTAN($tan, $account_id)
     }
 }
 
-function getUserID($user_mail) {
-
-	global $USER_TABLE_KEY;
-	global $USER_TABLE_NAME;
-	global $USER_TABLE_EMAIL;
-
-    $SQL_STATEMENT  = "
-        SELECT $USER_TABLE_KEY
-		FROM   $USER_TABLE_NAME
-		WHERE $USER_TABLE_EMAIL = '$user_mail'
-    " ;
-
-	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
-
-	if ($result != -1) {
-		return $result[$USER_TABLE_KEY];
-	} else {
-		return false;
-	}
-
-}
-
 function getUser($user_mail, $user_password) {
 
 	global $USER_TABLE_KEY;
@@ -549,39 +547,23 @@ function getUser($user_mail, $user_password) {
 	global $USER_TABLE_EMAIL;
 	global $USER_TABLE_HASH;
 	global $USER_TABLE_STATUS;
-	
-	$userid = getUserID($user_mail);
 
 	$hash = ''; //TODO: Use hash
 
-	if ($userid != false) {
-
-		print "UUUUUUUUUUUUUUSERID $userid<br>";
-
-		$SQL_STATEMENT = "
+    $SQL_STATEMENT = "
 			SELECT $USER_TABLE_KEY
 			FROM $USER_TABLE_NAME
 			WHERE
-				$USER_TABLE_KEY  = '$userid'
-				AND
 				$USER_TABLE_EMAIL = '$user_mail'
 				AND
 				$USER_TABLE_HASH = '$user_password'
-				AND
-				$USER_TABLE_STATUS = 1
 		" ;
 
-		$result = executeSelectStatementOneRecord($SQL_STATEMENT);
+    $result = executeSelectStatementOneRecord($SQL_STATEMENT);
 
-		if ($result != -1 && $result == $userid) {
-			return getUserDetails($userid);
-		} else {
-			return false;
-		}
-
-	} else {
-		return false;
-	}
-
+    if ($result != -1) {
+        return getUserDetails($result[$USER_TABLE_KEY]);
+    }
+    return false;
 }
 

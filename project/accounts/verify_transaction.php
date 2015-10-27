@@ -16,14 +16,14 @@ foreach ($_POST as $var => $value ){
 }
 #var_dump($_POST) ;
 # for testing 
-$account_id=10000001 ;
-#$account_id=100 ;
-$dest_code='IBAN213213123' ;
-$description='Test Transaction' ;
-$amount=500 ;
-
-$tan_code='1234567890ABCDE' ;			# invalid
-$tan_code='04696eac02be2ae' ;         	# valid
+#$account_id=10000001 ;
+##$account_id=100 ;
+#$dest_code='IBAN213213123' ;
+#$description='Test Transaction' ;
+#$amount=500 ;
+#
+#$tan_code='1234567890ABCDE' ;			# invalid
+#$tan_code='04696eac02be2ae' ;         	# valid
 
 
 # verify all input is there 

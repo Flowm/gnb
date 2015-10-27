@@ -26,7 +26,7 @@ function RecordIsInTable($record_value,$record_name,$table_name)
 }
 
 //tested
-function getUserDetails($user_ID,$filter = null)
+function getUserDetails($user_ID,$filter)
 {
 	global $USER_ROLES;
 	global $USER_TABLE_NAME;
@@ -38,13 +38,9 @@ function getUserDetails($user_ID,$filter = null)
 	global $USER_TABLE_STATUS;
 	global $USER_TABLE_APPROVER;
 
-    $role = null;
-    if (isset($USER_ROLES[$filter])) {
-        $role			= $USER_ROLES[$filter] ;
-    }
+	$role			= $USER_ROLES[$filter] ; 
 
-    if ($role != null) {
-        $SQL_STATEMENT	= "
+	$SQL_STATEMENT	= "
 		SELECT
 			$USER_TABLE_KEY
 			, $USER_TABLE_FIRSTNAME
@@ -54,26 +50,10 @@ function getUserDetails($user_ID,$filter = null)
 			, $USER_TABLE_ROLE
 			, $USER_TABLE_APPROVER
 		FROM $USER_TABLE_NAME
-		WHERE
+		WHERE 
 			$USER_TABLE_KEY 		= '$user_ID'
 			AND $USER_TABLE_ROLE 	= '$role'
-	    " ;
-    }
-    else {
-        $SQL_STATEMENT	= "
-		SELECT
-			$USER_TABLE_KEY
-			, $USER_TABLE_FIRSTNAME
-			, $USER_TABLE_LASTNAME
-			, $USER_TABLE_EMAIL
-			, $USER_TABLE_STATUS
-			, $USER_TABLE_ROLE
-			, $USER_TABLE_APPROVER
-		FROM $USER_TABLE_NAME
-		WHERE
-			$USER_TABLE_KEY 		= '$user_ID'
-	    " ;
-    }
+	" ;
 	
 	$result = executeSelectStatementOneRecord($SQL_STATEMENT) ;
 
@@ -182,7 +162,7 @@ function getPendingTransactions()
 }
 
 //tested
-function getPendingRequests($filter = 'ALL')
+function getPendingRequests($filter = null)
 {
     global $USER_STATUS;
     global $USER_ROLES;
@@ -193,13 +173,13 @@ function getPendingRequests($filter = 'ALL')
     $status = $USER_STATUS['unapproved'];
     $role = ($filter != null) ? $USER_ROLES[$filter] : null;
 
-    if ($filter == 'ALL') {
+    if ($role == null) {
         $SQL_STATEMENT = "
 		SELECT *
 		FROM $USER_TABLE_NAME
 		WHERE
 			$USER_TABLE_STATUS	    = $status
-		";
+	";
     } else {
         $SQL_STATEMENT = "
 		SELECT *
@@ -207,9 +187,8 @@ function getPendingRequests($filter = 'ALL')
 		WHERE
 			$USER_TABLE_ROLE 		= $role
 			AND $USER_TABLE_STATUS	= $status
-		";
+	";
     }
-
     $result = executeSelectStatement($SQL_STATEMENT);
 
     if ($result != -1) {
@@ -541,6 +520,28 @@ function insertTAN($tan, $account_id)
     }
 }
 
+function getUserID($user_mail) {
+
+	global $USER_TABLE_KEY;
+	global $USER_TABLE_NAME;
+	global $USER_TABLE_EMAIL;
+
+    $SQL_STATEMENT  = "
+        SELECT $USER_TABLE_KEY
+		FROM   $USER_TABLE_NAME
+		WHERE $USER_TABLE_EMAIL = '$user_mail'
+    " ;
+
+	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
+
+	if ($result != -1) {
+		return $result[$USER_TABLE_KEY];
+	} else {
+		return false;
+	}
+
+}
+
 function getUser($user_mail, $user_password) {
 
 	global $USER_TABLE_KEY;
@@ -548,25 +549,40 @@ function getUser($user_mail, $user_password) {
 	global $USER_TABLE_EMAIL;
 	global $USER_TABLE_HASH;
 	global $USER_TABLE_STATUS;
+	
+	$userid = getUserID($user_mail);
 
 	$hash = ''; //TODO: Use hash
 
-    $SQL_STATEMENT = "
-		SELECT $USER_TABLE_KEY
-		FROM $USER_TABLE_NAME
-		WHERE
-			$USER_TABLE_EMAIL = '$user_mail'
-			AND
-			$USER_TABLE_HASH = '$user_password'
+	if ($userid != false) {
+
+		print "UUUUUUUUUUUUUUSERID $userid<br>";
+
+		$SQL_STATEMENT = "
+			SELECT $USER_TABLE_KEY
+			FROM $USER_TABLE_NAME
+			WHERE
+				$USER_TABLE_KEY  = '$userid'
+				AND
+				$USER_TABLE_EMAIL = '$user_mail'
+				AND
+				$USER_TABLE_HASH = '$user_password'
+				AND
+				$USER_TABLE_STATUS = 1
 		" ;
 
-	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
+		$result = executeSelectStatementOneRecord($SQL_STATEMENT);
 
-	if ($result != -1) {
-		return getUserDetails($result[$USER_TABLE_KEY]);
-    } else {
+		if ($result != -1 && $result == $userid) {
+			return getUserDetails($userid);
+		} else {
+			return false;
+		}
+
+	} else {
 		return false;
 	}
+
 }
 
 # need to test MN 
@@ -652,5 +668,22 @@ function verify_transaction($account_id, $dest_code, $amount , $description , $t
 	# Add check for TAN Codes   
 	$var_res["message"]	= '[Success] Passed all tests' ;
 	return $var_res ; 
-	 	
 }
+
+function getAccountDetails($account_ID)
+{
+	global $BANKACCOUNTS_TABLE_NAME;
+	global $BANKACCOUNTS_TABLE_KEY;
+	global $BANKACCOUNTS_TABLE_AMOUNT ;
+	
+	$SQL_STATEMENT	= "
+		SELECT 
+			$BANKACCOUNTS_TABLE_KEY		\"Account ID\",
+			$BANKACCOUNTS_TABLE_AMOUNT	\"Current Balance\"
+		FROM $BANKACCOUNTS_TABLE_NAME
+		WHERE $BANKACCOUNTS_TABLE_KEY 	= '$account_ID'
+	" ;
+	return executeSelectStatement($SQL_STATEMENT) ; 
+}
+
+

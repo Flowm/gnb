@@ -44,6 +44,7 @@ $frames["transfer_details"] = "employee/transfer_details.php";
 $frames["account_overview"] = "accounts/account_overview.php";
 $frames["account_home"] = "accounts/account_overview.php";
 $frames["new_transaction"] = "accounts/new_transaction.php";
+$frames["new_transaction_multiple"] = "accounts/new_transaction_multiple.php";
 $frames["transaction_history"] = "accounts/transaction_history.php";
 
 

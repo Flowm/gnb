@@ -3,26 +3,55 @@
  * Created by PhpStorm.
  * User: lorenzodonini
  * Date: 18/10/15
- * Time: 00:32
+ * Time: 09:33
  */
+
+//IMPLEMENT SOME STUFF
+
+include_once ('../main_include.php') ; 
+# need account ID 
+#except Account Number 
+foreach ($_POST as $var => $value ){
+	$$var	= $value ; 
+}
+
+$account_id = '10000001' ;  
+$acc_info = getAccountDetails($account_id) ;
+drawSingleRecordTable($acc_info[0],'Account ') ; 
+
+$dest_code			= ( isset($dest_code) ? $dest_code : '' ) ; 
+$amount				= ( isset($amount) ? $amount : '' ) ; 
+$description		= ( isset($description) ? $description : '' ) ; 
+$tan_code			= ( isset($tan_code) ? $tan_code : '' ) ; 
+
 ?>
 
-<p>To perform a transaction you can either fill in the form below or upload a CSV or TXT file
-    containing the same information, using the following format:<br>
-    <b>RECEIVER_IBAN;TRANSFER_AMOUNT;DESCRIPTION;TAN;</b><br>
-    All fields are mandatory!
-</p><br>
-<form method="post" action="do_transaction.php" enctype="multipart/form-data">
-    <input type="file" name="transactionFile"><br>
-    <input type="submit" name="upload" value="Upload">
-</form>
-<br>
-<form method="post" action="do_transaction.php" id="transactionForm">
-    IBAN of the receiver: <input type="text" name="receiver"><br>
-    Transfer amount: <input type="number" name="amount"><br>
-    Description: <textarea name="description" form="transactionForm"></textarea><br>
-    Enter a TAN code: <input type="text" name="tan"><br>
-    <input type="submit" name="transfer" value="Submit">
-</form>
-
-<b>*Remember that a TAN code is unique an may be used only once</b>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <h2>Transaction page</h2><br>
+    <h4>This form is used to perform a single transaction for multiple transactions please click <a href="">here</a></h4>
+    <h5>Note: Any Transaction over 10,000 will be need to be processed which may take up to 48 hours</h5> 
+	<form method="post" action="verify_transaction.php">
+        IBAN# <input type="text" name="dest_code"	value="<?=$dest_code?>"><br>
+		Amount <input type="text" name="amount" value="<?=$amount?>"><br>
+		Descrition <input type="text" name="description" value="<?=$description?>"><br>
+		TAN Code <input type="text" name="tan_code" value="<?=$tan_code?>"><br>
+        <?php
+        $error = null;
+        if (isset($_GET) && isset($_GET["error"])) {
+            $error = $_GET["error"];
+            if ($error == "invalid") {
+                echo "<b><font color='red'>Invalid login credentials!</font></b><br>";
+            }
+        }
+        ?>
+        <input type="hidden" name="account_id" value="<?=$account_id?>">
+        <input type="submit" value="Submit">
+    </form>
+    <h4>For more about TAN Codes and how to use them please read instuctions <a href="">here</a> </h4>
+</body>

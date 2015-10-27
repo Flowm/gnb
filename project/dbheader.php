@@ -23,8 +23,8 @@ $TAN_TABLE_USED_TS		= "used_timestamp" ;
 
 $TRANSACTION_TABLE_NAME		= "$DB_SCHEMA.transaction" ;
 $TRANSACTION_TABLE_KEY		= "id" ;
-$TRANSACTION_TABLE_TO		= "source_account_id" ;
-$TRANSACTION_TABLE_FROM		= "destination_account_id" ;
+$TRANSACTION_TABLE_TO		= "destination_account_id" ;
+$TRANSACTION_TABLE_FROM		= "source_account_id" ;
 $TRANSACTION_TABLE_AP_AT	= "approved_at" ;
 $TRANSACTION_TABLE_AP_BY	= "approved_by_user_id" ;
 $TRANSACTION_TABLE_AMOUNT	= "amount" ;
@@ -44,22 +44,21 @@ $FAKE_APPROVER_USER_ID		= 0;
 # ROLES in USER TABLE
 $USER_ROLES = array(
 	'client'		=> 0
-	,'employee'		=> 1
+	, 'employee'	=> 1
 ); 
 	
 # STATUS for USER TABLE
 $USER_STATUS = array(
 	'unapproved'	=> 0
-	,'approved'		=> 1
-	,'rejected'		=> 2
-	,'blocked'		=> 3
+	, 'approved'	=> 1
+	, 'rejected'	=> 2
+	, 'blocked'		=> 3
 );
 	
 
 function executeSelectStatementOneRecord($sql)
 {
 	$data = executeSelectStatement($sql);
-
 	return $data[0];
 }
 
@@ -75,7 +74,7 @@ function executeSelectStatement($sql)
 		$message .= 'Query: ' . $sql . '<br>';
 
 		closeDatabaseConnection($connection);
-		print "ERROR: $message";
+		die("ERROR: $message");
 		return -1;
 
 	} else {
@@ -84,6 +83,7 @@ function executeSelectStatement($sql)
 
 		while($row = mysql_fetch_assoc($result)) {
 			$data[] = $row;
+			print "SQLLLLLLLLLLLLLLL $sql AND ROW=$row";
 		}
 	}
 

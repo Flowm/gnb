@@ -72,6 +72,7 @@ function getEmployeeDetails($employee_ID)
 	return getUserDetails($employee_ID,'employee') ;
 }
 
+//tested
 function getAccountTransactions($account_ID, $filter ='ALL')
 {
 	global $TRANSACTION_TABLE_TO;
@@ -103,18 +104,28 @@ function getAccountTransactions($account_ID, $filter ='ALL')
 		FROM $TRANSACTION_TABLE_NAME
 		$where
 	" ;
-	return executeSelectStatement($SQL_STATEMENT) ; 
+	
+	$result = executeSelectStatement($SQL_STATEMENT) ; 
+
+	if ($result != -1) {
+		return $result;
+	} else {
+		return false;
+	}
 }
 
+//tested
 function getPendingTransactions()
 {
 	global $TRANSACTION_TABLE_NAME;
 	global $TRANSACTION_TABLE_AP_AT;
+	global $TRANSACTION_TABLE_AP_BY;
 
 	$SQL_STATEMENT	= "
 		SELECT *
 		FROM $TRANSACTION_TABLE_NAME
-		WHERE $TRANSACTION_TABLE_AP_AT is EMPTY
+		WHERE $TRANSACTION_TABLE_AP_AT IS NULL
+			  OR $TRANSACTION_TABLE_AP_BY IS NULL
 	" ;
 
 	$result = executeSelectStatement($SQL_STATEMENT) ; 
@@ -194,6 +205,7 @@ function verifyTANCode($account_id,$tan_code)
 
 //TODO: Set TAN to used
 //TODO: Check if inserted TAN is valid (at insertTAN)
+//tested
 function processTransaction($src, $dest, $amount, $desc, $tan)
 {
 	global $TRANSACTION_TABLE_NAME;
@@ -255,15 +267,15 @@ function approvePendingTransaction($approver,$transaction_code)
 	global $TRANSACTION_TABLE_AP_BY;
 
 	# Check if approver exists
-	if (! RecordInTable($approver,$USER_TABLE_KEY, $USER_TABLE_NAME))
+	if (! RecordIsInTable($approver,$USER_TABLE_KEY, $USER_TABLE_NAME))
 	{
-		return null ; 
+		return false;
 	}
 	
 	# Check if transaction code exists and is not approved 
-	if (! RecordInTable($transaction_code,$TRANSACTION_TABLE_KEY, $TRANSACTION_TABLE_NAME))
+	if (! RecordIsInTable($transaction_code,$TRANSACTION_TABLE_KEY, $TRANSACTION_TABLE_NAME))
 	{
-		return null ; 
+		return false; 
 	}
 	
 	#Approve Transactions
@@ -276,6 +288,7 @@ function approvePendingTransaction($approver,$transaction_code)
 		WHERE
 			$TRANSACTION_TABLE_KEY	= '$transaction_code'
 	" ;
+	//TODO: Set TAN to used (set timestamp)
 	return executeSetStatement($SQL_STATEMENT) ; 
 }
 	
@@ -412,7 +425,7 @@ function addUser($first_name, $last_name, $email, $password, $role_filter) {
 				, '$email'
 				, '$role'
 				, 'somesalt'
-				, 'unhashedPW$password'
+				, '$password'
 			)
 	" ; 
 
@@ -467,5 +480,68 @@ function insertTAN($tan, $account_id) {
 	}
 }
 
+function getUserID($user_mail) {
 
+	global $USER_TABLE_KEY;
+	global $USER_TABLE_NAME;
+	global $USER_TABLE_EMAIL;
+
+    $SQL_STATEMENT  = "
+        SELECT $USER_TABLE_KEY
+		FROM   $USER_TABLE_NAME
+		WHERE $USER_TABLE_EMAIL = '$user_mail'
+    " ;
+
+	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
+
+	if ($result != -1) {
+		return $result[$USER_TABLE_KEY];
+	} else {
+		return false;
+	}
+
+}
+
+function getUser($user_mail, $user_password) {
+
+	global $USER_TABLE_KEY;
+	global $USER_TABLE_NAME;
+	global $USER_TABLE_EMAIL;
+	global $USER_TABLE_HASH;
+	global $USER_TABLE_STATUS;
+	
+	$userid = getUserID($user_mail);
+
+	$hash = ''; //TODO: Use hash
+
+	if ($userid != false) {
+
+		print "UUUUUUUUUUUUUUSERID $userid<br>";
+
+		$SQL_STATEMENT = "
+			SELECT $USER_TABLE_KEY
+			FROM $USER_TABLE_NAME
+			WHERE
+				$USER_TABLE_KEY  = '$userid'
+				AND
+				$USER_TABLE_EMAIL = '$user_mail'
+				AND
+				$USER_TABLE_HASH = '$user_password'
+				AND
+				$USER_TABLE_STATUS = 1
+		" ;
+
+		$result = executeSelectStatementOneRecord($SQL_STATEMENT);
+
+		if ($result != -1 && $result == $userid) {
+			return getUserDetails($userid);
+		} else {
+			return false;
+		}
+
+	} else {
+		return false;
+	}
+
+}
 

@@ -20,6 +20,7 @@ $USER2_ROLE			= 'client';
 $USER2_ID;
 $USER2_ACCOUNTID;
 $USER2_TESTTAN		= 'QWERTZUIOPASDFG';
+$USER2_TESTTAN2		= 'TESTTANTESTTAN0';
 $USER2_PASSWORD		= 'youwontguess';
 
 print 'Running tests...<br>';
@@ -29,65 +30,30 @@ removeTestTANs();
 removeTestAccounts();
 removeTestUsers();
 
+
 addTestUsers();
-if (checkForTestUsers()) {
-	print '<br>##### Test users are there!<br>';
-} else {
-	die('<br>##### Test users not found!1!');
-}
-
+test('Checking users', checkForTestUsers(), true);
 // Check if duplicate users are prohibited
-//addTestUsers();
+test('Checking user requests', checkTestUserRequests(), 2);
 
-if (checkTestUserRequests() == 2) {
-	print '<br>##### User requests are there!<br>';
-} else {
-	die('<br>##### User requests are not there!<br>');
-}
+
+print_r(getUser($USER1_EMAIL, $USER1_PASSWORD));
 
 approveTestUsers();
-if (checkForApprovedTestUsers()) {
-	print '<br>##### Test users approved!<br>';
-} else {
-	 die('<br>##### Test users not approved!<br>');
-}
-
-if (checkTestUserRequests() == 0) {
-	print '<br>##### User requests are done!<br>';
-} else {
-	die('<br>##### User requests are not done!<br>');
-}
+test('Checking approved users', checkForApprovedTestUsers(), true);
+test('Checking user requests', checkTestUserRequests(), 0);
 
 addTestAccounts();
-if (checkForTestAccounts()) {
-	print '<br>##### Test accounts added!<br>';
-} else {
-	die('<br>##### Test accounts not found!<br>');
-}
+test('Checking accounts', checkForTestAccounts(), true);
 
 addTestTANs();
-if (checkForTestTANs()) {
-	print '<br>##### Test TAN added!<br>';
-} else {
-	die('<br>##### Test TAN not found!<br>');
-}
-
+test('Adding TANs', checkForTestTANs(), true);
 // Check if duplicate TANs are prohibited
-//addTestTANs();
 
 addTestTransactions();
-
-
-
+test('Checking transactions', checkForTestTransactions(), true);
 die();
-if (checkForTestTransactions()) {
-	print '<br>##### Test Transactions added!<br>';
-} else {
-	die('<br>##### Test Transactions not found!<br>');
-}
-
-
-//die();
+approveTransactions();
 
 
 removeTestTransactions();
@@ -96,6 +62,21 @@ removeTestAccounts();
 removeTestUsers();
 
 
+
+
+
+
+
+function test($name, $testfunction, $expectedResult) {
+
+	if ($testfunction == $expectedResult) {
+		print "<br><br>SUCCESS @ $name<br><br>";
+	} else {
+		print "<br><br>  FAIL  @ $name<br><br>";
+		die();
+	}
+
+}
 
 function addTestUsers() {
 
@@ -282,6 +263,7 @@ function addTestTANs() {
 	global $USER2_ID;
 	global $USER2_ACCOUNTID;
 	global $USER2_TESTTAN;
+	global $USER2_TESTTAN2;
 
 	$data = getAccountsForClient($USER1_ID);
 
@@ -307,6 +289,18 @@ function addTestTANs() {
     } else {
         print "Could not insert TAN $USER2_TESTTAN for account $USER2_ACCOUNTID!<br>";
     }
+
+    $data = getAccountsForClient($USER2_ID);
+
+    $USER2_ACCOUNTID = $data[0]['id'];
+
+    $result = insertTAN($USER2_TESTTAN2, $USER2_ACCOUNTID);
+
+    if ($result != false) {
+        print "Inserted TAN $USER2_TESTTAN2 for account $USER2_ACCOUNTID<br>";
+    } else {
+        print "Could not insert TAN $USER2_TESTTAN2 for account $USER2_ACCOUNTID!<br>";
+    }
 }
 
 function checkForTestTANs() {
@@ -314,14 +308,29 @@ function checkForTestTANs() {
 	global $USER1_ACCOUNTID;
 	global $USER1_TESTTAN;
 
+	global $USER2_ACCOUNTID;
+	global $USER2_TESTTAN;
+	global $USER2_TESTTAN2;
+
+	if (!checkTAN($USER1_ACCOUNTID, $USER1_TESTTAN)) return false;
+	if (!checkTAN($USER2_ACCOUNTID, $USER2_TESTTAN)) return false;
+	if (!checkTAN($USER2_ACCOUNTID, $USER2_TESTTAN2)) return false;
+
+	return true;
+}
+
+function checkTAN($accountid, $tan) {
+
 	//function verifyTANCode($account_id,$tan_code)
-	if (verifyTANCode($USER1_ACCOUNTID, $USER1_TESTTAN)) {
-		print "Successfully verified TAN $USER1_TESTTAN for Account $USER1_ACCOUNTID<br>";
+
+	if (verifyTANCode($accountid, $tan)) {
+		print "Successfully verified TAN $tan for Account $accountid<br>";
 		return true;
 	} else {
-		print "Could not verify TAN $USER1_TESTTAN for Account $USER1_ACCOUNTID<br>";
+		print "Could not verify TAN $tan for Account $accountid<br>";
 		return false;
 	}
+
 }
 
 function addTestTransactions() {
@@ -332,6 +341,7 @@ function addTestTransactions() {
 	global $USER2_ID;
 	global $USER1_TESTTAN;
 	global $USER2_TESTTAN;
+	global $USER2_TESTTAN2;
 	global $TESTPREFIX;
 
 	$SRCACCOUNT = getAccountsForClient($USER1_ID);
@@ -344,12 +354,11 @@ function addTestTransactions() {
 	$result = processTransaction($SRCACC, $DSTACC, 1000, $DESC, $USER1_TESTTAN);
 
 	if ($result != false) {
-		print "Added transaction NR $result<br>";
+		print "Added transaction NR $result (DESC: $DESC)<br>";
 	} else {
-		print "Could not add transaction: $DESC<br>";
+		print "Could not add transaction with DESC: $DESC<br>";
 	}
 
-	global $USER2_TESTTAN;
 	$TEMP = $SRCACC;
 	$SRCACC = $DSTACC;
 	$DSTACC = $TEMP;
@@ -358,19 +367,53 @@ function addTestTransactions() {
 	$result = processTransaction($SRCACC, $DSTACC, 10000, $DESC, $USER2_TESTTAN);
 
     if ($result != false) {
-        print "Added transaction NR $result<br>";
+		print "Added transaction NR $result (DESC: $DESC)<br>";
     } else {
-        print "Could not add transaction: $DESC<br>";
+		print "Could not add transaction with DESC: $DESC<br>";
     }
 
+	$DESC   = $TESTPREFIX . '_DESC' . 3;
+	$result = processTransaction($SRCACC, $DSTACC, 10000, $DESC, $USER2_TESTTAN2);
 
+    if ($result != false) {
+		print "Added transaction NR $result (DESC: $DESC)<br>";
+    } else {
+		print "Could not add transaction with DESC: $DESC<br>";
+    }
 }
 
 function checkForTestTransactions() {
+
+	global $USER1_ACCOUNTID;
+	global $USER2_ACCOUNTID;
+
+	//function getAccountTransactions($account_ID, $filter ='ALL')
+	if (sizeof(getAccountTransactions($USER1_ACCOUNTID)) != 3) {return false;};
+	if (sizeof(getAccountTransactions($USER2_ACCOUNTID)) != 3) {return false;};
+
+	if (sizeof(getAccountTransactions($USER2_ACCOUNTID, 'TO')) != 1) {return false;};
+	if (sizeof(getAccountTransactions($USER2_ACCOUNTID, 'FROM')) != 2) {return false;};
+
+	if (sizeof(getPendingTransactions()) != 2) {return false;};
+
 	return true;
 }
 
+function approveTransactions() {
 
+	//function approvePendingTransaction($approver,$transaction_code)
+
+	global $USER1_ID;
+
+	$transactions = getPendingTransactions();
+	$transaction = $transactions[0];
+	$transaction_id = $transaction['id'];
+	
+	if (! approvePendingTransaction($USER1_ID, $transaction_id)) {return false;};
+
+	return true;
+
+}
 
 function removeTestUsers() {
 

@@ -26,7 +26,7 @@ function RecordIsInTable($record_value,$record_name,$table_name)
 }
 
 //tested
-function getUserDetails($user_ID,$filter = null)
+function getUser($user_ID,$filter = null)
 {
 	global $USER_ROLES;
 	global $USER_TABLE_NAME;
@@ -41,9 +41,11 @@ function getUserDetails($user_ID,$filter = null)
     $role = null;
     if (isset($USER_ROLES[$filter])) {
         $role			= $USER_ROLES[$filter] ;
-    }
+    } else {
+		return false;
+	}
 
-    if ($role != null) {
+    if ($role !== null) {
         $SQL_STATEMENT	= "
 		SELECT
 			$USER_TABLE_KEY
@@ -74,7 +76,7 @@ function getUserDetails($user_ID,$filter = null)
 			$USER_TABLE_KEY 		= '$user_ID'
 	    " ;
     }
-	
+
 	$result = executeSelectStatementOneRecord($SQL_STATEMENT) ;
 
 	if ($result != -1) {
@@ -85,15 +87,15 @@ function getUserDetails($user_ID,$filter = null)
 }
 
 //tested
-function getClientDetails($client_ID)
+function getClient($client_ID)
 {
-	return getUserDetails($client_ID,'client') ;
+	return getUser($client_ID, 'client') ;
 }
 
 //tested
-function getEmployeeDetails($employee_ID)
+function getEmployee($employee_ID)
 {
-	return getUserDetails($employee_ID,'employee') ;
+	return getUser($employee_ID, 'employee') ;
 }
 
 function getClientBySurname($client_surname)
@@ -541,7 +543,7 @@ function insertTAN($tan, $account_id)
     }
 }
 
-function getUser($user_mail, $user_password) {
+function loginUser($user_mail, $user_password) {
 
 	global $USER_TABLE_KEY;
 	global $USER_TABLE_NAME;
@@ -563,7 +565,7 @@ function getUser($user_mail, $user_password) {
 	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
 
 	if ($result != -1) {
-		return getUserDetails($result[$USER_TABLE_KEY]);
+		return getUser($result[$USER_TABLE_KEY]);
     } else {
 		return false;
 	}

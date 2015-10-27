@@ -43,7 +43,7 @@ function approveUserRegistrations($requests) {
         $exploded = explode(":",$request);
         $id = $exploded[0];
         $role = $exploded[1];
-        $data = getUserDetails($id,$role);
+        $data = getUser($id,$role);
         if (!$data) {
             //THIS WOULD BE BAD! NEED TO HANDLE THIS CASE
         }

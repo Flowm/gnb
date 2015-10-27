@@ -38,7 +38,7 @@ if ($username == "ted" && $pw == "ted") {
     exit();
 }
 
-$result = getUser($username, $pw);
+$result = loginUser($username, $pw);
 if (!$result) {
     header("Location:".getPageURL('login').$error);
 }

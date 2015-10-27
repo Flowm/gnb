@@ -32,7 +32,6 @@ $TRANSACTION_TABLE_DESC		= "description" ;
 $TRANSACTION_TABLE_TAN		= "tan_id" ;
 $TRANSACTION_TABLE_C_TS		= "creation_timestamp" ;
 
-#$TRANSACTION_TABLE_STATUS	= "TRANSACTION_TABLE_STATUS" ;
 $ACCOUNT_TABLE_NAME			= "$DB_SCHEMA.account" ;
 $ACCOUNT_TABLE_KEY			= "id" ;
 $ACCOUNT_TABLE_BALANCE		= "balance" ;
@@ -143,12 +142,14 @@ function executeSetStatement($sql)
 	$result = mysql_query($sql, $connection);
 
 	if ($result == false) {
+
 		$message = 'Invalid query: ' . mysql_error() . '<br>';
 		$message .= 'Query: ' . $sql . '<br>';
 
 		closeDatabaseConnection($connection);
 		print "ERROR: $message";
 		return -1;
+
 	} else {
 		$data = mysql_affected_rows();
 	}

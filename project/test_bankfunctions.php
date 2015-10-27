@@ -66,11 +66,14 @@ removeTestUsers();
 
 function test($name, $testfunction, $expectedResult) {
 
+	$style_success = "background-color: green; color: white";
+	$style_fail    = "background-color: red; color: black";
+
+
 	if ($testfunction == $expectedResult) {
-		print "<br><br>SUCCESS @ $name<br><br>";
+		print "<br><br><div style=\"$style_success\">SUCCESS @ $name</div><br><br>";
 	} else {
-		print "<br><br>  FAIL  @ $name<br><br>";
-		die();
+		print "<br><br><div style=\"$style_fail\">FAIL    @ $name</div><br><br>";
 	}
 
 }
@@ -136,8 +139,12 @@ function checkForTestUsers() {
 	if (! RecordIsInTable($USER1_ID, $USER_TABLE_KEY, $USER_TABLE_NAME)) return false;
 	if (! RecordIsInTable($USER2_ID, $USER_TABLE_KEY, $USER_TABLE_NAME)) return false;
 
-	print_r(getEmployeeDetails($USER1_ID));
-	print_r(getClientDetails($USER2_ID));
+	if (getEmployee($USER1_ID) == false) return false;
+	if (getClient($USER2_ID) == false) return false;
+	if (getUser($USER1_ID, 'client') != false) return false;
+	if (getUser($USER1_ID, 'employee') == false) return false;
+
+	print_r(getUser($USER1_ID, 'employe'));
 
 	return true;
 }
@@ -178,8 +185,13 @@ function approveTestUsers() {
 
 	print 'Approving users ' . $USER1_ID . ' and ' . $USER2_ID . '<br>';
 
-	if (approveEmployee(1, $USER1_ID) == false) die('Could not approve ' . $USER1_ID);
-	if (approveClient(1, $USER2_ID) == false) die('Could not approve ' . $USER2_ID);
+	if (approveEmployee(1, $USER1_ID) == false) {
+		print 'Could not approve ' . $USER1_ID;
+	}
+
+	if (approveClient(1, $USER2_ID) == false) {
+		print 'Could not approve ' . $USER2_ID;
+	}
 }
 
 function checkForApprovedTestUsers() {
@@ -199,7 +211,7 @@ function checkForApprovedTestUsers() {
 	global $USER_TABLE_NAME;
 	global $USER_TABLE_KEY;
 
-	$userinfo = getEmployeeDetails($USER1_ID);
+	$userinfo = getEmployee($USER1_ID);
 
 	if ($userinfo['status'] == 1 && $userinfo['approved_by_user_id'] != NULL) {
 		print 'User ' . $USER1_ID . ' approved!<br>';
@@ -208,7 +220,7 @@ function checkForApprovedTestUsers() {
 		return false;
 	}
 
-	$userinfo = getClientDetails($USER2_ID);
+	$userinfo = getClient($USER2_ID);
 
 	if ($userinfo['status'] == 1 && $userinfo['approved_by_user_id'] != NULL) {
 		print 'User ' . $USER2_ID . ' approved!<br>';

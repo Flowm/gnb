@@ -1,0 +1,37 @@
+<html>
+	<head>
+		<style type="text/css">
+			body {
+				background-color: #e0ddd6;
+			}
+			#frame {
+				width: 500px;
+				margin: 0 auto;
+				border-radius: 8px;
+				background-color: #ffffff;
+			}
+			#content {
+				font-family: Arial, Helvetica, sans-serif;
+				white-space: pre;
+				color: #454545;
+				font-size: 16px;
+				padding: 30px 25px 30px 24px;
+				line-height: 24px;
+			}
+			#logo {
+				display: block;
+				margin: auto;
+				padding: 50px 0px 0px 0px;
+				width: 60%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="frame">
+			<img id="logo" src="<?php echo $logo_base64; ?>" alt="" />
+			<div id="content">
+<?php echo $body_txt; ?>
+			</div>
+		</div>
+	</body>
+</html>

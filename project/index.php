@@ -13,6 +13,7 @@
     <meta charset="UTF-8">
     <title></title>
     <script type="text/javascript" src="js/index.js"></script>
+    <link rel="icon" type="image/png" href="media/gnb_icon.png" />
 </head>
 <body>
     <h2>Welcome to the Goliath National Bank!</h2>

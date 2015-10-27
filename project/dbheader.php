@@ -43,17 +43,34 @@ $FAKE_APPROVER_USER_ID		= 0;
 
 # ROLES in USER TABLE
 $USER_ROLES = array(
-	'client'		=> 0
-	, 'employee'	=> 1
+	'client'		=> 0,
+	'employee'		=> 1
 ); 
 	
 # STATUS for USER TABLE
 $USER_STATUS = array(
-	'unapproved'	=> 0
-	, 'approved'	=> 1
-	, 'rejected'	=> 2
-	, 'blocked'		=> 3
+	'unapproved'	=> 0,
+	'approved'		=> 1,
+	'rejected'		=> 2,
+	'blocked'		=> 3
 );
+
+
+# Reversed ROLES in USER TABLE
+$R_USER_ROLES = array(
+	0	=> 'client',
+	1	=> 'employee'
+); 
+	
+# Reversed STATUS for USER TABLE
+$R_USER_STATUS = array(
+	0	=> 'unapproved',
+	1	=> 'approved',
+	2	=> 'rejected',
+	3	=> 'blocked'
+);
+	
+
 	
 
 function executeSelectStatementOneRecord($sql)

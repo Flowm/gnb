@@ -5,35 +5,57 @@
  * Date: 18/10/15
  * Time: 11:03
  */
+
+include "../user.php";
+include "../bankfunctions.php";
+
+$data = getPendingRequests();
+$newUsers = array();
+if ($data != null) {
+    foreach ($data as $u) {
+        array_push($newUsers, new user($u));
+    }
+}
+
+//IN CASE WE HAVE NO PENDING REQUESTS
+if (count($newUsers) == 0) {
+    echo "<p>There currently are no new registration requests</p>";
+    exit();
+}
+
 ?>
 
-<p>Here we can show a list of new registrations (both clients and employees), which need to be approved</p>
-
-<p>There are 3 new registration requests awaiting your approval</p>
+<p>There are <?php count($newUsers) ?> new registration requests awaiting your approval</p>
 
 <table>
     <tr>
+        <th></th>
         <th>First Name</th>
         <th>Last Name</th>
         <th>Email</th>
         <th>Role</th>
-        <th>Action</th>
     </tr>
+    <?php
+    for ($i =0; $i < count($newUsers); $i++) {
+        $user = $newUsers[$i];
+        echo "<tr>
+            <td><input type='checkbox' name='action_check' id='$user->id'></td>
+            <td>$user->firstname</td>
+            <td>$user->lastname</td>
+            <td>$user->email</td>";
+        $role = array_search($user->role, $USER_ROLES);
+        echo "<td>$role</td> <!-- We want an icon here -->
+        </tr>";
+    }
+    ?>
+</table>
+<table>
     <tr>
-        <td>ted</td>
-        <td>mosby</td>
-        <td>noob@gnb.com</td>
-        <td>Employee</td> <!-- We want an icon here -->
-        <td><input type="checkbox" name="action_check" id="<?php echo 'ID00045'; ?>"></td>
-    </tr>
-    <tr>
-        <td>barney</td>
-        <td>stinson</td>
-        <td>trololo@gnb.com</td>
-        <td>Client</td> <!-- We want an icon here -->
-        <td><input type="checkbox" name="action_check" id="<?php echo 'ID00046'; ?>"></td>
+        <td><input type="checkbox" id="selectAll_check" onclick="checkAllBoxes()">
+            <label for="selectAll_check">Select/deselect all</label></td>
     </tr>
 </table>
-<p>What should be done with the selected requests?</p>
+
+<p>What should be done with the selected registration requests?</p>
 <button type="button" onclick="approveRegistration()">Approve</button>
 <button type="button" onclick="rejectRegistration()">Reject</button>

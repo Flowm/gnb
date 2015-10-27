@@ -8,19 +8,17 @@
 
 global $frames;
 
-$frame = $frames["manage_client"]; //static default
-if (isset($_POST["frame"])) {
+$frame = $frames["manage_clients"]; //static default
+if (isset($_POST["frame"]) && isset($frames[$_POST["frame"]])) {
     $frame = $frames[$_POST["frame"]];
 }
 ?>
-
-<div>Show the existing clients and maybe their pending requests, who is currently and so on</div>
 
 <div class="frameContainer">
     <div class="frameMenu">
         <ul>
             <li><a href="javascript:void(0)"
-                   onclick="goToEmployeeArea('manage_client')">Client Overview</a></li>
+                   onclick="goToEmployeeArea('manage_clients')">Manage Clients</a></li>
             <li><a href="javascript:void(0)"
                    onclick="goToEmployeeArea('manage_transfer')">Pending transfer approvals</a></li>
             <li><a href="javascript:void(0)"
@@ -29,6 +27,7 @@ if (isset($_POST["frame"])) {
     </div>
     <div class="frameContent">
         <?php
+        //INSERTING THE FRAME VIEW
         if ($frame != null) {
             include $frame;
         }

@@ -6,7 +6,7 @@
  * Time: 15:05
  */
 
-include "../view_mappings.php"; //All view mappings are loaded in here
+include "../resource_mappings.php"; //All view mappings are loaded in here
 
 global $pages;
 global $sections;

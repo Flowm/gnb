@@ -6,11 +6,11 @@ VALUES ("Ted", "Mosby", "ted.mosby@tedmosbyisajerk.com", "awesomesalt2", "awesom
 
 
 
-INSERT INTO account (balance, user_id)
-VALUES (3000.00, 1);
+INSERT INTO account (user_id)
+VALUES (1);
 
-INSERT INTO account (balance, user_id)
-VALUES (1000.00, 2);
+INSERT INTO account (user_id)
+VALUES (2);
 
 
 

@@ -35,7 +35,9 @@ if (isset($_POST["account"])) {
                    onclick="goToMyAccounts('account_overview','<?php echo $selected; ?>')">Account Overview</a></li>
             <li><a href="javascript:void(0)"
                    onclick="goToMyAccounts('new_transaction','<?php echo $selected; ?>')">New transaction</a></li>
-            <li><a href="javascript:void(0)"
+			<li><a href="javascript:void(0)"
+                   onclick="goToMyAccounts('new_transaction_multiple','<?php echo $selected; ?>')">New transaction (multiple)</a></li>
+	        <li><a href="javascript:void(0)"
                    onclick="goToMyAccounts('transaction_history','<?php echo $selected; ?>')">Transaction History</a></li>
         </ul>
     </div>

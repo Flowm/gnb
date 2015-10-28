@@ -26,7 +26,7 @@ function RecordIsInTable($record_value,$record_name,$table_name)
 }
 
 //tested
-function getUser($user_ID,$filter = null)
+function getUser($user_ID, $filter = "")
 {
 	global $USER_ROLES;
 	global $USER_TABLE_NAME;
@@ -38,44 +38,26 @@ function getUser($user_ID,$filter = null)
 	global $USER_TABLE_STATUS;
 	global $USER_TABLE_APPROVER;
 
-    $role = null;
-    if (isset($USER_ROLES[$filter])) {
-        $role			= $USER_ROLES[$filter] ;
-    } else {
-		return false;
+	$where = "";
+	if (isset($USER_ROLES[$filter])) {
+		$role = $USER_ROLES[$filter] ;
+		$where = "AND $USER_TABLE_ROLE = $role";
 	}
 
-    if ($role !== null) {
-        $SQL_STATEMENT	= "
-		SELECT
-			$USER_TABLE_KEY
-			, $USER_TABLE_FIRSTNAME
-			, $USER_TABLE_LASTNAME
-			, $USER_TABLE_EMAIL
-			, $USER_TABLE_STATUS
-			, $USER_TABLE_ROLE
-			, $USER_TABLE_APPROVER
-		FROM $USER_TABLE_NAME
-		WHERE
-			$USER_TABLE_KEY 		= '$user_ID'
-			AND $USER_TABLE_ROLE 	= '$role'
-	    " ;
-    }
-    else {
-        $SQL_STATEMENT	= "
-		SELECT
-			$USER_TABLE_KEY
-			, $USER_TABLE_FIRSTNAME
-			, $USER_TABLE_LASTNAME
-			, $USER_TABLE_EMAIL
-			, $USER_TABLE_STATUS
-			, $USER_TABLE_ROLE
-			, $USER_TABLE_APPROVER
-		FROM $USER_TABLE_NAME
-		WHERE
-			$USER_TABLE_KEY 		= '$user_ID'
-	    " ;
-    }
+	$SQL_STATEMENT	= "
+	SELECT
+		$USER_TABLE_KEY
+		, $USER_TABLE_FIRSTNAME
+		, $USER_TABLE_LASTNAME
+		, $USER_TABLE_EMAIL
+		, $USER_TABLE_STATUS
+		, $USER_TABLE_ROLE
+		, $USER_TABLE_APPROVER
+	FROM $USER_TABLE_NAME
+	WHERE
+		$USER_TABLE_KEY 		= '$user_ID'
+		$where
+	" ;
 
 	$result = executeSelectStatementOneRecord($SQL_STATEMENT) ;
 
@@ -125,6 +107,7 @@ function getAccountTransactions($account_ID, $filter ='ALL')
     global $TRANSACTION_TABLE_FROM;
     global $TRANSACTION_TABLE_NAME;
 
+    $where = "";
     # only get transfers to said account
     if ( $filter == 'TO' )
     {
@@ -184,7 +167,7 @@ function getPendingTransactions()
 }
 
 //tested
-function getPendingRequests($filter = 'ALL')
+function getPendingRequests($filter = "")
 {
     global $USER_STATUS;
     global $USER_ROLES;
@@ -193,24 +176,19 @@ function getPendingRequests($filter = 'ALL')
     global $USER_TABLE_STATUS;
 
     $status = $USER_STATUS['unapproved'];
-    $role = ($filter != null) ? $USER_ROLES[$filter] : null;
-
-    if ($filter == 'ALL') {
-        $SQL_STATEMENT = "
-		SELECT *
-		FROM $USER_TABLE_NAME
-		WHERE
-			$USER_TABLE_STATUS	    = $status
-		";
-    } else {
-        $SQL_STATEMENT = "
-		SELECT *
-		FROM $USER_TABLE_NAME
-		WHERE
-			$USER_TABLE_ROLE 		= $role
-			AND $USER_TABLE_STATUS	= $status
-		";
+    $where = "";
+    if (isset($USER_ROLES[$filter])) {
+        $role = $USER_ROLES[$filter] ;
+        $where = "AND $USER_TABLE_ROLE = $role";
     }
+
+    $SQL_STATEMENT = "
+    SELECT *
+    FROM $USER_TABLE_NAME
+    WHERE
+        $USER_TABLE_STATUS	    = $status
+        $where
+    ";
 
     $result = executeSelectStatement($SQL_STATEMENT);
 
@@ -441,7 +419,7 @@ function addAccountForUserWithBalance($user_id, $balance)
 		VALUES
 			($user_id, $balance) ;
 	";
-    $result = executeSetStatement($SQL_STATEMENT);
+    $result = executeAddStatementOneRecord($SQL_STATEMENT);
 
     if ($result != -1) {
         return $result;

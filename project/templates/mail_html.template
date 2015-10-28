@@ -12,11 +12,17 @@
 			}
 			#content {
 				font-family: Arial, Helvetica, sans-serif;
-				white-space: pre;
 				color: #454545;
 				font-size: 16px;
 				padding: 30px 25px 30px 24px;
 				line-height: 24px;
+				white-space: pre-wrap;
+				white-space: -moz-pre-wrap;
+				white-space: -o-pre-wrap;
+				word-wrap: break-word;
+			}
+			#tans {
+				font-family: monospace;
 			}
 			#logo {
 				display: block;

@@ -1,8 +1,21 @@
 Hello <?php echo $cust_name; ?>!
 
-We are pleased to announce, that your registration to GNB was approved!
+We are pleased to announce, that your registration to GNB was approved! <?php
+	if ($cust_balance != 0) {
+		echo "Because you're awesome we decided to give you a welcome credit of $cust_balance.";
+	}
+?>
+
+<?php if (!empty($cust_tans)): ?>
+
 Below you'll find 100 TANs for your Bank account:
-<?php echo $cust_tans ?>
+<div id=tans><?php
+	foreach ($cust_tans as $tan) {
+		echo "$tan\n";
+	}
+?>
+</div>
+<?php endif; ?>
 
 It's gonna be legen... wait for it... dary! Legendary!
 

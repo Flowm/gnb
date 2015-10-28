@@ -6,33 +6,44 @@
  * Time: 12:33
  */
 
-function welcomeUser($user) {
-    //TODO: IMPLEMENT LOGIC
+require_once '../bankfunctions.php';
+require_once '../gnbmailer.php';
+require_once "../user.php";
+
+function genRandString($length) {
+	return bin2hex(openssl_random_pseudo_bytes($length));
+}
+
+function generateTANs($account_id, $cnt=100) {
+	$tans = array();
+	for($i=0;$i<$cnt;$i++) {
+		$newtan = genRandString(15);
+		while(!insertTAN($newtan, $account_id)) {
+			$newtan = genString(15);
+		}
+		$tans[$i] = $newtan;
+	}
+	return $tans;
 }
 
 function approveRegistration($approver_id, $user) {
-    //TODO: WANNA CHANGE THIS LOGIC!! THIS SUCKS
     if ($user->role == '0') {
-        //Client
-        $result = approveClient($approver_id, $user->id);
-        if (!$result) {
-            return false;
-        }
-        else {
-            welcomeUser($user);
-        }
-    }
-    else if ($user->role == '1') {
-        //Employee
-        $result = approveEmployee($approver_id, $user->id);
-        if (!$result) {
-            return false;
-        }
-        else {
-            welcomeUser($user);
-        }
-    }
-    return true;
+        if (approveClient($approver_id, $user->id)) {
+			$balance = rand(100,1000);
+			$account_id = addAccountForUserWithBalance($user->id, $balance);
+			$tans = generateTANs($account_id);
+			$name = "$user->firstname $user->lastname";
+			$gnbmailer = new GNBMailer();
+			return $gnbmailer->sendMail_Approval($user->email, $name, $balance, $tans);
+		}
+    } else if ($user->role == '1') {
+        if (approveEmployee($approver_id, $user->id)) {
+			$name = "$user->firstname $user->lastname";
+			$gnbmailer = new GNBMailer();
+			return $gnbmailer->sendMail_Approval($user->email, $name);
+		}
+	}
+	return false;
 }
 
 function approveUserRegistrations($requests) {

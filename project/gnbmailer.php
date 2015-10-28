@@ -50,53 +50,50 @@ class GNBMailer {
 		return $this->send();
 	}
 
-	public function sendMail_Welcome($cust_addr, $cust_name) {
-		$subject = "Welcome to GNB!";
+	public function sendMail_Registration($cust_addr, $cust_name) {
+		$subject = "Registration request for GNB received!";
 		$body_txt = $this->getTemplate_Welcome($cust_name);
 		$body_html = $this->getHTMLMail($body_txt);
 
 		$this->sendMail($cust_addr, $cust_name, $subject, $body_txt, $body_html);
 	}
 
-	public function sendMail_Approval($cust_addr, $cust_name, $cust_tans) {
-		$subject = "Your registration to GNB was approved!";
-		$body_txt = $this->getTemplate_Approval($cust_name, $cust_tans);
+	public function sendMail_Approval($cust_addr, $cust_name, $cust_balance=0, $cust_tans=null) {
+		$subject = "Welcome to GNB!";
+		$body_txt = $this->getTemplate_Approval($cust_name, $cust_tans, $cust_balance, $cust_tans);
 		$body_html = $this->getHTMLMail($body_txt);
 
 		$this->sendMail($cust_addr, $cust_name, $subject, $body_txt, $body_html);
 	}
 
 	// PRIVATE
-	private function getTemplate_Welcome($cust_name) {
+	private function getTemplate_Registration($cust_name) {
 		ob_start();
-		include "templates/mail_welcome.template";
-		$template = ob_get_contents();
-		ob_end_clean();
+		include "templates/mail_registration.template";
+		$template = ob_get_clean();
 		return $template;
 	}
 
-	private function getTemplate_Approval($cust_name, $cust_tans) {
+	private function getTemplate_Approval($cust_name, $cust_tans, $cust_balance, $cust_tans) {
 		ob_start();
 		include "templates/mail_approval.template";
-		$template = ob_get_contents();
-		ob_end_clean();
+		$template = ob_get_clean();
 		return $template;
 	}
 
 	private function getHTMLMail($body_txt) {
-		$logo_path = 'media/gnb_logo.png';
+		$logo_path = realpath(dirname(__FILE__)) . '/media/gnb_logo.png';
 		$logo_type = pathinfo($logo_path, PATHINFO_EXTENSION);
 		$logo_data = file_get_contents($logo_path);
 		$logo_base64 = 'data:image/' . $logo_type . ';base64,' . base64_encode($logo_data);
 
 		ob_start();
 		include "templates/mail_html.template";
-		$html_mail = ob_get_contents();
-		ob_end_clean();
+		$html_mail = ob_get_clean();
 		return $html_mail;
 	}
 }
 
 //$gnbmailer = new GNBMailer();
-//$gnbmailer->sendMail_Welcome('florian.mauracher@tum.de', 'Florian Mauracher');
-//$gnbmailer->sendMail_Welcome('alexander.lill@tum.de', 'Alexander Lill');
+//$gnbmailer->sendMail_Approval('florian.mauracher@tum.de', 'Florian Mauracher');
+//$gnbmailer->sendMail_Approval('alexander.lill@tum.de', 'Alexander Lill');

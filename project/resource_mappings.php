@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lorenzodonini
- * Date: 19/10/15
- * Time: 21:24
- */
-
 //THIS FILE CONTAINS THE MAPPINGS BETWEEN LOGICAL NAMES AND VIEWS
 
 $root = realpath(dirname(__FILE__));
@@ -21,9 +14,11 @@ $pages["logout"] = "logout.php";
 $pages["registration"] = "registration.php";
 $pages["employee"] = "employee/employee.php";
 $pages["client"] = "client/client.php";
-$pages["user"] = "user.php";
-$pages["mail"] = "gnbmailer.php";
 $pages["db_functions"] = "bankfunctions.php";
+$pages["mail"] = "gnbmailer.php";
+$pages["user"] = "user.php";
+$pages["account"] = "account.php";
+$pages["transaction"] = "transaction.php";
 
 //SECTIONS (each section is triggered by a button)
 $sections = array();

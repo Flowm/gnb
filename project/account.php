@@ -1,13 +1,7 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: lorenzodonini
- * Date: 25/10/15
- * Time: 12:14
- */
-
-include "transaction.php";
+require_once "resource_mappings.php";
+require_once getPageAbsolute("transaction");
 
 class account {
     public $id;
@@ -29,4 +23,20 @@ class account {
             array_push($this->transactions, $data[i]);
         }
     }
+
+	public function generateTANs($cnt=100) {
+		$tans = array();
+		for($i=0;$i<$cnt;$i++) {
+			$newtan = $this->genRandString(15);
+			while(!insertTAN($newtan, $this->id)) {
+				$newtan = genString(15);
+			}
+			$tans[$i] = $newtan;
+		}
+		return $tans;
+	}
+
+	private function genRandString($length) {
+		return bin2hex(openssl_random_pseudo_bytes($length));
+	}
 }

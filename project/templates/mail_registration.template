@@ -1,7 +1,9 @@
 Hello <?php echo $cust_name; ?>!
 
-We are pleased to welcome you at GNB.
+You registration request has been received and will be processed shortly.
+Upon approval, you will receive a confirmation email.
 
+Thank you for choosing the Goliath National Bank!
 It's gonna be legen... wait for it... dary! Legendary!
 
 Sincerley Barney Stinson

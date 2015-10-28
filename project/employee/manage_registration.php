@@ -1,18 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lorenzodonini
- * Date: 18/10/15
- * Time: 11:03
- */
 
-include "../user.php";
-include "../bankfunctions.php";
-include "welcome_user.php";
+require_once "../resource_mappings.php";
+require_once getpageabsolute("user");
+require_once getpageabsolute("db_functions");
 
 //Handling approval/rejections first
 if (isset($_POST['approved_registrations'])) {
-    approveUserRegistrations($_POST['approved_registrations']);
+	user::approveUserRegistrations($_POST['approved_registrations']);
 }
 elseif (isset($_POST['reject_registrations'])) {
     //STILL NEED TO IMPLEMENT IT

@@ -1,13 +1,11 @@
 <?php
 
-include "account.php";
+require_once "resource_mappings.php";
+require_once getPageAbsolute("account");
 
-/**
- * Created by PhpStorm.
- * User: lorenzodonini
- * Date: 24/10/15
- * Time: 08:57
- */
+require_once getPageAbsolute("mail");
+require_once getPageAbsolute("db_functions");
+
 class user {
     public $id;
     public $email;
@@ -63,4 +61,47 @@ class user {
             'status'=>$this->status,
             'role'=>$this->role);
     }
+
+	public function approve($approver_id) {
+		if ($this->role == '0') {
+			if (approveClient($approver_id, $this->id) || true) {
+				$balance = rand(100,1000);
+				$account_id = addAccountForUserWithBalance($this->id, $balance);
+				$account = new account(array('id'=>$account_id));
+				$tans = $account->generateTANs();
+				$name = "$this->firstname $this->lastname";
+				$gnbmailer = new GNBMailer();
+				return $gnbmailer->sendMail_Approval($this->email, $name, $balance, $tans);
+			}
+		} else if ($this->role == '1') {
+			if (approveEmployee($approver_id, $this->id)) {
+				$name = "$this->firstname $this->lastname";
+				$gnbmailer = new GNBMailer();
+				return $gnbmailer->sendMail_Approval($this->email, $name);
+			}
+		}
+		return false;
+	}
+	public static function approveUserRegistrations($requests) {
+		//TODO: Untested
+		$requests = explode(";",$requests);
+		$approver_id = $_SESSION['id'];
+
+		foreach ($requests as $request) {
+			$exploded = explode(":",$request);
+			$id = $exploded[0];
+			$role = $exploded[1];
+			$data = getUser($id,$role);
+			if (!$data) {
+				//THIS WOULD BE BAD! WE SHOULD HANDLE THIS CASE
+			}
+			else {
+				$user = new user($data);
+				$result = $user->approve($approver_id);
+				if (!$result) {
+					//TODO: handle registration error
+				}
+			}
+		}
+	}
 }

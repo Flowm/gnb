@@ -1,6 +1,6 @@
 Hello <?php echo $cust_name; ?>!
 
-We are pleased to announce, that your registration to GNB was approved! <?php
+We are pleased to announce, that your registration to GNB was approved and an account was generated for you. <?php
 	if ($cust_balance != 0) {
 		echo "Because you're awesome we decided to give you a welcome credit of $cust_balance.";
 	}
@@ -17,7 +17,6 @@ Below you'll find 100 TANs for your Bank account:
 </div>
 <?php endif; ?>
 
-It's gonna be legen... wait for it... dary! Legendary!
 
 Sincerley Barney Stinson
 CEO of GNB

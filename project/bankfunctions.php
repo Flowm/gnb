@@ -7,7 +7,7 @@ ini_set("error_reporting",E_ALL|E_STRICT);
 include 'dbheader.php' ;
 
 //tested
-function RecordIsInTable($record_value,$record_name,$table_name)
+function recordIsInTable($record_value,$record_name,$table_name)
 {
 	$SQL_STATEMENT	= "
 		SELECT *
@@ -237,10 +237,9 @@ function verifyTANCode($account_id, $tan_code)
     }
 }
 
-//TODO: Set TAN to used
-//TODO: Check if inserted TAN is valid (at insertTAN)
+//TODO: Adjust balance
 //tested
-function processTransaction($src, $dest, $amount, $desc, $tan)
+function processTransaction($source, $destination, $amount, $description, $tan)
 {
     global $TRANSACTION_TABLE_NAME;
     global $TRANSACTION_TABLE_FROM;
@@ -253,42 +252,66 @@ function processTransaction($src, $dest, $amount, $desc, $tan)
     global $TRANSACTION_TABLE_AP_BY;
     global $FAKE_APPROVER_USER_ID;
 
-    $approved_at = ($amount >= 10000 ? 'NULL' : 'now()');
-    $approver = ($amount >= 10000 ? 'NULL' : $FAKE_APPROVER_USER_ID);
+	$approved_at = 'NULL';
+	$approved_by = 'NULL';
 
-    $SQL_STATEMENT = "
-		INSERT INTO $TRANSACTION_TABLE_NAME
-			(
-				$TRANSACTION_TABLE_FROM
-				, $TRANSACTION_TABLE_TO
-				, $TRANSACTION_TABLE_C_TS
-				, $TRANSACTION_TABLE_AMOUNT
-				, $TRANSACTION_TABLE_DESC
-				, $TRANSACTION_TABLE_TAN
-				, $TRANSACTION_TABLE_AP_AT
-				, $TRANSACTION_TABLE_AP_BY
-			)
-		VALUES
-			(
-				'$src'
-				, '$dest'
-				, now()
-				, '$amount'
-				, '$desc'
-				, '$tan'
-				, $approved_at
-				, $approver
-			)
+	if ($amount < 10000) {
+		$approved_at = 'now()';
+		$approved_by = $FAKE_APPROVER_USER_ID;
+	}
+
+	executeSetStatement("START TRANSACTION;");
+	executeSetStatement("SET autocommit=0;");
+
+	$SQL_STATEMENT_SET_TAN_USED = "
+		UPDATE
+			tan
+		SET
+			used_timestamp = now()
+		WHERE
+			id='$tan'
+			AND account_id='$source'
 	";
 
-    $result = executeAddStatementOneRecord($SQL_STATEMENT);
+	$affected_rows = executeSetStatement($SQL_STATEMENT_SET_TAN_USED);
 
-    if ($result != -1) {
-        return $result;
-    } else {
-        return false;
-    }
+	if ($affected_rows == 1) {
 
+		$SQL_STATEMENT_ADD_TRANSACTION = "
+			
+			INSERT INTO $TRANSACTION_TABLE_NAME
+				(
+					$TRANSACTION_TABLE_FROM,
+					$TRANSACTION_TABLE_TO,
+					$TRANSACTION_TABLE_C_TS,
+					$TRANSACTION_TABLE_AMOUNT,
+					$TRANSACTION_TABLE_DESC,
+					$TRANSACTION_TABLE_TAN,
+					$TRANSACTION_TABLE_AP_AT,
+					$TRANSACTION_TABLE_AP_BY
+				)
+			VALUES
+				(
+					'$source',
+					'$destination',
+					now(),
+					'$amount',
+					'$description',
+					'$tan',
+					$approved_at,
+					$approved_by
+				)
+		";
+
+		$result = executeAddStatementOneRecord($SQL_STATEMENT_ADD_TRANSACTION);
+
+		if ($result != -1) {
+			executeSetStatement("COMMIT");
+			return $result;
+		}
+	}
+
+	executeSetStatement("ROLLBACK");
 }
 
 function approvePendingTransaction($approver, $transaction_code)
@@ -301,13 +324,13 @@ function approvePendingTransaction($approver, $transaction_code)
 	global $TRANSACTION_TABLE_AP_BY;
 
 	# Check if approver exists
-	if (! RecordIsInTable($approver,$USER_TABLE_KEY, $USER_TABLE_NAME))
+	if (! recordIsInTable($approver,$USER_TABLE_KEY, $USER_TABLE_NAME))
 	{
 		return false;
 	}
 	
 	# Check if transaction code exists and is not approved 
-	if (! RecordIsInTable($transaction_code,$TRANSACTION_TABLE_KEY, $TRANSACTION_TABLE_NAME))
+	if (! recordIsInTable($transaction_code,$TRANSACTION_TABLE_KEY, $TRANSACTION_TABLE_NAME))
 	{
 		return false; 
 	}
@@ -354,7 +377,7 @@ function approveUser($approver_id, $user_id, $role_filter)
 
     $result = executeSetStatement($SQL_STATEMENT);
 
-    if ($result != false && $result == 1) {
+    if ($result != -1 && $result == 1) {
         return true;
     } else {
         return false;
@@ -554,8 +577,8 @@ function getAccountListForClient($client_ID)
 {
 	global $BANKACCOUNTS_TABLE_NAME;
 	global $BANKACCOUNTS_TABLE_KEY;
-	global $BANKACCOUNTS_TABLE_OWNER ;
-	global $BANKACCOUNTS_TABLE_AMOUNT ;
+	global $BANKACCOUNTS_TABLE_OWNER;
+	global $BANKACCOUNTS_TABLE_AMOUNT;
 	global $USER_TABLE_NAME;
 	global $USER_TABLE_KEY;
 	
@@ -589,7 +612,7 @@ function getAllAccountDetails()
 	return executeSelectStatement($SQL_STATEMENT) ; 
 }
 
-function verify_transaction($account_id, $dest_code, $amount , $description , $tan_code )
+function verifyTransaction($account_id, $dest_code, $amount , $description , $tan_code )
 {
 	global $BANKACCOUNTS_TABLE_NAME;
 	global $BANKACCOUNTS_TABLE_KEY;
@@ -603,7 +626,7 @@ function verify_transaction($account_id, $dest_code, $amount , $description , $t
 	$SQL_STATEMENT = "
 		SELECT 	* 
 		FROM  	$BANKACCOUNTS_TABLE_NAME
-		WHERE	$BANKACCOUNTS_TABLE_KEY = $account_id
+		WHERE	$BANKACCOUNTS_TABLE_KEY = '$account_id'
 	" ; 
 	
 	$account_info 	= executeSelectStatement($SQL_STATEMENT) ;
@@ -668,4 +691,76 @@ function getAccountDetails($account_ID)
 	return executeSelectStatement($SQL_STATEMENT) ; 
 }
 
+
+function getNumberOfUsers()
+{
+	$SQL_STATEMENT = "
+		SELECT
+			count(id) as count
+		FROM
+			user
+	" ;
+
+	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
+
+	if ($result != -1) {
+		return $result['count'];
+	} else {
+		return 0;
+	}
+}
+
+function getNumberOfAccounts()
+{
+	$SQL_STATEMENT = "
+		SELECT
+			count(id) as count
+		FROM
+			account
+	" ;
+
+	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
+
+	if ($result != -1) {
+		return $result['count'];
+	} else {
+		return 0;
+	}
+}
+
+function getNumberOfTransactions() {
+
+	$SQL_STATEMENT = "
+		SELECT
+			count(id) as count
+		FROM
+			transaction
+	" ;
+
+	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
+
+	if ($result != -1) {
+		return $result['count'];
+	} else {
+		return 0;
+	}
+}
+
+function getTotalAmountOfMoney() {
+
+	$SQL_STATEMENT = "
+		SELECT
+			sum(balance) as sum
+		FROM
+			account
+	" ;
+
+	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
+
+	if ($result != -1) {
+		return $result['sum'];
+	} else {
+		return 0;
+	}
+}
 

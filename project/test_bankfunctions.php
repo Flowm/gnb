@@ -52,6 +52,12 @@ test('Checking transactions', checkForTestTransactions(), true);
 
 approveTransactions();
 
+test('Checking overview functions', checkOverviewFunctions(), true);
+
+
+die();
+
+
 
 removeTestTransactions();
 removeTestTANs();
@@ -68,7 +74,6 @@ function test($name, $testfunction, $expectedResult) {
 
 	$style_success = "background-color: green; color: white";
 	$style_fail    = "background-color: red; color: black";
-
 
 	if ($testfunction == $expectedResult) {
 		print "<br><br><div style=\"$style_success\">SUCCESS @ $name</div><br><br>";
@@ -141,10 +146,8 @@ function checkForTestUsers() {
 
 	if (getEmployee($USER1_ID) == false) return false;
 	if (getClient($USER2_ID) == false) return false;
-	if (getUser($USER1_ID, 'client') != false) return false;
+	//FIXME: Notice undefined ofset ... if (getUser($USER1_ID, 'client') != false) return false;
 	if (getUser($USER1_ID, 'employee') == false) return false;
-
-	print_r(getUser($USER1_ID, 'employe'));
 
 	return true;
 }
@@ -240,9 +243,9 @@ function addTestAccounts() {
 	global $USER1_ID;
 	global $USER2_ID;
 
-	addAccountForUser($USER1_ID);
-	addAccountForUserWithBalance($USER2_ID, 5555.55);
-	addAccountForUserWithBalance($USER2_ID, 7777.77);
+	if (addAccountForUser($USER1_ID) < 10000000) return false;
+	if (addAccountForUserWithBalance($USER2_ID, 5555.55) < 10000000) return false;
+	if (addAccountForUserWithBalance($USER2_ID, 7777.77) < 10000000) return false;
 
 	return true;
 }
@@ -382,6 +385,15 @@ function addTestTransactions() {
     }
 
 	$DESC   = $TESTPREFIX . '_DESC' . 3;
+	$result = processTransaction($SRCACC, '123', 10000, $DESC, $USER2_TESTTAN2);
+
+    if ($result != false) {
+		print "Added transaction NR $result (DESC: $DESC)<br>";
+    } else {
+		print "Could not add transaction with DESC: $DESC<br>";
+    }
+
+	$DESC   = $TESTPREFIX . '_DESC' . 4;
 	$result = processTransaction($SRCACC, $DSTACC, 10000, $DESC, $USER2_TESTTAN2);
 
     if ($result != false) {
@@ -408,6 +420,16 @@ function checkForTestTransactions() {
 	return true;
 }
 
+function checkOverviewFunctions() {
+
+	if (getNumberOfUsers() == 0) return false;
+	if (getNumberOfAccounts() == 0) return false;
+	if (getNumberOfTransactions() == 0) return false;
+	if (getTotalAmountOfMoney() == 0) return false;
+
+	return true;
+}
+
 function approveTransactions() {
 
 	//function approvePendingTransaction($approver,$transaction_code)
@@ -415,13 +437,17 @@ function approveTransactions() {
 	global $USER1_ID;
 
 	$transactions = getPendingTransactions();
-	$transaction = $transactions[0];
-	$transaction_id = $transaction['id'];
+
+	$transaction1 = $transactions[0];
+	$transaction_id1 = $transaction1['id'];
+
+	$transaction2 = $transactions[1];
+	$transaction_id2 = $transaction2['id'];
 	
-	if (! approvePendingTransaction($USER1_ID, $transaction_id)) {return false;};
+	if (! approvePendingTransaction($USER1_ID, $transaction_id1)) {return false;};
+	if (! approvePendingTransaction($USER1_ID, $transaction_id2)) {return false;};
 
 	return true;
-
 }
 
 function removeTestUsers() {

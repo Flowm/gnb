@@ -42,8 +42,7 @@ $BANKACCOUNTS_TABLE_KEY		= "id" ;
 $BANKACCOUNTS_TABLE_OWNER	= "user_id" ;
 $BANKACCOUNTS_TABLE_AMOUNT	= "balance" ;
 
-$FAKE_APPROVER_USER_ID		= 0;
-
+$FAKE_APPROVER_USER_ID		= 1;
 
 # ROLES in USER TABLE
 $USER_ROLES = array(
@@ -73,12 +72,28 @@ $R_USER_STATUS = array(
 	2	=> 'rejected',
 	3	=> 'blocked'
 );
-	
 
 	
+$DB_CONNECTION = getDatabaseConnection();
+$debug = false;
+
+
+function printError($message) {
+	print "<br><br><div style=\"color: red;\">ERROR: $message</div><br><br>";
+}
+
+function printDebug($function, $sql) {
+	global $debug;
+
+	if ($debug) {
+		print "$function ( $sql )<br>";
+	}
+}
 
 function executeSelectStatementOneRecord($sql)
 {
+	printDebug("executeSelectStatementOneRecord", $sql);
+
 	$data = executeSelectStatement($sql);
 	$result = $data[0];
 
@@ -87,17 +102,18 @@ function executeSelectStatementOneRecord($sql)
 
 function executeSelectStatement($sql)
 {
-	$connection = getDatabaseConnection();
+	printDebug("executeSelectStatement", $sql);
 
-	$result = mysql_query($sql, $connection);
+	global $DB_CONNECTION;
+
+	$result = mysql_query($sql, $DB_CONNECTION);
 
 	if ($result == false) {
 
 		$message = 'Invalid query: ' . mysql_error() . '<br>';
 		$message .= 'Query: ' . $sql . '<br>';
 
-		closeDatabaseConnection($connection);
-		print "ERROR: $message";
+		printError($message);
 		return -1;
 
 	} else {
@@ -108,53 +124,52 @@ function executeSelectStatement($sql)
 		}
 	}
 
-	closeDatabaseConnection($connection);
 	return $data;
 }
  
 function executeAddStatementOneRecord($sql)
 {
-	$connection = getDatabaseConnection();
+	printDebug("executeAddStatementOneRecord", $sql);
 
-	$result = mysql_query($sql, $connection);
+	global $DB_CONNECTION;
+
+	$result = mysql_query($sql, $DB_CONNECTION);
 
 	if ($result == false) {
 
 		$message = 'Invalid query: ' . mysql_error() . '<br>';
 		$message .= 'Query: ' . $sql . '<br>';
 
-		closeDatabaseConnection($connection);
-		print "ERROR: $message";
+		printError($message);
 		return -1;
 
 	} else {
 		$data = mysql_insert_id();
 	}
 
-	closeDatabaseConnection($connection);
 	return $data;
 }
 
 function executeSetStatement($sql)
 {
-	$connection = getDatabaseConnection();
+	printDebug("executeSetStatement", $sql);
 
-	$result = mysql_query($sql, $connection);
+	global $DB_CONNECTION;
+
+	$result = mysql_query($sql, $DB_CONNECTION);
 
 	if ($result == false) {
 
 		$message = 'Invalid query: ' . mysql_error() . '<br>';
 		$message .= 'Query: ' . $sql . '<br>';
 
-		closeDatabaseConnection($connection);
-		print "ERROR: $message";
+		printError($message);
 		return -1;
 
 	} else {
 		$data = mysql_affected_rows();
 	}
 
-	closeDatabaseConnection($connection);
 	return $data;
 }
 

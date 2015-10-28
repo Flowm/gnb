@@ -397,7 +397,7 @@ function approveClient($approver_id, $client_id)
 }
 
 //tested
-function getAccountsForClient($client_id)
+function getAccountsForUser($user_id)
 {
 
     //TODO: Check for client status? A: Server side check maybe, instead of db?!
@@ -409,7 +409,7 @@ function getAccountsForClient($client_id)
 		SELECT *
 		FROM $ACCOUNT_TABLE_NAME
 		WHERE 
-			$ACCOUNT_TABLE_USER_ID	= $client_id;
+			$ACCOUNT_TABLE_USER_ID	= $user_id;
 	";
 
     $result = executeSelectStatement($SQL_STATEMENT);
@@ -422,13 +422,13 @@ function getAccountsForClient($client_id)
 }
 
 //tested
-function addAccountForClient($client_id)
+function addAccountForUser($user_id)
 {
-    return addAccountForClientWithBalance($client_id, 0);
+    return addAccountForUserWithBalance($user_id, 0);
 }
 
 //tested
-function addAccountForClientWithBalance($client_id, $balance)
+function addAccountForUserWithBalance($user_id, $balance)
 {
 
     global $ACCOUNT_TABLE_NAME;
@@ -440,7 +440,7 @@ function addAccountForClientWithBalance($client_id, $balance)
 		INTO $ACCOUNT_TABLE_NAME
 			( $ACCOUNT_TABLE_USER_ID, $ACCOUNT_TABLE_BALANCE )
 		VALUES
-			($client_id, $balance) ;
+			($user_id, $balance) ;
 	";
     $result = executeAddStatementOneRecord($SQL_STATEMENT);
 
@@ -616,11 +616,9 @@ function verifyTransaction($account_id, $dest_code, $amount , $description , $ta
 {
 	global $BANKACCOUNTS_TABLE_NAME;
 	global $BANKACCOUNTS_TABLE_KEY;
-	
-	
 	$var_res = array (
 		"result"	=> false,
-		"message"	=> ""
+		"message"	=> "[Default] No test has been completed"
 	) ; 
 	
 	$SQL_STATEMENT = "
@@ -633,44 +631,29 @@ function verifyTransaction($account_id, $dest_code, $amount , $description , $ta
 	
 	# checking account ID 
 	if (sizeof($account_info) == 0 ){
-		$var_res["message"]	.= '[Account] account not found' ;
+		$var_res["message"]	= '[Account] account not found' ;
 		return $var_res ; 
 	}
 	
-	# Add check for Destination Account  Only Internal account 
-	$SQL_STATEMENT = "
-		SELECT 	* 
-		FROM  	$BANKACCOUNTS_TABLE_NAME
-		WHERE	$BANKACCOUNTS_TABLE_KEY = '$dest_code'
-	" ; 
-	
-	$dest_account_info 	= executeSelectStatement($SQL_STATEMENT) ;
-	# checking destination  
-	if (sizeof($dest_account_info) == 0 ){
-		$var_res["message"]	.= '[Destination] Recepient not Identified as having account with GNB' ;
-		return $var_res ; 
-	}
-	
+	# Add check for Destination Account  
 	# no check needed at this stage 
 	
 	# Add check for Description  
 	# no check needed at this stage 
 	
 	if ( $amount > $account_info[0]["balance"] ){
-		$var_res["message"]	.= '[Funds] Insuffecient funds' ;
+		$var_res["message"]	= '[Funds] Insuffecient funds' ;
 		return $var_res ; 
 	}	
 
 	$tan_ver 	= verifyTANCode($account_id, $tan_code);  
 	if (sizeof($tan_ver) == 0 ){
-		$var_res["message"]	.= '[Tan Code] Invalid or used Tan code' ;
+		$var_res["message"]	= '[Tan Code] Invalid or used Tan code' ;
 		return $var_res ; 
 	}
  
-	# Add check for TAN Codes
-		
-	$var_res["result"]	= true ;
-	$var_res["message"]	.= '[Success] Passed all tests' ;
+	# Add check for TAN Codes   
+	$var_res["message"]	= '[Success] Passed all tests' ;
 	return $var_res ; 
 	 	
 }

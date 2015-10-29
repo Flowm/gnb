@@ -573,34 +573,6 @@ function loginUser($user_mail, $user_password) {
 }
 
 # need to test MN 
-function getAccountListForClient($client_ID)
-{
-	global $BANKACCOUNTS_TABLE_NAME;
-	global $BANKACCOUNTS_TABLE_KEY;
-	global $BANKACCOUNTS_TABLE_OWNER;
-	global $BANKACCOUNTS_TABLE_AMOUNT;
-	global $USER_TABLE_NAME;
-	global $USER_TABLE_KEY;
-	
-	$SQL_STATEMENT	= "
-		SELECT
-			b.$BANKACCOUNTS_TABLE_KEY
-			,b.$BANKACCOUNTS_TABLE_AMOUNT
-			,b.$BANKACCOUNTS_TABLE_OWNER
-		FROM 
-			$BANKACCOUNTS_TABLE_NAME	b
-			,$USER_TABLE_NAME			u
-		WHERE 
-			u.$USER_TABLE_KEY 		= b.$BANKACCOUNTS_TABLE_OWNER
-	" ;
-	
-	  ;
-	 
-	return executeSelectStatement($SQL_STATEMENT) ;
-}
-
-
-# need to test MN 
 function getAllAccountDetails()
 {
 	global $BANKACCOUNTS_TABLE_NAME;

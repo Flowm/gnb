@@ -34,23 +34,22 @@ $TRANSACTION_TABLE_C_TS		= "creation_timestamp" ;
 
 $ACCOUNT_TABLE_NAME			= "$DB_SCHEMA.account" ;
 $ACCOUNT_TABLE_KEY			= "id" ;
-$ACCOUNT_TABLE_BALANCE		= "balance" ;
 $ACCOUNT_TABLE_USER_ID		= "user_id" ;
 
-$BANKACCOUNTS_TABLE_NAME	= "$DB_SCHEMA.account" ;
-$BANKACCOUNTS_TABLE_KEY		= "id" ;
-$BANKACCOUNTS_TABLE_OWNER	= "user_id" ;
-$BANKACCOUNTS_TABLE_AMOUNT	= "balance" ;
+$ACCOUNTOVERVIEW_TABLE_NAME		= "$DB_SCHEMA.account_overview" ;
+$ACCOUNTOVERVIEW_TABLE_KEY		= "id" ;
+$ACCOUNTOVERVIEW_TABLE_USER_ID	= "user_id" ;
+$ACCOUNTOVERVIEW_TABLE_BALANCE	= "balance" ;
 
-$FAKE_APPROVER_USER_ID		= 1;
+$FAKE_APPROVER_USER_ID = 1;
 
 # ROLES in USER TABLE
 $USER_ROLES = array(
 	'client'		=> 0,
 	'employee'		=> 1
-); 
+);
 	
-# STATUS for USER TABLE
+# STATUS in USER TABLE
 $USER_STATUS = array(
 	'unapproved'	=> 0,
 	'approved'		=> 1,
@@ -58,22 +57,13 @@ $USER_STATUS = array(
 	'blocked'		=> 3
 );
 
-
-# Reversed ROLES in USER TABLE
-$R_USER_ROLES = array(
-	0	=> 'client',
-	1	=> 'employee'
-); 
-	
-# Reversed STATUS for USER TABLE
-$R_USER_STATUS = array(
-	0	=> 'unapproved',
-	1	=> 'approved',
-	2	=> 'rejected',
-	3	=> 'blocked'
+# STATUS in TRANSACTION TABLE
+$TRANSACTION_STATUS = array(
+	'unapproved'	=> 0,
+	'approved'		=> 1,
+	'rejected'		=> 2
 );
 
-	
 $DB_CONNECTION = getDatabaseConnection();
 $debug = false;
 

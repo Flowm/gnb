@@ -46,13 +46,13 @@ function getUser($user_ID, $filter = "")
 
 	$SQL_STATEMENT	= "
 	SELECT
-		$USER_TABLE_KEY
-		, $USER_TABLE_FIRSTNAME
-		, $USER_TABLE_LASTNAME
-		, $USER_TABLE_EMAIL
-		, $USER_TABLE_STATUS
-		, $USER_TABLE_ROLE
-		, $USER_TABLE_APPROVER
+		$USER_TABLE_KEY,
+		$USER_TABLE_FIRSTNAME,
+		$USER_TABLE_LASTNAME,
+		$USER_TABLE_EMAIL,
+		$USER_TABLE_STATUS,
+		$USER_TABLE_ROLE,
+		$USER_TABLE_APPROVER
 	FROM $USER_TABLE_NAME
 	WHERE
 		$USER_TABLE_KEY 		= '$user_ID'
@@ -101,7 +101,7 @@ function getClientBySurname($client_surname)
     }
 }
 
-function getAccountTransactions($account_ID, $filter ='ALL')
+function getAccountTransactions($account_ID, $filter = "ALL")
 {
     global $TRANSACTION_TABLE_TO;
     global $TRANSACTION_TABLE_FROM;
@@ -153,8 +153,9 @@ function getPendingTransactions()
     $SQL_STATEMENT	= "
 		SELECT *
 		FROM $TRANSACTION_TABLE_NAME
-		WHERE $TRANSACTION_TABLE_AP_AT IS NULL
-			  OR $TRANSACTION_TABLE_AP_BY IS NULL
+		WHERE
+			$TRANSACTION_TABLE_AP_AT IS NULL
+			OR $TRANSACTION_TABLE_AP_BY IS NULL
 	" ;
 
     $result = executeSelectStatement($SQL_STATEMENT) ;
@@ -175,7 +176,8 @@ function getPendingRequests($filter = "")
     global $USER_TABLE_ROLE;
     global $USER_TABLE_STATUS;
 
-    $status = $USER_STATUS['unapproved'];
+	$status = $USER_STATUS['unapproved'];
+
     $where = "";
     if (isset($USER_ROLES[$filter])) {
         $role = $USER_ROLES[$filter] ;
@@ -237,10 +239,14 @@ function verifyTANCode($account_id, $tan_code)
     }
 }
 
-//TODO: Adjust balance
 //tested
 function processTransaction($source, $destination, $amount, $description, $tan)
 {
+	global $TAN_TABLE_NAME;
+	global $TAN_TABLE_KEY;
+	global $TAN_TABLE_USED_TS;
+	global $TAN_TABLE_ACCOUNT_ID;
+
     global $TRANSACTION_TABLE_NAME;
     global $TRANSACTION_TABLE_FROM;
     global $TRANSACTION_TABLE_TO;
@@ -265,12 +271,13 @@ function processTransaction($source, $destination, $amount, $description, $tan)
 
 	$SQL_STATEMENT_SET_TAN_USED = "
 		UPDATE
-			tan
+			$TAN_TABLE_NAME
 		SET
-			used_timestamp = now()
+			$TAN_TABLE_USED_TS = now()
 		WHERE
-			id='$tan'
-			AND account_id='$source'
+			$TAN_TABLE_KEY ='$tan'
+			AND $TAN_TABLE_ACCOUNT_ID ='$source'
+			AND $TAN_TABLE_USED_TS IS NULL
 	";
 
 	$affected_rows = executeSetStatement($SQL_STATEMENT_SET_TAN_USED);
@@ -314,7 +321,7 @@ function processTransaction($source, $destination, $amount, $description, $tan)
 	executeSetStatement("ROLLBACK");
 }
 
-function approvePendingTransaction($approver, $transaction_code)
+function approvePendingTransaction($approver, $transaction_id)
 {
 	global $USER_TABLE_KEY;
 	global $USER_TABLE_NAME;
@@ -323,30 +330,26 @@ function approvePendingTransaction($approver, $transaction_code)
 	global $TRANSACTION_TABLE_AP_AT;
 	global $TRANSACTION_TABLE_AP_BY;
 
-	# Check if approver exists
-	if (! recordIsInTable($approver,$USER_TABLE_KEY, $USER_TABLE_NAME))
-	{
-		return false;
-	}
-	
-	# Check if transaction code exists and is not approved 
-	if (! recordIsInTable($transaction_code,$TRANSACTION_TABLE_KEY, $TRANSACTION_TABLE_NAME))
-	{
-		return false; 
-	}
-	
-	#Approve Transactions
+	//TODO: Check if approver is approved employee
+
 	$SQL_STATEMENT	= "
 		UPDATE $TRANSACTION_TABLE_NAME
 		SET
-			$TRANSACTION_TABLE_AP_AT 	= now()
-			, $TRANSACTION_TABLE_AP_BY 	= '$approver' 
-		
+			$TRANSACTION_TABLE_AP_AT 	= now(),
+			$TRANSACTION_TABLE_AP_BY 	= '$approver' 
 		WHERE
-			$TRANSACTION_TABLE_KEY	= '$transaction_code'
+			$TRANSACTION_TABLE_KEY	= '$transaction_id'
+			AND $TRANSACTION_TABLE_AP_AT IS NULL
+			AND $TRANSACTION_TABLE_AP_BY IS NULL
 	" ;
-	//TODO: Set TAN to used (set timestamp)
-	return executeSetStatement($SQL_STATEMENT) ; 
+
+	$result = executeSetStatement($SQL_STATEMENT) ;
+
+	if ($result != -1 && $result == 1) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 //tested
@@ -363,16 +366,18 @@ function approveUser($approver_id, $user_id, $role_filter)
     $role = $USER_ROLES[$role_filter];
     $new_status = $USER_STATUS['approved'];
 
-    #Approve User
+	//TODO: Check if approver is approved employee
+
     $SQL_STATEMENT = "
 		UPDATE $USER_TABLE_NAME
 		SET
-			$USER_TABLE_STATUS 		= '$new_status'
-			, $USER_TABLE_APPROVER 	= '$approver_id' 
-		
+			$USER_TABLE_STATUS 		= '$new_status',
+			$USER_TABLE_APPROVER 	= '$approver_id' 
 		WHERE
 			$USER_TABLE_KEY			= '$user_id'
 			AND $USER_TABLE_ROLE	= '$role'
+			AND $USER_TABLE_APPROVER IS NULL
+			AND $USER_TABLE_STATUS != '$new_status'
 	";
 
     $result = executeSetStatement($SQL_STATEMENT);
@@ -399,19 +404,22 @@ function approveClient($approver_id, $client_id)
 //tested
 function getAccountsForUser($user_id)
 {
-
     //TODO: Check for client status? A: Server side check maybe, instead of db?!
 
-    global $ACCOUNT_TABLE_NAME;
-    global $ACCOUNT_TABLE_USER_ID;
+	global $ACCOUNTOVERVIEW_TABLE_KEY;
+    global $ACCOUNTOVERVIEW_TABLE_NAME;
+	global $ACCOUNTOVERVIEW_TABLE_USER_ID;
+	global $ACCOUNTOVERVIEW_TABLE_BALANCE;
 
     $SQL_STATEMENT = "
-		SELECT *
-		FROM $ACCOUNT_TABLE_NAME
-		WHERE 
-			$ACCOUNT_TABLE_USER_ID	= $user_id;
+		SELECT
+			$ACCOUNTOVERVIEW_TABLE_KEY,
+			$ACCOUNTOVERVIEW_TABLE_BALANCE
+		FROM $ACCOUNTOVERVIEW_TABLE_NAME
+		WHERE
+			$ACCOUNTOVERVIEW_TABLE_USER_ID	= '$user_id';
 	";
-
+	print($SQL_STATEMENT);
     $result = executeSelectStatement($SQL_STATEMENT);
 
     if ($result != -1) {
@@ -422,29 +430,31 @@ function getAccountsForUser($user_id)
 }
 
 //tested
-function addAccountForUser($user_id)
+function addAccount($user_id)
 {
-    return addAccountForUserWithBalance($user_id, 0);
+    return addAccountWithBalance($user_id, 0);
 }
 
 //tested
-function addAccountForUserWithBalance($user_id, $balance)
+function addAccountWithBalance($user_id, $balance)
 {
-
     global $ACCOUNT_TABLE_NAME;
     global $ACCOUNT_TABLE_USER_ID;
-    global $ACCOUNT_TABLE_BALANCE;
 
     $SQL_STATEMENT = "
 		INSERT
 		INTO $ACCOUNT_TABLE_NAME
-			( $ACCOUNT_TABLE_USER_ID, $ACCOUNT_TABLE_BALANCE )
+			( $ACCOUNT_TABLE_USER_ID )
 		VALUES
-			($user_id, $balance) ;
+			( $user_id ) ;
 	";
+
     $result = executeAddStatementOneRecord($SQL_STATEMENT);
 
-    if ($result != -1) {
+	if ($result != -1) {
+
+		//TODO: Add transaction with initial balance
+
         return $result;
     } else {
         return false;
@@ -472,12 +482,12 @@ function addUser($first_name, $last_name, $email, $password, $role_filter)
     $SQL_STATEMENT = "
 		INSERT INTO $USER_TABLE_NAME
 			(
-				$USER_TABLE_FIRSTNAME
-				, $USER_TABLE_LASTNAME
-				, $USER_TABLE_EMAIL
-				, $USER_TABLE_ROLE
-				, $USER_TABLE_SALT
-				, $USER_TABLE_HASH
+				$USER_TABLE_FIRSTNAME,
+				$USER_TABLE_LASTNAME,
+				$USER_TABLE_EMAIL,
+				$USER_TABLE_ROLE,
+				$USER_TABLE_SALT,
+				$USER_TABLE_HASH
 			)
 		VALUES
 			(
@@ -525,13 +535,13 @@ function insertTAN($tan, $account_id)
     $SQL_STATEMENT = "
 		INSERT INTO $TAN_TABLE_NAME
 			(
-				$TAN_TABLE_KEY
-				, $TAN_TABLE_ACCOUNT_ID
+				$TAN_TABLE_KEY,
+				$TAN_TABLE_ACCOUNT_ID
 			)
 		VALUES
 			(
-				'$tan'
-				, '$account_id'
+				'$tan',
+				'$account_id'
 			)
 	";
 
@@ -575,19 +585,21 @@ function loginUser($user_mail, $user_password) {
 # need to test MN 
 function getAllAccountDetails()
 {
-	global $BANKACCOUNTS_TABLE_NAME;
+	//TODO: Check if necessary
+	global $ACCOUNT_TABLE_NAME;
 	
 	$SQL_STATEMENT	= "
 		SELECT *
-		FROM $BANKACCOUNTS_TABLE_NAME
+		FROM $ACCOUNT_TABLE_NAME
 	" ;
 	return executeSelectStatement($SQL_STATEMENT) ; 
 }
 
+# need to test MN 
 function verifyTransaction($account_id, $dest_code, $amount , $description , $tan_code )
 {
-	global $BANKACCOUNTS_TABLE_NAME;
-	global $BANKACCOUNTS_TABLE_KEY;
+	global $ACCOUNTOVERVIEW_TABLE_NAME;
+	global $ACCOUNTOVERVIEW_TABLE_KEY;
 	$var_res = array (
 		"result"	=> false,
 		"message"	=> "[Default] No test has been completed"
@@ -595,8 +607,8 @@ function verifyTransaction($account_id, $dest_code, $amount , $description , $ta
 	
 	$SQL_STATEMENT = "
 		SELECT 	* 
-		FROM  	$BANKACCOUNTS_TABLE_NAME
-		WHERE	$BANKACCOUNTS_TABLE_KEY = '$account_id'
+		FROM  	$ACCOUNTOVERVIEW_TABLE_NAME
+		WHERE	$ACCOUNTOVERVIEW_TABLE_KEY = '$account_id'
 	" ; 
 	
 	$account_info 	= executeSelectStatement($SQL_STATEMENT) ;
@@ -630,36 +642,42 @@ function verifyTransaction($account_id, $dest_code, $amount , $description , $ta
 	 	
 }
 
+# need to test MN 
 function getAccountDetails($account_ID)
 {
-	global $BANKACCOUNTS_TABLE_NAME;
-	global $BANKACCOUNTS_TABLE_KEY;
-	global $BANKACCOUNTS_TABLE_AMOUNT ;
+	global $ACCOUNTOVERVIEW_TABLE_NAME;
+	global $ACCOUNTOVERVIEW_TABLE_KEY;
+	global $ACCOUNTOVERVIEW_TABLE_AMOUNT ;
 	
 	$SQL_STATEMENT	= "
 		SELECT 
-			$BANKACCOUNTS_TABLE_KEY		\"Account ID\",
-			$BANKACCOUNTS_TABLE_AMOUNT	\"Current Balance\"
-		FROM $BANKACCOUNTS_TABLE_NAME
-		WHERE $BANKACCOUNTS_TABLE_KEY 	= '$account_ID'
+			$ACCOUNTOVERVIEW_TABLE_KEY		\"Account ID\",
+			$ACCOUNTOVERVIEW_TABLE_AMOUNT	\"Current Balance\"
+		FROM $ACCOUNTOVERVIEW_TABLE_NAME
+		WHERE $ACCOUNTOVERVIEW_TABLE_KEY 	= '$account_ID'
 	" ;
 	return executeSelectStatement($SQL_STATEMENT) ; 
 }
 
-
+//tested
 function getNumberOfUsers()
 {
+	global $USER_TABLE_KEY;
+	global $USER_TABLE_NAME;
+
+	$col = 'count';
+
 	$SQL_STATEMENT = "
 		SELECT
-			count(id) as count
+			count($USER_TABLE_KEY) as $col
 		FROM
-			user
+			$USER_TABLE_NAME
 	" ;
 
 	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
 
 	if ($result != -1) {
-		return $result['count'];
+		return $result[$col];
 	} else {
 		return 0;
 	}
@@ -667,47 +685,66 @@ function getNumberOfUsers()
 
 function getNumberOfAccounts()
 {
+	global $ACCOUNT_TABLE_KEY;
+	global $ACCOUNT_TABLE_NAME;
+
+	$col = 'count';
+
 	$SQL_STATEMENT = "
 		SELECT
-			count(id) as count
+			count($ACCOUNT_TABLE_KEY) as $col
 		FROM
-			account
+			$ACCOUNT_TABLE_NAME
 	" ;
 
 	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
 
 	if ($result != -1) {
-		return $result['count'];
+		return $result[$col];
 	} else {
 		return 0;
 	}
 }
 
-function getNumberOfTransactions() {
+function getNumberOfTransactions()
+{
+	global $TRANSACTION_TABLE_KEY;
+	global $TRANSACTION_TABLE_NAME;
+
+	$col = 'count';
 
 	$SQL_STATEMENT = "
 		SELECT
-			count(id) as count
+			count($TRANSACTION_TABLE_KEY) as $col
 		FROM
-			transaction
+			$TRANSACTION_TABLE_NAME
 	" ;
 
 	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
 
 	if ($result != -1) {
-		return $result['count'];
+		return $result[$col];
 	} else {
 		return 0;
 	}
 }
 
-function getTotalAmountOfMoney() {
+function getTotalAmountOfMoney()
+{
+	global $ACCOUNTOVERVIEW_TABLE_NAME;
+	global $ACCOUNTOVERVIEW_TABLE_BALANCE;
+	global $ACCOUNTOVERVIEW_TABLE_USER_ID;
+	global $FAKE_APPROVER_USER_ID;
+
+	$col = 'sum';
 
 	$SQL_STATEMENT = "
 		SELECT
-			sum(balance) as sum
+			sum($ACCOUNTOVERVIEW_TABLE_BALANCE) as $col
 		FROM
-			account
+			$ACCOUNTOVERVIEW_TABLE_NAME
+		WHERE
+			$ACCOUNTOVERVIEW_TABLE_USER_ID != '$FAKE_APPROVER_USER_ID'
 	" ;
 
 	$result = executeSelectStatementOneRecord($SQL_STATEMENT);

@@ -51,7 +51,7 @@ if (!isset($tan_code)){
 # no need for stage one 
 
 # Verify Operation
-$transaction_res = verify_transaction($account_id, $dest_code, $amount , $description , $tan_code ) ; 
+$transaction_res = verifyTransaction($account_id, $dest_code, $amount , $description , $tan_code ) ; 
 #$transaction_res 	= array(
 #	'result'	=> false,
 #	'message'	=> '[TAN Code] Tan code has been used'

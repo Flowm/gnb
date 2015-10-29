@@ -66,7 +66,7 @@ class user {
 		if ($this->role == '0') {
 			if (approveClient($approver_id, $this->id) || true) {
 				$balance = rand(100,1000);
-				$account_id = addAccountForUserWithBalance($this->id, $balance);
+				$account_id = addAccountWithBalance($this->id, $balance);
 				$account = new account(array('id'=>$account_id));
 				$tans = $account->generateTANs();
 				$name = "$this->firstname $this->lastname";

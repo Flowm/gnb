@@ -31,16 +31,16 @@ removeTestAccounts();
 removeTestUsers();
 
 
-addTestUsers();
+test('Adding test users', addTestUsers(), true);
 test('Checking users', checkForTestUsers(), true);
 // Check if duplicate users are prohibited
 test('Checking user requests', checkTestUserRequests(), 2);
 
-approveTestUsers();
+test('Approving test users', approveTestUsers(), true);
 test('Checking approved users', checkForApprovedTestUsers(), true);
 test('Checking user requests', checkTestUserRequests(), 0);
 
-addTestAccounts();
+test('Adding test accounts', addTestAccounts(), true);
 test('Checking accounts', checkForTestAccounts(), true);
 
 addTestTANs();
@@ -111,6 +111,7 @@ function addTestUsers() {
 		print "USER1_ID: $USER1_ID<br>";
 	} else {
 		print "Could not add USER1<br>";
+		return false;
 	}
 
 
@@ -121,7 +122,10 @@ function addTestUsers() {
 		print "USER2_ID: $USER2_ID<br>";
 	} else {
 		print "Could not add USER2<br>";
+		return false;
 	}
+
+	return true;
 }
 
 function checkForTestUsers() {
@@ -190,11 +194,15 @@ function approveTestUsers() {
 
 	if (approveEmployee(1, $USER1_ID) == false) {
 		print 'Could not approve ' . $USER1_ID;
+		return false;
 	}
 
 	if (approveClient(1, $USER2_ID) == false) {
 		print 'Could not approve ' . $USER2_ID;
+		return false;
 	}
+
+	return true;
 }
 
 function checkForApprovedTestUsers() {
@@ -237,15 +245,21 @@ function checkForApprovedTestUsers() {
 
 function addTestAccounts() {
 
-	//function addAccountForUser($user_id) {
-	//function addAccountForUser($user_id, $balance){
+	//function addAccount($user_id) {
+	//function addAccount($user_id, $balance){
 
 	global $USER1_ID;
 	global $USER2_ID;
 
-	if (addAccountForUser($USER1_ID) < 10000000) return false;
-	if (addAccountForUserWithBalance($USER2_ID, 5555.55) < 10000000) return false;
-	if (addAccountForUserWithBalance($USER2_ID, 7777.77) < 10000000) return false;
+	$acc1 = addAccount($USER1_ID);
+	$acc2 = addAccountWithBalance($USER2_ID, 5555.55);
+	$acc3 = addAccountWithBalance($USER2_ID, 7777.77);
+
+	print "Accounts: $acc1, $acc2, $acc3<br>";
+
+	if ($acc1 < 10000000) return false;
+	if ($acc2 < 10000000) return false;
+	if ($acc3 < 10000000) return false;
 
 	return true;
 }
@@ -432,7 +446,7 @@ function checkOverviewFunctions() {
 
 function approveTransactions() {
 
-	//function approvePendingTransaction($approver,$transaction_code)
+	//function approvePendingTransaction($approver,$transaction_id)
 
 	global $USER1_ID;
 

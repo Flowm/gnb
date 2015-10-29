@@ -74,7 +74,7 @@ for ($i = 0 ; $i < sizeof($tran_set) ; $i++ ){
 		$style	= $uncheckedStyle ; 
 	}
 	else {
-		$transaction_res = verify_transaction($account_id, $tran_set[$i][0], $tran_set[$i][1], $tran_set[$i][2], $tran_set[$i][3]) ;
+		$transaction_res = verifyTransaction($account_id, $tran_set[$i][0], $tran_set[$i][1], $tran_set[$i][2], $tran_set[$i][3]) ;
 		
 		if ($transaction_res["result"] == false ){
 			$failedTransactionFound		= true ; 

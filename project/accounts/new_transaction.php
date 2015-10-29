@@ -15,7 +15,7 @@ foreach ($_POST as $var => $value ){
 	$$var	= $value ; 
 }
 
-$account_id = '10000001' ;  
+#$account_id = '10000001' ;  
 $acc_info = getAccountDetails($account_id) ;
 drawSingleRecordTable($acc_info[0],'Account ') ; 
 

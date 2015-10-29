@@ -10,7 +10,7 @@
 include_once ('../main_include.php') ;
 
 #except Account Number 
-$account_id = '10000001' ;  
+$account_id = $_POST["account_id"] ;  
  
 echo '<p>Account overview here, with current balance and some basic info</p><br>' ;
 

@@ -647,16 +647,20 @@ function getAccountDetails($account_ID)
 {
 	global $ACCOUNTOVERVIEW_TABLE_NAME;
 	global $ACCOUNTOVERVIEW_TABLE_KEY;
-	global $ACCOUNTOVERVIEW_TABLE_AMOUNT ;
+	global $ACCOUNTOVERVIEW_TABLE_BALANCE ;
 	
 	$SQL_STATEMENT	= "
 		SELECT 
 			$ACCOUNTOVERVIEW_TABLE_KEY		\"Account ID\",
-			$ACCOUNTOVERVIEW_TABLE_AMOUNT	\"Current Balance\"
+			$ACCOUNTOVERVIEW_TABLE_BALANCE	\"Current Balance\"
 		FROM $ACCOUNTOVERVIEW_TABLE_NAME
 		WHERE $ACCOUNTOVERVIEW_TABLE_KEY 	= '$account_ID'
 	" ;
-	return executeSelectStatement($SQL_STATEMENT) ; 
+	
+	$result	= executeSelectStatement($SQL_STATEMENT) ; 
+	#var_dump($result) ; 
+	#var_dump($SQL_STATEMENT) ; 
+	return $result ; 
 }
 
 //tested
@@ -756,3 +760,26 @@ function getTotalAmountOfMoney()
 	}
 }
 
+function getAccountOwnerFromID($account_id){
+
+	global $USER_TABLE_NAME;
+	global $USER_TABLE_KEY;
+	global $ACCOUNT_TABLE_NAME;
+	global $ACCOUNT_TABLE_KEY;
+	global $ACCOUNT_TABLE_USER_ID;
+	
+	$SQL_STATEMENT	= "
+		SELECT
+			CONCAT(u.FIRST_NAME,' ',u.LAST_NAME )		\"Name\",
+			u.$USER_TABLE_KEY							\"User ID\"
+		FROM 
+			$ACCOUNT_TABLE_NAME		b
+			,$USER_TABLE_NAME		u
+		WHERE 
+			u.$USER_TABLE_KEY 				= b.$ACCOUNT_TABLE_USER_ID 
+			AND b.$ACCOUNT_TABLE_KEY		= '$account_id'
+	" ;
+	
+	$result 	= executeSelectStatement($SQL_STATEMENT) ;
+	return $result ;
+}

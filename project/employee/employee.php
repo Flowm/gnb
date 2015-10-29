@@ -6,7 +6,7 @@
  * Time: 15:51
  */
 
-include "../resource_mappings.php"; //All view mappings are loaded in here
+require_once __DIR__."/../resource_mappings.php";
 
 session_start();
 

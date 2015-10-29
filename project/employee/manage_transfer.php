@@ -6,8 +6,9 @@
  * Time: 11:02
  */
 
-include "../user.php";
-include "../bankfunctions.php";
+require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("db_functions");
+require_once getpageabsolute("user");
 
 $data = getPendingTransactions();
 $transactions = array();

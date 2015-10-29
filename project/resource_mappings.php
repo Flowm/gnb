@@ -1,9 +1,15 @@
 <?php
 //THIS FILE CONTAINS THE MAPPINGS BETWEEN LOGICAL NAMES AND VIEWS
 
-$root = realpath(dirname(__FILE__));
-$root = $root."/";
-$absolute_url = "http://$_SERVER[HTTP_HOST]/gnb/project/";
+// Detect base path and base url of application
+$base_dir = __DIR__;
+$protocol = isset($_SERVER["HTTPS"]) ? 'https://' : 'http://';
+$domain = $_SERVER['HTTP_HOST'];
+$doc_root = $_SERVER['DOCUMENT_ROOT'];
+$url_dir = str_replace($doc_root, '', $base_dir);
+$base_url = $protocol.$domain.$url_dir;
+define ('BASE_DIR', $base_dir ."/");
+define ('BASE_URL', $base_url ."/");
 
 //PAGES (main pages of the client application)
 $pages = array();
@@ -16,9 +22,9 @@ $pages["employee"] = "employee/employee.php";
 $pages["client"] = "client/client.php";
 $pages["db_functions"] = "bankfunctions.php";
 $pages["mail"] = "gnbmailer.php";
-$pages["user"] = "user.php";
-$pages["account"] = "account.php";
-$pages["transaction"] = "transaction.php";
+$pages["user"] = "models/user.php";
+$pages["account"] = "models/account.php";
+$pages["transaction"] = "models/transaction.php";
 
 //SECTIONS (each section is triggered by a button)
 $sections = array();
@@ -51,45 +57,39 @@ function getResource($prefix, $resources, $target) {
 }
 
 function getPageAbsolute($page) {
-    global $root;
     global $pages;
 
-    return getResource($root, $pages, $page);
+    return getResource(BASE_DIR, $pages, $page);
 }
 
 function getPageURL($page) {
-    global $absolute_url;
     global $pages;
 
-    return getResource($absolute_url, $pages, $page);
+    return getResource(BASE_URL, $pages, $page);
 }
 
 function getSectionAbsolute($section) {
-    global $root;
     global $sections;
 
-    return getResource($root, $sections, $section);
+    return getResource(BASE_DIR, $sections, $section);
 }
 
 function getSectionURL($section) {
-    global $absolute_url;
     global $sections;
 
-    return getResource($absolute_url, $sections, $section);
+    return getResource(BASE_URL, $sections, $section);
 }
 
 function getFrameAbsolute($frame) {
-    global $root;
     global $frames;
 
-    return getResource($root, $frames, $frame);
+    return getResource(BASE_DIR, $frames, $frame);
 }
 
 function getFrameURL($frame) {
-    global $absolute_url;
     global $frames;
 
-    return getResource($absolute_url, $frames, $frame);
+    return getResource(BASE_URL, $frames, $frame);
 }
 
 ?>

@@ -9,7 +9,9 @@
 /*Just process the received form, store the data inside the DB,
 maybe return an error if the data already existed and finally return to the index */
 
-include "resource_mappings.php";
+require_once "resource_mappings.php";
+require_once getpageabsolute("db_functions");
+require_once getpageabsolute("user");
 
 global $pages;
 
@@ -24,10 +26,6 @@ if (!isset($_POST['type'])
     header("Location:".getPageURL('registration').$error);
     exit();
 }
-
-//Don't want to include this for naught
-include "bankfunctions.php";
-include "user.php";
 
 //Getting form stuff
 $type = $_POST['type'];

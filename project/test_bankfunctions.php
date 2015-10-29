@@ -1,6 +1,6 @@
 <?php
 
-include 'bankfunctions.php' ;
+require_once 'bankfunctions.php' ;
 
 $TESTPREFIX = 'MYMAGICSTRING';
 

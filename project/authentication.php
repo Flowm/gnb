@@ -9,9 +9,9 @@
 //Check credentials: if ok proceed to the correct overview, otherwise return to login.php and print some error
 //If authentication successful, set some session variables
 
-include 'resource_mappings.php';
-include getPageAbsolute('user');
-include getPageAbsolute('db_functions');
+require_once "resource_mappings.php";
+require_once getpageabsolute("db_functions");
+require_once getpageabsolute("user");
 
 session_start();
 

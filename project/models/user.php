@@ -1,10 +1,10 @@
 <?php
 
-require_once "resource_mappings.php";
-require_once getPageAbsolute("account");
-
-require_once getPageAbsolute("mail");
+require_once __DIR__."/../resource_mappings.php";
 require_once getPageAbsolute("db_functions");
+require_once getPageAbsolute("mail");
+
+require_once getPageAbsolute("account");
 
 class user {
     public $id;

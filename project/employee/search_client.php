@@ -8,9 +8,9 @@
 
 session_start();
 
-include "../resource_mappings.php";
-include "../bankfunctions.php";
-include "../user.php";
+require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("db_functions");
+require_once getpageabsolute("user");
 
 if (isset($_POST['surname'])) {
     //query by surname

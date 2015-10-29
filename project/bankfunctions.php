@@ -4,7 +4,7 @@
 ini_set("display_errors",2);
 ini_set("error_reporting",E_ALL|E_STRICT);
 
-include 'dbheader.php' ;
+require_once "dbheader.php";
 
 //tested
 function recordIsInTable($record_value,$record_name,$table_name)

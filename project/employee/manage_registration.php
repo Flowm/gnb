@@ -1,6 +1,6 @@
 <?php
 
-require_once "../resource_mappings.php";
+require_once __DIR__."/../resource_mappings.php";
 require_once getpageabsolute("user");
 require_once getpageabsolute("db_functions");
 

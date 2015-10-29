@@ -6,7 +6,9 @@
  * Time: 15:05
  */
 
-include "../resource_mappings.php"; //All view mappings are loaded in here
+require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("db_functions");
+require_once getpageabsolute("user");
 
 session_start();
 

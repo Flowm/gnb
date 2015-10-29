@@ -8,7 +8,7 @@
 
 session_start();
 
-include "resource_mappings.php";
+require_once "resource_mappings.php";
 
 if (isset($_SESSION["username"]) && isset($_SESSION["role"])) {
     if ($_SESSION["role"] == "client") {

@@ -8,3 +8,14 @@ function goToLoginPage() {
 function goToRegistrationPage() {
     location.href="registration.php";
 }
+
+function refreshAwesomeData() {
+    var destination = 'awesome_data.php';
+    var request = {request:"all"};
+
+    performSimpleAjaxRequest(request, destination, refreshCallback);
+}
+
+function refreshCallback(data) {
+    //TODO: TO IMPLEMENT
+}

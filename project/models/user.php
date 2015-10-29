@@ -82,6 +82,7 @@ class user {
 		}
 		return false;
 	}
+
 	public static function approveRegistrations($requests, $approver_id) {
 		$requests = explode(";",$requests);
 		foreach ($requests as $request) {

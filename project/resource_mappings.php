@@ -1,5 +1,5 @@
 <?php
-//THIS FILE CONTAINS THE MAPPINGS BETWEEN LOGICAL NAMES AND VIEWS
+//THIS FILE CONTAINS THE MAPPINGS BETWEEN LOGICAL NAMES AND VIEWS/RESOURCES
 
 // Detect base path and base url of application
 $base_dir = __DIR__;
@@ -7,7 +7,8 @@ $protocol = isset($_SERVER["HTTPS"]) ? 'https://' : 'http://';
 $domain = $_SERVER['HTTP_HOST'];
 $doc_root = $_SERVER['DOCUMENT_ROOT'];
 $url_dir = str_replace($doc_root, '', $base_dir);
-$base_url = $protocol.$domain.$url_dir;
+$base_url = $protocol.$domain.$url_dir; //NORMAL USAGE
+//$base_url = $protocol.$domain."/gnb/project"; //THIS IS STATIC AND ONLY FOR PHPSTORM
 define ('BASE_DIR', $base_dir ."/");
 define ('BASE_URL', $base_url ."/");
 
@@ -25,6 +26,7 @@ $pages["mail"] = "gnbmailer.php";
 $pages["user"] = "models/user.php";
 $pages["account"] = "models/account.php";
 $pages["transaction"] = "models/transaction.php";
+$pages["awesome"] = "awesome_data.php";
 
 //SECTIONS (each section is triggered by a button)
 $sections = array();
@@ -47,6 +49,10 @@ $frames["account_home"] = "accounts/account_overview.php";
 $frames["new_transaction"] = "accounts/new_transaction.php";
 $frames["new_transaction_multiple"] = "accounts/new_transaction_multiple.php";
 $frames["transaction_history"] = "accounts/transaction_history.php";
+
+$media = array();
+$media["logo_svg"] = "media/gnb_logo.svg";
+$media["logo_icn"] = "media/gnb_icon.png";
 
 
 function getResource($prefix, $resources, $target) {
@@ -90,6 +96,12 @@ function getFrameURL($frame) {
     global $frames;
 
     return getResource(BASE_URL, $frames, $frame);
+}
+
+function getMedia($name) {
+    global $media;
+
+    return getResource(BASE_URL, $media, $name);
 }
 
 ?>

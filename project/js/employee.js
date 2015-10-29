@@ -39,10 +39,14 @@ function rejectRegistration() {
 function handleRegistrations(action) {
     var selected = document.getElementsByName("action_check");
     var ids = "";
+    var added = false;
     for (var i=0; i<selected.length; i++) {
-        ids += selected[i].id;
-        if ((i + 1) < selected.length) {
-            ids += ";";
+        if (selected[i].checked) {
+            if (added) {
+                ids += ";";
+            }
+            ids += selected[i].id;
+            added = true;
         }
     }
     var params = {section:"employee_area", frame:"manage_registration", action:action, users:ids};
@@ -129,11 +133,28 @@ function goToTransferDetails(transferId) {
 }
 
 function approveTransfer() {
-    //TODO: IMPLEMENT
+    return handleTransfers('approveTransfer');
 }
 
 function rejectTransfer() {
-    //TODO: IMPLEMENT
+    return handleTransfers('rejectTransfer');
+}
+
+function handleTransfers(action) {
+    var selected = document.getElementsByName("action_check");
+    var ids = "";
+    var added = false;
+    for (var i=0; i<selected.length; i++) {
+        if (selected[i].checked) {
+            if (added) {
+                ids += ";";
+            }
+            ids += selected[i].id;
+            added = true;
+        }
+    }
+    var params = {section:"employee_area", frame:"manage_transfer",action:action, transactions:ids};
+    return performPostRequest("employee.php",params);
 }
 
 function logout() {

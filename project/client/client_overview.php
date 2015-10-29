@@ -5,6 +5,32 @@
  * Date: 17/10/15
  * Time: 15:05
  */
+
+
+$BARNEY_QUOTES = array("In my body, where the shame gland should be, there is
+                    a second awesome gland. True story.",
+    "Suits are full of joy. They’re the sartorial
+                equivalent of a baby’s smile.",
+    "It’s gonna be legend-... wait for it… and I hope
+                you’re not lactose intolerant because the second half of that word is DAIRY!",
+    "Okay, pep talk! You can do this, but to be more
+                accurate, you probably can’t. You’re way out of practice and she’s way too hot
+                for you. So, remember, it’s not about scoring. It’s about believing you can do
+                it, even though you probably can’t. Go get ‘em, tiger!",
+    "Think of me like Yoda, but instead of being little and
+                green I wear suits and I’m awesome. I’m your bro—I’m Broda!");
+
+
+$quote_of_the_day = null;
+
+if (isset($_SESSION['quote'])) {
+    $quote_of_the_day = $_SESSION['quote'];
+}
+else {
+    $quote_of_the_day = $BARNEY_QUOTES[rand(0, count($BARNEY_QUOTES)-1)];
+    $_SESSION['quote'] = $quote_of_the_day;
+}
+
 ?>
 
-<div>Some Overview information, like the balance for each account (can be selected from a dropdown list)</div>
+<div class="message"><?php echo $quote_of_the_day ?></div>

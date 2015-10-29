@@ -7,8 +7,26 @@
  */
 
 require_once __DIR__."/../resource_mappings.php";
-require_once getpageabsolute("db_functions");
 require_once getpageabsolute("user");
+require_once getpageabsolute("db_functions");
+
+//Handling approval/rejections first
+if (isset($_POST['action']) && isset($_POST['transactions'])) {
+    $action = $_POST['action'];
+    $requests = $_POST['transactions'];
+    $approver_id = $_SESSION['user_id'];
+
+    if ($action == 'approveTransfer') {
+        transaction::approveTransactions($requests, $approver_id);
+    }
+    else if ($action == 'rejectTransfer') {
+        //TODO: Decide if we want to handle user rejections
+    }
+
+}
+elseif (isset($_POST['reject_transfers'])) {
+    //STILL NEED TO IMPLEMENT IT
+}
 
 $data = getPendingTransactions();
 $transactions = array();

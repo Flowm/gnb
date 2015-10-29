@@ -1,0 +1,277 @@
+body {
+    font-family: "Open-sans", Helvetica, sans-serif;
+    color: #454545;
+    font-size: 16px;
+    line-height: 24px;
+    background-color: #e0ddd6;
+
+}
+
+/* CONTAINERS */
+div.mainContainer {
+    width: 1000px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #ffffff;
+}
+
+div.headerContainer {
+    width: 1020px;
+    margin: 0 auto;
+    display: table;
+    margin-top: -20px;
+}
+
+div.logoContainer {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+div.navBarContainer {
+    width: 700px;
+    height: 60px;
+    background-color: #9d989d;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 20px;
+    text-align: right;
+    display: table-cell;
+}
+
+div.simpleContainer {
+    width: 800px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+div.buttonContainer {
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px;
+}
+
+/* HEADER CLASSES */
+.title1 {
+    font-weight: 300;
+    font-size: 48px;
+    line-height: 48px;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.title2 {
+    font-weight: 300;
+    font-size: 26px;
+    line-height: 26px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.title3 {
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+.simpleText {
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 18px;
+}
+
+.simpleLabel {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.simpleTextBig {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+/* BUTTONS */
+.simpleButton {
+    background-color: #428bca;
+    border: 1px solid #357ebd;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 300;
+    border-radius: 4px;
+    text-align: center;
+    width: 160px;
+    height: 40px;
+    margin: 4px;
+}
+
+.simpleButton:hover {
+    background-color: #3276b1;
+    border-color: #285e8e;
+}
+
+.simpleButton:focus {
+    outline: 0;
+}
+
+.simpleButton:active {
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125)
+}
+
+/* MAIN MENU BUTTONS */
+.menuButton {
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 300;
+    border-radius: 0;
+    text-align: center;
+    vertical-align: middle;
+    width: 200px;
+    height: 60px;
+    margin: 0 auto;
+    background-color: #d4d4d4;
+    border: 1px solid #b2b2b2;
+}
+
+.menuButton:hover {
+    background-color: #b1aaa8;
+    border-color: #888888;
+}
+
+.menuButtonActive {
+    background-color: #eea236;
+    border: 1px solid #ee7d25;
+    outline: 0;
+}
+
+/* REFRESH BUTTON - ORANGE, ONLY USED ON INDEX PAGE */
+#refreshButton {
+    background-color: #eea236;
+    border: 1px solid #ee7d25;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 300;
+    border-radius: 4px;
+    text-align: center;
+    width: 120px;
+    height: 40px;
+    margin: 10px;
+    vertical-align: middle;
+}
+
+#refreshButton:hover {
+    background-color: #ee8c2d;
+    border-color: #ee6c21;
+}
+
+#refreshButton:focus {
+    outline: 0;
+}
+
+#refreshButton:active {
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125)
+}
+
+/* COLUMNS IN A FORM. USUALLY USED INSIDE A FORM ROW ELEMENT */
+.formLeftColumn {
+    display: table-cell;
+    text-align: right;
+    width: 300px;
+    padding: 6px;
+}
+
+.formRightColumn {
+    display: table-cell;
+    text-align: left;
+    width: 300px;
+    padding: 6px;
+}
+
+/* A SIMPLE ROW IN A FORM */
+.formRow {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    display: table;
+}
+
+/* FORM ELEMENTS */
+/* RADIO BUTTON */
+input[type=radio] {
+    display:none;
+}
+
+input[type=radio] + label {
+    margin-right: 10px;
+}
+
+input[type=radio] + label span {
+    content: "";
+    display: inline-block;
+    vertical-align:middle;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    margin-bottom: 3px;
+    background-color: #cbcbcb;
+    box-shadow: inset 0 2px 2px rgba(0, 0, 0, .3);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+input[type=radio]:checked + label span {
+    background-color: #707070;
+    text-align:center;
+    text-shadow:0 0 3px #eee;
+}
+
+/* FIELDS (TEXT, EMAIL, ...) */
+input[type=text], input[type=email], input[type=password] {
+    margin: 0 auto;
+    width: 250px;
+    font-size: 16px;
+    line-height: 18px;
+    border-radius: 4px;
+    padding: 8px;
+    border: solid 1px #dcdcdc;
+    transition: box-shadow 0.3s, border 0.3s;
+}
+
+input[type=text]:focus, input[type=email]:focus, input[type=password]:focus {
+    border: solid 1px #707070;
+    box-shadow: 0 0 3px 1px #969696;
+    outline: 0;
+}
+
+img.logo_big {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+}
+
+img.logo_small {
+    vertical-align: middle;
+    display: inline-block;
+    width: 160px;
+}
+
+.error {
+    color: red;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+}

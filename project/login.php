@@ -8,7 +8,7 @@
 
 session_start();
 
-require_once "resource_mappings.php";
+require_once __DIR__."/resource_mappings.php";
 
 if (isset($_SESSION["username"]) && isset($_SESSION["role"])) {
     if ($_SESSION["role"] == "client") {
@@ -23,6 +23,8 @@ if (isset($_SESSION["username"]) && isset($_SESSION["role"])) {
 
 $error_types = array(0=>'Invalid login credentials!',1=>'The account is currently blocked');
 
+$logo_svg = getMedia('logo_svg');
+
 ?>
 
 <!DOCTYPE html>
@@ -30,25 +32,48 @@ $error_types = array(0=>'Invalid login credentials!',1=>'The account is currentl
 <head>
     <meta charset="UTF-8">
     <title></title>
-    <link rel="stylesheet" type="text/css" href="style/error.css">
+    <link rel="stylesheet" type="text/css" href="style/gnb.css">
     <script type="text/javascript" src="js/index.js"></script>
+    <link rel="icon" type="image/png" href="media/gnb_icon.png" />
 </head>
 <body>
-    <h2>Welcome to the Goliath National Bank!</h2><br>
-    <h4>Login with personal PIN</h4>
-    <form method="post" action="authentication.php">
-        <label for="user_input">Enter your username: </label><input type="text" name="username" id="user_input"><br>
-        <label for="pw_input">Enter your password: </label><input type="password" name="password" id="pw_input"><br>
-        <span id="error" class="error">
-        <?php
-        if (isset($_GET) && isset($_GET["error"])) {
-            $error = $_GET["error"];
-            if (isset($error_types[$error])) {
-                echo $error_types[$error];
-            }
-        }
-        ?></span><br>
-        <input type="submit" value="Login">
-    </form>
+<div class="mainContainer">
+    <img src="<?php echo $logo_svg ?>" alt="GNB Logo" class="logo_big">
+    <div class="simpleContainer">
+        <h1 class="title2">We are gonna need your bro-dentials!</h1>
+        <form method="post" action="authentication.php">
+            <div class="formRow">
+                <div class="formLeftColumn">
+                    <label for="user_input" class="simpleLabel">Enter your email here, bro:</label>
+                </div>
+                <div class="formRightColumn">
+                    <input type="text" name="username" id="user_input" placeholder="Email"><br>
+                </div>
+            </div>
+            <div class="formRow">
+                <div class="formLeftColumn">
+                    <label for="pw_input" class="simpleLabel">Enter your password here, bro:</label>
+                </div>
+                <div class="formRightColumn">
+                    <input type="password" name="password" id="pw_input" placeholder="Password"><br>
+                </div>
+            </div>
+            <div class="formRow">
+                <span id="error" class="error">
+                <?php
+                if (isset($_GET) && isset($_GET["error"])) {
+                    $error = $_GET["error"];
+                    if (isset($error_types[$error])) {
+                        echo $error_types[$error];
+                    }
+                }
+                ?></span><br>
+            </div>
+            <div class="buttonContainer">
+                <button type="submit" class="simpleButton">Suit up!</button>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>

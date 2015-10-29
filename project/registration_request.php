@@ -83,7 +83,7 @@ if (!$result) {
 <body>
     <h2>Welcome to the Goliath National Bank!</h2><br>
     <p>You request has been received and will be processed shortly.
-        Upon approval, you will receive a confirmation email.<br>
+        A confirmation email will be sent to you shortly.<br>
         Thank you for choosing the Goliath National Bank!</p>
     <a href="index.php">Return to Home page</a>
 </body>

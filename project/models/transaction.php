@@ -42,4 +42,14 @@ class transaction {
             $this->tan_id = $data['tan_id'];
         }
     }
+
+    public static function approveTransactions($requests, $approver_id) {
+        $requests = explode(";",$requests);
+        foreach ($requests as $request) {
+            $result = approvePendingTransaction($approver_id, $request);
+            if (!$result) {
+                //TODO: handle registration error
+            }
+        }
+    }
 }

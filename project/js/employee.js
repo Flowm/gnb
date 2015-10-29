@@ -29,11 +29,11 @@ function goToMyAccounts(frame, account) {
 }
 
 function approveRegistration() {
-    return handleRegistrations('approved_registrations');
+    return handleRegistrations('approveRegistration');
 }
 
 function rejectRegistration() {
-    return handleRegistrations('rejected_registrations');
+    return handleRegistrations('rejectRegistration');
 }
 
 function handleRegistrations(action) {
@@ -45,8 +45,8 @@ function handleRegistrations(action) {
             ids += ";";
         }
     }
-    var params = {section:"employee_area", frame:"manage_registration", action:ids};
-    return performPostRequest("employee.php",params);
+    var params = {section:"employee_area", frame:"manage_registration", action:action, users:ids};
+    return performPostRequest("employee.php", params);
 }
 
 //THE FOLLOWING FUNCTIONS ARE NEEDED INSIDE THE manage_clients.php FILE

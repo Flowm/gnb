@@ -29,7 +29,7 @@ class account {
 		for($i=0;$i<$cnt;$i++) {
 			$newtan = $this->genRandString(15);
 			while(!insertTAN($newtan, $this->id)) {
-				$newtan = genString(15);
+				$newtan = $this->genRandString(15);
 			}
 			$tans[$i] = $newtan;
 		}

@@ -5,11 +5,16 @@ require_once getpageabsolute("user");
 require_once getpageabsolute("db_functions");
 
 //Handling approval/rejections first
-if (isset($_POST['approved_registrations'])) {
-	user::approveUserRegistrations($_POST['approved_registrations']);
-}
-elseif (isset($_POST['reject_registrations'])) {
-    //STILL NEED TO IMPLEMENT IT
+if (isset($_POST['action']) && isset($_POST['users'])) {
+    $action = $_POST['action'];
+    $requests = $_POST['users'];
+    $approver_id = $_SESSION['user_id'];
+
+    if ($action == "approveRegistration") {
+        user::approveRegistrations($requests, $approver_id);
+    } elseif ($action == "rejectRegistration") {
+        //TODO: Decide if we want to handle user rejections
+    }
 }
 
 $data = getPendingRequests();
@@ -28,7 +33,7 @@ if (count($newUsers) == 0) {
 
 ?>
 
-<p>There are <?php count($newUsers) ?> new registration requests awaiting your approval</p>
+<p>There are <?php echo count($newUsers) ?> new registration requests awaiting your approval</p>
 
 <table>
     <tr>
@@ -61,4 +66,4 @@ if (count($newUsers) == 0) {
 
 <p>What should be done with the selected registration requests?</p>
 <button type="button" onclick="approveRegistration()">Approve</button>
-<button type="button" onclick="rejectRegistration()">Reject</button>
+<!--<button type="button" onclick="rejectRegistration()">Reject</button>-->

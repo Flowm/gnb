@@ -82,25 +82,20 @@ class user {
 		}
 		return false;
 	}
-	public static function approveUserRegistrations($requests) {
-		//TODO: Untested
+	public static function approveRegistrations($requests, $approver_id) {
 		$requests = explode(";",$requests);
-		$approver_id = $_SESSION['id'];
-
 		foreach ($requests as $request) {
 			$exploded = explode(":",$request);
 			$id = $exploded[0];
 			$role = $exploded[1];
 			$data = getUser($id,$role);
 			if (!$data) {
-				//THIS WOULD BE BAD! WE SHOULD HANDLE THIS CASE
+				return false;
 			}
-			else {
-				$user = new user($data);
-				$result = $user->approve($approver_id);
-				if (!$result) {
-					//TODO: handle registration error
-				}
+			$user = new user($data);
+			$result = $user->approve($approver_id);
+			if (!$result) {
+				//TODO: handle registration error
 			}
 		}
 	}

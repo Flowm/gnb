@@ -1,6 +1,8 @@
 <?php
 
 require_once __DIR__."/../resource_mappings.php";
+require_once getPageAbsolute("db_functions");
+
 require_once getPageAbsolute("transaction");
 
 class account {
@@ -27,16 +29,20 @@ class account {
 	public function generateTANs($cnt=100) {
 		$tans = array();
 		for($i=0;$i<$cnt;$i++) {
+			$retry=5;
 			$newtan = $this->genRandString(15);
 			while(!insertTAN($newtan, $this->id)) {
 				$newtan = $this->genRandString(15);
+				if ($retry-- <= 0) {
+					return false;
+				}
 			}
 			$tans[$i] = $newtan;
 		}
 		return $tans;
 	}
 
-	private function genRandString($length) {
-		return bin2hex(openssl_random_pseudo_bytes($length));
+	public function genRandString($length) {
+		return substr(bin2hex(openssl_random_pseudo_bytes(round($length/2))), 0, $length);
 	}
 }

@@ -27,6 +27,7 @@ $pages["user"] = "models/user.php";
 $pages["account"] = "models/account.php";
 $pages["transaction"] = "models/transaction.php";
 $pages["awesome"] = "awesome_data.php";
+$pages["uploads"] = "uploads/";
 
 //SECTIONS (each section is triggered by a button)
 $sections = array();

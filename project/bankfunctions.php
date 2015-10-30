@@ -406,8 +406,75 @@ function processPendingTransaction($transaction_id, $processor, $status)
 	}
 }
 
+/************************************************
+ * USER - STATUS FUNCTIONS
+ ************************************************/
+
 //tested
-function approveUser($approver_id, $user_id, $role_filter)
+function approveEmployee($employee_id, $approver_id)
+{
+    return approveUser($employee_id, $approver_id, 'employee');
+}
+
+//tested
+function approveClient($client_id, $approver_id)
+{
+    return approveUser($client_id, $approver_id, 'client');
+}
+
+//tested
+function rejectEmployee($employee_id, $rejector_id)
+{
+	return rejectUser($employee_id, $rejector_id, 'employee');
+}
+
+//tested
+function rejectClient($client_id, $rejector_id)
+{
+	return rejectUser($client_id, $rejector_id, 'client');
+}
+
+//tested
+function blockEmployee($employee_id, $blocker_id)
+{
+	return blockUser($employee_id, $blocker_id, 'employee');
+}
+
+//tested
+function blockClient($client_id, $blocker_id)
+{
+	return blockUser($client_id, $blocker_id, 'client');
+}
+
+//tested
+function approveUser($user_id, $approver_id, $role_filter)
+{
+	global $USER_STATUS;
+
+	$new_status = $USER_STATUS['approved'];
+	return changeUserStatus($user_id, $new_status, $approver_id, $role_filter);
+}
+
+//tested
+function rejectUser($user_id, $rejector_id, $role_filter)
+{
+	global $USER_STATUS;
+
+	$new_status = $USER_STATUS['rejected'];
+	return changeUserStatus($user_id, $new_status, $rejector_id, $role_filter);
+}
+
+//tested
+function blockUser($user_id, $blocker_id, $role_filter)
+{
+	global $USER_STATUS;
+
+	$new_status = $USER_STATUS['blocked'];
+	return changeUserStatus($user_id, $new_status, $blocker_id, $role_filter);
+}
+
+//tested
+function changeUserStatus($user_id, $new_status, $processor_id, $role_filter)
 {
     global $USER_ROLES;
     global $USER_STATUS;
@@ -418,7 +485,6 @@ function approveUser($approver_id, $user_id, $role_filter)
     global $USER_TABLE_ROLE;
 
     $role = $USER_ROLES[$role_filter];
-    $new_status = $USER_STATUS['approved'];
 
 	//TODO: Check if approver is approved employee
 
@@ -426,11 +492,10 @@ function approveUser($approver_id, $user_id, $role_filter)
 		UPDATE $USER_TABLE_NAME
 		SET
 			$USER_TABLE_STATUS 		= '$new_status',
-			$USER_TABLE_APPROVER 	= '$approver_id' 
+			$USER_TABLE_APPROVER 	= '$processor_id' 
 		WHERE
 			$USER_TABLE_KEY			= '$user_id'
 			AND $USER_TABLE_ROLE	= '$role'
-			AND $USER_TABLE_APPROVER IS NULL
 			AND $USER_TABLE_STATUS != '$new_status'
 	";
 
@@ -443,17 +508,9 @@ function approveUser($approver_id, $user_id, $role_filter)
     }
 }
 
-//tested
-function approveEmployee($approver_id, $employee_id)
-{
-    return approveUser($approver_id, $employee_id, 'employee');
-}
-
-//tested
-function approveClient($approver_id, $client_id)
-{
-    return approveUser($approver_id, $client_id, 'client');
-}
+/************************************************
+ * /USER - STATUS FUNCTIONS
+ ************************************************/
 
 //tested
 function getAccountsForUser($user_id)

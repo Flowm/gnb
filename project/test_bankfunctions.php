@@ -23,6 +23,17 @@ $USER2_TESTTAN		= 'QWERTZUIOPASDFG';
 $USER2_TESTTAN2		= 'TESTTANTESTTAN0';
 $USER2_PASSWORD		= 'youwontguess';
 
+$USER3_FIRSTNAME	= $TESTPREFIX . ' FN3';
+$USER3_LASTNAME		= $TESTPREFIX . ' LN3';
+$USER3_EMAIL		= $TESTPREFIX . 'E3@example.com';
+$USER3_ROLE			= 'client';
+$USER3_ID;
+$USER3_ACCOUNTID;
+$USER3_TESTTAN		= 'QWERTZUIOPASDFG';
+$USER3_TESTTAN2		= 'TESTTANTESTTAN0';
+$USER3_PASSWORD		= 'youwontguess';
+
+
 removeTestTransactions();
 removeTestTANs();
 removeTestAccounts();
@@ -32,7 +43,7 @@ removeTestUsers();
 test('Adding test users', addTestUsers(), true);
 test('Checking users', checkForTestUsers(), true);
 // Check if duplicate users are prohibited
-test('Checking user requests', checkTestUserRequests(), 2);
+test('Checking user requests', checkTestUserRequests(), 3);
 
 test('Approving test users', approveTestUsers(), true);
 test('Checking approved users', checkForApprovedTestUsers(), true);
@@ -54,7 +65,7 @@ test('Checking overview functions', checkOverviewFunctions(), true);
 
 //TODO: Test rollback @ processTransaction
 
-
+die("Stopping before test data was erased.");
 
 
 removeTestTransactions();
@@ -100,7 +111,14 @@ function addTestUsers() {
 	global $USER2_ID;
 	global $USER2_PASSWORD;
 
-	if ($debug) print 'Adding Users ' . $USER1_FIRSTNAME . ' and ' . $USER2_FIRSTNAME . '<br>';
+	global $USER3_FIRSTNAME;
+	global $USER3_LASTNAME;
+	global $USER3_EMAIL;
+	global $USER3_ROLE;
+	global $USER3_ID;
+	global $USER3_PASSWORD;
+
+	if ($debug) print 'Adding Users ' . $USER1_FIRSTNAME . ' and ' . $USER2_FIRSTNAME . ' and ' . $USER3_FIRSTNAME . '<br>';
 
 	$result = addEmployee($USER1_FIRSTNAME, $USER1_LASTNAME, $USER1_EMAIL, $USER1_PASSWORD);
 
@@ -123,6 +141,16 @@ function addTestUsers() {
 		return false;
 	}
 
+	$result = addClient($USER3_FIRSTNAME, $USER3_LASTNAME, $USER3_EMAIL, $USER3_PASSWORD);
+
+	if ($result != false) {
+		$USER3_ID= $result;
+		if ($debug) print "USER3_ID: $USER3_ID<br>";
+	} else {
+		print "Could not add USER3<br>";
+		return false;
+	}
+
 	return true;
 }
 
@@ -140,16 +168,23 @@ function checkForTestUsers() {
 	global $USER2_ROLE;
 	global $USER2_ID;
 
+	global $USER3_FIRSTNAME;
+	global $USER3_LASTNAME;
+	global $USER3_EMAIL;
+	global $USER3_ROLE;
+	global $USER3_ID;
+
 	global $USER_TABLE_NAME;
 	global $USER_TABLE_KEY;
 
 	if (! RecordIsInTable($USER1_ID, $USER_TABLE_KEY, $USER_TABLE_NAME)) return false;
 	if (! RecordIsInTable($USER2_ID, $USER_TABLE_KEY, $USER_TABLE_NAME)) return false;
+	if (! RecordIsInTable($USER3_ID, $USER_TABLE_KEY, $USER_TABLE_NAME)) return false;
 
 	if (getEmployee($USER1_ID) == false) return false;
 	if (getClient($USER2_ID) == false) return false;
+	if (getClient($USER3_ID) == false) return false;
 	//FIXME: Notice undefined ofset ... if (getUser($USER1_ID, 'client') != false) return false;
-	if (getUser($USER1_ID, 'employee') == false) return false;
 
 	return true;
 }
@@ -188,15 +223,49 @@ function approveTestUsers() {
 	global $USER2_ROLE;
 	global $USER2_ID;
 
-	if ($debug) print 'Approving users ' . $USER1_ID . ' and ' . $USER2_ID . '<br>';
+	global $USER3_FIRSTNAME;
+	global $USER3_LASTNAME;
+	global $USER3_EMAIL;
+	global $USER3_ROLE;
+	global $USER3_ID;
 
-	if (approveEmployee(1, $USER1_ID) == false) {
+	if ($debug) print 'Approving users ' . $USER1_ID . ' and ' . $USER2_ID . ' and ' . $USER3_ID . '<br>';
+
+	// USER 1
+	if (rejectEmployee($USER1_ID, 1) == false) {
+		print 'Could not reject ' . $USER1_ID;
+		return false;
+	}
+
+	if (blockEmployee($USER1_ID, 1) == false) {
+		print 'Could not block ' . $USER1_ID;
+		return false;
+	}
+
+	if (approveEmployee($USER1_ID, 1) == false) {
 		print 'Could not approve ' . $USER1_ID;
 		return false;
 	}
 
-	if (approveClient(1, $USER2_ID) == false) {
+	// USER 2
+	if (rejectClient($USER2_ID, 1) == false) {
+		print 'Could not reject ' . $USER2_ID;
+		return false;
+	}
+
+	if (blockClient($USER2_ID, 1) == false) {
+		print 'Could not block ' . $USER2_ID;
+		return false;
+	}
+
+	if (approveClient($USER2_ID, 1) == false) {
 		print 'Could not approve ' . $USER2_ID;
+		return false;
+	}
+
+	// USER 3
+	if (rejectClient($USER3_ID, 1) == false) {
+		print 'Could not reject ' . $USER3_ID;
 		return false;
 	}
 
@@ -219,6 +288,12 @@ function checkForApprovedTestUsers() {
 	global $USER2_ROLE;
 	global $USER2_ID;
 
+	global $USER3_FIRSTNAME;
+	global $USER3_LASTNAME;
+	global $USER3_EMAIL;
+	global $USER3_ROLE;
+	global $USER3_ID;
+
 	global $USER_TABLE_NAME;
 	global $USER_TABLE_KEY;
 
@@ -237,6 +312,15 @@ function checkForApprovedTestUsers() {
 		if ($debug) print 'User ' . $USER2_ID . ' approved!<br>';
 	} else {
 		print 'User ' . $USER2_ID . ' not approved!<br>';
+		return false;
+	}
+
+	$userinfo = getClient($USER3_ID);
+
+	if ($userinfo['status'] == 2 && $userinfo['approved_by_user_id'] != NULL) {
+		if ($debug) print 'User ' . $USER3_ID . ' rejected!<br>';
+	} else {
+		print 'User ' . $USER3_ID . ' not rejected!<br>';
 		return false;
 	}
 

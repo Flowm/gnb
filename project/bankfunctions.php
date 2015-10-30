@@ -147,19 +147,22 @@ function getAccountTransactions($account_ID, $filter = "ALL")
 	}
 }
 
-//tested
+//tested onld version
 function getPendingTransactions()
 {
+	global $TRANSACTION_STATUS;
 	global $TRANSACTION_TABLE_NAME;
 	global $TRANSACTION_TABLE_AP_AT;
 	global $TRANSACTION_TABLE_AP_BY;
-	//TODO: Use transaction status
+	global $TRANSACTION_TABLE_STATUS;
+
+	$status = $TRANSACTION_STATUS['unapproved'];
+
     $SQL_STATEMENT	= "
 		SELECT *
 		FROM $TRANSACTION_TABLE_NAME
 		WHERE
-			$TRANSACTION_TABLE_AP_AT IS NULL
-			AND $TRANSACTION_TABLE_AP_BY IS NULL
+			$TRANSACTION_TABLE_STATUS	= '$status'
 	" ;
 
     $result = executeSelectStatement($SQL_STATEMENT) ;
@@ -243,13 +246,15 @@ function verifyTANCode($account_id, $tan_code)
     }
 }
 
-//tested
+//tested older version
 function processTransaction($source, $destination, $amount, $description, $tan)
 {
 	global $TAN_TABLE_NAME;
 	global $TAN_TABLE_KEY;
 	global $TAN_TABLE_USED_TS;
 	global $TAN_TABLE_ACCOUNT_ID;
+
+	global $TRANSACTION_STATUS;
 
     global $TRANSACTION_TABLE_NAME;
     global $TRANSACTION_TABLE_FROM;
@@ -259,19 +264,22 @@ function processTransaction($source, $destination, $amount, $description, $tan)
     global $TRANSACTION_TABLE_DESC;
     global $TRANSACTION_TABLE_TAN;
     global $TRANSACTION_TABLE_AP_AT;
-    global $TRANSACTION_TABLE_AP_BY;
+	global $TRANSACTION_TABLE_AP_BY;
+	global $TRANSACTION_TABLE_STATUS;
+
     global $FAKE_APPROVER_USER_ID;
 
-	$approved_at = 'NULL';
-	$approved_by = 'NULL';
+	$approved_at	= 'NULL';
+	$approved_by	= 'NULL';
+	$status			= '0';
 
 	if ($amount < 10000) {
-		$approved_at = 'now()';
-		$approved_by = $FAKE_APPROVER_USER_ID;
+		$approved_at	= 'now()';
+		$approved_by	= $FAKE_APPROVER_USER_ID;
+		$status			= $TRANSACTION_STATUS['approved'];
 	}
 
 	executeSetStatement("START TRANSACTION;");
-	executeSetStatement("SET autocommit=0;");
 
 	$SQL_STATEMENT_SET_TAN_USED = "
 		UPDATE
@@ -287,7 +295,7 @@ function processTransaction($source, $destination, $amount, $description, $tan)
 	$affected_rows = executeSetStatement($SQL_STATEMENT_SET_TAN_USED);
 
 	if ($affected_rows == 1) {
-		//TODO: Use transaction status
+
 		$SQL_STATEMENT_ADD_TRANSACTION = "
 			
 			INSERT INTO $TRANSACTION_TABLE_NAME
@@ -299,18 +307,20 @@ function processTransaction($source, $destination, $amount, $description, $tan)
 					$TRANSACTION_TABLE_DESC,
 					$TRANSACTION_TABLE_TAN,
 					$TRANSACTION_TABLE_AP_AT,
-					$TRANSACTION_TABLE_AP_BY
+					$TRANSACTION_TABLE_AP_BY,
+					$TRANSACTION_TABLE_STATUS
 				)
 			VALUES
 				(
 					'$source',
-					'$destination',
+					'$destination a',
 					now(),
 					'$amount',
 					'$description',
 					'$tan',
 					$approved_at,
-					$approved_by
+					$approved_by,
+					$status
 				)
 		";
 
@@ -325,26 +335,45 @@ function processTransaction($source, $destination, $amount, $description, $tan)
 	executeSetStatement("ROLLBACK");
 }
 
-function approvePendingTransaction($approver, $transaction_id)
+function approvePendingTransaction($processor, $transaction_id)
 {
-	global $USER_TABLE_KEY;
-	global $USER_TABLE_NAME;
+	global $TRANSACTION_STATUS;
+
+	$status = $TRANSACTION_STATUS['approved'];
+	return processPendingTransaction($transaction_id, $processor, $status);
+}
+
+function rejectPendingTransaction($processor, $transaction_id)
+{
+	global $TRANSACTION_STATUS;
+
+	$status = $TRANSACTION_STATUS['rejected'];
+	return processPendingTransaction($transaction_id, $processor, $status);
+}
+
+function processPendingTransaction($transaction_id, $processor, $status)
+{
+	global $TRANSACTION_STATUS;
+
 	global $TRANSACTION_TABLE_KEY;
 	global $TRANSACTION_TABLE_NAME;
 	global $TRANSACTION_TABLE_AP_AT;
 	global $TRANSACTION_TABLE_AP_BY;
+	global $TRANSACTION_TABLE_STATUS;
+
+	$old_status = $TRANSACTION_STATUS['unapproved'];
 
 	//TODO: Check if approver is approved employee
-	//TODO: Update transaction status
+	
 	$SQL_STATEMENT	= "
 		UPDATE $TRANSACTION_TABLE_NAME
 		SET
 			$TRANSACTION_TABLE_AP_AT 	= now(),
-			$TRANSACTION_TABLE_AP_BY 	= '$approver' 
+			$TRANSACTION_TABLE_AP_BY 	= '$processor',
+			$TRANSACTION_TABLE_STATUS	= $status
 		WHERE
-			$TRANSACTION_TABLE_KEY	= '$transaction_id'
-			AND $TRANSACTION_TABLE_AP_AT IS NULL
-			AND $TRANSACTION_TABLE_AP_BY IS NULL
+			$TRANSACTION_TABLE_KEY	= '$transaction_id asd'
+			AND $TRANSACTION_TABLE_STATUS = '$old_status'
 	" ;
 
 	$result = executeSetStatement($SQL_STATEMENT) ;
@@ -354,12 +383,6 @@ function approvePendingTransaction($approver, $transaction_id)
 	} else {
 		return false;
 	}
-}
-
-function rejectPendingTransaction($approver, $transaction_id)
-{
-	//TODO: Implement
-	return true;
 }
 
 //tested
@@ -484,7 +507,6 @@ function addAccountWithBalance($user_id, $balance)
 		//function processTransaction($source, $destination, $amount, $description, $tan) 
 		$result = processTransaction($src_account, $new_account_id, $balance, $WELCOMECREDIT_DESCRIPTION, $tan);
 		//TODO: Depending on the balance, this transaction needs to be approved!
-		executeSetStatement("COMMIT");
 		return $new_account_id;
 	}
 
@@ -610,19 +632,6 @@ function loginUser($user_mail, $user_password) {
     } else {
 		return false;
 	}
-}
-
-# need to test MN 
-function getAllAccountDetails()
-{
-	//TODO: Check if necessary
-	global $ACCOUNT_TABLE_NAME;
-	
-	$SQL_STATEMENT	= "
-		SELECT *
-		FROM $ACCOUNT_TABLE_NAME
-	" ;
-	return executeSelectStatement($SQL_STATEMENT) ; 
 }
 
 # need to test MN 
@@ -813,4 +822,9 @@ function getAccountOwnerFromID($account_id){
 	
 	$result 	= executeSelectStatement($SQL_STATEMENT) ;
 	return $result ;
+}
+
+function getTransaction($transaction_id)
+{
+	return true;
 }

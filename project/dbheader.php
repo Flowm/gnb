@@ -74,95 +74,105 @@ function printError($message) {
 	print "<br><br><div style=\"color: red;\">ERROR: $message</div><br><br>";
 }
 
-function printDebug($function, $sql) {
+function printDebugResult($function, $sql, $result) {
+
 	global $debug;
 
 	if ($debug) {
-		print "$function ( $sql )<br>";
+
+		$format = "<span style=\"color: green; font-weight: bold;\">" .
+			$function . "</span> ($sql) - <span style=\"color: blue; font-weight: bold\">Result: ";
+
+		if (is_array($result)) {
+			print "<br>" . $format;
+			var_dump($result);
+			print "</span><br>";
+		} else {
+			print $format . $result . "</span><br>";
+		}
 	}
+}
+
+function assembleErrorMessage($message, $query)
+{
+	return "Could not execute query '$query': $message";
 }
 
 function executeSelectStatementOneRecord($sql)
 {
-	printDebug("executeSelectStatementOneRecord", $sql);
-
 	$data = executeSelectStatement($sql);
 	$result = $data[0];
 
+	printDebugResult("executeSelectStatementOneRecord", $sql, $result);
 	return $result;
 }
 
 function executeSelectStatement($sql)
 {
-	printDebug("executeSelectStatement", $sql);
-
 	global $DB_CONNECTION;
 
-	$result = mysql_query($sql, $DB_CONNECTION);
+	$resource = mysql_query($sql, $DB_CONNECTION);
 
-	if ($result == false) {
+	if ($resource == false) {
 
-		$message = 'Invalid query: ' . mysql_error() . '<br>';
-		$message .= 'Query: ' . $sql . '<br>';
-
+		$message = assembleErrorMessage(mysql_error(), $sql);
 		printError($message);
+
 		return -1;
 
 	} else {
 
-		$data = array();
-		while($row = mysql_fetch_assoc($result)) {
-			$data[] = $row;
+		$result = array();
+		while($row = mysql_fetch_assoc($resource)) {
+			$result[] = $row;
 		}
 	}
 
-	return $data;
+	printDebugResult("executeSelectStatement", $sql, $result);
+	return $result;
 }
  
 function executeAddStatementOneRecord($sql)
 {
-	printDebug("executeAddStatementOneRecord", $sql);
-
 	global $DB_CONNECTION;
 
-	$result = mysql_query($sql, $DB_CONNECTION);
+	$resource = mysql_query($sql, $DB_CONNECTION);
 
-	if ($result == false) {
+	if ($resource == false) {
 
-		$message = 'Invalid query: ' . mysql_error() . '<br>';
-		$message .= 'Query: ' . $sql . '<br>';
-
+		$message = assembleErrorMessage(mysql_error(), $sql);
 		printError($message);
+
 		return -1;
 
 	} else {
-		$data = mysql_insert_id();
+		$result = mysql_insert_id();
 	}
 
-	return $data;
+	printDebugResult("executeAddStatementOneRecord", $sql, $result);
+	return $result;
 }
 
 function executeSetStatement($sql)
 {
-	printDebug("executeSetStatement", $sql);
-
 	global $DB_CONNECTION;
 
-	$result = mysql_query($sql, $DB_CONNECTION);
+	$resource = mysql_query($sql, $DB_CONNECTION);
 
-	if ($result == false) {
+	if ($resource == false) {
 
-		$message = 'Invalid query: ' . mysql_error() . '<br>';
-		$message .= 'Query: ' . $sql . '<br>';
-
+		$message = assembleErrorMessage(mysql_error(), $sql);
 		printError($message);
+
 		return -1;
 
 	} else {
-		$data = mysql_affected_rows();
+		$result = mysql_affected_rows();
 	}
 
-	return $data;
+	printDebugResult("executeSetStatement", $sql, $result);
+
+	return $result;
 }
 
 function getDatabaseConnection() {

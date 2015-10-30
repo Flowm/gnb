@@ -52,6 +52,7 @@ approveTransactions();
 
 test('Checking overview functions', checkOverviewFunctions(), true);
 
+//TODO: Test rollback @ processTransaction
 
 
 
@@ -60,8 +61,6 @@ removeTestTransactions();
 removeTestTANs();
 removeTestAccounts();
 removeTestUsers();
-
-
 
 
 
@@ -155,7 +154,6 @@ function checkForTestUsers() {
 	return true;
 }
 
-
 function checkTestUserRequests() {
 
 	//function getPendingClientRequests()
@@ -171,9 +169,6 @@ function checkTestUserRequests() {
 
 	return $numberOfRowsForClients + $numberOfRowsForEmployees;
 }
-
-
-
 
 function approveTestUsers() {
 
@@ -462,7 +457,9 @@ function checkForTestTransactions() {
 	if (sizeof($trans3) != 2) return false;
 	if (sizeof($trans4) != 2) return false;
 
-	//if (sizeof(getPendingTransactions()) != 2) {return false;};
+	$pend1 = getPendingTransactions();
+
+	if (sizeof($pend1) != 2) {return false;};
 
 	return true;
 }
@@ -492,7 +489,9 @@ function approveTransactions() {
 	$transaction_id2 = $transaction2['id'];
 	
 	if (! approvePendingTransaction($USER1_ID, $transaction_id1)) {return false;};
-	if (! approvePendingTransaction($USER1_ID, $transaction_id2)) {return false;};
+	if (! rejectPendingTransaction($USER1_ID, $transaction_id2)) {return false;};
+
+	$transactions2 = getPendingTransactions();
 
 	return true;
 }
@@ -522,10 +521,10 @@ function removeTestTANs() {
 function removeTestTransactions() {
 
 	global $TESTPREFIX;
-	global $WELCOMECREDIT_DESCRIPTION;
 
-	executeSetStatement('DELETE FROM transaction WHERE description LIKE "%' . $TESTPREFIX . '%"');
-	executeSetStatement('DELETE FROM transaction WHERE description LIKE "%' . $WELCOMECREDIT_DESCRIPTION . '%"');
+	executeSetStatement('DELETE FROM transaction WHERE destination_account_id IN (
+							SELECT id FROM account WHERE user_id IN (
+								SELECT id FROM user WHERE first_name LIKE "%' . $TESTPREFIX . '%"))');
 }
 
 

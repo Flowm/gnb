@@ -23,8 +23,6 @@ $USER2_TESTTAN		= 'QWERTZUIOPASDFG';
 $USER2_TESTTAN2		= 'TESTTANTESTTAN0';
 $USER2_PASSWORD		= 'youwontguess';
 
-print 'Running tests...<br>';
-
 removeTestTransactions();
 removeTestTANs();
 removeTestAccounts();
@@ -55,7 +53,6 @@ approveTransactions();
 test('Checking overview functions', checkOverviewFunctions(), true);
 
 
-die();
 
 
 
@@ -76,9 +73,9 @@ function test($name, $testfunction, $expectedResult) {
 	$style_fail    = "background-color: red; color: black";
 
 	if ($testfunction == $expectedResult) {
-		print "<br><br><div style=\"$style_success\">SUCCESS @ $name</div><br><br>";
+		print "<div style=\"$style_success\">SUCCESS @ $name</div><br>";
 	} else {
-		print "<br><br><div style=\"$style_fail\">FAIL    @ $name</div><br><br>";
+		print "<div style=\"$style_fail\">FAIL    @ $name</div><br>";
 	}
 
 }
@@ -87,6 +84,8 @@ function addTestUsers() {
 
 	//function addEmployee($first_name, $last_name, $email, $password) 
 	//function addClient($first_name, $last_name, $email, $password) 
+
+	global $debug;
 
 	global $USER1_FIRSTNAME;
 	global $USER1_LASTNAME;
@@ -102,13 +101,13 @@ function addTestUsers() {
 	global $USER2_ID;
 	global $USER2_PASSWORD;
 
-	print 'Adding Users ' . $USER1_FIRSTNAME . ' and ' . $USER2_FIRSTNAME . '<br>';
+	if ($debug) print 'Adding Users ' . $USER1_FIRSTNAME . ' and ' . $USER2_FIRSTNAME . '<br>';
 
 	$result = addEmployee($USER1_FIRSTNAME, $USER1_LASTNAME, $USER1_EMAIL, $USER1_PASSWORD);
 
 	if ($result != false) {
 		$USER1_ID= $result;
-		print "USER1_ID: $USER1_ID<br>";
+		if ($debug) print "USER1_ID: $USER1_ID<br>";
 	} else {
 		print "Could not add USER1<br>";
 		return false;
@@ -119,7 +118,7 @@ function addTestUsers() {
 
 	if ($result != false) {
 		$USER2_ID= $result;
-		print "USER2_ID: $USER2_ID<br>";
+		if ($debug) print "USER2_ID: $USER2_ID<br>";
 	} else {
 		print "Could not add USER2<br>";
 		return false;
@@ -162,11 +161,13 @@ function checkTestUserRequests() {
 	//function getPendingClientRequests()
 	//function getPendingEmployeeRequests()
 
+	global $debug;
+
 	$numberOfRowsForClients = sizeof(getPendingClientRequests());
-	print 'PendingClientRequests: ' . $numberOfRowsForClients . '<br>';
+	if ($debug) print 'PendingClientRequests: ' . $numberOfRowsForClients . '<br>';
 
 	$numberOfRowsForEmployees = sizeof(getPendingEmployeeRequests());
-	print 'PendingEmployeeRequests: ' . $numberOfRowsForEmployees . '<br>';
+	if ($debug) print 'PendingEmployeeRequests: ' . $numberOfRowsForEmployees . '<br>';
 
 	return $numberOfRowsForClients + $numberOfRowsForEmployees;
 }
@@ -177,6 +178,8 @@ function checkTestUserRequests() {
 function approveTestUsers() {
 
 	//function approveUser($approver_id, $user_id, $role_filter )
+
+	global $debug;
 
 	global $USER1_FIRSTNAME;
 	global $USER1_LASTNAME;
@@ -190,7 +193,7 @@ function approveTestUsers() {
 	global $USER2_ROLE;
 	global $USER2_ID;
 
-	print 'Approving users ' . $USER1_ID . ' and ' . $USER2_ID . '<br>';
+	if ($debug) print 'Approving users ' . $USER1_ID . ' and ' . $USER2_ID . '<br>';
 
 	if (approveEmployee(1, $USER1_ID) == false) {
 		print 'Could not approve ' . $USER1_ID;
@@ -206,6 +209,8 @@ function approveTestUsers() {
 }
 
 function checkForApprovedTestUsers() {
+
+	global $debug;
 
 	global $USER1_FIRSTNAME;
 	global $USER1_LASTNAME;
@@ -225,7 +230,7 @@ function checkForApprovedTestUsers() {
 	$userinfo = getEmployee($USER1_ID);
 
 	if ($userinfo['status'] == 1 && $userinfo['approved_by_user_id'] != NULL) {
-		print 'User ' . $USER1_ID . ' approved!<br>';
+		if ($debug) print 'User ' . $USER1_ID . ' approved!<br>';
 	} else {
 		print 'User ' . $USER1_ID . ' not approved!<br>';
 		return false;
@@ -234,7 +239,7 @@ function checkForApprovedTestUsers() {
 	$userinfo = getClient($USER2_ID);
 
 	if ($userinfo['status'] == 1 && $userinfo['approved_by_user_id'] != NULL) {
-		print 'User ' . $USER2_ID . ' approved!<br>';
+		if ($debug) print 'User ' . $USER2_ID . ' approved!<br>';
 	} else {
 		print 'User ' . $USER2_ID . ' not approved!<br>';
 		return false;
@@ -248,6 +253,8 @@ function addTestAccounts() {
 	//function addAccount($user_id) {
 	//function addAccount($user_id, $balance){
 
+	global $debug;
+
 	global $USER1_ID;
 	global $USER2_ID;
 
@@ -255,7 +262,7 @@ function addTestAccounts() {
 	$acc2 = addAccountWithBalance($USER2_ID, 5555.55);
 	$acc3 = addAccountWithBalance($USER2_ID, 7777.77);
 
-	print "Accounts: $acc1, $acc2, $acc3<br>";
+	if ($debug) print "Accounts: $acc1, $acc2, $acc3<br>";
 
 	if ($acc1 < 10000000) return false;
 	if ($acc2 < 10000000) return false;
@@ -266,14 +273,16 @@ function addTestAccounts() {
 
 function checkForTestAccounts() {
 
+	global $debug;
+
 	global $USER1_ID;
 	global $USER2_ID;
 
 	$USER1_data = getAccountsForUser($USER1_ID);
-	var_dump($USER1_data);
+	if ($debug) var_dump($USER1_data);
 
 	$USER2_data = getAccountsForUser($USER2_ID);
-	var_dump($USER2_data);
+	if ($debug) var_dump($USER2_data);
 
 	return (sizeof($USER1_data) == 1) && (sizeof($USER2_data) == 2);
 }
@@ -281,6 +290,8 @@ function checkForTestAccounts() {
 function addTestTANs() {
 
 	//function insertTAN($tan, $account_id) {
+
+	global $debug;
 
 	global $USER1_ID;
 	global $USER1_ACCOUNTID;
@@ -298,7 +309,7 @@ function addTestTANs() {
 	$result = insertTAN($USER1_TESTTAN, $USER1_ACCOUNTID);
 
 	if ($result != false) {
-		print "Inserted TAN $USER1_TESTTAN for account $USER1_ACCOUNTID<br>";
+		if ($debug) print "Inserted TAN $USER1_TESTTAN for account $USER1_ACCOUNTID<br>";
 	} else {
 		print "Could not insert TAN $USER1_TESTTAN for account $USER1_ACCOUNTID!<br>";
 	}
@@ -311,7 +322,7 @@ function addTestTANs() {
     $result = insertTAN($USER2_TESTTAN, $USER2_ACCOUNTID);
 
     if ($result != false) {
-        print "Inserted TAN $USER2_TESTTAN for account $USER2_ACCOUNTID<br>";
+        if ($debug) print "Inserted TAN $USER2_TESTTAN for account $USER2_ACCOUNTID<br>";
     } else {
         print "Could not insert TAN $USER2_TESTTAN for account $USER2_ACCOUNTID!<br>";
     }
@@ -323,7 +334,7 @@ function addTestTANs() {
     $result = insertTAN($USER2_TESTTAN2, $USER2_ACCOUNTID);
 
     if ($result != false) {
-        print "Inserted TAN $USER2_TESTTAN2 for account $USER2_ACCOUNTID<br>";
+        if ($debug) print "Inserted TAN $USER2_TESTTAN2 for account $USER2_ACCOUNTID<br>";
     } else {
         print "Could not insert TAN $USER2_TESTTAN2 for account $USER2_ACCOUNTID!<br>";
     }
@@ -349,8 +360,10 @@ function checkTAN($accountid, $tan) {
 
 	//function verifyTANCode($account_id,$tan_code)
 
+	global $debug;
+
 	if (verifyTANCode($accountid, $tan)) {
-		print "Successfully verified TAN $tan for Account $accountid<br>";
+		if ($debug) print "Successfully verified TAN $tan for Account $accountid<br>";
 		return true;
 	} else {
 		print "Could not verify TAN $tan for Account $accountid<br>";
@@ -362,6 +375,8 @@ function checkTAN($accountid, $tan) {
 function addTestTransactions() {
 
 	//function processTransaction($src, $dest, $amount, $desc, $tan)
+
+	global $debug;
 
 	global $USER1_ID;
 	global $USER2_ID;
@@ -380,7 +395,7 @@ function addTestTransactions() {
 	$result = processTransaction($SRCACC, $DSTACC, 1000, $DESC, $USER1_TESTTAN);
 
 	if ($result != false) {
-		print "Added transaction NR $result (DESC: $DESC)<br>";
+		if ($debug) print "Added transaction NR $result (DESC: $DESC)<br>";
 	} else {
 		print "Could not add transaction with DESC: $DESC<br>";
 	}
@@ -393,7 +408,7 @@ function addTestTransactions() {
 	$result = processTransaction($SRCACC, $DSTACC, 10000, $DESC, $USER2_TESTTAN);
 
     if ($result != false) {
-		print "Added transaction NR $result (DESC: $DESC)<br>";
+		if ($debug) print "Added transaction NR $result (DESC: $DESC)<br>";
     } else {
 		print "Could not add transaction with DESC: $DESC<br>";
     }
@@ -401,17 +416,17 @@ function addTestTransactions() {
 	$DESC   = $TESTPREFIX . '_DESC' . 3;
 	$result = processTransaction($SRCACC, '123', 10000, $DESC, $USER2_TESTTAN2);
 
-    if ($result != false) {
-		print "Added transaction NR $result (DESC: $DESC)<br>";
+    if ($result == false) {
+		if ($debug) print "Transaction NR $result (DESC: $DESC) successfully denied!<br>";
     } else {
-		print "Could not add transaction with DESC: $DESC<br>";
+		print "Could add transaction with duplicate TAN with DESC: $DESC<br>";
     }
 
 	$DESC   = $TESTPREFIX . '_DESC' . 4;
 	$result = processTransaction($SRCACC, $DSTACC, 10000, $DESC, $USER2_TESTTAN2);
 
     if ($result != false) {
-		print "Added transaction NR $result (DESC: $DESC)<br>";
+		if ($debug) print "Added transaction NR $result (DESC: $DESC)<br>";
     } else {
 		print "Could not add transaction with DESC: $DESC<br>";
     }
@@ -419,17 +434,35 @@ function addTestTransactions() {
 
 function checkForTestTransactions() {
 
+	global $debug;
+
 	global $USER1_ACCOUNTID;
 	global $USER2_ACCOUNTID;
 
 	//function getAccountTransactions($account_ID, $filter ='ALL')
-	if (sizeof(getAccountTransactions($USER1_ACCOUNTID)) != 3) {return false;};
-	if (sizeof(getAccountTransactions($USER2_ACCOUNTID)) != 3) {return false;};
 
-	if (sizeof(getAccountTransactions($USER2_ACCOUNTID, 'TO')) != 1) {return false;};
-	if (sizeof(getAccountTransactions($USER2_ACCOUNTID, 'FROM')) != 2) {return false;};
+	$trans1 = getAccountTransactions($USER1_ACCOUNTID);
+	$trans2 = getAccountTransactions($USER2_ACCOUNTID);
+	$trans3 = getAccountTransactions($USER2_ACCOUNTID, 'TO');
+	$trans4 = getAccountTransactions($USER2_ACCOUNTID, 'FROM');
 
-	if (sizeof(getPendingTransactions()) != 2) {return false;};
+	if ($debug) {
+		var_dump($trans1);
+		print "<br><br>";
+		var_dump($trans2);
+		print "<br><br>";
+		var_dump($trans3);
+		print "<br><br>";
+		var_dump($trans4);
+	}
+
+	if (sizeof($trans1) != 3) return false;
+	if (sizeof($trans2) != 4) return false;
+
+	if (sizeof($trans3) != 2) return false;
+	if (sizeof($trans4) != 2) return false;
+
+	//if (sizeof(getPendingTransactions()) != 2) {return false;};
 
 	return true;
 }
@@ -489,8 +522,10 @@ function removeTestTANs() {
 function removeTestTransactions() {
 
 	global $TESTPREFIX;
+	global $WELCOMECREDIT_DESCRIPTION;
 
 	executeSetStatement('DELETE FROM transaction WHERE description LIKE "%' . $TESTPREFIX . '%"');
+	executeSetStatement('DELETE FROM transaction WHERE description LIKE "%' . $WELCOMECREDIT_DESCRIPTION . '%"');
 }
 
 

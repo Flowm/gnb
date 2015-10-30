@@ -458,8 +458,10 @@ function checkForTestTransactions() {
 	if (sizeof($trans4) != 2) return false;
 
 	$pend1 = getPendingTransactions();
+	if (sizeof($pend1) != 2) return false;
 
-	if (sizeof($pend1) != 2) {return false;};
+	$mytrans = getTransaction($pend1[0]['id']);
+	if (sizeof($mytrans) != 1) return false;
 
 	return true;
 }

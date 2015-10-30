@@ -105,6 +105,27 @@ function getClientBySurname($client_surname)
     }
 }
 
+function getTransaction($transaction_id)
+{
+	global $TRANSACTION_TABLE_NAME;
+	global $TRANSACTION_TABLE_KEY;
+
+	$SQL_STATEMENT = "
+		SELECT *
+		FROM $TRANSACTION_TABLE_NAME
+		WHERE
+			$TRANSACTION_TABLE_KEY = '$transaction_id'
+	";
+
+	$result = executeSelectStatement($SQL_STATEMENT);
+
+	if ($result != -1) {
+		return $result;
+	} else {
+		return false;
+	}
+}
+
 function getAccountTransactions($account_ID, $filter = "ALL")
 {
     global $TRANSACTION_TABLE_TO;
@@ -824,7 +845,3 @@ function getAccountOwnerFromID($account_id){
 	return $result ;
 }
 
-function getTransaction($transaction_id)
-{
-	return true;
-}

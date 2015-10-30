@@ -27,6 +27,7 @@ $TRANSACTION_TABLE_TO		= "destination_account_id" ;
 $TRANSACTION_TABLE_FROM		= "source_account_id" ;
 $TRANSACTION_TABLE_AP_AT	= "approved_at" ;
 $TRANSACTION_TABLE_AP_BY	= "approved_by_user_id" ;
+$TRANSACTION_TABLE_STATUS	= "status" ;
 $TRANSACTION_TABLE_AMOUNT	= "amount" ;
 $TRANSACTION_TABLE_DESC		= "description" ;
 $TRANSACTION_TABLE_TAN		= "tan_id" ;
@@ -66,6 +67,7 @@ $TRANSACTION_STATUS = array(
 
 $DB_CONNECTION = getDatabaseConnection();
 $debug = false;
+//$debug = true;
 
 
 function printError($message) {
@@ -179,7 +181,7 @@ function getDatabaseConnection() {
 	if (mysql_select_db($DB_SCHEMA, $connection) == false) {
 		return NULL; //TODO: Do something with error message?
 	}
-	
+
 	return $connection;
 }
 

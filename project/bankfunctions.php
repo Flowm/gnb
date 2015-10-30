@@ -5,6 +5,10 @@ ini_set("display_errors",2);
 ini_set("error_reporting",E_ALL|E_STRICT);
 
 require_once "dbheader.php";
+require_once "resource_mappings.php";
+require_once getPageAbsolute("account");
+
+$WELCOMECREDIT_DESCRIPTION = 'GNB Welcome Credit';
 
 //tested
 function recordIsInTable($record_value,$record_name,$table_name)
@@ -149,13 +153,13 @@ function getPendingTransactions()
 	global $TRANSACTION_TABLE_NAME;
 	global $TRANSACTION_TABLE_AP_AT;
 	global $TRANSACTION_TABLE_AP_BY;
-
+	//TODO: Use transaction status
     $SQL_STATEMENT	= "
 		SELECT *
 		FROM $TRANSACTION_TABLE_NAME
 		WHERE
 			$TRANSACTION_TABLE_AP_AT IS NULL
-			OR $TRANSACTION_TABLE_AP_BY IS NULL
+			AND $TRANSACTION_TABLE_AP_BY IS NULL
 	" ;
 
     $result = executeSelectStatement($SQL_STATEMENT) ;
@@ -188,7 +192,7 @@ function getPendingRequests($filter = "")
     SELECT *
     FROM $USER_TABLE_NAME
     WHERE
-        $USER_TABLE_STATUS	    = $status
+        $USER_TABLE_STATUS	    = '$status'
         $where
     ";
 
@@ -283,7 +287,7 @@ function processTransaction($source, $destination, $amount, $description, $tan)
 	$affected_rows = executeSetStatement($SQL_STATEMENT_SET_TAN_USED);
 
 	if ($affected_rows == 1) {
-
+		//TODO: Use transaction status
 		$SQL_STATEMENT_ADD_TRANSACTION = "
 			
 			INSERT INTO $TRANSACTION_TABLE_NAME
@@ -331,7 +335,7 @@ function approvePendingTransaction($approver, $transaction_id)
 	global $TRANSACTION_TABLE_AP_BY;
 
 	//TODO: Check if approver is approved employee
-
+	//TODO: Update transaction status
 	$SQL_STATEMENT	= "
 		UPDATE $TRANSACTION_TABLE_NAME
 		SET
@@ -350,6 +354,12 @@ function approvePendingTransaction($approver, $transaction_id)
 	} else {
 		return false;
 	}
+}
+
+function rejectPendingTransaction($approver, $transaction_id)
+{
+	//TODO: Implement
+	return true;
 }
 
 //tested
@@ -419,7 +429,7 @@ function getAccountsForUser($user_id)
 		WHERE
 			$ACCOUNTOVERVIEW_TABLE_USER_ID	= '$user_id';
 	";
-	print($SQL_STATEMENT);
+
     $result = executeSelectStatement($SQL_STATEMENT);
 
     if ($result != -1) {
@@ -431,12 +441,6 @@ function getAccountsForUser($user_id)
 
 //tested
 function addAccount($user_id)
-{
-    return addAccountWithBalance($user_id, 0);
-}
-
-//tested
-function addAccountWithBalance($user_id, $balance)
 {
     global $ACCOUNT_TABLE_NAME;
     global $ACCOUNT_TABLE_USER_ID;
@@ -452,9 +456,6 @@ function addAccountWithBalance($user_id, $balance)
     $result = executeAddStatementOneRecord($SQL_STATEMENT);
 
 	if ($result != -1) {
-
-		//TODO: Add transaction with initial balance
-
         return $result;
     } else {
         return false;
@@ -462,9 +463,38 @@ function addAccountWithBalance($user_id, $balance)
 }
 
 //tested
+function addAccountWithBalance($user_id, $balance)
+{
+	global $WELCOMECREDIT_DESCRIPTION;
+	global $FAKE_APPROVER_USER_ID;
+
+	$new_account_id = addAccount($user_id);
+
+	if ($new_account_id != false) {
+
+		$accounts_admin = getAccountsForUser($FAKE_APPROVER_USER_ID);
+		$account_admin = $accounts_admin[0];
+		$src_account = $account_admin['id'];
+
+		$account = new account($account_admin);
+
+		$tans = $account->generateTANs(1);
+		$tan = $tans[0];
+
+		//function processTransaction($source, $destination, $amount, $description, $tan) 
+		$result = processTransaction($src_account, $new_account_id, $balance, $WELCOMECREDIT_DESCRIPTION, $tan);
+		//TODO: Depending on the balance, this transaction needs to be approved!
+		executeSetStatement("COMMIT");
+		return $new_account_id;
+	}
+
+	executeSetStatement("ROLLBACK");
+	return false;
+}
+
+//tested
 function addUser($first_name, $last_name, $email, $password, $role_filter)
 {
-
     global $USER_ROLES;
     global $USER_TABLE_NAME;
     global $USER_TABLE_FIRSTNAME;
@@ -491,12 +521,12 @@ function addUser($first_name, $last_name, $email, $password, $role_filter)
 			)
 		VALUES
 			(
-				'$first_name'
-				, '$last_name'
-				, '$email'
-				, '$role'
-				, 'somesalt'
-				, '$password'
+				'$first_name',
+				'$last_name',
+				'$email',
+				'$role',
+				'somesalt',
+				'$password'
 			)
 	";
 
@@ -524,14 +554,14 @@ function addEmployee($first_name, $last_name, $email, $password)
 //tested
 function insertTAN($tan, $account_id)
 {
-    // Inserts TAN in DB
-    // Returns true if successful
-    // Returns false in case of error
-
     global $TAN_TABLE_NAME;
     global $TAN_TABLE_KEY;
     global $TAN_TABLE_ACCOUNT_ID;
 
+	if (strlen($tan) > 15) {
+		return false;
+	}
+	
     $SQL_STATEMENT = "
 		INSERT INTO $TAN_TABLE_NAME
 			(
@@ -760,6 +790,7 @@ function getTotalAmountOfMoney()
 	}
 }
 
+// needs to be tested
 function getAccountOwnerFromID($account_id){
 
 	global $USER_TABLE_NAME;

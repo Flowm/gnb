@@ -117,7 +117,7 @@ function getTransaction($transaction_id)
 			$TRANSACTION_TABLE_KEY = '$transaction_id'
 	";
 
-	$result = executeSelectStatement($SQL_STATEMENT);
+	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
 
 	if ($result != -1) {
 		return $result;

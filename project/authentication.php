@@ -30,14 +30,6 @@ if ($username == null || $pw == null) {
     exit();
 }
 
-//HARDCODED!! NEED LOGIN FUNCTION TO ACTUALLY DO THIS RIGHT
-if ($username == "ted" && $pw == "ted") {
-    header("Location:".getPageURL('employee'));
-    $_SESSION["username"] = $username;
-    $_SESSION["role"] = "employee";
-    exit();
-}
-
 $result = loginUser($username, $pw);
 if (!$result) {
     header("Location:".getPageURL('login').$error);

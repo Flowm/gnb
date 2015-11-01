@@ -10,6 +10,12 @@ require_once getPageAbsolute("account");
 
 $WELCOMECREDIT_DESCRIPTION = 'GNB Welcome Credit';
 
+
+
+/************************************************
+ * MISC FUNCTIONS
+ ************************************************/
+
 //tested
 function recordIsInTable($record_value,$record_name,$table_name)
 {
@@ -27,6 +33,111 @@ function recordIsInTable($record_value,$record_name,$table_name)
 	} else {
 		return false;
 	}
+}
+
+
+function loginUser($user_mail, $user_password) {
+
+	global $USER_TABLE_KEY;
+	global $USER_TABLE_NAME;
+	global $USER_TABLE_EMAIL;
+	global $USER_TABLE_HASH;
+	global $USER_TABLE_STATUS;
+	global $USER_STATUS;
+
+	$hash = ''; //TODO: Use hash
+
+	$status = $USER_STATUS['approved'];
+
+    $SQL_STATEMENT = "
+		SELECT $USER_TABLE_KEY
+		FROM $USER_TABLE_NAME
+		WHERE
+			$USER_TABLE_EMAIL = '$user_mail'
+			AND
+			$USER_TABLE_HASH = '$user_password'
+			AND
+			$USER_TABLE_STATUS = '$status'
+	" ;
+
+	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
+
+	//TODO: Return specific error message (unapproved, rejected, blocked)
+
+	if ($result != -1) {
+		return getUser($result[$USER_TABLE_KEY]);
+    } else {
+		return false;
+	}
+}
+
+/************************************************
+ * /MISC FUNCTIONS
+ ************************************************/
+
+
+
+/************************************************
+ * USER FUNCTIONS
+ ************************************************/
+
+//tested
+function addUser($first_name, $last_name, $email, $password, $role_filter)
+{
+    global $USER_ROLES;
+    global $USER_TABLE_NAME;
+    global $USER_TABLE_FIRSTNAME;
+    global $USER_TABLE_LASTNAME;
+    global $USER_TABLE_EMAIL;
+    global $USER_TABLE_ROLE;
+    global $USER_TABLE_SALT;
+    global $USER_TABLE_HASH;
+
+    $role = $USER_ROLES[$role_filter];
+
+    //TODO: Generate salt
+    //TODO: Generate hash from password
+
+    $SQL_STATEMENT = "
+		INSERT INTO $USER_TABLE_NAME
+			(
+				$USER_TABLE_FIRSTNAME,
+				$USER_TABLE_LASTNAME,
+				$USER_TABLE_EMAIL,
+				$USER_TABLE_ROLE,
+				$USER_TABLE_SALT,
+				$USER_TABLE_HASH
+			)
+		VALUES
+			(
+				'$first_name',
+				'$last_name',
+				'$email',
+				'$role',
+				'somesalt',
+				'$password'
+			)
+	";
+
+    $result = executeAddStatementOneRecord($SQL_STATEMENT);
+
+    if ($result != -1) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+//tested
+function addClient($first_name, $last_name, $email, $password)
+{
+    return addUser($first_name, $last_name, $email, $password, 'client');
+}
+
+//tested
+function addEmployee($first_name, $last_name, $email, $password)
+{
+    return addUser($first_name, $last_name, $email, $password, 'employee');
 }
 
 //tested
@@ -118,6 +229,366 @@ function getUserBySurname($user_surname)
     }
 }
 
+//tested
+function getPendingRequests($filter = "")
+{
+    global $USER_STATUS;
+    global $USER_ROLES;
+    global $USER_TABLE_NAME;
+    global $USER_TABLE_ROLE;
+    global $USER_TABLE_STATUS;
+
+	$status = $USER_STATUS['unapproved'];
+
+    $where = "";
+    if (isset($USER_ROLES[$filter])) {
+        $role = $USER_ROLES[$filter] ;
+        $where = "AND $USER_TABLE_ROLE = $role";
+    }
+
+    $SQL_STATEMENT = "
+    SELECT *
+    FROM $USER_TABLE_NAME
+    WHERE
+        $USER_TABLE_STATUS	    = '$status'
+        $where
+    ";
+
+    $result = executeSelectStatement($SQL_STATEMENT);
+
+    if ($result != -1) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+//tested
+function getPendingClientRequests()
+{
+    return getPendingRequests('client');
+}
+
+//tested
+function getPendingEmployeeRequests()
+{
+    return getPendingRequests('employee');
+}
+
+//tested
+function approveEmployee($employee_id, $approver_id)
+{
+    return approveUser($employee_id, $approver_id, 'employee');
+}
+
+//tested
+function approveClient($client_id, $approver_id)
+{
+    return approveUser($client_id, $approver_id, 'client');
+}
+
+//tested
+function rejectEmployee($employee_id, $rejector_id)
+{
+	return rejectUser($employee_id, $rejector_id, 'employee');
+}
+
+//tested
+function rejectClient($client_id, $rejector_id)
+{
+	return rejectUser($client_id, $rejector_id, 'client');
+}
+
+//tested
+function blockEmployee($employee_id, $blocker_id)
+{
+	return blockUser($employee_id, $blocker_id, 'employee');
+}
+
+//tested
+function blockClient($client_id, $blocker_id)
+{
+	return blockUser($client_id, $blocker_id, 'client');
+}
+
+//tested
+function approveUser($user_id, $approver_id, $role_filter)
+{
+	global $USER_STATUS;
+
+	$new_status = $USER_STATUS['approved'];
+	return changeUserStatus($user_id, $new_status, $approver_id, $role_filter);
+}
+
+//tested
+function rejectUser($user_id, $rejector_id, $role_filter)
+{
+	global $USER_STATUS;
+
+	$new_status = $USER_STATUS['rejected'];
+	return changeUserStatus($user_id, $new_status, $rejector_id, $role_filter);
+}
+
+//tested
+function blockUser($user_id, $blocker_id, $role_filter)
+{
+	global $USER_STATUS;
+
+	$new_status = $USER_STATUS['blocked'];
+	return changeUserStatus($user_id, $new_status, $blocker_id, $role_filter);
+}
+
+//tested
+function changeUserStatus($user_id, $new_status, $processor_id, $role_filter)
+{
+    global $USER_ROLES;
+    global $USER_STATUS;
+    global $USER_TABLE_NAME;
+    global $USER_TABLE_STATUS;
+    global $USER_TABLE_APPROVER;
+    global $USER_TABLE_KEY;
+    global $USER_TABLE_ROLE;
+
+    $role = $USER_ROLES[$role_filter];
+
+	//TODO: Check if approver is approved employee
+
+    $SQL_STATEMENT = "
+		UPDATE $USER_TABLE_NAME
+		SET
+			$USER_TABLE_STATUS 		= '$new_status',
+			$USER_TABLE_APPROVER 	= '$processor_id' 
+		WHERE
+			$USER_TABLE_KEY			= '$user_id'
+			AND $USER_TABLE_ROLE	= '$role'
+			AND $USER_TABLE_STATUS != '$new_status'
+	";
+
+    $result = executeSetStatement($SQL_STATEMENT);
+
+    if ($result != -1 && $result == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/************************************************
+ * /USER FUNCTIONS
+ ************************************************/
+
+
+
+/************************************************
+ * ACCOUNT FUNCTIONS
+ ************************************************/
+
+# need to test MN 
+function getAccountDetails($account_ID)
+{
+	global $ACCOUNTOVERVIEW_TABLE_NAME;
+	global $ACCOUNTOVERVIEW_TABLE_KEY;
+	global $ACCOUNTOVERVIEW_TABLE_BALANCE ;
+	
+	$SQL_STATEMENT	= "
+		SELECT 
+			$ACCOUNTOVERVIEW_TABLE_KEY,
+			$ACCOUNTOVERVIEW_TABLE_BALANCE
+		FROM $ACCOUNTOVERVIEW_TABLE_NAME
+		WHERE $ACCOUNTOVERVIEW_TABLE_KEY 	= '$account_ID'
+	" ;
+	
+	$result	= executeSelectStatementOneRecord($SQL_STATEMENT) ;
+	return $result ; 
+}
+
+//tested
+function getAccountsForUser($user_id)
+{
+    //TODO: Check for client status? A: Server side check maybe, instead of db?!
+
+	global $ACCOUNTOVERVIEW_TABLE_KEY;
+    global $ACCOUNTOVERVIEW_TABLE_NAME;
+	global $ACCOUNTOVERVIEW_TABLE_USER_ID;
+	global $ACCOUNTOVERVIEW_TABLE_BALANCE;
+
+    $SQL_STATEMENT = "
+		SELECT
+			$ACCOUNTOVERVIEW_TABLE_KEY,
+			$ACCOUNTOVERVIEW_TABLE_BALANCE
+		FROM $ACCOUNTOVERVIEW_TABLE_NAME
+		WHERE
+			$ACCOUNTOVERVIEW_TABLE_USER_ID	= '$user_id';
+	";
+
+    $result = executeSelectStatement($SQL_STATEMENT);
+
+    if ($result != -1) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+// needs to be tested
+function getAccountOwnerFromID($account_id){
+
+	global $USER_TABLE_NAME;
+	global $USER_TABLE_KEY;
+	global $ACCOUNT_TABLE_NAME;
+	global $ACCOUNT_TABLE_KEY;
+	global $ACCOUNT_TABLE_USER_ID;
+	
+	$SQL_STATEMENT	= "
+		SELECT
+			CONCAT(u.FIRST_NAME,' ',u.LAST_NAME )		\"Name\",
+			u.$USER_TABLE_KEY							\"User ID\"
+		FROM 
+			$ACCOUNT_TABLE_NAME		b
+			,$USER_TABLE_NAME		u
+		WHERE 
+			u.$USER_TABLE_KEY 				= b.$ACCOUNT_TABLE_USER_ID 
+			AND b.$ACCOUNT_TABLE_KEY		= '$account_id'
+	" ;
+	
+	$result 	= executeSelectStatementOneRecord($SQL_STATEMENT);
+	return $result ;
+}
+
+//tested
+function addAccount($user_id)
+{
+    global $ACCOUNT_TABLE_NAME;
+    global $ACCOUNT_TABLE_USER_ID;
+
+    $SQL_STATEMENT = "
+		INSERT
+		INTO $ACCOUNT_TABLE_NAME
+			( $ACCOUNT_TABLE_USER_ID )
+		VALUES
+			( $user_id ) ;
+	";
+
+    $result = executeAddStatementOneRecord($SQL_STATEMENT);
+
+	if ($result != -1) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+//tested
+function addAccountWithBalance($user_id, $balance)
+{
+	global $WELCOMECREDIT_DESCRIPTION;
+	global $FAKE_APPROVER_USER_ID;
+
+	$new_account_id = addAccount($user_id);
+
+	if ($new_account_id != false) {
+
+		$accounts_admin = getAccountsForUser($FAKE_APPROVER_USER_ID);
+		$account_admin = $accounts_admin[0];
+		$src_account = $account_admin['id'];
+
+		$account = new account($account_admin);
+
+		$tans = $account->generateTANs(1);
+		$tan = $tans[0];
+
+		$result = processTransaction($src_account, $new_account_id, $balance, $WELCOMECREDIT_DESCRIPTION, $tan);
+
+		if ($balance >= 10000) {
+			approvePendingTransaction($FAKE_APPROVER_USER_ID, $result);
+		}
+
+		return $new_account_id;
+	}
+
+	executeSetStatement("ROLLBACK");
+	return false;
+}
+
+/************************************************
+ * /ACCOUNT FUNCTIONS
+ ************************************************/
+
+
+
+/************************************************
+ * TAN FUNCTIONS
+ ************************************************/
+
+//tested
+function insertTAN($tan, $account_id)
+{
+    global $TAN_TABLE_NAME;
+    global $TAN_TABLE_KEY;
+    global $TAN_TABLE_ACCOUNT_ID;
+
+	if (strlen($tan) > 15) {
+		return false;
+	}
+	
+    $SQL_STATEMENT = "
+		INSERT INTO $TAN_TABLE_NAME
+			(
+				$TAN_TABLE_KEY,
+				$TAN_TABLE_ACCOUNT_ID
+			)
+		VALUES
+			(
+				'$tan',
+				'$account_id'
+			)
+	";
+
+    $result = executeAddStatementOneRecord($SQL_STATEMENT);
+
+    if ($result != -1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//tested
+function verifyTANCode($account_id, $tan_code)
+{
+    global $TAN_TABLE_NAME;
+    global $TAN_TABLE_KEY;
+    global $TAN_TABLE_USED_TS;
+    global $TAN_TABLE_ACCOUNT_ID;
+
+    $SQL_STATEMENT = "
+		SELECT *
+		FROM $TAN_TABLE_NAME
+		WHERE
+			$TAN_TABLE_KEY	= '$tan_code'
+			AND $TAN_TABLE_ACCOUNT_ID = '$account_id'
+			AND $TAN_TABLE_USED_TS IS NULL
+	";
+
+    $result = executeSelectStatement($SQL_STATEMENT);
+
+    if ($result != -1) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+/************************************************
+ * /TAN FUNCTIONS
+ ************************************************/
+
+
+
+/************************************************
+ * TRANSACTION FUNCTIONS
+ ************************************************/
+
 function getTransaction($transaction_id)
 {
 	global $TRANSACTION_TABLE_NAME;
@@ -181,6 +652,55 @@ function getAccountTransactions($account_ID, $filter = "ALL")
 	}
 }
 
+# need to test MN 
+function verifyTransaction($account_id, $dest_code, $amount, $description, $tan_code)
+{
+	global $ACCOUNTOVERVIEW_TABLE_NAME;
+	global $ACCOUNTOVERVIEW_TABLE_KEY;
+
+	$var_res = array (
+		"result"	=> false,
+		"message"	=> "[Default] No test has been completed"
+	) ; 
+	
+	$SQL_STATEMENT = "
+		SELECT 	* 
+		FROM  	$ACCOUNTOVERVIEW_TABLE_NAME
+		WHERE	$ACCOUNTOVERVIEW_TABLE_KEY = '$account_id'
+	" ; 
+	
+	$account_info 	= executeSelectStatement($SQL_STATEMENT) ;
+	
+	# checking account ID 
+	if (sizeof($account_info) == 0 ){
+		$var_res["message"]	= '[Account] Account not found' ;
+		return $var_res ; 
+	}
+	
+	# Add check for Destination Account  
+	# no check needed at this stage 
+	
+	# Add check for Description  
+	# no check needed at this stage 
+	
+	if ( $amount > $account_info[0]["balance"] ){
+		$var_res["message"]	= '[Funds] Insuffecient funds' ;
+		return $var_res ; 
+	}	
+
+	$tan_ver 	= verifyTANCode($account_id, $tan_code);  
+	if (sizeof($tan_ver) == 0 ){
+		$var_res["message"]	= '[Tan Code] Invalid or used Tan code' ;
+		return $var_res ; 
+	}
+ 
+	# Add check for TAN Codes
+	$var_res["result"] = true;
+	$var_res["message"]	= '[Success] Passed all tests' ;
+
+	return $var_res ; 
+}
+
 //tested onld version
 function getPendingTransactions()
 {
@@ -200,78 +720,6 @@ function getPendingTransactions()
 	" ;
 
     $result = executeSelectStatement($SQL_STATEMENT) ;
-
-    if ($result != -1) {
-        return $result;
-    } else {
-        return false;
-    }
-}
-
-//tested
-function getPendingRequests($filter = "")
-{
-    global $USER_STATUS;
-    global $USER_ROLES;
-    global $USER_TABLE_NAME;
-    global $USER_TABLE_ROLE;
-    global $USER_TABLE_STATUS;
-
-	$status = $USER_STATUS['unapproved'];
-
-    $where = "";
-    if (isset($USER_ROLES[$filter])) {
-        $role = $USER_ROLES[$filter] ;
-        $where = "AND $USER_TABLE_ROLE = $role";
-    }
-
-    $SQL_STATEMENT = "
-    SELECT *
-    FROM $USER_TABLE_NAME
-    WHERE
-        $USER_TABLE_STATUS	    = '$status'
-        $where
-    ";
-
-    $result = executeSelectStatement($SQL_STATEMENT);
-
-    if ($result != -1) {
-        return $result;
-    } else {
-        return false;
-    }
-}
-
-//tested
-function getPendingClientRequests()
-{
-    return getPendingRequests('client');
-}
-
-//tested
-function getPendingEmployeeRequests()
-{
-    return getPendingRequests('employee');
-}
-
-//tested
-function verifyTANCode($account_id, $tan_code)
-{
-    global $TAN_TABLE_NAME;
-    global $TAN_TABLE_KEY;
-    global $TAN_TABLE_USED_TS;
-    global $TAN_TABLE_ACCOUNT_ID;
-
-    $SQL_STATEMENT = "
-		SELECT *
-		FROM $TAN_TABLE_NAME
-		WHERE
-			$TAN_TABLE_KEY	= '$tan_code'
-			AND $TAN_TABLE_ACCOUNT_ID = '$account_id'
-			AND $TAN_TABLE_USED_TS IS NULL
-	";
-
-    $result = executeSelectStatement($SQL_STATEMENT);
 
     if ($result != -1) {
         return $result;
@@ -445,388 +893,14 @@ function processPendingTransaction($transaction_id, $processor, $status)
 }
 
 /************************************************
- * USER - STATUS FUNCTIONS
+ * /TRANSACTION FUNCTIONS
  ************************************************/
 
-//tested
-function approveEmployee($employee_id, $approver_id)
-{
-    return approveUser($employee_id, $approver_id, 'employee');
-}
 
-//tested
-function approveClient($client_id, $approver_id)
-{
-    return approveUser($client_id, $approver_id, 'client');
-}
-
-//tested
-function rejectEmployee($employee_id, $rejector_id)
-{
-	return rejectUser($employee_id, $rejector_id, 'employee');
-}
-
-//tested
-function rejectClient($client_id, $rejector_id)
-{
-	return rejectUser($client_id, $rejector_id, 'client');
-}
-
-//tested
-function blockEmployee($employee_id, $blocker_id)
-{
-	return blockUser($employee_id, $blocker_id, 'employee');
-}
-
-//tested
-function blockClient($client_id, $blocker_id)
-{
-	return blockUser($client_id, $blocker_id, 'client');
-}
-
-//tested
-function approveUser($user_id, $approver_id, $role_filter)
-{
-	global $USER_STATUS;
-
-	$new_status = $USER_STATUS['approved'];
-	return changeUserStatus($user_id, $new_status, $approver_id, $role_filter);
-}
-
-//tested
-function rejectUser($user_id, $rejector_id, $role_filter)
-{
-	global $USER_STATUS;
-
-	$new_status = $USER_STATUS['rejected'];
-	return changeUserStatus($user_id, $new_status, $rejector_id, $role_filter);
-}
-
-//tested
-function blockUser($user_id, $blocker_id, $role_filter)
-{
-	global $USER_STATUS;
-
-	$new_status = $USER_STATUS['blocked'];
-	return changeUserStatus($user_id, $new_status, $blocker_id, $role_filter);
-}
-
-//tested
-function changeUserStatus($user_id, $new_status, $processor_id, $role_filter)
-{
-    global $USER_ROLES;
-    global $USER_STATUS;
-    global $USER_TABLE_NAME;
-    global $USER_TABLE_STATUS;
-    global $USER_TABLE_APPROVER;
-    global $USER_TABLE_KEY;
-    global $USER_TABLE_ROLE;
-
-    $role = $USER_ROLES[$role_filter];
-
-	//TODO: Check if approver is approved employee
-
-    $SQL_STATEMENT = "
-		UPDATE $USER_TABLE_NAME
-		SET
-			$USER_TABLE_STATUS 		= '$new_status',
-			$USER_TABLE_APPROVER 	= '$processor_id' 
-		WHERE
-			$USER_TABLE_KEY			= '$user_id'
-			AND $USER_TABLE_ROLE	= '$role'
-			AND $USER_TABLE_STATUS != '$new_status'
-	";
-
-    $result = executeSetStatement($SQL_STATEMENT);
-
-    if ($result != -1 && $result == 1) {
-        return true;
-    } else {
-        return false;
-    }
-}
 
 /************************************************
- * /USER - STATUS FUNCTIONS
+ * OVERVIEW FUNCTIONS
  ************************************************/
-
-//tested
-function getAccountsForUser($user_id)
-{
-    //TODO: Check for client status? A: Server side check maybe, instead of db?!
-
-	global $ACCOUNTOVERVIEW_TABLE_KEY;
-    global $ACCOUNTOVERVIEW_TABLE_NAME;
-	global $ACCOUNTOVERVIEW_TABLE_USER_ID;
-	global $ACCOUNTOVERVIEW_TABLE_BALANCE;
-
-    $SQL_STATEMENT = "
-		SELECT
-			$ACCOUNTOVERVIEW_TABLE_KEY,
-			$ACCOUNTOVERVIEW_TABLE_BALANCE
-		FROM $ACCOUNTOVERVIEW_TABLE_NAME
-		WHERE
-			$ACCOUNTOVERVIEW_TABLE_USER_ID	= '$user_id';
-	";
-
-    $result = executeSelectStatement($SQL_STATEMENT);
-
-    if ($result != -1) {
-        return $result;
-    } else {
-        return false;
-    }
-}
-
-//tested
-function addAccount($user_id)
-{
-    global $ACCOUNT_TABLE_NAME;
-    global $ACCOUNT_TABLE_USER_ID;
-
-    $SQL_STATEMENT = "
-		INSERT
-		INTO $ACCOUNT_TABLE_NAME
-			( $ACCOUNT_TABLE_USER_ID )
-		VALUES
-			( $user_id ) ;
-	";
-
-    $result = executeAddStatementOneRecord($SQL_STATEMENT);
-
-	if ($result != -1) {
-        return $result;
-    } else {
-        return false;
-    }
-}
-
-//tested
-function addAccountWithBalance($user_id, $balance)
-{
-	global $WELCOMECREDIT_DESCRIPTION;
-	global $FAKE_APPROVER_USER_ID;
-
-	$new_account_id = addAccount($user_id);
-
-	if ($new_account_id != false) {
-
-		$accounts_admin = getAccountsForUser($FAKE_APPROVER_USER_ID);
-		$account_admin = $accounts_admin[0];
-		$src_account = $account_admin['id'];
-
-		$account = new account($account_admin);
-
-		$tans = $account->generateTANs(1);
-		$tan = $tans[0];
-
-		$result = processTransaction($src_account, $new_account_id, $balance, $WELCOMECREDIT_DESCRIPTION, $tan);
-
-		if ($balance >= 10000) {
-			approvePendingTransaction($FAKE_APPROVER_USER_ID, $result);
-		}
-
-		return $new_account_id;
-	}
-
-	executeSetStatement("ROLLBACK");
-	return false;
-}
-
-//tested
-function addUser($first_name, $last_name, $email, $password, $role_filter)
-{
-    global $USER_ROLES;
-    global $USER_TABLE_NAME;
-    global $USER_TABLE_FIRSTNAME;
-    global $USER_TABLE_LASTNAME;
-    global $USER_TABLE_EMAIL;
-    global $USER_TABLE_ROLE;
-    global $USER_TABLE_SALT;
-    global $USER_TABLE_HASH;
-
-    $role = $USER_ROLES[$role_filter];
-
-    //TODO: Generate salt
-    //TODO: Generate hash from password
-
-    $SQL_STATEMENT = "
-		INSERT INTO $USER_TABLE_NAME
-			(
-				$USER_TABLE_FIRSTNAME,
-				$USER_TABLE_LASTNAME,
-				$USER_TABLE_EMAIL,
-				$USER_TABLE_ROLE,
-				$USER_TABLE_SALT,
-				$USER_TABLE_HASH
-			)
-		VALUES
-			(
-				'$first_name',
-				'$last_name',
-				'$email',
-				'$role',
-				'somesalt',
-				'$password'
-			)
-	";
-
-    $result = executeAddStatementOneRecord($SQL_STATEMENT);
-
-    if ($result != -1) {
-        return $result;
-    } else {
-        return false;
-    }
-}
-
-//tested
-function addClient($first_name, $last_name, $email, $password)
-{
-    return addUser($first_name, $last_name, $email, $password, 'client');
-}
-
-//tested
-function addEmployee($first_name, $last_name, $email, $password)
-{
-    return addUser($first_name, $last_name, $email, $password, 'employee');
-}
-
-//tested
-function insertTAN($tan, $account_id)
-{
-    global $TAN_TABLE_NAME;
-    global $TAN_TABLE_KEY;
-    global $TAN_TABLE_ACCOUNT_ID;
-
-	if (strlen($tan) > 15) {
-		return false;
-	}
-	
-    $SQL_STATEMENT = "
-		INSERT INTO $TAN_TABLE_NAME
-			(
-				$TAN_TABLE_KEY,
-				$TAN_TABLE_ACCOUNT_ID
-			)
-		VALUES
-			(
-				'$tan',
-				'$account_id'
-			)
-	";
-
-    $result = executeAddStatementOneRecord($SQL_STATEMENT);
-
-    if ($result != -1) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-function loginUser($user_mail, $user_password) {
-
-	global $USER_TABLE_KEY;
-	global $USER_TABLE_NAME;
-	global $USER_TABLE_EMAIL;
-	global $USER_TABLE_HASH;
-	global $USER_TABLE_STATUS;
-	global $USER_STATUS;
-
-	$hash = ''; //TODO: Use hash
-
-	$status = $USER_STATUS['approved'];
-
-    $SQL_STATEMENT = "
-		SELECT $USER_TABLE_KEY
-		FROM $USER_TABLE_NAME
-		WHERE
-			$USER_TABLE_EMAIL = '$user_mail'
-			AND
-			$USER_TABLE_HASH = '$user_password'
-			AND
-			$USER_TABLE_STATUS = '$status'
-	" ;
-
-	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
-
-	//TODO: Return specific error message (unapproved, rejected, blocked)
-
-	if ($result != -1) {
-		return getUser($result[$USER_TABLE_KEY]);
-    } else {
-		return false;
-	}
-}
-
-# need to test MN 
-function verifyTransaction($account_id, $dest_code, $amount, $description, $tan_code)
-{
-	global $ACCOUNTOVERVIEW_TABLE_NAME;
-	global $ACCOUNTOVERVIEW_TABLE_KEY;
-
-	$var_res = array (
-		"result"	=> false,
-		"message"	=> "[Default] No test has been completed"
-	) ; 
-	
-	$SQL_STATEMENT = "
-		SELECT 	* 
-		FROM  	$ACCOUNTOVERVIEW_TABLE_NAME
-		WHERE	$ACCOUNTOVERVIEW_TABLE_KEY = '$account_id'
-	" ; 
-	
-	$account_info 	= executeSelectStatement($SQL_STATEMENT) ;
-	
-	# checking account ID 
-	if (sizeof($account_info) == 0 ){
-		$var_res["message"]	= '[Account] Account not found' ;
-		return $var_res ; 
-	}
-	
-	# Add check for Destination Account  
-	# no check needed at this stage 
-	
-	# Add check for Description  
-	# no check needed at this stage 
-	
-	if ( $amount > $account_info[0]["balance"] ){
-		$var_res["message"]	= '[Funds] Insuffecient funds' ;
-		return $var_res ; 
-	}	
-
-	$tan_ver 	= verifyTANCode($account_id, $tan_code);  
-	if (sizeof($tan_ver) == 0 ){
-		$var_res["message"]	= '[Tan Code] Invalid or used Tan code' ;
-		return $var_res ; 
-	}
- 
-	# Add check for TAN Codes
-	$var_res["result"] = true;
-	$var_res["message"]	= '[Success] Passed all tests' ;
-
-	return $var_res ; 
-}
-
-# need to test MN 
-function getAccountDetails($account_ID)
-{
-	global $ACCOUNTOVERVIEW_TABLE_NAME;
-	global $ACCOUNTOVERVIEW_TABLE_KEY;
-	global $ACCOUNTOVERVIEW_TABLE_BALANCE ;
-	
-	$SQL_STATEMENT	= "
-		SELECT 
-			$ACCOUNTOVERVIEW_TABLE_KEY,
-			$ACCOUNTOVERVIEW_TABLE_BALANCE
-		FROM $ACCOUNTOVERVIEW_TABLE_NAME
-		WHERE $ACCOUNTOVERVIEW_TABLE_KEY 	= '$account_ID'
-	" ;
-	
-	$result	= executeSelectStatementOneRecord($SQL_STATEMENT) ;
-	return $result ; 
-}
 
 //tested
 function getNumberOfUsers()
@@ -925,28 +999,6 @@ function getTotalAmountOfMoney()
 	}
 }
 
-// needs to be tested
-function getAccountOwnerFromID($account_id){
-
-	global $USER_TABLE_NAME;
-	global $USER_TABLE_KEY;
-	global $ACCOUNT_TABLE_NAME;
-	global $ACCOUNT_TABLE_KEY;
-	global $ACCOUNT_TABLE_USER_ID;
-	
-	$SQL_STATEMENT	= "
-		SELECT
-			CONCAT(u.FIRST_NAME,' ',u.LAST_NAME )		\"Name\",
-			u.$USER_TABLE_KEY							\"User ID\"
-		FROM 
-			$ACCOUNT_TABLE_NAME		b
-			,$USER_TABLE_NAME		u
-		WHERE 
-			u.$USER_TABLE_KEY 				= b.$ACCOUNT_TABLE_USER_ID 
-			AND b.$ACCOUNT_TABLE_KEY		= '$account_id'
-	" ;
-	
-	$result 	= executeSelectStatementOneRecord($SQL_STATEMENT);
-	return $result ;
-}
-
+/************************************************
+ * /OVERVIEW FUNCTIONS
+ ************************************************/

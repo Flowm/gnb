@@ -524,7 +524,7 @@ function addTestTransactions() {
 //		return false;
 //	}
 
-	$result = processTransaction($SRCACC, $DSTACC, -5000, $DESC, $USER2_TESTTAN2);
+	$result = processTransaction($SRCACC, $DSTACC, 12000, $DESC, $USER2_TESTTAN2);
 
     if ($result != false) {
 		print "Added transaction NR $result (DESC: $DESC SRC: $SRCACC DST: $DSTACC AMT: 5000).<br>";
@@ -599,7 +599,7 @@ function approveTransactions() {
 	$transaction2 = $transactions[1];
 	$transaction_id2 = $transaction2['id'];
 	
-	if (! approvePendingTransaction($USER1_ID, $transaction_id1)) {return false;};
+//	if (! approvePendingTransaction($USER1_ID, $transaction_id1)) {return false;};
 	//TODO: if (! approvePendingTransaction($USER1_ID, $transaction_id2)) {return false;};
 
 	$transactions2 = getPendingTransactions();

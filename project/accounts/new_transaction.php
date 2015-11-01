@@ -44,7 +44,7 @@ $tan_code			= ( isset($tan_code) ? $tan_code : '' ) ;
     <h2>Transaction page</h2><br>
     <h4>This form is used to perform a single transaction for multiple transactions please click <a href="">here</a></h4>
     <h5>Note: Any Transaction over 10,000 will be need to be processed which may take up to 48 hours</h5> 
-	<form method="post" action="verify_transaction.php">
+	<form method="post" id="transactionForm">
         IBAN# <input type="text" name="dest_code"	value="<?=$dest_code?>"><br>
 		Amount <input type="text" name="amount" value="<?=$amount?>"><br>
 		Descrition <input type="text" name="description" value="<?=$description?>"><br>
@@ -59,7 +59,7 @@ $tan_code			= ( isset($tan_code) ? $tan_code : '' ) ;
         }
         ?>
         <input type="hidden" name="account_id" value="<?=$account_id?>">
-        <input type="submit" value="Submit">
+        <button type="button" onclick="verifyTransaction()">Submit</button>
     </form>
     <h4>For more about TAN Codes and how to use them please read instuctions <a href="">here</a> </h4>
 </body>

@@ -91,6 +91,8 @@ function genRandString($length) {
 }
 
 function getPasswordHash($password, $salt) {
+	global $MAGIC;
+
 	return hash('sha512', $MAGIC . $password . $salt);
 }
 

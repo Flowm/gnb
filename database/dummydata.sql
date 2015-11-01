@@ -1,8 +1,8 @@
 INSERT INTO user (first_name, last_name, email, pw_salt, pw_hash, role, approved_by_user_id, status)
-VALUES ("Barney", "Stinson", "barney.stinson@gnb.com", "329b4c76", "934f351a22d36e4b6aabc5a4137ef5ce6ca9100150ffd18ff6fcf0633289263b86e41320925a87fe93ab1e1eb46e35f0b38f9dd4b7c3b3b1a5a732a79c144d1b", 1, 1, 1);
+VALUES ("Barney", "Stinson", "barney.stinson@gnb.com", "329b4c76", "747114b33a0e07f6a6d6d292955678b81d91346fee8e2b6146ba2c0f889a0a78525d280675214ed81b9f45863a85390dc2c6c754c6a5dcbc7c7a69465c86f913", 1, 1, 1);
 
 INSERT INTO user (first_name, last_name, email, pw_salt, pw_hash, role, approved_by_user_id, status)
-VALUES ("Ted", "Mosby", "ted.mosby@gnb.com", "b8bd380b", "5d22f5681710e13cacbac6a3bcc293013ee3a286cd8137e4244f768cad101d1a00dc9f052e23ac7cb0f389a4f8a38683f337fc5e5112a771aa084c015602b195", 1, 1, 1);
+VALUES ("Ted", "Mosby", "ted.mosby@gnb.com", "b8bd380b", "75d512fae191058b320dd7341f45ebf03c6ed04b887cb3a9a4e0175cacab3a185e3ad1c331e557acba2ed140689e577f06c2c62478cbf15a5b5eccc4b9ce7b8e", 1, 1, 1);
 
 
 INSERT INTO account (user_id)

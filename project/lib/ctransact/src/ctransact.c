@@ -1,10 +1,7 @@
 #include "ctransact.h"
 
 //TODO: Add quoting support to csv
-//TODO: Human readable errors
 //TODO: Only copy structures when required
-//TODO: Replace strncpy with snprintf
-//TODO: Ignore first row if it contains csv header
 
 int main(int argc, char* argv[]) {
 	FILE* file;
@@ -81,24 +78,41 @@ int parse_csv(char* src_acc, FILE* fh) {
 
 int process_transaction(char* src, struct transactstr transtr) {
 	struct transaction t;
-	int res;
+	int ret;
 
-	TDBG printf("DBG offsets 0:%d 1:%d 2:%d 3:%d\n", transtr.offset[0], transtr.offset[1], transtr.offset[2], transtr.offset[3]);
-	t.src  = src;
-	t.dst  = &transtr.buffer[transtr.offset[0]];
-	t.sum  = &transtr.buffer[transtr.offset[1]];
-	t.desc = &transtr.buffer[transtr.offset[2]];
-	t.tan  = &transtr.buffer[transtr.offset[3]];
-
-	//TODO: Add some input validation here
+	t.src    = src;
+	t.dst    = &transtr.buffer[transtr.offset[0]];
+	t.sum    = &transtr.buffer[transtr.offset[1]];
+	t.desc   = &transtr.buffer[transtr.offset[2]];
+	t.tan    = &transtr.buffer[transtr.offset[3]];
+	t.ap_ok = 0;
 	printf("Processing transaction: SRC=%s DST=%s, AMOUNT=%s, DESC=%s, TAN=%s\n", t.src, t.dst, t.sum, t.desc, t.tan);
-	res = gnb_mysql_do_transaction(t);
-	if (!res) {
+
+	// Check numerical fields for validity
+	if (parse_number(t.src, 0) < 10000000) {
+		printf("\t--> SRC account invalid\n");
+		return 1;
+	}
+	if (parse_number(t.dst, 0) < 10000000) {
+		printf("\t--> DST account invalid\n");
+		return 1;
+	}
+	long long sum = (parse_number(t.sum, 1));
+	if (sum < 0) {
+		printf("\t--> Amount invalid\n");
+		return 1;
+	} else if (sum < 10000) {
+		t.ap_ok = 1;
+	}
+
+	// Execute transaction
+	ret = gnb_mysql_do_transaction(t);
+	if (!ret) {
 		printf("\t--> Success\n");
 	} else {
 		printf("\t--> Fail\n");
 	}
-	return res;
+	return ret;
 }
 
 int gnb_mysql_do_transaction(struct transaction t) {
@@ -106,8 +120,6 @@ int gnb_mysql_do_transaction(struct transaction t) {
 	my_ulonglong numrows;
 	MYSQL_ROW row;
 	char query[MAX_QUERY_LEN];
-
-	//TODO: Automatic approval
 
 	// START MySQL transaction
 	snprintf(query, MAX_QUERY_LEN, "START TRANSACTION");
@@ -117,14 +129,13 @@ int gnb_mysql_do_transaction(struct transaction t) {
 	}
 
 	// Get time
-	char time[20];
 	snprintf(query, MAX_QUERY_LEN, "SELECT NOW()");
 	MDBG printf("QUERY: %s\n", query);
 	if (gnb_mysql_do_query(query, &result, &numrows)) {
 		goto rollback;
 	}
 	row = mysql_fetch_row(result);
-	strncpy(time, row[0], 20);
+	snprintf(t.time, MAX_TINFO_LEN, "%s", row[0]);
 	mysql_free_result(result);
 
 	// Mark TAN as used
@@ -132,12 +143,21 @@ int gnb_mysql_do_transaction(struct transaction t) {
 			"SET used_timestamp = '%s' "
 			"WHERE id = '%s' AND "
 				"account_id ='%s' AND "
-				"used_timestamp IS NULL", time, t.tan, t.src);
+				"used_timestamp IS NULL", t.time, t.tan, t.src);
 	MDBG printf("QUERY: %s\n", query);
 	if (gnb_mysql_do_query(query, &result, &numrows)) {
 		goto rollback;
 	}
 	mysql_free_result(result);
+
+	// Automatically approve transactions below 10000
+	if (t.ap_ok == 1) {
+		snprintf(t.ap_time, MAX_TINFO_LEN, "'%s'", t.time);
+		snprintf(t.ap_byid, MAX_TINFO_LEN, "'1'");
+	} else {
+		snprintf(t.ap_time, MAX_TINFO_LEN, "NULL");
+		snprintf(t.ap_byid, MAX_TINFO_LEN, "NULL");
+	}
 
 	// Insert transaction
 	snprintf(query, MAX_QUERY_LEN,
@@ -158,10 +178,10 @@ int gnb_mysql_do_transaction(struct transaction t) {
 				"'%s', "
 				"'%s', "
 				"'%s', "
-				"NULL, "
-				"NULL, "
-				"0 "
-			")", t.src, t.dst, time, t.sum, t.desc, t.tan);
+				"%s, "
+				"%s, "
+				"'%i'"
+			")", t.src, t.dst, t.time, t.sum, t.desc, t.tan, t.ap_time, t.ap_byid, t.ap_ok);
 	MDBG printf("QUERY: %s\n", query);
 	if (gnb_mysql_do_query(query, &result, &numrows)) {
 		goto rollback;
@@ -220,4 +240,24 @@ int gnb_mysql_init() {
 	MDBG printf("MySQL server info: %s\n", mysql_get_server_info(con));
 	MDBG printf("MySQL connection info: %s\n\n", mysql_get_host_info(con));
 	return 0;
+}
+
+long long parse_number(char* c, int decimal) {
+	//Check numerical field for validity
+	int num = 0;
+
+	while (*c) {
+		if (*c == '.') {
+			if (--decimal == -1)
+				return -1;
+		} else if (*c >= '0' && *c <= '9' && decimal >= 0) {
+			num *= 10;
+			num += *c-'0';
+		} else {
+			return -1;
+		}
+		c++;
+	}
+
+	return num;
 }

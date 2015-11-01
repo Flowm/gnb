@@ -5,7 +5,8 @@
  * Date: 17/10/15
  * Time: 15:14
  */
-
+ 
+include_once ('../main_include.php') ;
 $frame = getFrameAbsolute('account_home'); //static default
 if (isset($_POST["frame"])) {
     $frame = getFrameAbsolute($_POST["frame"]);
@@ -13,6 +14,7 @@ if (isset($_POST["frame"])) {
 
 $summary_message 	= '' ; 
 $selected			= '' ; 
+
 if (isset($_POST["account"])){
 	$selected 	= $_POST["account"]; 
 	$summary_message	= 'Current selected account is #'.$selected ; 

@@ -11,22 +11,36 @@ if (isset($_POST["frame"])) {
     $frame = getFrameAbsolute($_POST["frame"]);
 }
 
-$selected = "account1";
+$summary_message 	= '' ; 
+$selected			= '' ; 
+if (isset($_POST["account"])){
+	$selected 	= $_POST["account"]; 
+	$summary_message	= 'Current selected account is #'.$selected ; 
+} else {
+	$summary_message	= 'No account is currently selected' ; 
+}
+	
 if (isset($_POST["account"])) {
     $selected = $_POST["account"];
 }
-?>
 
-<p>Current selected account is account1</p><br>
-<span>Select a different account: </span>
-<select id="account_select" onchange="onSelectedAccount()">
-    <option value="account1" <?php if($selected == "account1") {
-        echo "selected";
-    }?>>Account 1</option>
-    <option value="account2" <?php if($selected == "account2") {
-        echo "selected";
-    }?>>Account 2</option>
-</select><br>
+$user_id	=	$_SESSION["user_id"] ; 
+$accounts_info 	= getAccountsForUser( $user_id ) ;  
+
+echo 	'<p>'.$summary_message.'</p><br>' ;
+
+
+# Generate Account List 
+echo 	'<span>Select a different account: </span>' ; 
+echo 	'<select id="account_select" onchange="onSelectedAccount()">' ;
+echo 	'<option selected disabled>Select Account</option>' ;
+foreach($accounts_info as $acc){
+	echo 	'<option value="'.$acc["id"].'" ' ; 
+	if ( $selected == $acc["id"] ){ echo "selected" ; }   
+	echo 	'>'.$acc["id"].'</option>' ; 
+}	
+echo	'</select><br>' ; 
+?>
 
 <div class="frameContainer">
     <div class="frameMenu">

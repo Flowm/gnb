@@ -15,9 +15,18 @@ foreach ($_POST as $var => $value ){
 	$$var	= $value ; 
 }
 
-#$account_id = '10000001' ;  
+
+$account_id	= $_POST["account"] ; 
+
+if ( empty($account_id) ){
+	die("Please choose an account")  ; 
+} 
+
+
 $acc_info = getAccountDetails($account_id) ;
-drawSingleRecordTable($acc_info[0],'Account ') ; 
+#var_dump($acc_info) ;
+drawSingleRecordTable($acc_info,'Account ') ; 
+
 
 $dest_code			= ( isset($dest_code) ? $dest_code : '' ) ; 
 $amount				= ( isset($amount) ? $amount : '' ) ; 
@@ -25,7 +34,6 @@ $description		= ( isset($description) ? $description : '' ) ;
 $tan_code			= ( isset($tan_code) ? $tan_code : '' ) ; 
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

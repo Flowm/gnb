@@ -795,8 +795,6 @@ function getAccountDetails($account_ID)
 	" ;
 	
 	$result	= executeSelectStatementOneRecord($SQL_STATEMENT) ;
-	#var_dump($result) ; 
-	#var_dump($SQL_STATEMENT) ; 
 	return $result ; 
 }
 

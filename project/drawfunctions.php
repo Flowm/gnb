@@ -4,7 +4,7 @@ function drawMultipleRecordTable($data,$record_name = 'record(s)'){
 	
 	# getting number of headings ( data columns )
 	$num_of_col		= count($data[0]) ;
-	$num_of_col		= 2;
+	#$num_of_col		= 2;
 
 	# getting number of recordsd
 	$num_of_rec		= count($data) ;
@@ -17,11 +17,13 @@ function drawMultipleRecordTable($data,$record_name = 'record(s)'){
 	
 	# drawing headers and footer
 	echo 	'<thead>'
-		.	'<tr>'.'<th colspan="'.$num_of_col.'">'.$summary.'</th>' 
+		.	'<tr>'.'<th colspan="'.$num_of_col.'" style="text-align: left;"'
+		.	'>'.$summary.'</th>' 
 		.	'</tr>'.'</thead>' ;
 		
 	echo 	'<tfoot>'
-		.	'<tr>'.'<th colspan="'.$num_of_col.'">'.$summary.'</th>' 
+		.	'<tr>'.'<th colspan="'.$num_of_col.'" style="text-align: left;"'
+		.	'>'.$summary.'</th>' 
 		.	'</tr>'.'</tfoot>' ;
 
 	
@@ -70,6 +72,7 @@ function drawSinglerecordTable($data,$record_name = 'Record'){
 			.	'<td>'.$value.'</td>' 
 			. 	'</tr>' ;
 	}
+	#var_dump($data) ;
 	
 	echo "</table>" ;
 }

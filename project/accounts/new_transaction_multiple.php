@@ -1,4 +1,8 @@
 <?php
+$account_id	= $_POST["account"] ; 
+if ( empty($account_id) ){
+	die("Please choose an account")  ; 
+} 
 
 require_once __DIR__."/../resource_mappings.php";
 

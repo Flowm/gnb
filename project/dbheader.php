@@ -47,7 +47,10 @@ $FAKE_APPROVER_USER_ID = 1;
 # ROLES in USER TABLE
 $USER_ROLES = array(
 	'client'		=> 0,
-	'employee'		=> 1
+	'employee'		=> 1,
+	0				=> 'client',
+	1				=> 'employee',
+	
 );
 	
 # STATUS in USER TABLE
@@ -55,14 +58,21 @@ $USER_STATUS = array(
 	'unapproved'	=> 0,
 	'approved'		=> 1,
 	'rejected'		=> 2,
-	'blocked'		=> 3
+	'blocked'		=> 3,
+	0				=> 'unapproved',
+	1				=> 'approved',
+	2				=> 'rejected',
+	3				=> 'blocked',
 );
 
 # STATUS in TRANSACTION TABLE
 $TRANSACTION_STATUS = array(
 	'unapproved'	=> 0,
 	'approved'		=> 1,
-	'rejected'		=> 2
+	'rejected'		=> 2,
+	0				=> 'unapproved',
+	1				=> 'approved',
+	2				=> 'rejected'
 );
 
 $DB_CONNECTION = getDatabaseConnection();

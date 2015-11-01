@@ -22,45 +22,63 @@ $pdf_download_link 	= '<a href="'.$download_link.'">'
 
 # showing transactions
 $transaction_data 	= getAccountTransactions($account_id) ; 
-$skip_headers		= array('approved_by_user_id','approved_at') ; 
-
+$skip_headers		= array( 'id','approved_by_user_id','approved_at','destination_account_id','tan_id') ; 
+$header_decode 		= array(
+	'status'				=> 'Status',
+	'source_account_id'		=> 'Source/Dest',
+	'creation_timestamp'	=>  'Date/Time',
+	'amount'				=>  'Amount',
+	'description'			=> 'Description'
+);
+	
+	
 # getting number of headings ( data columns ) and columns
 $num_of_col			= count($transaction_data[0]) ;
 $num_of_rec			= count($transaction_data) ;
 $summary 			= $num_of_rec.' transaction(s) available '; 
 
-echo '<table border="1" style="white-space: nowrap">' ;
+echo '<br><table class="table-default" style="white-space: nowrap">' ;
 # drawing headers and footer
 echo 	'<thead>'
-	.	'<tr>'.'<th colspan="'.$num_of_col.'" style="text-align: left;"'.'>'
+	.	'<tr class="thead-row-default">'.'<th colspan="'.$num_of_col.'"'
+	.	'class="th-default" style="text-align: left;"'.'>'
 	.	'<div style="float:left;width:50%;">'.$summary.'</div>' 
 	.	'<div style="float:right;width:50%;">'.$pdf_download_link.'</div>' 
 	.	'</th></tr>'.'</thead>' ;
 	
 echo 	'<tfoot>'
-	.	'<tr>'.'<th colspan="'.$num_of_col.'" style="text-align: left;"'.'>'
+	.	'<tr class="thead-row-default">'.'<th colspan="'.$num_of_col.'"'
+	.	'class="th-default" style="text-align: left;"'.'>'
 	.	'<div style="float:left;width:50%;">'.$summary.'</div>' 
 	.	'<div style="float:right;width:50%;">'.$pdf_download_link.'</div>' 
 	.	'</tr>'.'</tfoot>' ;
 
 
 # drawing column titles
-echo 	'<tr>' ; 
+echo 	'<tr class="thead-row-default">' ; 
 foreach( $transaction_data[0] as $title => $value){
 	if ( in_array($title,$skip_headers) ) { continue ; }
-	echo  '<th>'.$title.'</th>' ; }
-echo	'</tr>' ;
+	echo  	'<th>'
+		.	(array_key_exists($title,$header_decode) ? $header_decode[$title] :$title)
+		.'	</th>' ; }
+echo		'</tr>' ;
 
 # printing availble data 
 for ( $i = 0 ; $i < $num_of_rec ; $i++ ){
-	echo 	'<tr>' ;
+	echo 	'<tr class="">' ;
 	foreach( $transaction_data[$i] as $title => $value){
 		if ( in_array($title,$skip_headers) ) { continue ; }
+		$data	= $value ; 
 		if ( $title	== 'status' ){ $value	= $TRANSACTION_STATUS[$value] ; }
-		echo  '<th>'.$value.'</th>' ; 
+		if ( $title	== 'source_account_id' ){
+			if( $value == $account_id){
+				$data	= $transaction_data[$i]["destination_account_id"] ; 
+			}
+		}
+		if ( $title	== 'description' ){ $data	= wordwrap( $data, 18, "<br>\n",true ) ; }
+		echo  '<td class="td-default">'.$data.'</td>' ; 
 	}
 	echo	'</tr>' ;
 }
-
 echo "</table>" ; 
 ?>

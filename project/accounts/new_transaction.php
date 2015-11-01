@@ -10,9 +10,12 @@ if (empty($_SESSION["account_id"]))
 	die("Please choose an account");
 
 $account_id = $_SESSION["account_id"];
-
 $acc_info = getAccountDetails($account_id) ;
-drawSingleRecordTable($acc_info,'Account ') ;
+$account_header	= array(
+	'id'			=> 'ID',
+	'balance'		=> 'Balance',
+) ;
+drawSingleRecordTable($acc_info,'Account ',$account_header) ;
 
 $dest_code		= ( isset($_POST["dest_code"]) ? $_POST["dest_code"] : '' );
 $amount			= ( isset($_POST["amount"]) ? $_POST["amount"] : '' );
@@ -28,7 +31,7 @@ $tan_code		= ( isset($_POST["tan_code"]) ? $_POST["tan_code"] : '' );
 </head>
 <body>
     <h2>Transaction page</h2><br>
-    <h4>This form is used to perform a single transaction for multiple transactions please click <a href="">here</a></h4>
+    <h4>This form is used to perform a single transaction</h4>
     <h5>Note: Any Transaction over 10,000 will be need to be processed which may take up to 48 hours</h5>
     <form method="post" id="transactionForm">
         IBAN# <input type="text" name="dest_code" value="<?=$dest_code?>"><br>
@@ -47,5 +50,4 @@ $tan_code		= ( isset($_POST["tan_code"]) ? $_POST["tan_code"] : '' );
         <input type="hidden" name="account_id" value="<?=$account_id?>">
         <button type="button" onclick="verifyTransaction()">Submit</button>
     </form>
-    <h4>For more about TAN Codes and how to use them please read instuctions <a href="">here</a> </h4>
-</body>
+  </body>

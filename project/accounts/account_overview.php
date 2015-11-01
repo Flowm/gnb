@@ -16,7 +16,13 @@ drawSingleRecordTable($account_holder_info,'Account Holder');
 
 echo '<br>';
 
+
+
 $account_info = getAccountDetails($account_id);
-drawSingleRecordTable($account_info,'Account');
+$account_header	= array(
+	'id'			=> 'ID',
+	'balance'		=> 'Balance',
+) ; 	
+drawSingleRecordTable($account_info,'Account',$account_header);
 
 ?>

@@ -704,8 +704,11 @@ function loginUser($user_mail, $user_password) {
 	global $USER_TABLE_EMAIL;
 	global $USER_TABLE_HASH;
 	global $USER_TABLE_STATUS;
+	global $USER_STATUS;
 
 	$hash = ''; //TODO: Use hash
+
+	$status = $USER_STATUS['approved'];
 
     $SQL_STATEMENT = "
 		SELECT $USER_TABLE_KEY
@@ -714,9 +717,13 @@ function loginUser($user_mail, $user_password) {
 			$USER_TABLE_EMAIL = '$user_mail'
 			AND
 			$USER_TABLE_HASH = '$user_password'
-		" ;
+			AND
+			$USER_TABLE_STATUS = '$status'
+	" ;
 
 	$result = executeSelectStatementOneRecord($SQL_STATEMENT);
+
+	//TODO: Return specific error message (unapproved, rejected, blocked)
 
 	if ($result != -1) {
 		return getUser($result[$USER_TABLE_KEY]);

@@ -65,7 +65,7 @@ test('Checking overview functions', checkOverviewFunctions(), true);
 
 //TODO: Test rollback @ processTransaction
 
-die("Stopping before test data was erased.");
+//die("Stopping before test data was erased.");
 
 
 removeTestTransactions();

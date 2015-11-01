@@ -13,7 +13,7 @@ if (isset($_POST['action']) && isset($_POST['users'])) {
     if ($action == "approveRegistration") {
         user::approveRegistrations($requests, $approver_id);
     } elseif ($action == "rejectRegistration") {
-
+		user::rejectRegistrations($requests, $approver_id);
     }
 }
 
@@ -66,4 +66,4 @@ if (count($newUsers) == 0) {
 
 <p>What should be done with the selected registration requests?</p>
 <button type="button" onclick="approveRegistration()">Approve</button>
-<!--<button type="button" onclick="rejectRegistration()">Reject</button>-->
+<button type="button" onclick="rejectRegistration()">Reject</button>

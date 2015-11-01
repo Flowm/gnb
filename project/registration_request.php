@@ -72,6 +72,8 @@ if (!$result) {
     exit();
 }
 
+$logo_svg = getMedia('logo_svg'); //GNB logo
+
 ?>
 
 <!DOCTYPE html>
@@ -94,7 +96,8 @@ if (!$result) {
         <h1 class="title3">
             This is gonna be LEGENDARY!!!
         </h1>
-        <a href="index.php" class="simpleText simple-text-centered">Return to Home page</a>
+        <p class="simpleText simple-text-centered">
+            <a href="index.php" class="simpleText simple-text-centered">Return to Home page</a></p>
     </div>
 </div>
 </body>

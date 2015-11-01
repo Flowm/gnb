@@ -13,7 +13,7 @@ function checkContents() {
     var errorText = document.getElementById('error');
     var type1 = document.getElementById('type1');
     var type2 = document.getElementById('type2');
-    if (!type1.checked && !type1.checked) {
+    if (!type1.checked && !type2.checked) {
         errorText.innerHTML = 'All fields are mandatory!';
         return false;
     }

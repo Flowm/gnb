@@ -1,11 +1,13 @@
 <?php
-$account_id	= $_POST["account"] ; 
-if ( empty($account_id) ){
-	die("Please choose an account")  ; 
-} 
 
 require_once __DIR__."/../resource_mappings.php";
 
+if (empty($_SESSION["user_id"]))
+	die("User missing");
+if (empty($_SESSION["account_id"]))
+	die("Please choose an account");
+
+$account_id = $_SESSION["account_id"];
 if (isset($_FILES['transactionsCSV'])) {
 	$file = $_FILES['transactionsCSV'];
 
@@ -16,13 +18,15 @@ if (isset($_FILES['transactionsCSV'])) {
 	}
 
 	$target_file = getPageAbsolute("uploads") . basename($file["name"]);
+	$target_file = getPageAbsolute("cparser");
 	if (move_uploaded_file($file['tmp_name'], $target_file)) {
 		echo "<div id='success'>FILEUPLOAD SUCCESSFUL</div>";
+		$cmdln = "./ $ . ' ' . $targetname . ";
+		//$cmd = shell_exec( $cmdln); 
 	}
 }
 
 ?>
-
 <p>To perform multiple transactions in one request you can upload a batch transaction file.
 Format the file according to be following example (each transaction in a new line):</p>
 <p>Destination Account ID,Amount,Description,TAN Code</p>

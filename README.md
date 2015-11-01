@@ -10,6 +10,10 @@ TODO: Update with the final passwords!
 ## Installation
 The following steps are required to use the gnb application:
 
+### Initialize git submodules
+* Go into the directory of the project
+	```git submodule init && git submodule update```
+
 ### Database setup
 * Go into the directory of the project
 * Connect to the sql server:

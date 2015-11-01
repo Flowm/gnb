@@ -1,51 +1,32 @@
 <?php
 
+require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("db_functions");
+require_once getPageAbsolute("drawfunctions");
 
-include_once ('../main_include.php') ; 
+if (empty($_SESSION["user_id"]))
+	die("User missing");
+if (empty($_SESSION["account_id"]))
+	die("Please choose an account");
 
+$account_id = $_SESSION["account_id"];
 
-
-
-
-# Check that user is allowed to transfer money for said account 
-# not needed for phase 1 
-
-# get input 
-foreach ($_POST as $var => $value ){
-	$$var	= $value ; 
-}
-#var_dump($_POST) ;
-# for testing 
-#$account_id=10000001 ;
-##$account_id=100 ;
-#$dest_code='IBAN213213123' ;
-#$description='Test Transaction' ;
-#$amount=500 ;
-#
-#$tan_code='1234567890ABCDE' ;			# invalid
-#$tan_code='04696eac02be2ae' ;         	# valid
-
+$dest_code		= ( isset($_POST["dest_code"]) ? $_POST["dest_code"] : '' );
+$amount			= ( isset($_POST["amount"]) ? $_POST["amount"] : '' );
+$description	= ( isset($_POST["description"]) ? $_POST["description"] : '' );
+$tan_code		= ( isset($_POST["tan_code"]) ? $_POST["tan_code"] : '' );
 
 # verify all input is there 
-if (!isset($account_id)){
+if (empty($account_id))
 	die("Account ID not found");
-}	
-
-if (!isset($dest_code)){
+if (empty($dest_code))
 	die("Destination Code not found");
-}	
-
-if (!isset($amount)){
+if (empty($amount))
 	die("Amount not found");
-}	
-
-if (!isset($description)){
+if (empty($description))
 	die("Description Code not found");
-}	
-
-if (!isset($tan_code)){
+if (empty($tan_code))
 	die("TAN Code not found");
-}	
 
 # sanitize input 
 # no need for stage one 

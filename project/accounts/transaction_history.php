@@ -1,19 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lorenzodonini
- * Date: 18/10/15
- * Time: 00:32
- */
- 
 
-include_once ('../main_include.php') ;
-$account_id	= $_POST["account"] ; 
-$user_id = $_SESSION["user_id"] ;  
+require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("db_functions");
+require_once getPageAbsolute("drawfunctions");
 
-if ( empty($account_id) ){
-	die("Please choose an account")  ; 
-} 
+if (empty($_SESSION["user_id"]))
+	die("User missing");
+if (empty($_SESSION["account_id"]))
+	die("Please choose an account");
+
+$account_id = $_SESSION["account_id"];
+$user_id = $_SESSION["user_id"];
 
 $download_link		= '../accounts/download_transactions.php' ;
 $download_icon		= '../media/download_pdf.svg' ; 
@@ -67,4 +64,3 @@ for ( $i = 0 ; $i < $num_of_rec ; $i++ ){
 
 echo "</table>" ; 
 ?>
-

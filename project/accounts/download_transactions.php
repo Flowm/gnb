@@ -1,14 +1,17 @@
 <?php
 
-#echo '<h2>TESTING</h2>';
+require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("db_functions");
+require_once getPageAbsolute("fpdf");
 
-include('../main_include.php') ; 
-require('../lib/fpdf/fpdf.php');
+session_start();
 
-# needs to be edited 
-$account_id	= 10000001 ;
-#$account_id	= 10000001 ;
+if (empty($_SESSION["user_id"]))
+	die("User missing");
+if (empty($_SESSION["account_id"]))
+	die("Please choose an account");
 
+$account_id = $_SESSION["account_id"];
 $transaction_data 	= getAccountTransactions($account_id) ; 
 $headers			= array_keys($transaction_data[0]) ; 
 
@@ -28,7 +31,7 @@ $pdf->Image('../media/gnb_logo.png',10,10,-300);
 # Add transaction info 
 $pdf->SetFont('Arial','B',10);
 
-	# getting number of records and setting summary line 
+# getting number of records and setting summary line
 $num_of_rec		= count($transaction_data) ;
 $record_name 	= 'Transaction(s)' ;
 $summary 		= $num_of_rec.' '.$record_name.' available' ; 
@@ -64,14 +67,6 @@ for ( $i = 0 ; $i < $num_of_rec ; $i++ ){
 	$pdf->Ln() ; 
 }
 $pdf->Ln() ; 
-
-
-
-
-#$pdf->Cell(40,10,'Hello World!');
-
-
-
 
 $pdf->Output();
 

@@ -1,37 +1,23 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lorenzodonini
- * Date: 18/10/15
- * Time: 09:33
- */
 
-//IMPLEMENT SOME STUFF
+require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("db_functions");
+require_once getPageAbsolute("drawfunctions");
 
-include_once ('../main_include.php') ; 
-# need account ID 
-#except Account Number 
-foreach ($_POST as $var => $value ){
-	$$var	= $value ; 
-}
+if (empty($_SESSION["user_id"]))
+	die("User missing");
+if (empty($_SESSION["account_id"]))
+	die("Please choose an account");
 
-
-$account_id	= $_POST["account"] ; 
-
-if ( empty($account_id) ){
-	die("Please choose an account")  ; 
-} 
-
+$account_id = $_SESSION["account_id"];
 
 $acc_info = getAccountDetails($account_id) ;
-#var_dump($acc_info) ;
-drawSingleRecordTable($acc_info,'Account ') ; 
+drawSingleRecordTable($acc_info,'Account ') ;
 
-
-$dest_code			= ( isset($dest_code) ? $dest_code : '' ) ; 
-$amount				= ( isset($amount) ? $amount : '' ) ; 
-$description		= ( isset($description) ? $description : '' ) ; 
-$tan_code			= ( isset($tan_code) ? $tan_code : '' ) ; 
+$dest_code		= ( isset($_POST["dest_code"]) ? $_POST["dest_code"] : '' );
+$amount			= ( isset($_POST["amount"]) ? $_POST["amount"] : '' );
+$description	= ( isset($_POST["description"]) ? $_POST["description"] : '' );
+$tan_code		= ( isset($_POST["tan_code"]) ? $_POST["tan_code"] : '' );
 
 ?>
 <!DOCTYPE html>
@@ -43,12 +29,12 @@ $tan_code			= ( isset($tan_code) ? $tan_code : '' ) ;
 <body>
     <h2>Transaction page</h2><br>
     <h4>This form is used to perform a single transaction for multiple transactions please click <a href="">here</a></h4>
-    <h5>Note: Any Transaction over 10,000 will be need to be processed which may take up to 48 hours</h5> 
-	<form method="post" id="transactionForm">
-        IBAN# <input type="text" name="dest_code"	value="<?=$dest_code?>"><br>
-		Amount <input type="text" name="amount" value="<?=$amount?>"><br>
-		Descrition <input type="text" name="description" value="<?=$description?>"><br>
-		TAN Code <input type="text" name="tan_code" value="<?=$tan_code?>"><br>
+    <h5>Note: Any Transaction over 10,000 will be need to be processed which may take up to 48 hours</h5>
+    <form method="post" id="transactionForm">
+        IBAN# <input type="text" name="dest_code" value="<?=$dest_code?>"><br>
+        Amount <input type="text" name="amount" value="<?=$amount?>"><br>
+        Descrition <input type="text" name="description" value="<?=$description?>"><br>
+        TAN Code <input type="text" name="tan_code" value="<?=$tan_code?>"><br>
         <?php
         $error = null;
         if (isset($_GET) && isset($_GET["error"])) {

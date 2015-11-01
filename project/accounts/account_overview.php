@@ -1,36 +1,22 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lorenzodonini
- * Date: 18/10/15
- * Time: 00:32
- 
- 
- */
-include_once ('../main_include.php') ;
-$user_id 	= $_SESSION["user_id"] ;  
 
-if (isset($_POST["account"])){
-	$account_id = $_POST["account"] ;
-}
+require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("db_functions");
+require_once getPageAbsolute("drawfunctions");
 
+if (empty($_SESSION["user_id"]))
+	die("User missing");
+if (empty($_SESSION["account_id"]))
+	die("Please choose an account");
 
-if ( empty($account_id) ){
-	die("Please choose an account")  ; 
-} 
+$account_id = $_SESSION["account_id"];
 
-$account_holder_info 	= getAccountOwnerFromID($account_id) ;
-drawSingleRecordTable($account_holder_info,'Account Holder') ;
+$account_holder_info = getAccountOwnerFromID($account_id);
+drawSingleRecordTable($account_holder_info,'Account Holder');
 
-echo 	'<br>' ; 
+echo '<br>';
 
-$account_info			= getAccountDetails($account_id) ; 
-drawSingleRecordTable($account_info,'Account') ;
+$account_info = getAccountDetails($account_id);
+drawSingleRecordTable($account_info,'Account');
 
-	 
 ?>
-
-
-
-
-

@@ -1,49 +1,42 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lorenzodonini
- * Date: 17/10/15
- * Time: 15:14
- */
- 
-include_once ('../main_include.php') ;
-$frame = getFrameAbsolute('account_home'); //static default
+
+require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("db_functions");
+
+$frame = getFrameAbsolute('account_home');
 if (isset($_POST["frame"])) {
     $frame = getFrameAbsolute($_POST["frame"]);
 }
 
-$summary_message 	= '' ; 
-$selected			= '' ; 
+if (empty($_SESSION["user_id"]))
+	die("User missing");
+$accounts_info = getAccountsForUser($_SESSION["user_id"]);
 
-if (isset($_POST["account"])){
-	$selected 	= $_POST["account"]; 
-	$summary_message	= 'Current selected account is #'.$selected ; 
-} else {
-	$summary_message	= 'No account is currently selected' ; 
-}
-	
 if (isset($_POST["account"])) {
-    $selected = $_POST["account"];
+	foreach($accounts_info as $acc) {
+		if ( $_POST["account"] == $acc["id"] ) {
+			$_SESSION["account_id"] = $_POST["account"];
+			break;
+		}
+	}
 }
-
-$user_id	=	$_SESSION["user_id"] ; 
-$accounts_info 	= getAccountsForUser( $user_id ) ;  
-
-echo 	'<p>'.$summary_message.'</p><br>' ;
-
-
-# Generate Account List 
-echo 	'<span>Select a different account: </span>' ; 
-echo 	'<select id="account_select" onchange="onSelectedAccount()">' ;
-echo 	'<option selected disabled>Select Account</option>' ;
+# Generate Account List
+if (isset($_SESSION["account_id"])) {
+	$selected = $_SESSION["account_id"];
+	echo '<span>Select a different account: </span>' ;
+} else {
+	echo '<span>Please select an account: </span>' ;
+}
+echo '<select id="account_select" onchange="onSelectedAccount()">' ;
+echo '<option selected disabled>Select Account</option>' ;
 foreach($accounts_info as $acc){
-	echo 	'<option value="'.$acc["id"].'" ' ; 
-	if ( $selected == $acc["id"] ){ echo "selected" ; }   
-	echo 	'>'.$acc["id"].'</option>' ; 
-}	
-echo	'</select><br>' ; 
-?>
+	echo 	'<option value="'.$acc["id"].'" ' ;
+	if ( $_SESSION["account_id"] == $acc["id"] ){ echo "selected" ; }
+	echo 	'>'.$acc["id"].'</option>' ;
+}
+echo	'</select><br>' ;
 
+?>
 <div class="frameContainer">
     <div class="frameMenu">
         <ul>

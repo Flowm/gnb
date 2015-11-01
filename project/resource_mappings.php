@@ -1,6 +1,10 @@
 <?php
 //THIS FILE CONTAINS THE MAPPINGS BETWEEN LOGICAL NAMES AND VIEWS/RESOURCES
 
+ini_set('display_errors',1);
+ini_set('display_startup_errors',1);
+error_reporting(-1);
+
 // Detect base path and base url of application
 $base_dir = __DIR__;
 $protocol = isset($_SERVER["HTTPS"]) ? 'https://' : 'http://';
@@ -27,6 +31,10 @@ $pages["user"] = "models/user.php";
 $pages["account"] = "models/account.php";
 $pages["transaction"] = "models/transaction.php";
 $pages["awesome"] = "awesome_data.php";
+
+$pages["drawfunctions"] = "drawfunctions.php";
+$pages["fpdf"] = "lib/fpdf/fpdf.php";
+$pages["cparser"] = "lib/cparser/cparser";
 $pages["uploads"] = "uploads/";
 
 //SECTIONS (each section is triggered by a button)

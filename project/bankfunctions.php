@@ -9,6 +9,7 @@ require_once "resource_mappings.php";
 require_once getPageAbsolute("account");
 
 $WELCOMECREDIT_DESCRIPTION = 'GNB Welcome Credit';
+$MAGIC = 'SUITUP';
 
 
 
@@ -36,16 +37,30 @@ function recordIsInTable($record_value,$record_name,$table_name)
 }
 
 
-function loginUser($user_mail, $user_password) {
+function loginUser($mail, $password) {
 
 	global $USER_TABLE_KEY;
 	global $USER_TABLE_NAME;
 	global $USER_TABLE_EMAIL;
+	global $USER_TABLE_SALT;
 	global $USER_TABLE_HASH;
 	global $USER_TABLE_STATUS;
 	global $USER_STATUS;
 
-	$hash = ''; //TODO: Use hash
+	$SQL_STATEMENT_SALT = "
+		SELECT $USER_TABLE_SALT
+		FROM $USER_TABLE_NAME
+		WHERE $USER_TABLE_EMAIL = '$mail'
+	";
+
+	$result = executeSelectStatementOneRecord($SQL_STATEMENT_SALT);
+
+	if ($result == false) {
+		return false;
+	}
+
+	$salt = $result[$USER_TABLE_SALT];
+	$password_hash = getPasswordHash($password, $salt);
 
 	$status = $USER_STATUS['approved'];
 
@@ -53,9 +68,9 @@ function loginUser($user_mail, $user_password) {
 		SELECT $USER_TABLE_KEY
 		FROM $USER_TABLE_NAME
 		WHERE
-			$USER_TABLE_EMAIL = '$user_mail'
+			$USER_TABLE_EMAIL = '$mail'
 			AND
-			$USER_TABLE_HASH = '$user_password'
+			$USER_TABLE_HASH = '$password_hash'
 			AND
 			$USER_TABLE_STATUS = '$status'
 	" ;
@@ -69,6 +84,14 @@ function loginUser($user_mail, $user_password) {
     } else {
 		return false;
 	}
+}
+
+function genRandString($length) {
+	return substr(bin2hex(openssl_random_pseudo_bytes(round($length/2))), 0, $length);
+}
+
+function getPasswordHash($password, $salt) {
+	return hash('sha512', $MAGIC . $password . $salt);
 }
 
 /************************************************
@@ -95,8 +118,8 @@ function addUser($first_name, $last_name, $email, $password, $role_filter)
 
     $role = $USER_ROLES[$role_filter];
 
-    //TODO: Generate salt
-    //TODO: Generate hash from password
+	$salt = genRandString(8);
+	$password_hash = getPasswordHash($password, $salt);
 
     $SQL_STATEMENT = "
 		INSERT INTO $USER_TABLE_NAME
@@ -114,8 +137,8 @@ function addUser($first_name, $last_name, $email, $password, $role_filter)
 				'$last_name',
 				'$email',
 				'$role',
-				'somesalt',
-				'$password'
+				'$salt',
+				'$password_hash'
 			)
 	";
 

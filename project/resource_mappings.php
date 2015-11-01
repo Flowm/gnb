@@ -41,7 +41,7 @@ $sections["my_accounts"] = "accounts/my_accounts.php";
 //FRAMES (each frame is used inside a section, triggered by a submenu button)
 $frames = array();
 $frames["manage_clients"] = "employee/manage_clients.php";
-$frames["manage_client"] = "employee/manage_client.php";
+$frames["client_details"] = "employee/client_details.php";
 $frames["manage_registration"] = "employee/manage_registration.php";
 $frames["manage_transfer"] = "employee/manage_transfer.php";
 $frames["transfer_details"] = "employee/transfer_details.php";

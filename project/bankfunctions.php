@@ -301,11 +301,19 @@ function processTransaction($source, $destination, $amount, $description, $tan)
 	global $TRANSACTION_TABLE_AP_BY;
 	global $TRANSACTION_TABLE_STATUS;
 
+	global $ACCOUNTOVERVIEW_TABLE_KEY;
+	global $ACCOUNTOVERVIEW_TABLE_NAME;
+	global $ACCOUNTOVERVIEW_TABLE_BALANCE;
+
     global $FAKE_APPROVER_USER_ID;
 
 	$approved_at	= 'NULL';
 	$approved_by	= 'NULL';
 	$status			= '0';
+
+	if ($amount < 0) {
+		return false;
+	}	
 
 	if ($amount < 10000) {
 		$approved_at	= 'now()';
@@ -314,6 +322,23 @@ function processTransaction($source, $destination, $amount, $description, $tan)
 	}
 
 	executeSetStatement("START TRANSACTION;");
+
+	$SQL_STATEMENT_CHECK_BALANCE = "
+		SELECT
+			$ACCOUNTOVERVIEW_TABLE_KEY
+		FROM
+			$ACCOUNTOVERVIEW_TABLE_NAME
+		WHERE
+			$ACCOUNTOVERVIEW_TABLE_KEY = '$source'
+			AND
+			$ACCOUNTOVERVIEW_TABLE_BALANCE >= '$amount'
+	";
+
+	$sufficient_balance = executeSelectStatement($SQL_STATEMENT_CHECK_BALANCE);
+
+	if (sizeof($sufficient_balance) == 0) {
+		return false;
+	}
 
 	$SQL_STATEMENT_SET_TAN_USED = "
 		UPDATE
@@ -595,9 +620,12 @@ function addAccountWithBalance($user_id, $balance)
 		$tans = $account->generateTANs(1);
 		$tan = $tans[0];
 
-		//function processTransaction($source, $destination, $amount, $description, $tan) 
 		$result = processTransaction($src_account, $new_account_id, $balance, $WELCOMECREDIT_DESCRIPTION, $tan);
-		//TODO: Depending on the balance, this transaction needs to be approved!
+
+		if ($balance >= 10000) {
+			approvePendingTransaction($FAKE_APPROVER_USER_ID, $result);
+		}
+
 		return $new_account_id;
 	}
 

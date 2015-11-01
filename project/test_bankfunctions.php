@@ -65,7 +65,7 @@ test('Checking overview functions', checkOverviewFunctions(), true);
 
 //TODO: Test rollback @ processTransaction
 
-//die("Stopping before test data was erased.");
+die("Stopping before test data was erased.");
 
 
 removeTestTransactions();
@@ -337,9 +337,9 @@ function addTestAccounts() {
 	global $USER1_ID;
 	global $USER2_ID;
 
-	$acc1 = addAccount($USER1_ID);
-	$acc2 = addAccountWithBalance($USER2_ID, 5555.55);
-	$acc3 = addAccountWithBalance($USER2_ID, 7777.77);
+	$acc1 = addAccountWithBalance($USER1_ID, 2000.00);
+	$acc2 = addAccountWithBalance($USER2_ID, 100000.00);
+	$acc3 = addAccountWithBalance($USER2_ID, 8000.00);
 
 	if ($debug) print "Accounts: $acc1, $acc2, $acc3<br>";
 
@@ -451,6 +451,16 @@ function checkTAN($accountid, $tan) {
 
 }
 
+// currently unused
+function testTransaction($source_account, $destination_account, $amount, $description, $tan, $expected_outcome) {
+
+	if (processTransaction($source_account, $destination_account, $amount, $description, $tan) == $expected_outcome) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 function addTestTransactions() {
 
 	//function processTransaction($src, $dest, $amount, $desc, $tan)
@@ -477,37 +487,50 @@ function addTestTransactions() {
 		if ($debug) print "Added transaction NR $result (DESC: $DESC)<br>";
 	} else {
 		print "Could not add transaction with DESC: $DESC<br>";
+		return false;
 	}
 
 	$TEMP = $SRCACC;
 	$SRCACC = $DSTACC;
 	$DSTACC = $TEMP;
 
-	$DESC   = $TESTPREFIX . '_DESC' . 2;
-	$result = processTransaction($SRCACC, $DSTACC, 10000, $DESC, $USER2_TESTTAN);
+//	$DESC   = $TESTPREFIX . '_DESC' . 2;
+//	$result = processTransaction($SRCACC, $DSTACC, 5000, $DESC, $USER2_TESTTAN);
+//
+//    if ($result != false) {
+//		if ($debug) print "Added transaction NR $result (DESC: $DESC)<br>";
+//    } else {
+//		print "Could not add transaction with DESC: $DESC<br>";
+//		return false;
+//    }
+//
+//	$DESC   = $TESTPREFIX . '_DESC' . 3;
+//	$result = processTransaction($SRCACC, '123', 10000, $DESC, $USER2_TESTTAN2);
+//
+//    if ($result == false) {
+//		if ($debug) print "Transaction DESC: $DESC with duplicate TAN successfully denied!<br>";
+//    } else {
+//		print "Could add transaction with duplicate TAN with DESC: $DESC<br>";
+//		return false;
+//    }
+//
+//	$DESC   = $TESTPREFIX . '_DESC' . 4;
+//	$result = processTransaction($SRCACC, $DSTACC, 20000, $DESC, $USER2_TESTTAN2);
+//
+//    if ($result != false) {
+//		if ($debug) print "Transaction DESC: $DESC successfully added<br>";
+//    } else {
+//		print "Could not add transaction with DESC: $DESC<br>";
+//		return false;
+//	}
+
+	$result = processTransaction($SRCACC, $DSTACC, -5000, $DESC, $USER2_TESTTAN2);
 
     if ($result != false) {
-		if ($debug) print "Added transaction NR $result (DESC: $DESC)<br>";
+		print "Added transaction NR $result (DESC: $DESC SRC: $SRCACC DST: $DSTACC AMT: 5000).<br>";
     } else {
-		print "Could not add transaction with DESC: $DESC<br>";
-    }
-
-	$DESC   = $TESTPREFIX . '_DESC' . 3;
-	$result = processTransaction($SRCACC, '123', 10000, $DESC, $USER2_TESTTAN2);
-
-    if ($result == false) {
-		if ($debug) print "Transaction NR $result (DESC: $DESC) successfully denied!<br>";
-    } else {
-		print "Could add transaction with duplicate TAN with DESC: $DESC<br>";
-    }
-
-	$DESC   = $TESTPREFIX . '_DESC' . 4;
-	$result = processTransaction($SRCACC, $DSTACC, 10000, $DESC, $USER2_TESTTAN2);
-
-    if ($result != false) {
-		if ($debug) print "Added transaction NR $result (DESC: $DESC)<br>";
-    } else {
-		print "Could not add transaction with DESC: $DESC<br>";
+		print "Could not add transaction with (DESC: $DESC SRC: $SRCACC DST: $DSTACC AMT: 5000)<br>";
+		return false;
     }
 }
 
@@ -526,23 +549,25 @@ function checkForTestTransactions() {
 	$trans4 = getAccountTransactions($USER2_ACCOUNTID, 'FROM');
 
 	if ($debug) {
+		print "<br><br>TRANS1";
 		var_dump($trans1);
-		print "<br><br>";
+		print "<br><br>TRANS2";
 		var_dump($trans2);
-		print "<br><br>";
+		print "<br><br>TRANS3";
 		var_dump($trans3);
-		print "<br><br>";
+		print "<br><br>TRANS4";
 		var_dump($trans4);
 	}
 
-	if (sizeof($trans1) != 3) return false;
+	if (sizeof($trans1) != 4) return false;
 	if (sizeof($trans2) != 4) return false;
 
 	if (sizeof($trans3) != 2) return false;
 	if (sizeof($trans4) != 2) return false;
 
 	$pend1 = getPendingTransactions();
-	if (sizeof($pend1) != 2) return false;
+
+	if (sizeof($pend1) != 1) return false;
 
 	$mytrans = getTransaction($pend1[0]['id']);
 	if (!isset($mytrans['id'])) return false;
@@ -575,7 +600,7 @@ function approveTransactions() {
 	$transaction_id2 = $transaction2['id'];
 	
 	if (! approvePendingTransaction($USER1_ID, $transaction_id1)) {return false;};
-	if (! rejectPendingTransaction($USER1_ID, $transaction_id2)) {return false;};
+	//TODO: if (! approvePendingTransaction($USER1_ID, $transaction_id2)) {return false;};
 
 	$transactions2 = getPendingTransactions();
 

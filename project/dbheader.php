@@ -90,8 +90,8 @@ function printDebugResult($function, $sql, $result) {
 
 	if ($debug) {
 
-		$format = "<span style=\"color: green; font-weight: bold;\">" .
-			$function . "</span> ($sql) - <span style=\"color: blue; font-weight: bold\">Result: ";
+		$format = "<span style=\"color: orange; font-weight: bold;\">" .
+			$function . "</span>(<span style=\"color: green;\">$sql)</span>) - <span style=\"color: blue; font-weight: bold\">Result: ";
 
 		if (is_array($result)) {
 			print "<br>" . $format;

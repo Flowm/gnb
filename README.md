@@ -19,7 +19,9 @@ The following steps are required to use the gnb application:
 * Connect to the sql server:
 	```mysql -u samurai -p```
 * Drop the database, and import the schema and the dummydata:
-	```drop database gnbdb; source database/gnbdb_create.sql; source database/dummydata.sql;```
+	```drop database gnbdb; source database/gnbdb_create.sql;```
+* Create the default accounts by opening the following website:
+	http://frcy.org:2280/gnb-alex/database/setup.php
 
 ### Bulk transaction processing
 * Go to the project/lib/ctransact folder within the project

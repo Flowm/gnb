@@ -40,6 +40,9 @@ removeTestAccounts();
 removeTestUsers();
 
 
+
+
+
 test('Adding test users', addTestUsers(), true);
 test('Checking users', checkForTestUsers(), true);
 // Check if duplicate users are prohibited
@@ -633,6 +636,10 @@ function removeTestTransactions() {
 	global $TESTPREFIX;
 
 	executeSetStatement('DELETE FROM transaction WHERE destination_account_id IN (
+							SELECT id FROM account WHERE user_id IN (
+								SELECT id FROM user WHERE first_name LIKE "%' . $TESTPREFIX . '%"))');
+
+	executeSetStatement('DELETE FROM transaction WHERE source_account_id IN (
 							SELECT id FROM account WHERE user_id IN (
 								SELECT id FROM user WHERE first_name LIKE "%' . $TESTPREFIX . '%"))');
 }

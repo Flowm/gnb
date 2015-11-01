@@ -220,7 +220,17 @@ function getEmployee($employee_ID)
 	return getUser($employee_ID, 'employee') ;
 }
 
-function getUserBySurname($user_surname)
+function getClientsByName($name)
+{
+	return getUsersByName($name, 'client');
+}
+
+function getEmployeesByName($name)
+{
+	return getUsersByName($name, 'employee');
+}
+
+function getUsersByName($name, $role_filter)
 {
 	global $USER_TABLE_NAME;
 	global $USER_TABLE_KEY;
@@ -230,6 +240,9 @@ function getUserBySurname($user_surname)
 	global $USER_TABLE_EMAIL;
 	global $USER_TABLE_STATUS;
 	global $USER_TABLE_APPROVER;
+	global $USER_ROLES;
+
+	$role = $USER_ROLES[$role_filter];
 
 	$SQL_STATEMENT	= "
 	SELECT
@@ -242,7 +255,12 @@ function getUserBySurname($user_surname)
 		$USER_TABLE_APPROVER
 	FROM $USER_TABLE_NAME
 	WHERE
-		$USER_TABLE_LASTNAME LIKE '%$user_surname%'
+		(
+			$USER_TABLE_FIRSTNAME LIKE '%$name%'
+			OR
+			$USER_TABLE_LASTNAME LIKE '%$name%'
+		) AND
+			$USER_TABLE_ROLE = '$role'
 	";
 
     $result = executeSelectStatement($SQL_STATEMENT);

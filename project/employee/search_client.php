@@ -16,9 +16,9 @@ $json = file_get_contents('php://input');
 
 if ($json != null) {
     $search = json_decode($json, true);
-    if (isset($search['surname'])) {
-        //query by surname
-        $search = getUserBySurname($search['surname']);
+    if (isset($search['name'])) {
+        //query by name
+        $search = getClientsByName($search['name']);
         $result = array();
         for ($i=0; $i < count($search); $i++) {
             $user = new user($search[$i]);

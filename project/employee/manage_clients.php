@@ -11,10 +11,10 @@
 <form>
     <div class="simple-container-no-bounds simpleTextBig">
         <label for="search_by_type">Search by </label> <select class="select-bar" id="search_by_type" onchange="clearSearchField()">
-            <option value="surname" selected>Surname</option>
+            <option value="name" selected>Name</option>
             <option value="id">ID</option>
         </select>
-        <label for="search_field">Search for: </label><input type="text" name="surname" id="search_field" placeholder="Search"><br>
+        <label for="search_field">Search for: </label><input type="text" name="name" id="search_field" placeholder="Search"><br>
     </div>
     <div class="button-container">
         <button class="simpleButton" type="button" onclick="searchForClients()">Search</button>

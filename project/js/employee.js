@@ -75,7 +75,12 @@ function searchForClients() {
 }
 
 function displaySearchResults(result) {
-    var clients = JSON.parse(result);
+	var clients = [];
+	try {
+		clients = JSON.parse(result);
+	} catch(err) {
+		;
+	}
 
     //Clearing search field
     var searchField = document.getElementById("search_field");

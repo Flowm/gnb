@@ -86,7 +86,7 @@ int process_transaction(char* src, struct transactstr transtr) {
 	t.desc   = &transtr.buffer[transtr.offset[2]];
 	t.tan    = &transtr.buffer[transtr.offset[3]];
 	t.ap_ok = 0;
-	printf("Processing transaction: SRC=%s DST=%s, AMOUNT=%s, DESC=%s, TAN=%s\n", t.src, t.dst, t.sum, t.desc, t.tan);
+	printf("Processing: DST=%s, AMOUNT=%s, DESC=%s, TAN=%s\n", t.dst, t.sum, t.desc, t.tan);
 
 	// Check numerical fields for validity
 	if (parse_number(t.src, 0) < 10000000) {

@@ -10,19 +10,25 @@ if (empty($_SESSION["account_id"]))
 $account_id = $_SESSION["account_id"];
 if (isset($_FILES['transactionsCSV'])) {
 	$file = $_FILES['transactionsCSV'];
+	$name = $file['name'];
 
-	$file_ext = strtolower(end(explode('.',$file['name'])));
+	$file_arr = explode('.',$name);
+	$file_ext = strtolower(array_pop($file_arr));
 	$allowed_ext = array("txt","csv");
 	if (in_array($file_ext, $allowed_ext) === false) {
-		echo "<div id='fail'>FILEUPLOAD FAILED</div>";
+		echo "<div id='fail'>Fileupload failed</div>";
 	}
 
 	$target_file = getPageAbsolute("uploads") . basename($file["name"]);
-	$target_file = getPageAbsolute("cparser");
+	$ctransact = getPageAbsolute("ctransact");
 	if (move_uploaded_file($file['tmp_name'], $target_file)) {
-		echo "<div id='success'>FILEUPLOAD SUCCESSFUL</div>";
-		$cmdln = "./ $ . ' ' . $targetname . ";
-		//$cmd = shell_exec( $cmdln); 
+		echo "<div id='success'>Fileupload successful<br />";
+		$cmdln = "$ctransact '$account_id' '$target_file'";
+		exec($cmdln, $cmdout);
+		foreach ($cmdout as $line) {
+			echo $line . "<br/>";
+		}
+		echo "</div>";
 	}
 }
 

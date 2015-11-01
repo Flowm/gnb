@@ -71,11 +71,12 @@ if (!$result) {
     header("Location:".getPageURL('registration').$error);
     exit();
 }
+$gnbmailer = new GNBMailer();
+$gnbmailer->sendMail_Registration($email, "$firstname $lastname");
 
 $logo_svg = getMedia('logo_svg'); //GNB logo
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

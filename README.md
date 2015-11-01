@@ -13,6 +13,8 @@ The following steps are required to use the gnb application:
 ### Initialize git submodules
 * Go into the directory of the project
 	```git submodule init && git submodule update```
+* Fix permissions of the upload folder
+	```sudo chown www-data:www-data -R project/uploads```
 
 ### Database setup
 * Go into the directory of the project

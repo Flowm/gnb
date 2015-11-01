@@ -28,10 +28,10 @@ class GNBMailer {
 		$this->mail->SmtpClose();
 
 		if ( $this->mail->IsError() ) {
-			echo "ERROR<br />$mail->ErrorInfo<br />";
+			echo "<p class='simpleTextBig simple-text-centered'>Operation failed:<br />$mail->ErrorInfo</p><br />";
 			return 1;
 		} else {
-			echo "OK<br /><br />";
+			echo "<p class='simpleTextBig simple-text-centered'>Operation was successful</p><br />";
 			return 0;
 		}
 	}

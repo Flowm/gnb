@@ -52,7 +52,7 @@ if (count($newUsers) == 0) {
         $role = array_search($user->role, $USER_ROLES);
         echo "<tr class='tbody-row-default'>
             <td class='td-default'><input type='checkbox' name='action_check' id='$user->id:$role'>
-                <label for='$user->id'><span></span></label></td>
+                <label for='$user->id:$role'><span></span></label></td>
             <td class='td-default'>$user->firstname</td>
             <td class='td-default'>$user->lastname</td>
             <td class='td-default'>$user->email</td>";

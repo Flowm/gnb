@@ -34,7 +34,7 @@ $pages["awesome"] = "awesome_data.php";
 
 $pages["drawfunctions"] = "drawfunctions.php";
 $pages["fpdf"] = "lib/fpdf/fpdf.php";
-$pages["cparser"] = "lib/cparser/cparser";
+$pages["ctransact"] = "lib/ctransact/ctransact";
 $pages["uploads"] = "uploads/";
 
 //SECTIONS (each section is triggered by a button)

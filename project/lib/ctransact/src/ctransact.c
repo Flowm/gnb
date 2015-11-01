@@ -134,8 +134,23 @@ int gnb_mysql_do_transaction(struct transaction t) {
 	if (gnb_mysql_do_query(query, &result, &numrows)) {
 		goto rollback;
 	}
+	if (numrows != 1)
+		goto rollback;
 	row = mysql_fetch_row(result);
 	snprintf(t.time, MAX_TINFO_LEN, "%s", row[0]);
+	mysql_free_result(result);
+
+	// Check balance
+	snprintf(query, MAX_QUERY_LEN, "SELECT balance "
+		"FROM account_overview "
+		"WHERE id = '%s' "
+		"AND balance > %s", t.src, t.sum);
+	MDBG printf("QUERY: %s\n", query);
+	if (gnb_mysql_do_query(query, &result, &numrows)) {
+		goto rollback;
+	}
+	if (numrows != 1)
+		goto rollback;
 	mysql_free_result(result);
 
 	// Mark TAN as used
@@ -148,6 +163,8 @@ int gnb_mysql_do_transaction(struct transaction t) {
 	if (gnb_mysql_do_query(query, &result, &numrows)) {
 		goto rollback;
 	}
+	if (numrows != 1)
+		goto rollback;
 	mysql_free_result(result);
 
 	// Automatically approve transactions below 10000
@@ -186,6 +203,8 @@ int gnb_mysql_do_transaction(struct transaction t) {
 	if (gnb_mysql_do_query(query, &result, &numrows)) {
 		goto rollback;
 	}
+	if (numrows != 1)
+		goto rollback;
 	mysql_free_result(result);
 
 	// COMMIT MySQL transaction

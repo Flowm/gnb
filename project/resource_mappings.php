@@ -50,6 +50,7 @@ $frames["account_home"] = "accounts/account_overview.php";
 $frames["new_transaction"] = "accounts/new_transaction.php";
 $frames["new_transaction_multiple"] = "accounts/new_transaction_multiple.php";
 $frames["transaction_history"] = "accounts/transaction_history.php";
+$frames["verify_transaction"] = "accounts/verify_transaction.php";
 
 $media = array();
 $media["logo_svg"] = "media/gnb_logo.svg";

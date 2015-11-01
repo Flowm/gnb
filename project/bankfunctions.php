@@ -106,7 +106,7 @@ function getUserBySurname($user_surname)
 		$USER_TABLE_APPROVER
 	FROM $USER_TABLE_NAME
 	WHERE
-		$USER_TABLE_LASTNAME LIKE '$user_surname'
+		$USER_TABLE_LASTNAME LIKE '%$user_surname%'
 	";
 
     $result = executeSelectStatement($SQL_STATEMENT);
@@ -761,10 +761,11 @@ function loginUser($user_mail, $user_password) {
 }
 
 # need to test MN 
-function verifyTransaction($account_id, $dest_code, $amount , $description , $tan_code )
+function verifyTransaction($account_id, $dest_code, $amount, $description, $tan_code)
 {
 	global $ACCOUNTOVERVIEW_TABLE_NAME;
 	global $ACCOUNTOVERVIEW_TABLE_KEY;
+
 	$var_res = array (
 		"result"	=> false,
 		"message"	=> "[Default] No test has been completed"
@@ -780,7 +781,7 @@ function verifyTransaction($account_id, $dest_code, $amount , $description , $ta
 	
 	# checking account ID 
 	if (sizeof($account_info) == 0 ){
-		$var_res["message"]	= '[Account] account not found' ;
+		$var_res["message"]	= '[Account] Account not found' ;
 		return $var_res ; 
 	}
 	
@@ -801,10 +802,11 @@ function verifyTransaction($account_id, $dest_code, $amount , $description , $ta
 		return $var_res ; 
 	}
  
-	# Add check for TAN Codes   
+	# Add check for TAN Codes
+	$var_res["result"] = true;
 	$var_res["message"]	= '[Success] Passed all tests' ;
+
 	return $var_res ; 
-	 	
 }
 
 # need to test MN 

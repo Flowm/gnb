@@ -25,3 +25,20 @@ function uploadFile() {
     }
     form.submit();
 }
+
+function verifyTransaction() {
+    var form = document.getElementById('transactionForm');
+    form.setAttribute("action", window.location.href);
+    var params = {section:"my_accounts", frame:"verify_transaction"};
+    for (var key in params) {
+        if (params.hasOwnProperty(key)) {
+            var hiddenfield = document.createElement("input");
+            hiddenfield.setAttribute("type","hidden");
+            hiddenfield.setAttribute("name", key);
+            hiddenfield.setAttribute("value", params[key]);
+
+            form.appendChild(hiddenfield);
+        }
+    }
+    form.submit();
+}

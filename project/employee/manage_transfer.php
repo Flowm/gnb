@@ -20,14 +20,12 @@ if (isset($_POST['action']) && isset($_POST['transactions'])) {
         transaction::approveTransactions($requests, $approver_id);
     }
     else if ($action == 'rejectTransfer') {
-        //TODO: Decide if we want to handle user rejections
+
     }
 
 }
-elseif (isset($_POST['reject_transfers'])) {
-    //STILL NEED TO IMPLEMENT IT
-}
 
+//Once request operations have been handled, be get the list of pending transactions and display it
 $data = getPendingTransactions();
 $transactions = array();
 if ($data != null) {
@@ -36,7 +34,7 @@ if ($data != null) {
     }
 }
 
-//IN CASE WE HAVE NO PENDING TRANSFERS
+//In case we have no pending transactions
 if (count($transactions) == 0) {
     echo "<p>There currently are no pending transfer requests</p>";
     exit();
@@ -53,8 +51,7 @@ if (count($transactions) == 0) {
         <th>Destination Account</th>
         <th>Creation date</th>
         <th>Amount</th>
-        <th>Description</th>
-        <th>Details</th>
+        <th></th>
     </tr>
     <?php
     foreach ($transactions as $transaction) {
@@ -64,7 +61,6 @@ if (count($transactions) == 0) {
             <td>$transaction->dst</td>
             <td>$transaction->creation_date</td>
             <td>$transaction->amount</td>
-            <td>$transaction->description</td>
             <td><button type='button' onclick='goToTransferDetails($transaction->id)'>Details</button></td>
         </tr>";
     }

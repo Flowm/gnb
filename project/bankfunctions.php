@@ -84,17 +84,30 @@ function getEmployee($employee_ID)
 	return getUser($employee_ID, 'employee') ;
 }
 
-function getClientBySurname($client_surname)
+function getUserBySurname($user_surname)
 {
-    global $USER_TABLE_NAME;
-    global $USER_TABLE_LASTNAME;
+	global $USER_TABLE_NAME;
+	global $USER_TABLE_KEY;
+	global $USER_TABLE_ROLE;
+	global $USER_TABLE_FIRSTNAME;
+	global $USER_TABLE_LASTNAME;
+	global $USER_TABLE_EMAIL;
+	global $USER_TABLE_STATUS;
+	global $USER_TABLE_APPROVER;
 
-    $SQL_STATEMENT = "
-        SELECT *
-        FROM $USER_TABLE_NAME
-        WHERE
-            $USER_TABLE_LASTNAME = '$client_surname'
-    ";
+	$SQL_STATEMENT	= "
+	SELECT
+		$USER_TABLE_KEY,
+		$USER_TABLE_FIRSTNAME,
+		$USER_TABLE_LASTNAME,
+		$USER_TABLE_EMAIL,
+		$USER_TABLE_STATUS,
+		$USER_TABLE_ROLE,
+		$USER_TABLE_APPROVER
+	FROM $USER_TABLE_NAME
+	WHERE
+		$USER_TABLE_LASTNAME LIKE '$user_surname'
+	";
 
     $result = executeSelectStatement($SQL_STATEMENT);
 
@@ -768,13 +781,13 @@ function getAccountDetails($account_ID)
 	
 	$SQL_STATEMENT	= "
 		SELECT 
-			$ACCOUNTOVERVIEW_TABLE_KEY		\"Account ID\",
-			$ACCOUNTOVERVIEW_TABLE_BALANCE	\"Current Balance\"
+			$ACCOUNTOVERVIEW_TABLE_KEY,
+			$ACCOUNTOVERVIEW_TABLE_BALANCE
 		FROM $ACCOUNTOVERVIEW_TABLE_NAME
 		WHERE $ACCOUNTOVERVIEW_TABLE_KEY 	= '$account_ID'
 	" ;
 	
-	$result	= executeSelectStatement($SQL_STATEMENT) ; 
+	$result	= executeSelectStatementOneRecord($SQL_STATEMENT) ;
 	#var_dump($result) ; 
 	#var_dump($SQL_STATEMENT) ; 
 	return $result ; 
@@ -898,7 +911,7 @@ function getAccountOwnerFromID($account_id){
 			AND b.$ACCOUNT_TABLE_KEY		= '$account_id'
 	" ;
 	
-	$result 	= executeSelectStatement($SQL_STATEMENT) ;
+	$result 	= executeSelectStatementOneRecord($SQL_STATEMENT);
 	return $result ;
 }
 

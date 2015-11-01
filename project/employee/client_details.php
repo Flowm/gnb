@@ -12,7 +12,7 @@ require_once getpageabsolute("user");
 
 $user = null;
 if (isset($_POST['client_id'])) {
-    $search = getClientDetails($_POST['client_id']);
+    $search = getUser($_POST['client_id']);
     $user = new user($search);
 }
 
@@ -59,7 +59,7 @@ $selected = (count($accounts) > 0) ? $accounts[0] : null;
     ?>
 </table>
 <br>
-<p>Current selected account is <?php echo $selected->id ?></p>
+<p>Current selected account is <?php echo ($selected != null) ? $selected->id : "" ?></p>
 <label for="account_select">Select a different account: </label><select id="account_select">
     <!-- Still need some onclick JS here-->
     <?php

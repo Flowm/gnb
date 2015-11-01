@@ -3,7 +3,6 @@
 require_once __DIR__."/../resource_mappings.php";
 require_once getPageAbsolute("db_functions");
 require_once getPageAbsolute("mail");
-
 require_once getPageAbsolute("account");
 
 class user {
@@ -64,7 +63,7 @@ class user {
 
 	public function approve($approver_id) {
 		if ($this->role == '0') {
-			if (approveClient($approver_id, $this->id) || true) {
+			if (approveClient($this->id, $approver_id) || true) {
 				$balance = rand(100,1000);
 				$account_id = addAccountWithBalance($this->id, $balance);
 				$account = new account(array('id'=>$account_id));
@@ -83,7 +82,23 @@ class user {
 		return false;
 	}
 
-	public static function approveRegistrations($requests, $approver_id) {
+    public function reject($denier_id) {
+        if ($this->role == '0') {
+            if (rejectClient($this->id, $denier_id) || true) {
+                //DO SOMETHING IN CASE OF REJECTION?!
+                return true;
+            }
+        }
+        else if($this->role == '1') {
+            if (rejectEmployee($this->id, $denier_id) || true) {
+                //DO SOMETHING IN CASE OF REJECTION?!
+                return true;
+            }
+        }
+        return false;
+    }
+
+	public static function approveRegistrations($requests, $employee_id) {
 		$requests = explode(";",$requests);
 		foreach ($requests as $request) {
 			$exploded = explode(":",$request);
@@ -94,10 +109,30 @@ class user {
 				return false;
 			}
 			$user = new user($data);
-			$result = $user->approve($approver_id);
+			$result = $user->approve($employee_id);
 			if (!$result) {
 				//TODO: handle registration error
 			}
 		}
+        return true;
 	}
+
+    public static function rejectRegistrations($requests, $employee_id) {
+        $requests = explode(";",$requests);
+        foreach ($requests as $request) {
+            $exploded = explode(":",$request);
+            $id = $exploded[0];
+            $role = $exploded[1];
+            $data = getUser($id,$role);
+            if (!$data) {
+                return false;
+            }
+            $user = new user($data);
+            $result = $user->reject($employee_id);
+            if (!$result) {
+                //TODO: handle registration error
+            }
+        }
+        return true;
+    }
 }

@@ -13,7 +13,7 @@ To obtain details about a client, please look him up here: <br>
         <option value="surname" selected>Surname</option>
         <option value="id">ID</option>
     </select>
-    <label for="search_field">Search for: </label><input type="text" name="surname" id="search_field"><br>
+    <label for="search_field">Search for: </label><input type="text" name="surname" id="search_field" placeholder="Search"><br>
     <button type="button" onclick="searchForClients()">Search</button>
 </form>
 

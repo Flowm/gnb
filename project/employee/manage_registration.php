@@ -13,7 +13,7 @@ if (isset($_POST['action']) && isset($_POST['users'])) {
     if ($action == "approveRegistration") {
         user::approveRegistrations($requests, $approver_id);
     } elseif ($action == "rejectRegistration") {
-        //TODO: Decide if we want to handle user rejections
+
     }
 }
 

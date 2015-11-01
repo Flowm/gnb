@@ -68,6 +68,7 @@ function searchForClients() {
     var searchField = document.getElementById("search_field");
     var json = Object();
     json[type] = searchField.value;
+    //We actually send a post parameter, in which the value is the json object itself
     performSimpleAjaxRequest(JSON.stringify(json), "search_client.php", displaySearchResults);
 }
 
@@ -110,7 +111,7 @@ function displaySearchResults(result) {
         row.insertCell(3).innerHTML = client['email'];
         row.insertCell(4).innerHTML = client['status'];
         row.insertCell(5).innerHTML = client['role'];
-        row.insertCell(6).innerHTML = "<button onclick='goToManageClient("+client['id']+")'>Details</button>";
+        row.insertCell(6).innerHTML = "<button onclick='goToClientDetails("+client['id']+")'>Details</button>";
     }
 }
 
@@ -122,8 +123,8 @@ function checkAllBoxes() {
     }
 }
 
-function goToManageClient(clientId) {
-    var params = {section:"employee_area", frame:"manage_client", client_id:clientId};
+function goToClientDetails(clientId) {
+    var params = {section:"employee_area", frame:"client_details", client_id:clientId};
     return performPostRequest("employee.php",params);
 }
 

@@ -10,6 +10,6 @@ function performSimpleAjaxRequest(value, target, handler) {
         }
     };
     xmlhttp.open("POST", target, true);
-    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.send(value);
 }

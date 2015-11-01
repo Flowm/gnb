@@ -19,4 +19,5 @@ The following steps are required to use the gnb application:
 
 ### Bulk transaction processing
 * Go to the project/lib/ctransact folder within the project
+* Ensure the `libmysqlclient-dev` package is installed for the mysql connection to the database
 * Execute `make`

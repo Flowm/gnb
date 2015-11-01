@@ -20,9 +20,8 @@ if (isset($_POST['action']) && isset($_POST['transactions'])) {
         transaction::approveTransactions($requests, $approver_id);
     }
     else if ($action == 'rejectTransfer') {
-
+        transaction::rejectTransactions($requests, $approver_id);
     }
-
 }
 
 //Once request operations have been handled, be get the list of pending transactions and display it
@@ -42,38 +41,45 @@ if (count($transactions) == 0) {
 
 ?>
 
-<p>There are <?php count($transactions) ?> pending transfer requests awaiting your approval</p>
+<p class="simpleTextBig">There are <?php count($transactions) ?> pending transfer requests awaiting your approval</p>
 
-<table>
-    <tr>
-        <th></th>
-        <th>Source Account</th>
-        <th>Destination Account</th>
-        <th>Creation date</th>
-        <th>Amount</th>
-        <th></th>
+<table class="table-default">
+    <thead>
+    <tr class="thead-row-default">
+        <th class='th-default'></th>
+        <th class='th-default'>Source Account</th>
+        <th class='th-default'>Destination Account</th>
+        <th class='th-default'>Creation date</th>
+        <th class='th-default'>Amount</th>
+        <th class='th-default'></th>
     </tr>
+    </thead>
+    <tbody>
     <?php
     foreach ($transactions as $transaction) {
-        echo "<tr>
-            <td><input type='checkbox' name='action_check' id='$transaction->id'></td>
-            <td>$transaction->src</td>
-            <td>$transaction->dst</td>
-            <td>$transaction->creation_date</td>
-            <td>$transaction->amount</td>
-            <td><button type='button' onclick='goToTransferDetails($transaction->id)'>Details</button></td>
+        echo "<tr class='tbody-row-default'>
+            <td class='td-default'><input type='checkbox' name='action_check' id='$transaction->id'>
+                <label for='$transaction->id'><span></span></label></td>
+            <td class='td-default'>$transaction->src</td>
+            <td class='td-default'>$transaction->dst</td>
+            <td class='td-default'>$transaction->creation_date</td>
+            <td class='td-default'>$transaction->amount</td>
+            <td class='td-default'>
+            <button type='button' class='table-button' onclick='goToTransferDetails($transaction->id)'>Details</button>
+            </td>
         </tr>";
     }
     ?>
+    </tbody>
 </table>
-<table>
-    <tr>
-        <td><input type="checkbox" id="selectAll_check" onclick="checkAllBoxes()">
-            <label for="selectAll_check">Select/deselect all</label></td>
-    </tr>
-</table>
+<div class="select-all-container">
+    <input type="checkbox" id="selectAll_check" onclick="checkAllBoxes()">
+    <label for="selectAll_check"><span></span>Select/deselect all</label>
+</div>
 
 
-<p>What should be done with the selected transfer requests?</p>
-<button type="button" onclick="approveTransfer()">Approve</button>
-<button type="button" onclick="rejectTransfer()">Reject</button>
+<p class="simpleTextBig simple-text-centered">What should be done with the selected transfer requests?</p>
+<div class="button-container">
+    <button type="button" class="simpleButton" onclick="approveTransfer()">Approve</button>
+    <button type="button" class="simpleButton" onclick="rejectTransfer()">Reject</button>
+</div>

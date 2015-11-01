@@ -30,67 +30,79 @@ $receiver = new user($data);
 
 ?>
 
-<button type="button" onclick="goToEmployeeArea('manage_transfer')">Back</button><br>
+<!--<button type="button" onclick="goToEmployeeArea('manage_transfer')">Back</button><br>-->
 <div id="transaction_info">
-    <span><b>Transaction</b></span>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Amount</th>
-            <th>Description</th>
-            <th>Creation Date</th>
+    <p class="simpleTextBig"><b>Transaction</b></p>
+    <table class="table-default">
+        <thead>
+        <tr class="thead-row-default">
+            <th class="th-default">ID</th>
+            <th class="th-default">Amount</th>
+            <th class="th-default">Description</th>
+            <th class="th-default">Creation Date</th>
         </tr>
+        </thead>
+        <tbody>
         <?php
-        echo "<tr>
-            <td>$transaction->id</td>
-            <td>$transaction->amount</td>
-            <td>$transaction->description</td>
-            <td>$transaction->creation_date</td>
+        echo "<tr class='tbody-row-default'>
+            <td class='td-default'>$transaction->id</td>
+            <td class='td-default'>$transaction->amount</td>
+            <td class='td-default'>$transaction->description</td>
+            <td class='td-default'>$transaction->creation_date</td>
         </tr>";
         ?>
+        </tbody>
     </table>
 </div>
 
 <div id="sender_info">
-    <span><b>Sender</b></span>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Account ID</th>
+    <p class="simpleTextBig"><b>Sender</b></p>
+    <table class="table-default">
+        <thead>
+        <tr class="thead-row-default">
+            <th class="th-default">ID</th>
+            <th class="th-default">Name</th>
+            <th class="th-default">Email</th>
+            <th class="th-default">Account ID</th>
         </tr>
+        </thead>
+        <tbody>
+        <?php
+        echo "<tr class='tbody-row-default'>
+            <td class='td-default'>$sender->id</td>
+            <td class='td-default'>$sender->firstname $sender->lastname</td>
+            <td class='td-default'>$sender->email</td>
+            <td class='td-default'>$srcAccount->id</td>
+        </tr>";
+        ?>
+        </tbody>
     </table>
-    <?php
-    echo "<tr>
-        <td>$sender->id</td>
-        <td>$sender->firstname $sender->lastname</td>
-        <td>$sender->email</td>
-        <td>$srcAccount->id</td>
-    </tr>";
-    ?>
 </div>
 <div id="receiver_info">
-    <span><b>Receiver</b></span>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Account ID</th>
+    <p class="simpleTextBig"><b>Receiver</b></p>
+    <table class="table-default">
+        <thead>
+        <tr class="thead-row-default">
+            <th class="th-default">ID</th>
+            <th class="th-default">Name</th>
+            <th class="th-default">Email</th>
+            <th class="th-default">Account ID</th>
         </tr>
+        </thead>
+        <tbody>
+        <?php
+        echo "<tr class='tbody-row-default'>
+            <td class='td-default'>$receiver->id</td>
+            <td class='td-default'>$receiver->firstname $receiver->lastname</td>
+            <td class='td-default'>$sender->email</td>
+            <td class='td-default'>$dstAccount->id</td>
+        </tr>"
+        ?>
+        </tbody>
     </table>
-    <?php
-    echo "<tr>
-        <td>$receiver->id</td>
-        <td>$receiver->firstname $receiver->lastname</td>
-        <td>$sender->email</td>
-        <td>$dstAccount->id</td>
-    </tr>"
-    ?>
 </div>
 
-<div class="buttonContainer">
+<div class="button-container">
     <input type="hidden" id="<?php echo $transaction->id ?>" name="action_check" checked>
     <button type="button" class="simpleButton" onclick="approveTransfer()">Approve Transaction</button>
     <button type="button" class="simpleButton" onclick="rejectTransfer()">Reject Transaction</button>

@@ -20,14 +20,17 @@ if ($role != "employee") {
     exit();
 }
 
-$logo_svg = getMedia('logo_svg');
+$logo_svg = getMedia('logo_svg'); //GNB logo
 
 $page = getPageAbsolute('employee'); //static
 
 $section = getSectionAbsolute('employee_home'); //static default
+$sectionKey = 'employee_overview';
 if (isset($_POST["section"])) {
-    $section = getSectionAbsolute($_POST["section"]);
+    $sectionKey = $_POST["section"];
+    $section = getSectionAbsolute($sectionKey);
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -46,9 +49,27 @@ if (isset($_POST["section"])) {
 <div class="nav-container nav-default">
     <div class="nav-bar">
         <ul class="nav-button-bar nav-left">
-            <li class="nav-button nav-left" onclick="goToOverview()"><a class="nav-button-inner">Overview</a></li>
-            <li class="nav-button nav-left" onclick="goToEmployeeArea()"><a class="nav-button-inner">Employee Area</a></li>
-            <li class="nav-button nav-left" onclick="goToMyAccounts()"><a class="nav-button-inner">My Accounts</a></li>
+            <li class="nav-button <?php
+                if ($sectionKey != null && $sectionKey == 'employee_overview') {
+                    echo "nav-button-active";
+                }
+                else {
+                    echo "nav-button";
+                } ?> nav-left" onclick="goToOverview()"><a class="nav-button-inner">Overview</a></li>
+            <li class="nav-button <?php
+            if ($sectionKey != null && $sectionKey == 'employee_area') {
+                echo "nav-button-active";
+            }
+            else {
+                echo "nav-button";
+            } ?> nav-left" onclick="goToEmployeeArea()"><a class="nav-button-inner">Employee Area</a></li>
+            <li class="nav-button <?php
+            if ($sectionKey != null && $sectionKey == 'my_accounts') {
+                echo "nav-button-active";
+            }
+            else {
+                echo "nav-button";
+            } ?> nav-left" onclick="goToMyAccounts()"><a class="nav-button-inner">My Accounts</a></li>
         </ul>
         <ul class="nav-button-bar nav-right">
             <li class="nav-button nav-right" onclick="logout()"><a class="nav-button-inner">Logout</a></li>
@@ -72,6 +93,10 @@ if (isset($_POST["section"])) {
         include $section;
     }
     ?>
+    <div class="footerContainer">
+        <hr class="hr-thin">
+        <p class="simpleText simple-text-italic">This is not a real bank. All rights reserved.</p>
+    </div>
 </div>
 </body>
 </html>

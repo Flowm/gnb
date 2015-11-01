@@ -78,13 +78,24 @@ if (!$result) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style/gnb.css">
     <title></title>
 </head>
 <body>
-    <h2>Welcome to the Goliath National Bank!</h2><br>
-    <p>You request has been received and will be processed shortly.
-        A confirmation email will be sent to you shortly.<br>
-        Thank you for choosing the Goliath National Bank!</p>
-    <a href="index.php">Return to Home page</a>
+<div class="mainContainer">
+    <img src="<?php echo $logo_svg ?>" alt="GNB Logo" class="logo_big">
+    <div class="simpleContainer">
+        <h1 class="title2">Welcome to the Goliath National Bank!</h1>
+        <p class="simpleTextBig simple-text-centered">
+            Your request has been received and will be processed shortly.
+            A confirmation email will be sent to you, once your registration has been approved.<br>
+            Thank you for choosing the Goliath National Bank!
+        </p>
+        <h1 class="title3">
+            This is gonna be LEGENDARY!!!
+        </h1>
+        <a href="index.php" class="simpleText simple-text-centered">Return to Home page</a>
+    </div>
+</div>
 </body>
 </html>

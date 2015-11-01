@@ -94,7 +94,7 @@ $logo_svg = getMedia('logo_svg');
                 }
                 ?></span><br>
             </div>
-            <div class="buttonContainer">
+            <div class="button-container">
                 <button type="button" onclick="register()" class="simpleButton">Register</button>
             </div>
         </form>

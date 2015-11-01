@@ -22,12 +22,17 @@ if ($role != "client") {
     exit();
 }
 
+$logo_svg = getMedia('logo_svg'); //GNB logo
+
 $page = getPageAbsolute('client'); //static
 
+$sectionKey = 'client_overview';
 $section = getSectionAbsolute('client_home'); //static default
 if (isset($_POST["section"])) {
-    $section = getSectionAbsolute($_POST["section"]);
+    $sectionKey = $_POST["section"];
+    $section = getSectionAbsolute($sectionKey);
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -42,16 +47,50 @@ if (isset($_POST["section"])) {
     <script type="text/javascript" src="../js/account.js"></script>
 </head>
 <body>
-<h2>Welcome to the Goliath National Bank!</h2><br>
-<h4>Welcome back, <?php echo $_SESSION["firstname"]." ".$_SESSION["lastname"] ?>!</h4><br>
-<div>
-    <button type="button" onclick="goToOverview()">Overview</button>
-    <button type="button" onclick="goToMyAccounts()">My Accounts</button>
-    <button type="button" onclick="logout()">Logout</button>
-</div><br><hr><br>
-<?php
-//We keep the same "button-bar" and include the correct additional section, which contains the actual data
-include $section;
-?>
+<div class="nav-container nav-default">
+    <div class="nav-bar">
+        <ul class="nav-button-bar nav-left">
+            <li class="nav-button <?php
+            if ($sectionKey != null && $sectionKey == 'client_overview') {
+                echo "nav-button-active";
+            }
+            else {
+                echo "nav-button";
+            } ?> nav-left" onclick="goToOverview()"><a class="nav-button-inner">Overview</a></li>
+            <li class="nav-button <?php
+            if ($sectionKey != null && $sectionKey == 'my_accounts') {
+                echo "nav-button-active";
+            }
+            else {
+                echo "nav-button";
+            } ?> nav-left" onclick="goToMyAccounts()"><a class="nav-button-inner">My Accounts</a></li>
+        </ul>
+        <ul class="nav-button-bar nav-right">
+            <li class="nav-button nav-right" onclick="logout()"><a class="nav-button-inner">Logout</a></li>
+        </ul>
+    </div>
+</div>
+<div class="nav-placeholder"></div>
+<div class="mainContainer">
+    <div class="headerContainer">
+        <div class="logoContainer">
+            <img src="<?php echo $logo_svg ?>" alt="GNB Logo" class="logo_small">
+        </div>
+        <div class="welcome-header">
+            <h1 class="title4"><b>Welcome back, <?php echo $_SESSION["firstname"]." ".$_SESSION["lastname"] ?>!</b></h1>
+        </div>
+    </div>
+    <hr class="hr-large">
+    <?php
+    //We keep the same "button-bar" and include the correct additional section, which contains the actual data
+    if ($section != null) {
+        include $section;
+    }
+    ?>
+    <div class="footerContainer">
+        <hr class="hr-thin">
+        <p class="simpleText simple-text-italic">This is not a real bank. All rights reserved.</p>
+    </div>
+</div>
 </body>
 </html>

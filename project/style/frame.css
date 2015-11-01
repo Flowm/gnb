@@ -1,20 +1,17 @@
 .frameContainer {
     width: 1000px;
-    display: inline-table;
+    display: table;
 }
 
 .frameMenu {
-    position: relative;
     display: table-cell;
-    left: 0;
-    top: 10px;
-    width: 300px;
+    vertical-align: top;
+    width: 280px;
 }
 
 .frameContent {
-    position: relative;
+    margin-left: 20px;
     display: table-cell;
-    left: 0;
-    top: 10px;
-    width: 800px;
+    vertical-align: top;
+    width: 100%;
 }

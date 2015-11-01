@@ -1,6 +1,8 @@
 /**
  * Created by lorenzodonini on 17/10/15.
  */
+
+//NAVIGATION FUNCTIONS
 function goToOverview(frame) {
     var params = {section:"employee_overview"};
     if (frame != undefined) {
@@ -79,40 +81,67 @@ function displaySearchResults(result) {
     var searchField = document.getElementById("search_field");
     searchField.value = '';
 
+    var label = document.getElementById("search_results_label");
+    label.innerHTML = '';
+
     var table = document.getElementById("search_results");
+    table.style.visibility = 'visible';
+
     //Clearing the old table
-    while (table.rows != undefined && table.rows.length > 0) {
-        table.deleteRow(0);
+    while (table.firstChild) {
+        table.removeChild(table.firstChild);
     }
 
     //In case we didn't have any results at all
     if (clients.length == 0) {
-        var dummyRow = table.insertRow(0);
-        dummyRow.insertCell(0).innerHTML = 'No results were found!';
+        table.style.visibility = 'hidden';
+        label.innerHTML = 'No results were found';
         return;
     }
 
     //Inserting header
-    var hRow = table.insertRow(0);
-    hRow.insertCell(0).innerHTML = 'ID';
-    hRow.insertCell(1).innerHTML = 'Firstname';
-    hRow.insertCell(2).innerHTML = 'Lastname';
-    hRow.insertCell(3).innerHTML = 'Email';
-    hRow.insertCell(4).innerHTML = 'Status';
-    hRow.insertCell(5).innerHTML = 'Role';
-    hRow.insertCell(6).innerHTML = '';
+    var thead = document.createElement('thead');
+    var hRow = document.createElement('tr');
+    hRow.classList.add('thead-row-default');
+    addHeaderElement(hRow,'ID');
+    addHeaderElement(hRow,'Firstname');
+    addHeaderElement(hRow,'Lastname');
+    addHeaderElement(hRow,'Email');
+    addHeaderElement(hRow,'Status');
+    addHeaderElement(hRow,'Role');
+    addHeaderElement(hRow,'');
+    thead.appendChild(hRow);
+    table.appendChild(thead);
 
+    var tbody = document.createElement('tbody');
     for (var i=0; i<clients.length; i++) {
         var client = clients[i];
-        var row = table.insertRow(table.rows.length);
-        row.insertCell(0).innerHTML = client['id'];
-        row.insertCell(1).innerHTML = client['firstname'];
-        row.insertCell(2).innerHTML = client['lastname'];
-        row.insertCell(3).innerHTML = client['email'];
-        row.insertCell(4).innerHTML = client['status'];
-        row.insertCell(5).innerHTML = client['role'];
-        row.insertCell(6).innerHTML = "<button onclick='goToClientDetails("+client['id']+")'>Details</button>";
+        var row = document.createElement('tr');
+        row.classList.add('tbody-row-default');
+        addRowElement(row, client['id']);
+        addRowElement(row, client['firstname']);
+        addRowElement(row, client['lastname']);
+        addRowElement(row, client['email']);
+        addRowElement(row, client['status']);
+        addRowElement(row, client['role']);
+        addRowElement(row, "<button class='table-button' onclick='goToClientDetails("+client['id']+")'>Details</button>");
+        tbody.appendChild(row);
     }
+    table.appendChild(tbody);
+}
+
+function addHeaderElement(hRow, value) {
+    var hElement = document.createElement('th');
+    hElement.innerHTML = value;
+    hElement.classList.add('th-default');
+    hRow.appendChild(hElement);
+}
+
+function addRowElement(row, value) {
+    var element = document.createElement('td');
+    element.innerHTML = value;
+    element.classList.add('td-default');
+    row.appendChild(element);
 }
 
 function checkAllBoxes() {

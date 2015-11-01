@@ -3,9 +3,11 @@
 require_once __DIR__."/../resource_mappings.php";
 require_once getpageabsolute("db_functions");
 
-$frame = getFrameAbsolute('account_home');
+$frameKey = 'account_overview';
+$frame = getFrameAbsolute('account_home'); //static default
 if (isset($_POST["frame"])) {
-    $frame = getFrameAbsolute($_POST["frame"]);
+    $frameKey = $_POST["frame"];
+    $frame = getFrameAbsolute($frameKey);
 }
 
 if (empty($_SESSION["user_id"]))
@@ -39,19 +41,62 @@ echo	'</select><br>' ;
 ?>
 <div class="frameContainer">
     <div class="frameMenu">
-        <ul>
-            <li><a href="javascript:void(0)"
-                   onclick="goToMyAccounts('account_overview','<?php echo $selected; ?>')">Account Overview</a></li>
-            <li><a href="javascript:void(0)"
-                   onclick="goToMyAccounts('new_transaction','<?php echo $selected; ?>')">New transaction</a></li>
-			<li><a href="javascript:void(0)"
-                   onclick="goToMyAccounts('new_transaction_multiple','<?php echo $selected; ?>')">New transaction (multiple)</a></li>
-	        <li><a href="javascript:void(0)"
-                   onclick="goToMyAccounts('transaction_history','<?php echo $selected; ?>')">Transaction History</a></li>
-        </ul>
+        <div class="menu-container">
+            <ul class="menu-button-list">
+                <li class="menu-button <?php
+                if ($frameKey != null && $frameKey == 'account_overview') {
+                    echo "menu-button-active";
+                }
+                ?>" onclick="goToMyAccounts('account_overview', '<?=$selected?>')">
+                    <a class="menu-button-inner">Account Overview</a>
+                    <?php
+                    if ($frameKey != null && $frameKey == 'account_overview') {
+                        echo "<span class='menu-selected-arrow'></span>";
+                    }
+                    ?>
+                </li>
+                <li class="menu-button <?php
+                if ($frameKey != null && $frameKey == 'new_transaction') {
+                    echo "menu-button-active";
+                }
+                ?>" onclick="goToMyAccounts('new_transaction', '<?=$selected?>')">
+                    <a class="menu-button-inner">New transaction</a>
+                    <?php
+                    if ($frameKey != null && $frameKey == 'new_transaction') {
+                        echo "<span class='menu-selected-arrow'></span>";
+                    }
+                    ?>
+                </li>
+                <li class="menu-button <?php
+                if ($frameKey != null && $frameKey == 'new_transaction_multiple') {
+                    echo "menu-button-active";
+                }
+                ?>" onclick="goToMyAccounts('new_transaction_multiple', '<?=$selected?>')">
+                    <a class="menu-button-inner">New transaction (multiple)</a>
+                    <?php
+                    if ($frameKey != null && $frameKey == 'new_transaction_multiple') {
+                        echo "<span class='menu-selected-arrow'></span>";
+                    }
+                    ?>
+                </li>
+                <li class="menu-button <?php
+                if ($frameKey != null && $frameKey == 'transaction_history') {
+                    echo "menu-button-active";
+                }
+                ?>" onclick="goToMyAccounts('transaction_history', '<?=$selected?>')">
+                    <a class="menu-button-inner">Transaction History</a>
+                    <?php
+                    if ($frameKey != null && $frameKey == 'transaction_history') {
+                        echo "<span class='menu-selected-arrow'></span>";
+                    }
+                    ?>
+                </li>
+            </ul>
+        </div>
     </div>
     <div class="frameContent">
         <?php
+        //INSERTING THE FRAME VIEW
         if ($frame != null) {
             include $frame;
         }

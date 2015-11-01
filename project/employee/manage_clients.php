@@ -7,17 +7,21 @@
  */
 ?>
 
-To obtain details about a client, please look him up here: <br>
+<p class="simpleTextBig">To obtain details about a client, please look him up here: </p>
 <form>
-    <label for="search_by_type">Search by </label> <select id="search_by_type" onchange="clearSearchField()">
-        <option value="surname" selected>Surname</option>
-        <option value="id">ID</option>
-    </select>
-    <label for="search_field">Search for: </label><input type="text" name="surname" id="search_field" placeholder="Search"><br>
-    <button type="button" onclick="searchForClients()">Search</button>
+    <div class="simple-container-no-bounds simpleTextBig">
+        <label for="search_by_type">Search by </label> <select class="select-bar" id="search_by_type" onchange="clearSearchField()">
+            <option value="surname" selected>Surname</option>
+            <option value="id">ID</option>
+        </select>
+        <label for="search_field">Search for: </label><input type="text" name="surname" id="search_field" placeholder="Search"><br>
+    </div>
+    <div class="button-container">
+        <button class="simpleButton" type="button" onclick="searchForClients()">Search</button>
+    </div>
 </form>
 
 <br>
 <p id="search_results_label"></p>
-<table id="search_results">
+<table id="search_results" class="table-default" style="visibility: hidden">
 </table>

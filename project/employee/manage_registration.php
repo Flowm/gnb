@@ -13,7 +13,7 @@ if (isset($_POST['action']) && isset($_POST['users'])) {
     if ($action == "approveRegistration") {
         user::approveRegistrations($requests, $approver_id);
     } elseif ($action == "rejectRegistration") {
-		user::rejectRegistrations($requests, $approver_id);
+        user::rejectRegistrations($requests, $approver_id);
     }
 }
 
@@ -35,35 +35,40 @@ if (count($newUsers) == 0) {
 
 <p>There are <?php echo count($newUsers) ?> new registration requests awaiting your approval</p>
 
-<table>
-    <tr>
-        <th></th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Email</th>
-        <th>Role</th>
+<table class="table-default">
+    <thead>
+    <tr class="thead-row-default">
+        <th class="th-default"></th>
+        <th class="th-default">First Name</th>
+        <th class="th-default">Last Name</th>
+        <th class="th-default">Email</th>
+        <th class="th-default">Role</th>
     </tr>
+    </thead>
+    <tbody>
     <?php
     for ($i =0; $i < count($newUsers); $i++) {
         $user = $newUsers[$i];
         $role = array_search($user->role, $USER_ROLES);
-        echo "<tr>
-            <td><input type='checkbox' name='action_check' id='$user->id:$role'></td>
-            <td>$user->firstname</td>
-            <td>$user->lastname</td>
-            <td>$user->email</td>";
-        echo "<td>$role</td> <!-- We want an icon here -->
+        echo "<tr class='tbody-row-default'>
+            <td class='td-default'><input type='checkbox' name='action_check' id='$user->id:$role'>
+                <label for='$user->id'><span></span></label></td>
+            <td class='td-default'>$user->firstname</td>
+            <td class='td-default'>$user->lastname</td>
+            <td class='td-default'>$user->email</td>";
+        echo "<td class='td-default'>$role</td> <!-- We want an icon here -->
         </tr>";
     }
     ?>
+    </tbody>
 </table>
-<table>
-    <tr>
-        <td><input type="checkbox" id="selectAll_check" onclick="checkAllBoxes()">
-            <label for="selectAll_check">Select/deselect all</label></td>
-    </tr>
-</table>
+<div class="select-all-container">
+    <input type="checkbox" id="selectAll_check" onclick="checkAllBoxes()">
+    <label for="selectAll_check"><span></span>Select/deselect all</label>
+</div>
 
-<p>What should be done with the selected registration requests?</p>
-<button type="button" onclick="approveRegistration()">Approve</button>
-<button type="button" onclick="rejectRegistration()">Reject</button>
+<p class="simpleTextBig simple-text-centered">What should be done with the selected registration requests?</p>
+<div class="button-container">
+    <button type="button" class="simpleButton" onclick="approveRegistration()">Approve</button>
+    <button type="button" class="simpleButton" onclick="rejectRegistration()">Reject</button>
+</div>

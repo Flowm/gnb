@@ -26,10 +26,14 @@ $user->setAccounts($data);
 $accounts = $user->accounts;
 
 $selected = (count($accounts) > 0) ? $accounts[0] : null;
-?>
 
-<button type="button" onclick="goToEmployeeArea('manage_clients')">Back</button><br>
-<p>
+//VIEW STARTS FROM HERE
+?>
+<!--<button type="button" onclick="goToEmployeeArea('manage_clients')">Back</button><br>-->
+<div class="simple-container-no-bounds">
+
+</div>
+<p class="simpleTextBig">
     <?php
     echo "Client $user->id overview";
     ?>

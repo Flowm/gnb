@@ -39,7 +39,7 @@ $logo_svg = getMedia('logo_svg');
 <body>
 <div class="mainContainer">
     <img src="<?php echo $logo_svg ?>" alt="GNB Logo" class="logo_big">
-    <div class="simpleContainer">
+    <div class="simple-container">
         <h1 class="title2">We are gonna need your bro-dentials!</h1>
         <form method="post" action="authentication.php">
             <div class="formRow">
@@ -69,7 +69,7 @@ $logo_svg = getMedia('logo_svg');
                 }
                 ?></span><br>
             </div>
-            <div class="buttonContainer">
+            <div class="button-container">
                 <button type="submit" class="simpleButton">Suit up!</button>
             </div>
         </form>

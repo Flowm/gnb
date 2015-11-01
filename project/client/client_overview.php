@@ -33,4 +33,8 @@ else {
 
 ?>
 
-<div class="message"><?php echo $quote_of_the_day ?></div>
+<div class="simple-container-no-bounds simple-text-centered">
+    <h1 class="title4">Our CEO's quote of the day:</h1>
+    <p class="simpleTextBig"><?php echo $quote_of_the_day ?></p><br><br>
+    <p class="simpleTextBig">Big party today, so suit up!</p>
+</div>

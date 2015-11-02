@@ -566,7 +566,7 @@ input[type=checkbox]:checked + label span {
 }
 
 /* FIELDS (TEXT, EMAIL, ...) */
-input[type=text], input[type=email], input[type=password] {
+input[type=text], input[type=email], input[type=password], input[type=number] {
     margin: 0 auto;
     width: 250px;
     font-size: 16px;

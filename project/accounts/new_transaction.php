@@ -42,7 +42,7 @@ $tan_code		= ( isset($_POST["tan_code"]) ? $_POST["tan_code"] : '' );
                 <label for="amount" class="simple-label">Amount </label>
             </div>
             <div class="formRightColumn">
-                <input type="text" id="amount" name="amount" value="<?=$amount?>" placeholder="Amount"><br>
+                <input type="number" step="0.01" min=0 id="amount" name="amount" value="<?=$amount?>" placeholder="Amount"><br>
             </div>
         </div>
         <div class="formRow">

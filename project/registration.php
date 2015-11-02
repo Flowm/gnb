@@ -24,16 +24,17 @@ $logo_svg = getMedia('logo_svg');
     <title></title>
     <link rel="stylesheet" type="text/css" href="style/gnb.css">
     <script type="text/javascript" src="js/registration.js"></script>
+    <link rel="icon" type="image/png" href="media/gnb_icon.png" />
 </head>
 <body>
 <div class="mainContainer">
     <img src="<?php echo $logo_svg ?>" alt="GNB Logo" class="logo_big">
     <div class="simpleContainer">
-        <h1 class="title2">In order to register correctly, you will need to fill in the form below</h1>
+        <h1 class="title3">In order to register correctly, you will need to fill in the form below</h1>
         <form method="post" action="registration_request.php" id="registrationForm">
             <div class="formRow">
                 <div class="formLeftColumn">
-                    <span class="simpleTextBig">What are you?</span>
+                    <span class="simple-text-big">What are you?</span>
                 </div>
                 <div class="formRightColumn">
                     <input type="radio" id="type1" name="type" value="client" checked>
@@ -44,7 +45,7 @@ $logo_svg = getMedia('logo_svg');
             </div>
             <div class="formRow">
                 <div class="formLeftColumn">
-                    <label for="email" class="simpleLabel">Enter your email address: </label>
+                    <label for="email" class="simple-label">Enter your email address: </label>
                 </div>
                 <div class="formRightColumn">
                     <input type="email" id="email" name="email" placeholder="Email"><br>
@@ -52,7 +53,7 @@ $logo_svg = getMedia('logo_svg');
             </div>
             <div class="formRow">
                 <div class="formLeftColumn">
-                    <label for="firstname" class="simpleLabel">Enter your first name: </label>
+                    <label for="firstname" class="simple-label">Enter your first name: </label>
                 </div>
                 <div class="formRightColumn">
                     <input type="text" id="firstname" name="firstname" placeholder="Name"><br>
@@ -60,7 +61,7 @@ $logo_svg = getMedia('logo_svg');
             </div>
             <div class="formRow">
                 <div class="formLeftColumn">
-                    <label for="lastname" class="simpleLabel">Enter your last name: </label>
+                    <label for="lastname" class="simple-label">Enter your last name: </label>
                 </div>
                 <div class="formRightColumn">
                     <input type="text" id="lastname" name="lastname" placeholder="Lastname"><br>
@@ -68,7 +69,7 @@ $logo_svg = getMedia('logo_svg');
             </div>
             <div class="formRow">
                 <div class="formLeftColumn">
-                    <label for="password" class="simpleLabel">Enter a valid password: </label>
+                    <label for="password" class="simple-label">Enter a valid password: </label>
                 </div>
                 <div class="formRightColumn">
                     <input type="password" id="password" name="password" placeholder="Password"><br>
@@ -76,7 +77,7 @@ $logo_svg = getMedia('logo_svg');
             </div>
             <div class="formRow">
                 <div class="formLeftColumn">
-                    <label for="password_repeat" class="simpleLabel">Repeat the password: </label>
+                    <label for="password_repeat" class="simple-label">Repeat the password: </label>
                 </div>
                 <div class="formRightColumn">
                     <input type="password" id="password_repeat" name="password_repeat" placeholder="Password repeat"><br>

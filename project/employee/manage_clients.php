@@ -7,9 +7,9 @@
  */
 ?>
 
-<p class="simpleTextBig">To obtain details about a client, please look him up here: </p>
-<form>
-    <div class="simple-container-no-bounds simpleTextBig">
+<p class="simple-label">To obtain details about a client, please look him up here: </p><br>
+<form onsubmit="searchForClients(); return false;">
+    <div class="simple-container-no-bounds simple-text-big">
         <label for="search_by_type">Search by </label> <select class="select-bar" id="search_by_type" onchange="clearSearchField()">
             <option value="name" selected>Name</option>
             <option value="id">ID</option>

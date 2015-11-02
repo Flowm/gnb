@@ -22,21 +22,36 @@ if (isset($_POST["account"])) {
 		}
 	}
 }
+
+//In case the user doesn't have any accounts
+if ($accounts_info == null || count($accounts_info) == 0) {
+    echo "<div class='simple-container-no-bounds simple-text-centered'>
+        <h1 class='title4'>Sorry buddy, but you don't have any active accounts at GNB!</h1></div>";
+    return;
+}
+
+//Used for presentation purposes
+$overview_frame_keys = array('account_overview');
+$single_trans_frame_keys = array('new_transaction', 'verify_transaction');
+$multiple_trans_frame_keys = array('new_transaction_multiple');
+$history_frame_keys = array('transaction_history');
+
 # Generate Account List
+echo "<div class='simple-container-no-bounds simple-text-centered'>";
 if (isset($_SESSION["account_id"])) {
 	$selected = $_SESSION["account_id"];
-	echo '<span>Select a different account: </span>' ;
+	echo '<span class="simple-label">Selected account: </span>' ;
 } else {
-	echo '<span>Please select an account: </span>' ;
+	echo '<span class="simple-label">Please select an account: </span>' ;
 }
-echo '<select id="account_select" onchange="onSelectedAccount()">' ;
+echo '<select class="select-bar" id="account_select" onchange="onSelectedAccount()">' ;
 echo '<option selected disabled>Select Account</option>' ;
 foreach($accounts_info as $acc){
 	echo 	'<option value="'.$acc["id"].'" ' ;
 	if ( $_SESSION["account_id"] == $acc["id"] ){ echo "selected" ; }
 	echo 	'>'.$acc["id"].'</option>' ;
 }
-echo	'</select><br>' ;
+echo	'</select></div>' ;
 
 ?>
 <div class="frameContainer">
@@ -44,49 +59,49 @@ echo	'</select><br>' ;
         <div class="menu-container">
             <ul class="menu-button-list">
                 <li class="menu-button <?php
-                if ($frameKey != null && $frameKey == 'account_overview') {
+                if ($frameKey != null && in_array($frameKey, $overview_frame_keys)) {
                     echo "menu-button-active";
                 }
                 ?>" onclick="goToMyAccounts('account_overview', '<?=$selected?>')">
                     <a class="menu-button-inner">Account Overview</a>
                     <?php
-                    if ($frameKey != null && $frameKey == 'account_overview') {
+                    if ($frameKey != null && in_array($frameKey, $overview_frame_keys)) {
                         echo "<span class='menu-selected-arrow'></span>";
                     }
                     ?>
                 </li>
                 <li class="menu-button <?php
-                if ($frameKey != null && $frameKey == 'new_transaction') {
+                if ($frameKey != null && in_array($frameKey, $single_trans_frame_keys)) {
                     echo "menu-button-active";
                 }
                 ?>" onclick="goToMyAccounts('new_transaction', '<?=$selected?>')">
                     <a class="menu-button-inner">New transaction</a>
                     <?php
-                    if ($frameKey != null && $frameKey == 'new_transaction') {
+                    if ($frameKey != null && in_array($frameKey, $single_trans_frame_keys)) {
                         echo "<span class='menu-selected-arrow'></span>";
                     }
                     ?>
                 </li>
                 <li class="menu-button <?php
-                if ($frameKey != null && $frameKey == 'new_transaction_multiple') {
+                if ($frameKey != null && in_array($frameKey, $multiple_trans_frame_keys)) {
                     echo "menu-button-active";
                 }
                 ?>" onclick="goToMyAccounts('new_transaction_multiple', '<?=$selected?>')">
                     <a class="menu-button-inner">New transaction (multiple)</a>
                     <?php
-                    if ($frameKey != null && $frameKey == 'new_transaction_multiple') {
+                    if ($frameKey != null && in_array($frameKey, $multiple_trans_frame_keys)) {
                         echo "<span class='menu-selected-arrow'></span>";
                     }
                     ?>
                 </li>
                 <li class="menu-button <?php
-                if ($frameKey != null && $frameKey == 'transaction_history') {
+                if ($frameKey != null && in_array($frameKey, $history_frame_keys)) {
                     echo "menu-button-active";
                 }
                 ?>" onclick="goToMyAccounts('transaction_history', '<?=$selected?>')">
                     <a class="menu-button-inner">Transaction History</a>
                     <?php
-                    if ($frameKey != null && $frameKey == 'transaction_history') {
+                    if ($frameKey != null && in_array($frameKey, $history_frame_keys)) {
                         echo "<span class='menu-selected-arrow'></span>";
                     }
                     ?>

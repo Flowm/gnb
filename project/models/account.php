@@ -22,7 +22,7 @@ class account {
 
     public function setTransactions($data) {
         for ($i=0; $i<count($data); $i++) {
-            array_push($this->transactions, $data[i]);
+            array_push($this->transactions, new transaction($data[$i]));
         }
     }
 

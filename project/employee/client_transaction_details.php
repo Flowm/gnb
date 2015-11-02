@@ -1,21 +1,25 @@
 <?php
 
 require_once __DIR__."/../resource_mappings.php";
-require_once getPageAbsolute('user');
-require_once getPageAbsolute('db_functions');
+require_once getpageabsolute("db_functions");
+require_once getpageabsolute("user");
 
 $transaction = null;
+$client_id = null;
+if (isset($_POST['client_id'])) {
+    $client_id = $_POST['client_id'];
+}
 if (isset($_POST['transfer_id'])) {
     $search = getTransaction($_POST['transfer_id']);
     if ($search) {
         $transaction = new transaction($search);
     }
 }
-
-if ($transaction == null) {
-    include getSectionAbsolute('transfer_details');
+if ($transaction == null || $client_id == null) {
+    header("Location:".getPageAbsolute('employee'));
     exit();
 }
+
 
 $data = getAccountDetails($transaction->src);
 $srcAccount = new account($data);
@@ -28,19 +32,11 @@ $data = getAccountOwnerFromID($dstAccount->id);
 $data = getUser($data['User ID']);
 $receiver = new user($data);
 
-$currency = '€';
-
 ?>
 
-<button type="button" onclick="goToEmployeeArea('manage_transfer')" class="details-button">Back</button><br><br>
+<button type="button" onclick="goToClientDetails('<?=$client_id?>')" class="details-button">Back</button><br><br>
 
 <?php
 include getFrameAbsolute('transaction_view');
 ?>
-
-<div class="button-container">
-    <input type="hidden" id="<?php echo $transaction->id ?>" name="action_check" checked>
-    <button type="button" class="simpleButton" onclick="approveTransfer()">Approve Transaction</button>
-    <button type="button" class="simpleButton" onclick="rejectTransfer()">Reject Transaction</button>
-</div>
 

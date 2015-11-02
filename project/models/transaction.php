@@ -12,6 +12,7 @@ class transaction {
     public $amount;
     public $description;
     public $tan_id;
+    public $status;
 
     public function __construct($data) {
         if (isset($data['id'])) {
@@ -19,6 +20,9 @@ class transaction {
         }
         if (isset($data['approved_at'])) {
             $this->approved_at = $data['approved_at'];
+        }
+        if (isset($data['status'])) {
+            $this->status = $data['status'];
         }
         if (isset($data['approved_by_user_id'])) {
             $this->approved_by = $data['approved_by_user_id'];

@@ -12,7 +12,7 @@ $domain = $_SERVER['HTTP_HOST'];
 $doc_root = $_SERVER['DOCUMENT_ROOT'];
 $url_dir = str_replace($doc_root, '', $base_dir);
 $base_url = $protocol.$domain.$url_dir; //NORMAL USAGE
-//$base_url = $protocol.$domain."/gnb/project"; //THIS IS STATIC AND ONLY FOR PHPSTORM
+//$base_url = $protocol.$domain."/gnb/project"; //THIS IS STATIC AND ONLY FOR PHPSTORM, DUE TO IDE BUG
 define ('BASE_DIR', $base_dir ."/");
 define ('BASE_URL', $base_url ."/");
 
@@ -50,9 +50,11 @@ $sections["my_accounts"] = "accounts/my_accounts.php";
 $frames = array();
 $frames["manage_clients"] = "employee/manage_clients.php";
 $frames["client_details"] = "employee/client_details.php";
+$frames["client_transaction_details"] = "employee/client_transaction_details.php";
 $frames["manage_registration"] = "employee/manage_registration.php";
 $frames["manage_transfer"] = "employee/manage_transfer.php";
 $frames["transfer_details"] = "employee/transfer_details.php";
+$frames["transaction_view"] = "accounts/transaction_view.php";
 $frames["account_overview"] = "accounts/account_overview.php";
 $frames["account_home"] = "accounts/account_overview.php";
 $frames["new_transaction"] = "accounts/new_transaction.php";

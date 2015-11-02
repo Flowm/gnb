@@ -33,7 +33,7 @@ if (count($newUsers) == 0) {
 
 ?>
 
-<p>There are <?php echo count($newUsers) ?> new registration requests awaiting your approval</p>
+<p class="simple-label">There are <?php echo count($newUsers) ?> new registration requests awaiting your approval</p><br>
 
 <table class="table-default">
     <thead>
@@ -67,7 +67,7 @@ if (count($newUsers) == 0) {
     <label for="selectAll_check"><span></span>Select/deselect all</label>
 </div>
 
-<p class="simpleTextBig simple-text-centered">What should be done with the selected registration requests?</p>
+<p class="simple-text-big simple-text-centered">What should be done with the selected registration requests?</p>
 <div class="button-container">
     <button type="button" class="simpleButton" onclick="approveRegistration()">Approve</button>
     <button type="button" class="simpleButton" onclick="rejectRegistration()">Reject</button>

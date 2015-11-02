@@ -41,7 +41,7 @@ if (count($transactions) == 0) {
 
 ?>
 
-<p class="simpleTextBig">There are <?php count($transactions) ?> pending transfer requests awaiting your approval</p>
+<p class="simple-label">There are <?php count($transactions) ?> pending transfer requests awaiting your approval</p><br>
 
 <table class="table-default">
     <thead>
@@ -65,7 +65,7 @@ if (count($transactions) == 0) {
             <td class='td-default'>$transaction->creation_date</td>
             <td class='td-default'>$transaction->amount</td>
             <td class='td-default'>
-            <button type='button' class='table-button' onclick='goToTransferDetails($transaction->id)'>Details</button>
+            <button type='button' class='details-button' onclick='goToTransferDetails($transaction->id)'>Details</button>
             </td>
         </tr>";
     }
@@ -78,7 +78,7 @@ if (count($transactions) == 0) {
 </div>
 
 
-<p class="simpleTextBig simple-text-centered">What should be done with the selected transfer requests?</p>
+<p class="simple-text-big simple-text-centered">What should be done with the selected transfer requests?</p>
 <div class="button-container">
     <button type="button" class="simpleButton" onclick="approveTransfer()">Approve</button>
     <button type="button" class="simpleButton" onclick="rejectTransfer()">Reject</button>

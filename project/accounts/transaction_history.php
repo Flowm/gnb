@@ -37,7 +37,7 @@ $num_of_col			= count($transaction_data[0]) ;
 $num_of_rec			= count($transaction_data) ;
 $summary 			= $num_of_rec.' transaction(s) available '; 
 
-echo '<br><table class="table-default" style="white-space: nowrap">' ;
+echo '<table class="table-default" style="white-space: nowrap">' ;
 # drawing headers and footer
 echo 	'<thead>'
 	.	'<tr class="thead-row-default">'.'<th colspan="'.$num_of_col.'"'

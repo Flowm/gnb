@@ -24,8 +24,8 @@ $logo_svg = getMedia('logo_svg'); //GNB logo
 
 $page = getPageAbsolute('employee'); //static
 
-$section = getSectionAbsolute('employee_home'); //static default
 $sectionKey = 'employee_overview';
+$section = getSectionAbsolute('employee_home'); //static default
 if (isset($_POST["section"])) {
     $sectionKey = $_POST["section"];
     $section = getSectionAbsolute($sectionKey);
@@ -44,6 +44,7 @@ if (isset($_POST["section"])) {
     <script type="text/javascript" src="../js/postRequest.js"></script>
     <script type="text/javascript" src="../js/account.js"></script>
     <script type="text/javascript" src="../js/asyncRequest.js"></script>
+    <link rel="icon" type="image/png" href="../media/gnb_icon.png" />
 </head>
 <body>
 <div class="nav-container nav-default">
@@ -83,7 +84,7 @@ if (isset($_POST["section"])) {
             <img src="<?php echo $logo_svg ?>" alt="GNB Logo" class="logo_small">
         </div>
         <div class="welcome-header">
-            <h1 class="title4"><b>Welcome back, <?php echo $_SESSION["firstname"]." ".$_SESSION["lastname"] ?>!</b></h1>
+            <h1 class="title2"><b>Welcome back, <?php echo $_SESSION["firstname"]." ".$_SESSION["lastname"] ?>!</b></h1>
         </div>
     </div>
     <hr class="hr-large">
@@ -95,7 +96,7 @@ if (isset($_POST["section"])) {
     ?>
     <div class="footerContainer">
         <hr class="hr-thin">
-        <p class="simpleText simple-text-italic">This is not a real bank. All rights reserved.</p>
+        <p class="simple-text simple-text-italic">This is not a real bank. All rights reserved.</p>
     </div>
 </div>
 </body>

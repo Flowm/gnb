@@ -30,15 +30,15 @@ $logo_svg = getMedia('logo_svg');
         <h1 class="title1">
             Join our <span id="nClients"><?php echo $nClients ?></span> LEGENDARY clients!
         </h1>
-        <h1 class="title2">
+        <h1 class="title3">
             We have <span id="awesomeAmount"><?php echo $money.$currency ?></span> ... and counting!
             <button type="button" id="refreshButton" onclick="refreshAwesomeData()">Check again!</button>
         </h1>
     </div>
     <div class="simple-container">
-        <h1 class="title3">Join our awesome bank now!</h1>
-        <p class="simpleText">Reasons why you should join us:</p>
-        <ul class="simpleText">
+        <h1 class="title4">Join our awesome bank now!</h1>
+        <p class="simple-text">Reasons why you should join us:</p>
+        <ul class="simple-text">
             <li>Creating a bank account has never been easier.</li>
             <li>Banking is generally not cool? Well, we made it cool anyway.</li>
             <li>How much does having an account at GNB cost? Absolutely nothing.</li>

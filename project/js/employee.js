@@ -113,7 +113,6 @@ function displaySearchResults(result) {
     addHeaderElement(hRow,'Lastname');
     addHeaderElement(hRow,'Email');
     addHeaderElement(hRow,'Status');
-    addHeaderElement(hRow,'Role');
     addHeaderElement(hRow,'');
     thead.appendChild(hRow);
     table.appendChild(thead);
@@ -127,9 +126,13 @@ function displaySearchResults(result) {
         addRowElement(row, client['firstname']);
         addRowElement(row, client['lastname']);
         addRowElement(row, client['email']);
-        addRowElement(row, client['status']);
-        addRowElement(row, client['role']);
-        addRowElement(row, "<button class='table-button' onclick='goToClientDetails("+client['id']+")'>Details</button>");
+        if (client['role'] == 0) {
+            addRowElement(row, 'Client');
+        }
+        else if (client['role'] == 1) {
+            addRowElement(row, 'Employee');
+        }
+        addRowElement(row, "<button class='details-button' onclick='goToClientDetails("+client['id']+")'>Details</button>");
         tbody.appendChild(row);
     }
     table.appendChild(tbody);
@@ -159,6 +162,11 @@ function checkAllBoxes() {
 
 function goToClientDetails(clientId) {
     var params = {section:"employee_area", frame:"client_details", client_id:clientId};
+    return performPostRequest("employee.php",params);
+}
+
+function goToClientTransactionDetails(clientId, transferId) {
+    var params = {section:"employee_area", frame:"client_transaction_details", client_id:clientId, transfer_id:transferId};
     return performPostRequest("employee.php",params);
 }
 

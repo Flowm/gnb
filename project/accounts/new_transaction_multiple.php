@@ -33,14 +33,14 @@ if (isset($_FILES['transactionsCSV'])) {
 }
 
 ?>
-<p>To perform multiple transactions in one request you can upload a batch transaction file.
+<p class="simple-text">To perform multiple transactions in one request you can upload a batch transaction file.
 Format the file according to be following example (each transaction in a new line):</p>
-<p>Destination Account ID,Amount,Description,TAN Code</p>
+<p class="simple-text-big">Destination Account ID,Amount,Description,TAN Code</p>
 
-<p>Note: Any Transaction over 10,000 will be need to be processed which may take up to 48 hours</p>
-
-<form id="uploadForm" method="post" enctype="multipart/form-data">
+<p class="simple-text">Note: Any Transaction over 10,000 will be need to be processed which may take up to 48 hours</p>
+<br>
+<form id="uploadForm" method="post" enctype="multipart/form-data" class="simple-text">
 	Select transaction file to upload:
 	<input type="file" name="transactionsCSV" id="transactionsCSV">
-	<button type="button" onclick="uploadFile()">Upload</button>
+	<button type="button" onclick="uploadFile()" class="simpleButton">Upload</button>
 </form>

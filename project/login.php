@@ -40,11 +40,11 @@ $logo_svg = getMedia('logo_svg');
 <div class="mainContainer">
     <img src="<?php echo $logo_svg ?>" alt="GNB Logo" class="logo_big">
     <div class="simple-container">
-        <h1 class="title2">We are gonna need your bro-dentials!</h1>
+        <h1 class="title3">We are gonna need your bro-dentials!</h1>
         <form method="post" action="authentication.php">
             <div class="formRow">
                 <div class="formLeftColumn">
-                    <label for="user_input" class="simpleLabel">Enter your email here, bro:</label>
+                    <label for="user_input" class="simple-label">Enter your email here, bro:</label>
                 </div>
                 <div class="formRightColumn">
                     <input type="text" name="username" id="user_input" placeholder="Email"><br>
@@ -52,7 +52,7 @@ $logo_svg = getMedia('logo_svg');
             </div>
             <div class="formRow">
                 <div class="formLeftColumn">
-                    <label for="pw_input" class="simpleLabel">Enter your password here, bro:</label>
+                    <label for="pw_input" class="simple-label">Enter your password here, bro:</label>
                 </div>
                 <div class="formRightColumn">
                     <input type="password" name="password" id="pw_input" placeholder="Password"><br>

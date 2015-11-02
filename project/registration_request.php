@@ -77,28 +77,30 @@ $gnbmailer->sendMail_Registration($email, "$firstname $lastname");
 $logo_svg = getMedia('logo_svg'); //GNB logo
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="style/gnb.css">
+    <link rel="icon" type="image/png" href="media/gnb_icon.png" />
     <title></title>
 </head>
 <body>
 <div class="mainContainer">
     <img src="<?php echo $logo_svg ?>" alt="GNB Logo" class="logo_big">
     <div class="simpleContainer">
-        <h1 class="title2">Welcome to the Goliath National Bank!</h1>
-        <p class="simpleTextBig simple-text-centered">
+        <h1 class="title3">Welcome to the Goliath National Bank!</h1>
+        <p class="simple-text-big simple-text-centered">
             Your request has been received and will be processed shortly.
             A confirmation email will be sent to you, once your registration has been approved.<br>
             Thank you for choosing the Goliath National Bank!
         </p>
-        <h1 class="title3">
+        <h1 class="title4 simple-text-centered">
             This is gonna be LEGENDARY!!!
         </h1>
-        <p class="simpleText simple-text-centered">
-            <a href="index.php" class="simpleText simple-text-centered">Return to Home page</a></p>
+        <p class="simple-text simple-text-centered">
+            <a href="index.php">Return to Home page</a></p>
     </div>
 </div>
 </body>

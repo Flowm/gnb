@@ -57,7 +57,7 @@ function drawSinglerecordTable($data,$record_name = 'Record',$headers=array()){
 	$num_of_rec		= count($data) ;
 	
 	# Setting the summary line 
-	$summary 		= $record_name.' infromation' ; 
+	$summary 		= $record_name.' information' ;
 
 	
 	echo 	'<h4>'.$summary.'</h4>' ; 

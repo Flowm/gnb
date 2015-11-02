@@ -11,6 +11,7 @@ maybe return an error if the data already existed and finally return to the inde
 
 require_once "resource_mappings.php";
 require_once getpageabsolute("db_functions");
+require_once getPageAbsolute("mail");
 require_once getpageabsolute("user");
 
 global $pages;

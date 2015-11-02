@@ -1,11 +1,12 @@
 <?php
 
+require_once "resource_mappings.php";
+require_once getPageAbsolute("phpmailer");
+
 class GNBMailer {
 	public $mail;
 
 	public function __construct() {
-		require_once 'lib/phpmailer/PHPMailerAutoload.php';
-
 		$this->mail = new PHPMailer();
 		$this->mail->IsSMTP();
 		$this->mail->Host        = "smtp-mail.outlook.com";
@@ -28,10 +29,10 @@ class GNBMailer {
 		$this->mail->SmtpClose();
 
 		if ( $this->mail->IsError() ) {
-			echo "<p class='simpleTextBig simple-text-centered'>Operation failed:<br />$mail->ErrorInfo</p><br />";
+			echo "<p class='simpleTextBig simple-text-centered'>Operation failed:<br />" . $this->mail->ErrorInfo . "</p>";
 			return 1;
 		} else {
-			echo "<p class='simpleTextBig simple-text-centered'>Operation was successful</p><br />";
+			echo "<p class='simpleTextBig simple-text-centered'>Operation was successful</p>";
 			return 0;
 		}
 	}

@@ -85,13 +85,13 @@ class user {
 
     public function reject($denier_id) {
         if ($this->role == '0') {
-            if (rejectClient($this->id, $denier_id) || true) {
+            if (rejectClient($this->id, $denier_id)) {
                 //DO SOMETHING IN CASE OF REJECTION?!
                 return true;
 			}
         }
         else if($this->role == '1') {
-            if (rejectEmployee($this->id, $denier_id) || true) {
+            if (rejectEmployee($this->id, $denier_id)) {
                 //DO SOMETHING IN CASE OF REJECTION?!
                 return true;
 			}

@@ -52,7 +52,7 @@ class GNBMailer {
 
 	public function sendMail_Registration($cust_addr, $cust_name) {
 		$subject = "Registration request for GNB received!";
-		$body_txt = $this->getTemplate_Welcome($cust_name);
+		$body_txt = $this->getTemplate_Registration($cust_name);
 		$body_html = $this->getHTMLMail($body_txt);
 
 		$this->sendMail($cust_addr, $cust_name, $subject, $body_txt, $body_html);

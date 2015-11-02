@@ -28,6 +28,7 @@ int main(int argc, char* argv[]) {
 
 int parse_csv(char* src_acc, FILE* fh) {
 	int c;
+	int eof = 0;
 	int invalid = 0;
 	int pos = 0;
 	int field = 0;
@@ -35,16 +36,21 @@ int parse_csv(char* src_acc, FILE* fh) {
 	struct transactstr trans;
 	trans.offset[field++] = 0;
 
-	while ((c = fgetc(fh)) != EOF) {
+	while (!eof) {
+		c = fgetc(fh);
+		if (c == EOF)
+			eof = 1;
 		if (c == '\r')
 			continue;
-		if (c == '\n') {
+		if (c == '\n' || eof) {
 			if (field != 4)
 				invalid = E_TRANS_FIELDSMIN;
 
 			if (!invalid) {
 				trans.buffer[pos++] = '\0';
 				process_transaction(src_acc, trans);
+			} else if (eof && field < 2) {
+				continue;
 			} else {
 				printf("Ignoring invalid transaction in line %d, ERR: %d\n", line, invalid);
 			}

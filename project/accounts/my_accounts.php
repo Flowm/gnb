@@ -43,6 +43,7 @@ if (isset($_SESSION["account_id"])) {
 	echo '<span class="simple-label">Selected account: </span>' ;
 } else {
 	echo '<span class="simple-label">Please select an account: </span>' ;
+	$selected = "";
 }
 echo '<select class="select-bar" id="account_select" onchange="onSelectedAccount()">' ;
 echo '<option selected disabled>Select Account</option>' ;

@@ -937,7 +937,7 @@ function processPendingTransaction($transaction_id, $processor, $status)
 			$TRANSACTION_TABLE_AP_BY 	= '$processor',
 			$TRANSACTION_TABLE_STATUS	= $status
 		WHERE
-			$TRANSACTION_TABLE_KEY	= '$transaction_id asd'
+			$TRANSACTION_TABLE_KEY	= '$transaction_id'
 			AND $TRANSACTION_TABLE_STATUS = '$old_status'
 	" ;
 

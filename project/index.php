@@ -47,12 +47,12 @@ $logo_svg = getMedia('logo_svg');
             <h1 class="title4">Join our awesome bank now!</h1>
             <p class="simple-text-index">Reasons why you should join us:</p>
             <ul class="simple-text-index">
-                <li>Creating a bank account has never been easier.</li>
-                <li>Banking is generally not cool? Well, we made it cool anyway.</li>
-                <li>How much does having an account at GNB cost? Absolutely nothing.</li>
-                <li>You usually get champagne for christmas? What a joke! You will get free champagne at any of our weekly parties. Members only!</li>
-                <li>Need a loan? Well, you won't get any. But we will give you money. For free.</li>
-                <li>Our employees are the coolest people in the world. True story.</li>
+                <li class="bank-list">Creating a bank account has never been easier.</li>
+                <li class="bank-list">Banking is generally not cool? Well, we made it cool anyway.</li>
+                <li class="bank-list">How much does having an account at GNB cost? Absolutely nothing.</li>
+                <li class="bank-list">You usually get champagne for christmas? What a joke! You will get free champagne at any of our weekly parties. Members only!</li>
+                <li class="bank-list">Need a loan? Well, you won't get any. But we will give you money. For free.</li>
+                <li class="bank-list">Our employees are the coolest people in the world. True story.</li>
             </ul>
         </div>
         <div class="img-container">

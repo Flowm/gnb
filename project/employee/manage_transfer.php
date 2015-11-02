@@ -77,7 +77,6 @@ if (count($transactions) == 0) {
     <label for="selectAll_check"><span></span>Select/deselect all</label>
 </div>
 
-
 <p class="simple-text-big simple-text-centered">What should be done with the selected transfer requests?</p>
 <div class="button-container">
     <button type="button" class="simpleButton" onclick="approveTransfer()">Approve</button>

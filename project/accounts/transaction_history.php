@@ -70,22 +70,25 @@ for ( $i = 0 ; $i < $num_of_rec ; $i++ ){
 	$transaction = new transaction($transaction_data[$i]);
     $src_dest = null;
     $arrow_class = null;
+    $arrow_pending = null;
     $desc = wordwrap($transaction->description, 18, "<br>\n", true);
     $t_status = $TRANSACTION_STATUS[$transaction->status];
 
     if ($transaction->src == $account_id) {
         $src_dest = $transaction->dst;
         $arrow_class = 'outgoing-transfer-arrow';
+        $arrow_pending = 'outgoing-pending-arrow';
     }
     else if ($transaction->dst == $account_id) {
         $src_dest = $transaction->src;
         $arrow_class = 'ingoing-transfer-arrow';
+        $arrow_pending = 'ingoing-pending-arrow';
     }
     if ($t_status == 'approved') {
         echo "<td class='td-default'><span class='$arrow_class'></span></td>";
     }
     else {
-        echo "<td class='td-default'></td>";
+        echo "<td class='td-default'><span class='$arrow_pending'></span></td>";
     }
 
     echo "<td class='td-default'>$t_status</td>";

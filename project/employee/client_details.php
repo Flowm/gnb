@@ -143,17 +143,25 @@ if (count($accounts) == 0 || $selected == null) {
         <?php
         foreach ($selected->transactions as $transaction) {
             $t_status = $transaction->status;
+            $arrow_class = null;
+            $arrow_pending = null;
+            if ($transaction->src == $selected->id) {
+                //We are the source, so the transfer is outgoing.
+                $arrow_class = 'outgoing-transfer-arrow';
+                $arrow_pending = 'outgoing-pending-arrow';
+            }
+            else if ($transaction->dst == $selected->id) {
+                //We are the destination, so the transfer is ingoing.
+                $arrow_class = 'ingoing-transfer-arrow';
+                $arrow_pending = 'ingoing-pending-arrow';
+            }
             echo "<tr class='tbody-row-default'>
                     <td class='td-default'>";
             if ($transaction->status == $TRANSACTION_STATUS['approved']) {
-                if ($transaction->src == $selected->id) {
-                    //We are the source, so the transfer is outgoing.
-                    echo "<span class='outgoing-transfer-arrow'></span>";
-                }
-                else if ($transaction->dst == $selected->id) {
-                    //We are the destination, so the transfer is ingoing.
-                    echo "<span class='ingoing-transfer-arrow'></span>";
-                }
+                echo "<span class='$arrow_class'></span>";
+            }
+            else {
+                echo "<span class='$arrow_pending'></span>";
             }
             echo "</td>";
             echo "<td class='td-default'>$TRANSACTION_STATUS[$t_status]</td>";

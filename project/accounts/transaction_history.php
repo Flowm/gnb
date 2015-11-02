@@ -75,6 +75,11 @@ for ( $i = 0 ; $i < $num_of_rec ; $i++ ){
 				$data	= $transaction_data[$i]["destination_account_id"] ; 
 			}
 		}
+		if ( $title == 'amount') {
+			if ($transaction_data[$i]['source_account_id'] == $account_id) {
+				$data = number_format($data * -1.0, 2);
+			}
+		}
 		if ( $title	== 'description' ){ $data	= wordwrap( $data, 18, "<br>\n",true ) ; }
 		echo  '<td class="td-default">'.$data.'</td>' ; 
 	}

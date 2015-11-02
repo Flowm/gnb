@@ -3,6 +3,7 @@
 ## Virtual machine
 Our submitted virtual machine has the following passwords configured:
 * System user: `samurai:r8QD4bbgvByQiuqX`
+* Database root: `root:K7NsNeKHej9EQPYQ`
 * Database user: `samurai:6JEn7RhLAGaavQTx`
 
 We only include the real passwords here, as the repository is private and will
@@ -20,12 +21,7 @@ All steps assume your at the root directory of the project.
 	`sudo chown www-data:www-data -R project/uploads`
 
 ### Database setup
-* Create the database user samurai with the correct password
-```
-use mysql;
-SET PASSWORD FOR 'samurai'@'localhost' = PASSWORD('6JEn7RhLAGaavQTx');
-FLUSH PRIVILEGES;
-```
+* Add the database user samurai with the correct password
 * Connect to the sql server
 	`mysql -u samurai -p`
 * Drop the database, and import the schema

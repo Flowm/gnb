@@ -1,5 +1,8 @@
 <?php
 
+$t_status = $transaction->status;
+$currency = '€';
+
 //This is actually just for presentation purposes, since it is used by several other files.
 
 ?>
@@ -10,6 +13,7 @@
         <thead>
         <tr class="thead-row-default">
             <th class="th-default">ID</th>
+            <th class="th-default">Status</th>
             <th class="th-default">Amount</th>
             <th class="th-default">Description</th>
             <th class="th-default">Creation Date</th>
@@ -19,6 +23,7 @@
         <?php
         echo "<tr class='tbody-row-default'>
             <td class='td-default'>$transaction->id</td>
+            <td class='td-default'>$TRANSACTION_STATUS[$t_status]</td>
             <td class='td-default'>$transaction->amount $currency</td>
             <td class='td-default'>$transaction->description</td>
             <td class='td-default'>$transaction->creation_date</td>
@@ -67,7 +72,7 @@
         echo "<tr class='tbody-row-default'>
             <td class='td-default'>$receiver->id</td>
             <td class='td-default'>$receiver->firstname $receiver->lastname</td>
-            <td class='td-default'>$sender->email</td>
+            <td class='td-default'>$receiver->email</td>
             <td class='td-default'>$dstAccount->id</td>
         </tr>"
         ?>

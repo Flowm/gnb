@@ -60,7 +60,7 @@ function drawSinglerecordTable($data,$record_name = 'Record',$headers=array()){
 	$summary 		= $record_name.' information' ;
 
 	
-	echo 	'<h4>'.$summary.'</h4>' ; 
+	echo 	'<h1 class="title4">'.$summary.'</h1>' ;
 	#echo 	'<thead>'
 	#	.	'<tr class="thead-row-default">'
 	#	.	'<th colspan="2">'.$summary.'</th>' 
@@ -69,10 +69,10 @@ function drawSinglerecordTable($data,$record_name = 'Record',$headers=array()){
 	echo '<table>' ;
 	foreach( $data as $title => $value){
 		echo 	'<tr">'  
-			.	'<td>'
+			.	'<td><b>'
 			.	(array_key_exists($title,$headers) ? $headers[$title] :$title) 
-			.	'</td>' 
-			.	'<td>'.$value.'</td>' 
+			.	' </b></td>'
+			.	'<td> '.$value.'</td>'
 			. 	'</tr>' ;
 			
 	}

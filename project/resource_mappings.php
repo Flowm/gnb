@@ -66,6 +66,7 @@ $frames["verify_transaction"] = "accounts/verify_transaction.php";
 $media = array();
 $media["logo_svg"] = "media/gnb_logo.svg";
 $media["logo_icn"] = "media/gnb_icon.png";
+$media["ceo_img"] = "media/gnb_bs_img1.jpg";
 
 
 function getResource($prefix, $resources, $target) {

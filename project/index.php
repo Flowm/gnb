@@ -26,7 +26,7 @@ $logo_svg = getMedia('logo_svg');
 <body>
 <div class="mainContainer">
     <img src="<?php echo $logo_svg ?>" alt="GNB Logo" class="logo_big">
-    <div class="simple-container">
+    <!--<div class="simple-container">
         <h1 class="title1">
             Join our <span id="nClients"><?php echo $nClients ?></span> LEGENDARY clients!
         </h1>
@@ -34,19 +34,31 @@ $logo_svg = getMedia('logo_svg');
             We have <span id="awesomeAmount"><?php echo $money.$currency ?></span> ... and counting!
             <button type="button" id="refreshButton" onclick="refreshAwesomeData()">Check again!</button>
         </h1>
-    </div>
-    <div class="simple-container">
-        <h1 class="title4">Join our awesome bank now!</h1>
-        <p class="simple-text">Reasons why you should join us:</p>
-        <ul class="simple-text">
-            <li>Creating a bank account has never been easier.</li>
-            <li>Banking is generally not cool? Well, we made it cool anyway.</li>
-            <li>How much does having an account at GNB cost? Absolutely nothing.</li>
-            <li>You usually get champagne for christmas? What a joke! You will get free champagne at any of our weekly parties. Memebers only!</li>
-            <li>Need a loan? Well, you won't get any. But we will give you money. For free.</li>
-            <li>Our employees are the coolest people in the world. True story.</li>
-        </ul>
-    </div>
+    </div>-->
+    <div class="headerContainer">
+        <div class="index-text-container">
+            <h1 class="title1">
+                Join our <span id="nClients"><?php echo $nClients ?></span> LEGENDARY clients!
+            </h1>
+            <h1 class="title3">
+                We have <span id="awesomeAmount"><?php echo $money.$currency ?></span> ... and counting!
+                <button type="button" id="refreshButton" onclick="refreshAwesomeData()">Check again!</button>
+            </h1>
+            <h1 class="title4">Join our awesome bank now!</h1>
+            <p class="simple-text-index">Reasons why you should join us:</p>
+            <ul class="simple-text-index">
+                <li>Creating a bank account has never been easier.</li>
+                <li>Banking is generally not cool? Well, we made it cool anyway.</li>
+                <li>How much does having an account at GNB cost? Absolutely nothing.</li>
+                <li>You usually get champagne for christmas? What a joke! You will get free champagne at any of our weekly parties. Members only!</li>
+                <li>Need a loan? Well, you won't get any. But we will give you money. For free.</li>
+                <li>Our employees are the coolest people in the world. True story.</li>
+            </ul>
+        </div>
+        <div class="img-container">
+            <img src="<?= getMedia('ceo_img') ?>" class="index_img" alt="Our awesome CEO">
+        </div>
+    </div><br>
     <div class="button-container">
         <button type="button" onclick="goToLoginPage()" class="simpleButton">Login</button>
         <button type="button" onclick="goToRegistrationPage()" class="simpleButton">Register</button>

@@ -56,6 +56,39 @@ div.transaction-container {
     left: 0;
 }
 
+div.img-container {
+    display: table-cell;
+    float: right;
+    margin-right: 60px;
+    margin-top: 30px;
+}
+
+div.index-text-container {
+    display: table-cell;
+    width: 600px;
+    margin-left: 60px;
+    margin-top: 30px;
+    float: left;
+}
+
+div.simple-container {
+    width: 800px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+div.simple-container-no-bounds {
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+}
+
+div.button-container {
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px;
+}
+
 /* NAVBAR */
 div.nav-container {
     height: 42px;
@@ -152,24 +185,6 @@ a.nav-button-inner {
     vertical-align: middle;
 }
 
-div.simple-container {
-    width: 800px;
-    margin: 0 auto;
-    padding: 10px;
-}
-
-div.simple-container-no-bounds {
-    margin: 0 auto;
-    padding: 0;
-    width: 100%;
-}
-
-div.button-container {
-    margin: 0 auto;
-    text-align: center;
-    padding: 10px;
-}
-
 /* CUSTOM HORIZONTAL RULES */
 hr.hr-large {
     height: 12px;
@@ -240,21 +255,21 @@ span.menu-selected-arrow {
 span.outgoing-transfer-arrow {
     width: 0;
     height: 0;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
-    border-top: 20px solid #ff0000;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 15px solid #ff0000;
     position: relative;
-    top: 20px;
+    top: 15px;
 }
 
 span.ingoing-transfer-arrow {
     width: 0;
     height: 0;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
-    border-bottom: 20px solid #008000;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid #008000;
     position: relative;
-    top: -20px;
+    top: -15px;
 }
 
 
@@ -314,6 +329,12 @@ span.ingoing-transfer-arrow {
     line-height: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.simple-text-index {
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 22px;
 }
 
 .simple-text-centered {
@@ -464,19 +485,23 @@ tr.thead-row-default {
 
 tr.tbody-row-default {
     background-color: white;
-
     height: 40px;
+    font-size: 14px;
 }
 
 th.th-default {
     padding: 5px;
     text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 td.td-default {
     padding: 5px;
     text-align: center;
     border-top: 1px solid #b3b3b3;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 div.select-all-container {
@@ -596,6 +621,10 @@ img.logo_small {
     vertical-align: middle;
     display: inline-block;
     width: 180px;
+}
+
+img.index_img {
+    width: 220px;
 }
 
 .error {

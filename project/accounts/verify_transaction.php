@@ -21,13 +21,13 @@ $tan_code		= ( isset($_POST["tan_code"]) ? $_POST["tan_code"] : '' );
 if ( isset($_POST["process"]) && $_POST["process"] == 'yes'){
 	$trans_res	 = processTransaction($account_id, $dest_code, $amount, $description, $tan_code) ;
 	if ($trans_res == false){
-		die ("Unkonwn Transaction error, please connect our bros for help");
+		die ("Unkonwn Transaction error, please connect our bros for help!");
 	}
 	echo	'<h3>Transcation Successful</h3>' ;
 	echo 	'<form method="post" action="'.$_SERVER["PHP_SELF"].'">'
 		.	'<input type="hidden" name="frame" value="account_overview">'
 		.	'<input type="hidden" name="section" value="my_accounts">'
-		.	'<input type="submit" value="Back to Overview">'
+		.	'<input type="submit" value="Back to Overview" class="simpleButton">'
 		.	'</form">' ;
 } 
 # Otherwise confirm transction parameters 
@@ -95,8 +95,5 @@ else
 			.	'</form>' ;	
 	}
 }
-
-
-
 
 ?>

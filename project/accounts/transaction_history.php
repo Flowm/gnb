@@ -55,7 +55,8 @@ echo 	'<tfoot>'
 
 
 # drawing column titles
-echo 	'<tr class="thead-row-default">' ; 
+echo 	'<tr class="thead-row-default">' ;
+echo	'<th></th>';
 foreach( $transaction_data[0] as $title => $value){
 	if ( in_array($title,$skip_headers) ) { continue ; }
 	echo  	'<th>'
@@ -63,13 +64,41 @@ foreach( $transaction_data[0] as $title => $value){
 		.'	</th>' ; }
 echo		'</tr>' ;
 
-# printing availble data 
+# printing available data
 for ( $i = 0 ; $i < $num_of_rec ; $i++ ){
-	echo 	'<tr class="">' ;
+	echo 	'<tr class="tbody-row-default">' ;
+	$transaction = new transaction($transaction_data[$i]);
+    $src_dest = null;
+    $arrow_class = null;
+    $desc = wordwrap($transaction->description, 18, "<br>\n", true);
+    $t_status = $TRANSACTION_STATUS[$transaction->status];
+
+    if ($transaction->src == $account_id) {
+        $src_dest = $transaction->dst;
+        $arrow_class = 'outgoing-transfer-arrow';
+    }
+    else if ($transaction->dst == $account_id) {
+        $src_dest = $transaction->src;
+        $arrow_class = 'ingoing-transfer-arrow';
+    }
+    if ($t_status == 'approved') {
+        echo "<td class='td-default'><span class='$arrow_class'></span></td>";
+    }
+    else {
+        echo "<td class='td-default'></td>";
+    }
+
+    echo "<td class='td-default'>$t_status</td>";
+    echo "<td class='td-default'>$src_dest</td>";
+    echo "<td class='td-default'>$transaction->creation_date</td>";
+    echo "<td class='td-default'>$transaction->amount</td>";
+    echo "<td class='td-default'>$transaction->description</td>";
+
+	/* Sorry, had to change this for presentation purposes.
 	foreach( $transaction_data[$i] as $title => $value){
 		if ( in_array($title,$skip_headers) ) { continue ; }
 		$data	= $value ; 
-		if ( $title	== 'status' ){ $value	= $TRANSACTION_STATUS[$value] ; }
+		if ( $title	== 'status' ){ $data	= $TRANSACTION_STATUS[$value] ; }
 		if ( $title	== 'source_account_id' ){
 			if( $value == $account_id){
 				$data	= $transaction_data[$i]["destination_account_id"] ; 
@@ -81,8 +110,11 @@ for ( $i = 0 ; $i < $num_of_rec ; $i++ ){
 			}
 		}
 		if ( $title	== 'description' ){ $data	= wordwrap( $data, 18, "<br>\n",true ) ; }
+		if ( $title == 'status' && $data == 'approved') {
+
+		}
 		echo  '<td class="td-default">'.$data.'</td>' ; 
-	}
+	} */
 	echo	'</tr>' ;
 }
 echo "</table>" ; 

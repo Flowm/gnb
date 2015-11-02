@@ -93,7 +93,7 @@ if (count($accounts) == 0 || $selected == null) {
 
 <div class='simple-container-no-bounds simple-text-centered'>
     <label for="account_select" class="simple-label">Selected account: </label>
-    <select class="select-bar" id="account_select" onchange="onSelectedAccount()">
+    <select class="select-bar" id="account_select" onchange="onSelectedAccount('my_accounts','client_details','<?= $user->id ?>')">
         <?php
         foreach ($accounts as $acc) {
             echo "<option value='".$acc->id."' ";
@@ -131,8 +131,9 @@ if (count($accounts) == 0 || $selected == null) {
     <thead>
         <tr class="thead-row-default">
             <th class="th-default"></th>
-            <th class="th-default">Source</th>
-            <th class="th-default">Destination</th>
+            <th class="th-default">Status</th>
+            <th class="th-default">Src</th>
+            <th class="th-default">Dst</th>
             <th class="th-default">Date/Time</th>
             <th class="th-default">Amount</th>
             <th class="th-default"></th>
@@ -141,17 +142,21 @@ if (count($accounts) == 0 || $selected == null) {
     <tbody>
         <?php
         foreach ($selected->transactions as $transaction) {
+            $t_status = $transaction->status;
             echo "<tr class='tbody-row-default'>
                     <td class='td-default'>";
-            if ($transaction->src == $selected->id) {
-                //We are the source, so the transfer is outgoing.
-                echo "<span class='outgoing-transfer-arrow'></span>";
-            }
-            else if ($transaction->dst == $selected->id) {
-                //We are the destination, so the transfer is ingoing.
-                echo "<span class='ingoing-transfer-arrow'></span>";
+            if ($transaction->status == $TRANSACTION_STATUS['approved']) {
+                if ($transaction->src == $selected->id) {
+                    //We are the source, so the transfer is outgoing.
+                    echo "<span class='outgoing-transfer-arrow'></span>";
+                }
+                else if ($transaction->dst == $selected->id) {
+                    //We are the destination, so the transfer is ingoing.
+                    echo "<span class='ingoing-transfer-arrow'></span>";
+                }
             }
             echo "</td>";
+            echo "<td class='td-default'>$TRANSACTION_STATUS[$t_status]</td>";
             echo "<td class='td-default'>$transaction->src</td>";
             echo "<td class='td-default'>$transaction->dst</td>";
             echo "<td class='td-default'>$transaction->creation_date</td>";

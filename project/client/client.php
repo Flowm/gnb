@@ -45,7 +45,7 @@ if (isset($_POST["section"])) {
     <script type="text/javascript" src="../js/client.js"></script>
     <script type="text/javascript" src="../js/postRequest.js"></script>
     <script type="text/javascript" src="../js/account.js"></script>
-    <link rel="icon" type="image/png" href="media/gnb_icon.png" />
+    <link rel="icon" type="image/png" href="../media/gnb_icon.png" />
 </head>
 <body>
 <div class="nav-container nav-default">

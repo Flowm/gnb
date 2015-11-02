@@ -878,7 +878,7 @@ function processTransaction($source, $destination, $amount, $description, $tan)
 			VALUES
 				(
 					'$source',
-					'$destination a',
+					'$destination',
 					now(),
 					'$amount',
 					'$description',

@@ -92,7 +92,7 @@ for ( $i = 0 ; $i < $num_of_rec ; $i++ ){
     echo "<td class='td-default'>$src_dest</td>";
     echo "<td class='td-default'>$transaction->creation_date</td>";
     echo "<td class='td-default'>$transaction->amount</td>";
-    echo "<td class='td-default'>$transaction->description</td>";
+    echo "<td class='td-default'>".wordwrap( $transaction->description, 18, "<br>\n",true )."</td>";
 
 	/* Sorry, had to change this for presentation purposes.
 	foreach( $transaction_data[$i] as $title => $value){

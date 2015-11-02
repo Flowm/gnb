@@ -47,6 +47,21 @@ function loginUser($mail, $password) {
 	global $USER_TABLE_STATUS;
 	global $USER_STATUS;
 
+    $SQL_STATEMENT_INJECT = "
+		SELECT $USER_TABLE_KEY
+		FROM $USER_TABLE_NAME
+		WHERE
+			FALSE
+			AND
+			$USER_TABLE_EMAIL = '$mail'
+	";
+
+	$injectCheck = executeSelectStatementOneRecord($SQL_STATEMENT_INJECT);
+
+	if($injectCheck != false && sizeof($injectCheck) != 0) {
+		return false;
+	}
+
 	$SQL_STATEMENT_SALT = "
 		SELECT $USER_TABLE_SALT
 		FROM $USER_TABLE_NAME
@@ -68,11 +83,11 @@ function loginUser($mail, $password) {
 		SELECT $USER_TABLE_KEY
 		FROM $USER_TABLE_NAME
 		WHERE
-			$USER_TABLE_EMAIL = '$mail'
-			AND
 			$USER_TABLE_HASH = '$password_hash'
 			AND
 			$USER_TABLE_STATUS = '$status'
+			AND
+			$USER_TABLE_EMAIL = '$mail'
 	" ;
 
 	$result = executeSelectStatementOneRecord($SQL_STATEMENT);

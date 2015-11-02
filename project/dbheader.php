@@ -111,6 +111,11 @@ function assembleErrorMessage($message, $query)
 function executeSelectStatementOneRecord($sql)
 {
 	$data = executeSelectStatement($sql);
+
+	if (sizeof($data) > 1) {
+		return false;
+	}
+
 	$result = $data[0];
 
 	printDebugResult("executeSelectStatementOneRecord", $sql, $result);

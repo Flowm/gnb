@@ -6,8 +6,13 @@ require_once getPageAbsolute("drawfunctions");
 
 if (empty($_SESSION["user_id"]))
 	die("User missing");
-if (empty($_SESSION["account_id"]))
-	die("Please choose an account");
+if (empty($_SESSION["account_id"])) {
+
+	//$all_accounts = getAccountsForUser($_SESSION["user_id"]);
+
+	//drawMultipleRecordTable($all_accounts, 'Accounts');
+	return;
+}
 
 $account_id = $_SESSION["account_id"];
 

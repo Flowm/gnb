@@ -29,12 +29,16 @@ if ($json != null) {
     }
     else if (isset($search['id'])) {
         //query by id
-        $search = getClient($search['id']);
-        $user = new user($search);
-        $result = array();
-        $result[0] = $user->getBasicInfo();
-        header('Content-type: application/json');
-        echo json_encode($result);
+		$search = getClient($search['id']);
+		if ($search != false) {
+	        $user = new user($search);
+			$result = array();
+			$result[0] = $user->getBasicInfo();
+			header('Content-type: application/json');
+			echo json_encode($result);
+		} else {
+			// No client found
+		}
     }
     else {
         //ERROR?

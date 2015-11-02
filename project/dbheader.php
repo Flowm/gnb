@@ -116,7 +116,11 @@ function executeSelectStatementOneRecord($sql)
 		return false;
 	}
 
-	$result = $data[0];
+	if (sizeof($data) > 0) {
+		$result = $data[0];
+	} else {
+		$result = $data;
+	}
 
 	printDebugResult("executeSelectStatementOneRecord", $sql, $result);
 	return $result;

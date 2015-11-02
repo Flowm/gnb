@@ -731,12 +731,25 @@ function verifyTransaction($account_id, $dest_code, $amount, $description, $tan_
 	
 	# checking account ID 
 	if (sizeof($account_info) == 0 ){
-		$var_res["message"]	= '[Account] Account not found' ;
+		$var_res["message"]	= '[Account] Source account not found' ;
 		return $var_res ; 
 	}
 	
 	# Add check for Destination Account  
-	# no check needed at this stage 
+	
+	$SQL_STATEMENT = "
+		SELECT 	$ACCOUNTOVERVIEW_TABLE_KEY 
+		FROM  	$ACCOUNTOVERVIEW_TABLE_NAME
+		WHERE	$ACCOUNTOVERVIEW_TABLE_KEY = '$dest_code'
+	" ; 
+	
+	$destacc_result 	= executeSelectStatementOneRecord($SQL_STATEMENT) ;
+	
+	# checking destinatin account
+	if ($destacc_result == false || sizeof($destacc_result) == 0 ){
+		$var_res["message"]	= '[Account] Destination account not found' ;
+		return $var_res ; 
+	}
 	
 	# Add check for Description  
 	# no check needed at this stage 

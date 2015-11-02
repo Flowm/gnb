@@ -18,7 +18,7 @@
 
 #define MYSQL_HOSTNAME	"localhost"
 #define MYSQL_USERNAME	"samurai"
-#define MYSQL_PASSWORD	"samurai"
+#define MYSQL_PASSWORD	"6JEn7RhLAGaavQTx"
 #define MYSQL_DBNAME	"gnbdb"
 
 #define E_TRANS_LENGTH		1

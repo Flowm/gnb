@@ -2,30 +2,38 @@
 
 ## Virtual machine
 Our submitted virtual machine has the following passwords configured:
-* System user: `samurai:samurai`
-* Database user: `samurai:samurai`
+* System user: `samurai:r8QD4bbgvByQiuqX`
+* Database user: `samurai:6JEn7RhLAGaavQTx`
 
-TODO: Update with the final passwords!
+We only include the real passwords here, as the repository is private and will
+only be deployed on a VM without direct internet access. Normally these
+password would be stored completely separate from the VCS.
 
 ## Installation
-The following steps are required to use the gnb application:
+The following steps are required to use the gnb application.
+All steps assume your at the root directory of the project.
 
 ### Initialize git submodules
-* Go into the directory of the project
+* Download the PHPMailer submodule
 	```git submodule init && git submodule update```
 * Fix permissions of the upload folder
 	```sudo chown www-data:www-data -R project/uploads```
 
 ### Database setup
-* Go into the directory of the project
-* Connect to the sql server:
+* Create the database user samurai with the correct password
+```
+use mysql;
+SET PASSWORD FOR 'samurai'@'localhost' = PASSWORD('6JEn7RhLAGaavQTx');
+FLUSH PRIVILEGES;
+```
+* Connect to the sql server
 	```mysql -u samurai -p```
-* Drop the database, and import the schema and the dummydata:
+* Drop the database, and import the schema
 	```drop database gnbdb; source database/gnbdb_create.sql;```
 * Create the default accounts by opening the following website:
-	http://frcy.org:2280/gnb-alex/database/setup.php
+	```http://URL/gnb/database/setup.php```
 
 ### Bulk transaction processing
-* Go to the project/lib/ctransact folder within the project
 * Ensure the `libmysqlclient-dev` package is installed for the mysql connection to the database
-* Execute `make`
+* Build the ctransact programm
+	```make -C project/lib/ctransact```

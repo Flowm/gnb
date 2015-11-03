@@ -49,7 +49,7 @@ echo '<select class="select-bar" id="account_select" onchange="onSelectedAccount
 echo '<option selected disabled>Select Account</option>' ;
 foreach($accounts_info as $acc){
 	echo 	'<option value="'.$acc["id"].'" ' ;
-	if ( $_SESSION["account_id"] == $acc["id"] ){ echo "selected" ; }
+	if ( $selected == $acc["id"] ){ echo "selected" ; }
 	echo 	'>'.$acc["id"].'</option>' ;
 }
 echo	'</select></div>' ;

@@ -3,8 +3,8 @@ Hello <?php echo $cust_name; ?>!
 You registration request has been received and will be processed shortly.
 Upon approval, you will receive a confirmation email.
 
-Thank you for choosing the Goliath National Bank!
-It's gonna be legen... wait for it... dary! Legendary!
+Thank you for choosing GNB - it's gonna be legen... wait for it... dary!
+Legendary!
 
 Sincerley Barney Stinson
 CEO of GNB

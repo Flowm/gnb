@@ -1,0 +1,1 @@
+var res = {'data':'HTTP/1.1 200 Partial Content\x0aDate: Fri, 13 Nov 2015 15:30:03 GMT\x0aServer: Apache/2.2.22 (Ubuntu)\x0aLast-Modified: Mon, 02 Nov 2015 21:30:59 GMT\x0aETag: \x2210783f-4e9f-523957e439e87\x22\x0aAccept-Ranges: bytes\x0aContent-Length: 20127\x0aContent-Range: bytes 0-20126/20127\x0aKeep-Alive: timeout=5, max=58\x0aConnection: Keep-Alive\x0a\x0a\x9fN'}

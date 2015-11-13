@@ -1,0 +1,1 @@
+var res = {'data':'HTTP/1.1 200 OK\x0aDate: Fri, 13 Nov 2015 15:29:47 GMT\x0aServer: Apache/2.2.22 (Ubuntu)\x0aAccept-Ranges: bytes\x0aX-Powered-By: PHP/5.3.10-1ubuntu3.20\x0aSet-Cookie: PHPSESSID=5va9ndpb2q0gpnuljr80npsjv0; path=/; domain=www.team27.com\x0a\x0a[...truncated...]\x0a'}

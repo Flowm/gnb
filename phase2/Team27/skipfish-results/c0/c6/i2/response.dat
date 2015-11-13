@@ -1,0 +1,8 @@
+HTTP/1.1 200 OK
+Date: Fri, 13 Nov 2015 15:29:47 GMT
+Server: Apache/2.2.22 (Ubuntu)
+Accept-Ranges: bytes
+X-Powered-By: PHP/5.3.10-1ubuntu3.20
+Set-Cookie: PHPSESSID=5va9ndpb2q0gpnuljr80npsjv0; path=/; domain=www.team27.com
+
+[...truncated...]

@@ -1,0 +1,12 @@
+HTTP/1.1 200 Partial Content
+Date: Fri, 13 Nov 2015 15:30:02 GMT
+Server: Apache/2.2.22 (Ubuntu)
+Last-Modified: Mon, 02 Nov 2015 21:30:59 GMT
+ETag: "107843-5b80-523957e439e87"
+Accept-Ranges: bytes
+Content-Length: 23424
+Content-Range: bytes 0-23423/23424
+Keep-Alive: timeout=5, max=69
+Connection: Keep-Alive
+
+wOFF

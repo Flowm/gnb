@@ -1,0 +1,27 @@
+/
+	index.php
+	login.php
+	register.php
+	backend.php
+	tran.php
+	employee_home.php
+	customer_home.php
+	approveuser.php
+	img
+		/
+	icons
+		/
+		small
+			/
+	upload
+		/
+	js
+		/
+	fonts
+		/
+	Presentation
+		/
+	css
+		/
+		
+	

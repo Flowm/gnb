@@ -1,0 +1,6 @@
+python2.7 sqlmap.py --wizard
+
+http://localhost:8080/login.php
+<Enter>
+3
+3

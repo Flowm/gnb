@@ -6,12 +6,33 @@
 	Team 12\\
 	Alexander Lill\\
 	Lorenzo Donini\\
-	Florian Mauracher\\ 
+	Florian Mauracher\\
 	Mahmoud Naser\\
 }
 \newcommand*{\getDoctype}{Secure Coding - Phase 2}
-\newcommand*{\doge}{DogeBankT27}
+\newcommand*{\doge}{DogeBank}
 \newcommand*{\gnb}{Goliath National Bank}
 
-% TODO: vultable function here
-% TODO: cvss function here
+\newcommand*{\vulntitle}[2]{%
+	\subsection{#2 (#1)}\label{vuln:#1}
+}
+\newcommand*{\vultable}[6]{%
+	\begin{table}[htpb]
+		\centering
+		\begin{tabularx}{\textwidth}{l | X}
+			\toprule
+			& #1 \\
+			\midrule
+			\textbf{Observation} & #2 \\
+			\textbf{Discovery} & #3 \\
+			\textbf{Likelihood} & #4 \\
+			\textbf{Implication} & #5 \\
+			\textbf{CVSS} & #6 \\
+			\bottomrule
+		\end{tabularx}
+	\end{table}
+}
+
+\newcommand*{\cvss}[8]{%
+	#1 #2 #3 #4 #5 #6 #7 #8
+}

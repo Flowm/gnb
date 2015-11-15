@@ -1,36 +1,134 @@
 \chapter{Detailed Report}\label{chapter:detailed_report}
 
-\section{Tools}
+\section{Tools description}
 
+\newpage
+\section{Configuration and Deploy Management Testing}
+\vulntitle{OTG-CONFIG-003}{Test File Extensions Handling for Sensitive Information}
+\vultable{\doge}{%
+		observation text
+	}{%
+		discovery text
+	}{%
+		likelihood text
+	}{%
+		implication text
+	}{%
+		\cvss{av}{ac}{pr}{ui}{s}{c}{i}{a}
+}
+\vultable{\gnb}{%
+		observation text
+	}{%
+		discovery text
+	}{%
+		likelihood text
+	}{%
+		implication text
+	}{%
+		\cvss{av}{ac}{pr}{ui}{s}{c}{i}{a}
+}
 
-\section{Information Gathering}
+\vulntitle{OTG-CONFIG-006}{Test HTTP Methods}
+\vulntitle{OTG-CONFIG-007}{Test HTTP Strict Transport Security}
+\vulntitle{OTG-CONFIG-008}{Test RIA cross domain policy}
 
-\subsection{Configuration and Deploy Management Testing (OTG-CONFIG-003)}
+\newpage
+\section{Identity Management Testing}
+\vulntitle{OTG-IDENT-001}{Test Role Definitions}
+\vulntitle{OTG-IDENT-002}{Test User Registration Process}
+\vulntitle{OTG-IDENT-003}{Test Account Provisioning Process}
+\vulntitle{OTG-IDENT-004}{Testing for Account Enumeration and Guessable User Account}
+\vulntitle{OTG-IDENT-005}{Testing for Weak or unenforced username policy}
 
-\begin{table}[htpb]
-  \centering
-  \begin{tabularx}{\textwidth}{l | X}
-    \toprule
-      & \doge \\
-    \midrule
-      \textbf{Observation} & Example \\
-      \textbf{Discovery} & Example \\
-      \textbf{Likelihood} & Example \\
-      \textbf{Implication} & Example \\
-      \textbf{CVSS} & Example \\
-    \bottomrule
-  \end{tabularx}
-\end{table}
+\newpage
+\section{Authentication Testing}
+\vulntitle{OTG-AUTHN-001}{Testing for Credentials Transported over an Encrypted Channel}
+\vulntitle{OTG-AUTHN-002}{Testing for default credentials}
+\vulntitle{OTG-AUTHN-003}{Testing for Weak lock out mechanism}
+\vulntitle{OTG-AUTHN-004}{Testing for bypassing authentication schema}
+\vulntitle{OTG-AUTHN-005}{Test remember password functionality}
+\vulntitle{OTG-AUTHN-006}{Testing for Browser cache weakness}
+\vulntitle{OTG-AUTHN-007}{Testing for Weak password policy}
+\vulntitle{OTG-AUTHN-008}{Testing for Weak security question/answer}
+\vulntitle{OTG-AUTHN-009}{Testing for weak password change or reset functionalities}
+\vulntitle{OTG-AUTHN-010}{Testing for Weaker authentication in alternative channel}
 
+\newpage
+\section{Authorization Testing}
+\vulntitle{OTG-AUTHZ-001}{Testing Directory traversal/file include}
+\vulntitle{OTG-AUTHZ-002}{Testing for bypassing authorization schema}
+\vulntitle{OTG-AUTHZ-003}{Testing for Privilege Escalation}
+\vulntitle{OTG-AUTHZ-004}{Testing for Insecure Direct Object References}
 
-% \vultable{
-%	observation
-%	}{
-%	Discovery
-%	}{
-%	Likelihood
-%	}{
-%	Implication
-%	}{
-%	\cvss{AV}{AC}{PR}{UI}{S}{C}{I}{A}
-%	}
+\newpage
+\section{Session Management Testing}
+\vulntitle{OTG-SESS-001}{Testing for Bypassing Session Management Schema}
+\vulntitle{OTG-SESS-002}{Testing for Cookies attributes}
+\vulntitle{OTG-SESS-003}{Testing for Session Fixation}
+\vulntitle{OTG-SESS-004}{Testing for Exposed Session Variables}
+\vulntitle{OTG-SESS-005}{Testing for Cross Site Request Forgery}
+\vulntitle{OTG-SESS-006}{Testing for logout functionality}
+\vulntitle{OTG-SESS-007}{Test Session Timeout}
+\vulntitle{OTG-SESS-008}{Testing for Session puzzling}
+
+\newpage
+\section{Data Validation Testing}
+\vulntitle{OTG-INPVAL-001}{Testing for Reflected Cross Site Scripting}
+\vulntitle{OTG-INPVAL-002}{Testing for Stored Cross Site Scripting}
+\vulntitle{OTG-INPVAL-003}{Testing for HTTP Verb Tampering}
+\vulntitle{OTG-INPVAL-004}{Testing for HTTP Parameter pollution}
+\vulntitle{OTG-INPVAL-005}{Testing for SQL Injection}
+\vulntitle{OTG-INPVAL-006}{Testing for LDAP Injection}
+\vulntitle{OTG-INPVAL-007}{Testing for ORM Injection}
+\vulntitle{OTG-INPVAL-008}{Testing for XML Injection}
+\vulntitle{OTG-INPVAL-009}{Testing for SSI Injection}
+\vulntitle{OTG-INPVAL-010}{Testing for XPath Injection}
+\vulntitle{OTG-INPVAL-011}{IMAP/SMTP Injection}
+\vulntitle{OTG-INPVAL-012}{Testing for Code Injection}
+Testing for Local File Inclusion\\
+Testing for Remote File Inclusion\\
+\vulntitle{OTG-INPVAL-013}{Testing for Command Injection}
+\vulntitle{OTG-INPVAL-014}{Testing for Buffer overflow}
+Testing for Heap overflow\\
+Testing for Stack overflow\\
+Testing for Format string\\
+\vulntitle{OTG-INPVAL-015}{Testing for incubated vulnerabilities}
+\vulntitle{OTG-INPVAL-016}{Testing for HTTP Splitting/Smuggling}
+
+\newpage
+\section{Error Handling}
+\vulntitle{OTG-ERR-001}{Analysis of Error Codes}
+\vulntitle{OTG-ERR-002}{Analysis of Stack Traces}
+
+\newpage
+\section{Cryptography}
+\vulntitle{OTG-CRYPST-001}{Testing for Weak SSL/TSL Ciphers, Insufficient Transport Layer Protection}
+\vulntitle{OTG-CRYPST-002}{Testing for Padding Oracle}
+\vulntitle{OTG-CRYPST-003}{Testing for Sensitive information sent via unencrypted channels}
+
+\newpage
+\section{Business Logic Testing}
+\vulntitle{OTG-BUSLOGIC-001}{Test Business Logic Data Validation}
+\vulntitle{OTG-BUSLOGIC-002}{Test Ability to Forge Requests}
+\vulntitle{OTG-BUSLOGIC-003}{Test Integrity Checks}
+\vulntitle{OTG-BUSLOGIC-004}{Test for Process Timing}
+\vulntitle{OTG-BUSLOGIC-005}{Test Number of Times a Function Can be Used Limits}
+\vulntitle{OTG-BUSLOGIC-006}{Testing for the Circumvention of Work Flows}
+\vulntitle{OTG-BUSLOGIC-007}{Test Defenses Against Application Mis-use}
+\vulntitle{OTG-BUSLOGIC-008}{Test Upload of Unexpected File Types}
+\vulntitle{OTG-BUSLOGIC-009}{Test Upload of Malicious Files}
+
+\newpage
+\section{Client Side Testing}
+\vulntitle{OTG-CLIENT-001}{Testing for DOM based Cross Site Scripting}
+\vulntitle{OTG-CLIENT-002}{Testing for JavaScript Execution}
+\vulntitle{OTG-CLIENT-003}{Testing for HTML Injection}
+\vulntitle{OTG-CLIENT-004}{Testing for Client Side URL Redirect}
+\vulntitle{OTG-CLIENT-005}{Testing for CSS Injection}
+\vulntitle{OTG-CLIENT-006}{Testing for Client Side Resource Manipulation}
+\vulntitle{OTG-CLIENT-007}{Test Cross Origin Resource Sharing}
+\vulntitle{OTG-CLIENT-008}{Testing for Cross Site Flashing}
+\vulntitle{OTG-CLIENT-009}{Testing for Clickjacking}
+\vulntitle{OTG-CLIENT-010}{Testing WebSockets}
+\vulntitle{OTG-CLIENT-011}{Test Web Messaging}
+\vulntitle{OTG-CLIENT-012}{Test Local Storage}

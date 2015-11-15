@@ -1,0 +1,41 @@
+\RequirePackage[l2tabu,orthodox]{nag}
+
+\documentclass[headsepline,footsepline,footinclude=false,oneside,fontsize=11pt,paper=a4,listof=totoc,bibliography=totoc]{scrbook} % one-sided
+%\documentclass[headsepline,footsepline,footinclude=false,fontsize=11pt,paper=a4,listof=totoc,bibliography=totoc,BCOR=12mm,DIV=12]{scrbook} % two-sided
+
+\input{settings/packages}
+\input{settings/settings}
+\input{settings/commands}
+
+%\input{glossary/terms}
+%\input{glossary/acronyms}
+
+\begin{document}
+
+\input{pages/cover}
+
+\frontmatter{}
+
+\input{pages/abstract}
+\microtypesetup{protrusion=false}
+\tableofcontents{}
+\microtypesetup{protrusion=true}
+
+\mainmatter{}
+
+\input{chapters/01_timetracking.tex}
+\input{chapters/02_vulnerabilities_overview.tex}
+\input{chapters/03_detailed_report.tex}
+
+\appendix{}
+
+%\glsaddall{} % add all defined terms to glossary, even if not referenced in text
+%\printglossaries{}
+
+%\microtypesetup{protrusion=false}
+%\listoffigures{}
+%\listoftables{}
+%\microtypesetup{protrusion=true}
+%\printbibliography{}
+
+\end{document}

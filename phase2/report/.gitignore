@@ -1,0 +1,4 @@
+/build/*
+!/build/main.pdf
+/logos/*.pdf
+.texpadtmp/

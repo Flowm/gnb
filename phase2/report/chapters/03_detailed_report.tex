@@ -4,7 +4,8 @@
 
 \newpage
 \section{Configuration and Deploy Management Testing}
-\vulntitle{OTG-CONFIG-003}{Test File Extensions Handling for Sensitive Information}
+%SAMPLE
+\vulntitle{OTG-CONFIG-XXX}{SAMPLE}
 \vultable{\doge}{%
 		observation text
 	}{%
@@ -27,10 +28,106 @@
 	}{%
 		\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
 }
-
+%CONFIG 003
+\vulntitle{OTG-CONFIG-003}{Test File Extensions Handling for Sensitive Information}
+\vultable{\doge}{%
+	The batch transaction functionality at \url{http:/IPADDRESS/tran.php} does not seem to check the extension of the uploaded files.\newline
+	Also, while exploring the folder structure of the server, some leftover files were found, as well as hidden folders.
+}{%
+	If the user tries to upload any file other than a txt file, the server does not provide any error messages. This particular vulnerability will be discussed later in 3.X.X.\newline
+	Additionally, leftover files (e.g. \url{http:/IPADDRESS/employee_registration.php~}) were not deleted from the server, as well as other files containing sensitive information. More specifically, this is the case of the .git folder.
+}{%
+	In order to access the hidden .git folder, however, an attacker must be skilled and know where to search for sensitive information.
+}{%
+	Having access to the data contained inside the hidden .git folder allows to potentially get access to the whole source code of the web application.
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+}
+\vultable{\gnb}{%
+	?
+}{%
+	?
+}{%
+	?
+}{%
+	?
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+}
+%CONFIG 006
 \vulntitle{OTG-CONFIG-006}{Test HTTP Methods}
+\vultable{\doge}{%
+	observation text
+}{%
+discovery text
+}{%
+likelihood text
+}{%
+implication text
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+}
+\vultable{\gnb}{%
+	observation text
+}{%
+discovery text
+}{%
+likelihood text
+}{%
+implication text
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+}
+
+%CONFIG 007
 \vulntitle{OTG-CONFIG-007}{Test HTTP Strict Transport Security}
+\vultable{\doge}{%
+	The application is only accessible over HTTP.
+}{%
+	No HTTPS is enforced, therefore all data sent between the server and client is not encrypted.
+}{%
+	An attacker could perform a man in the middle attack.
+}{%
+	Sniffing the network traffic, all data exchanged between the server and the client can be read as clear text. No confidentiality at all is supported on this end.
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+\vultable{\gnb}{%
+	The application is only accessible over HTTP.
+}{%
+	No HTTPS is enforced, therefore all data sent between the server and client is not encrypted.
+}{%
+	An attacker could perform a man in the middle attack.
+}{%
+	Sniffing the network traffic, all data exchanged between the server and the client can be read as clear text. No confidentiality at all is supported on this end.
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
+%CONFIG 008
 \vulntitle{OTG-CONFIG-008}{Test RIA cross domain policy}
+\vultable{\doge}{%
+	The web application doesn't support additional technologies like Flash, Silverlight or Java.
+}{%
+	No cross-domain policy files were found.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+\vultable{\gnb}{%
+	The web application doesn't support additional technologies like Flash, Silverlight or Java.
+}{%
+	No cross-domain policy files were found.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
 
 \newpage
 \section{Identity Management Testing}
@@ -62,13 +159,65 @@
 
 \newpage
 \section{Session Management Testing}
+%SESSION 001
 \vulntitle{OTG-SESS-001}{Testing for Bypassing Session Management Schema}
+\vultable{\doge}{%
+	When accessing the application, a randomly generated PHPSESSID session cookie is set. The cookie doesn't have an expiration date nor is it tagged as secure. Apparently the session cookie is already set before logging into the application. This cookie is simply replaced by a new one once the user logs out of the application. No other cookies are set. Also if the cookie is tampered with, the server automatically generates a new cookie, containing a new session ID.
+}{%
+	The PHPSESSID cookie has been discovered while intercepting HTTP requests/responses using Burp. The same cookie details were later on confirmed using the Cookies plugin for browser.
+}{%
+	\na
+}{%
+	Since the only used cookie only contains the session ID, even though it is easy to change the value of the cookie, no other session values are exposed to the user. It is still possible to hijack another session by changing the entire value of the cookie with the one associated to another user (see Session 004).
+}{%
+\na
+}
+\vultable{\gnb}{%
+	The same observations made for the DogeBank application apply.
+}{%
+	The PHPSESSID cookie was analyzed using the Cookies plugin for browser.
+}{%
+	\na
+}{%
+	The same implications mentioned for the DogeBank application apply.
+}{%
+\na
+}
+%SESSION 002
 \vulntitle{OTG-SESS-002}{Testing for Cookies attributes}
+\vultable{\doge}{%
+	observation text
+}{%
+discovery text
+}{%
+likelihood text
+}{%
+implication text
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+\vultable{\gnb}{%
+	observation text
+}{%
+discovery text
+}{%
+likelihood text
+}{%
+implication text
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+}
+%SESSION 003
 \vulntitle{OTG-SESS-003}{Testing for Session Fixation}
+%SESSION 004
 \vulntitle{OTG-SESS-004}{Testing for Exposed Session Variables}
+%SESSION 005
 \vulntitle{OTG-SESS-005}{Testing for Cross Site Request Forgery}
+%SESSION 006
 \vulntitle{OTG-SESS-006}{Testing for logout functionality}
+%SESSION 007
 \vulntitle{OTG-SESS-007}{Test Session Timeout}
+%SESSION 008
 \vulntitle{OTG-SESS-008}{Testing for Session puzzling}
 
 \newpage
@@ -120,6 +269,7 @@ Testing for Format string\\
 
 \newpage
 \section{Client Side Testing}
+This section was prioritized as low, therefore the client side was not tested in depth. Furthermore, as stated in the OWASP testing guide, black box testing of the client side is usually not performed, since access to the source code is always available, as it needs to be sent to the client to be executed. Nevertheless, some potential vulnerabilities were found and briefly analyzed.
 \vulntitle{OTG-CLIENT-001}{Testing for DOM based Cross Site Scripting}
 \vulntitle{OTG-CLIENT-002}{Testing for JavaScript Execution}
 \vulntitle{OTG-CLIENT-003}{Testing for HTML Injection}

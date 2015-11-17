@@ -1,5 +1,58 @@
 \chapter{Vulnerabilities Overview}\label{chapter:vulnerabilities_overview}
-
+In this chapter, the major security flaws of both the DogeBank and the Goliath National Bank applications will be briefly summarized and compared.\newline
+After testing the two web applications thoroughly, we found the following vulnerabilities to be the most serious.
+%THEIR SECTION
 \section{\doge}
+\subsection{Bypassing authorizations}
+\begin{itemize}
+	\item Likelihood: \textit{medium}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: \textit{OWASP OTG-AUTHZ-002}
+\end{itemize}
+Any unauthenticated user may approve registrations or transactions using the correct GET request. It is also possible to directly register an employee without even having to login. Considering this security issue, the whole authentication process proves to be useless.
+\subsection{Privilege escalation}
+\begin{itemize}
+	\item Likelihood: \textit{medium}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: \textit{OWASP OTG-AUTHZ-003}
+\end{itemize}
+A logged in customer is able to access employee pages without having the proper privileges, allowing therefore actions which shouldn't be possible. This is also possible the other way around, although this could be considered as a bug, rather than a vulnerability.
+\subsection{Stored XSS in all forms}
+\begin{itemize}
+	\item Likelihood: \textit{medium}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: \textit{OWASP OTG-INPVAL-002}
+\end{itemize}
+Input values in forms are not validated whatsoever, allowing to store custom scripts inside the database when filling out forms. These scripts will automatically be executed by employees who view the details of the client. This is also valid for stored CSS and HTML injection.
+\subsection{SQL injection in all forms}
+\begin{itemize}
+	\item Likelihood: \textit{medium}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: \textit{OWASP OTG-INPVAL-005}
+\end{itemize}
+The same concept explained in the XSS vulnerability also applies for SQL injection: since the input values in forms are not validated, it is possible to inject SQL statements. Even though multiple SQL queries are not supported, tricking the server into authenticating a user without valid credentials, or using invalid TANs for that matter, is still easy.
+\subsection{No file extension check during upload}
+\begin{itemize}
+	\item Likelihood: \textit{medium}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: \textit{OWASP OTG-BUSLOGIC-008}
+\end{itemize}
+During the upload of batch files for multiple transactions, the file extension is not verified, therefore it is possible to upload any potential file or to use Unix commands as the name of the file.
+\subsection{Test Upload of Malicious Files}
+\begin{itemize}
+	\item Likelihood: \textit{medium}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: \textit{OWASP OTG-BUSLOGIC-009}
+\end{itemize}
+The weak file upload policy leads to another big issue, since the uploaded file may contain malicious code. Exploiting this vulnerability allows to gain complete control of the web application.
+
+%OUR SECTION
 \section{\gnb}
+
 \section{Comparison}

@@ -3,5 +3,14 @@
 %TODO: Write executive summary
 
 \section{\doge - Team 27}
+During our intensive testing of the DogeBank application, we found many severe vulnerabilities, as well as bugs, that could easily be exploited to compromise the entire application. Under no circumstances should this web application be used 
+productively!\newline\newline
+For starters, directory listing is enabled and allows to browse the structure of the web application, providing knowledge about the application flow and some functionalities. Several checks are not performed, therefore it is possible to access some pages as an unauthenticated user and perform operations that should only be allowed to employees (e.g. approving registrations/transactions). This also holds for users without sufficient role privileges. Even without all these vulnerabilities, session hijacking would still be a viable option to obtain employee privileges. SQL injection and XSS is also possible on almost all pages, giving an attacker plenty of possibilities to cause damage to both customers and employees.\newline\newline
+Furthermore any registered user may potentially upload arbitrary malicious code to the server by exploiting the batch transaction functionality. Since no checks are performed whatsoever on the extension of the uploaded file, it is perfectly feasible to upload scripts that can later be executed from just anyone. Although this issue is easy to fix, it may give an attacker full control over the web application as well as over part of the system it runs on. All database and email passwords are also accessible this way. Additionally, the file upload functionality is vulnerable to direct code injection, which will result in allowing an attacker to execute arbitrary code.\newline\newline 
+The business logic also seems to be somewhat broken, as a customer can increase his/her balance arbitrarily, by exploiting multiple flaws in the transaction functionalities. Moreover TANs are not entirely random and will be generated only once per user, allowing endless transactions after all the codes have been used up.
 \section{\gnb - Team 12}
+We found several vulnerabilities and bugs, most of them having minor impact on the web application as a whole, but still allowing an attacker to gain access to other user accounts (both clients and employees).\newline\newline
+Even though the folder listing is disabled on the server, an astute attacker may either brute-force or figure out the names of some PHP files, by analyzing the logical names inside the client code. Since not all of these files seem to perform checks (and automatically redirect a user to a safe path), some  
+Among the major issues found, SQL injection and XSS is possible from the registration page.
 \section{Comparison}
+In summary

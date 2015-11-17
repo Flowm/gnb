@@ -228,7 +228,7 @@
 	%7 Integrity Impact %High H, Low L, None N
 	%8 Availability Impact %High H, Low L, None N
 	
-	%\dumpSettings{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}
+	\dumpSettingsShort{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}
 
 	%{\calcIsc}[2]{%
 	% #1 = Scope
@@ -355,4 +355,20 @@
 	Confidentiality Impact: #6\\
 	Integrity Impact: #7\\
 	Availability Impact: #8\\
+}
+
+\newcommand{\dumpSettingsShort}[8]{%
+    \noindent
+    \formatDump{AV}{#1}
+    \formatDump{AC}{#2}
+    \formatDump{PR}{#3}
+    \formatDump{UI}{#4}
+    \formatDump{S}{#5}
+    \formatDump{C}{#6}
+    \formatDump{I}{#7}
+    \formatDump{A}{#8}
+}
+
+\newcommand{\formatDump}[2]{%
+    \textbf{#1:} #2~
 }

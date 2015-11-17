@@ -1,3 +1,6 @@
 [submodule "project/lib/phpmailer"]
 	path = project/lib/phpmailer
 	url = https://github.com/PHPMailer/PHPMailer.git
+[submodule "phase2/report/settings/cvss3tex"]
+	path = phase2/report/settings/cvss3tex
+	url = https://github.com/AlexanderLill/cvss3tex.git

@@ -132,13 +132,109 @@ implication text
 \newpage
 \section{Identity Management Testing}
 \vulntitle{OTG-IDENT-001}{Test Role Definitions}
+\vultable{\doge}{%
+	Clients and non-logged in users are able to access Employee privileges, see \ref{figure:RoleDefinitionsDoge}
+}{%
+	This was discovered through the bug searching stage and while completing the "OTG-AUTHN-004 Testing for bypassing authentication schema" test.
+}{%
+	This is a relatively easy bug to uncover, so the likelihood of is quite high 
+}{%
+	This could have tremendous damages to the bank, as adding employee accounts and transferring functions 
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/RoleDefinitionsDoge}
+	\caption{Role Definitions}
+	\label{figure:RoleDefinitionsDoge}
+\end{figure}
+
+
+\vultable{\gnb}{%
+	Clients, Employees and non-logged in users all act as expected, see \ref{figure:RoleDefinitionsGNB}
+}{%
+	This was verified through basic function testing and security testing tools (ZAP).
+}{%
+	N/A since no vulnerability was found.
+}{%
+	N/A 
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/RoleDefinitionsGNB}
+	\caption{Role Definitions}
+	\label{figure:RoleDefinitionsGNB}
+\end{figure}
+
+
 \vulntitle{OTG-IDENT-002}{Test User Registration Process}
+\vultable{\doge}{%
+	The registration process is set up for anyone to register, the process then awaits human interaction for the approval stage, this will serve an extra step of verification.
+
+	Identities are not verified nor checked at this stage due to application limitations, email format verification is missing from the form.
+}{%
+	The email verification test was discovered through trail and error while registering.
+}{%
+	likely, due to intentional or unintentional mistyping.
+}{%
+	No serious impact as TAN codes are not sent to the email. 
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
+\vultable{\gnb}{%
+	The registration process is set up for anyone to register, the process then awaits human interaction for the approval stage, this will serve an extra step of verification.
+	
+	Identities are not verified nor checked at this stage due to application limitations.
+}{%
+	Trail and error.
+}{%
+	N/A since no vulnerability was found.
+}{%
+	N/A since no vulnerability was found. 
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
 \vulntitle{OTG-IDENT-003}{Test Account Provisioning Process}
+\vultable{\doge}{%
+	The registration process is set up for anyone to register, the process then awaits human interaction for the approval stage, this will serve an extra step of verification.
+	
+	Identities are not verified nor checked at this stage due to application limitations, email format verification is missing from the form.
+}{%
+The email verification test was discovered through trail and error while registering.
+}{%
+likely, due to intentional or unintentional mistyping.
+}{%
+No serious impact as TAN codes are not sent to the email. 
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
+\vultable{\gnb}{%
+	The registration process is set up for anyone to register, the process then awaits human interaction for the approval stage, this will serve an extra step of verification.
+	
+	Identities are not verified nor checked at this stage due to application limitations, email format verification is missing from the form.
+}{%
+The email verification test was discovered through trail and error while registering.
+}{%
+likely, due to intentional or unintentional mistyping.
+}{%
+No serious impact as TAN codes are not sent to the email. 
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
 \vulntitle{OTG-IDENT-004}{Testing for Account Enumeration and Guessable User Account}
 \vulntitle{OTG-IDENT-005}{Testing for Weak or unenforced username policy}
 
 \newpage
-\section{Authentication Testing}
+\section{Authentication Testing}	
 \vulntitle{OTG-AUTHN-001}{Testing for Credentials Transported over an Encrypted Channel}
 \vulntitle{OTG-AUTHN-002}{Testing for default credentials}
 \vulntitle{OTG-AUTHN-003}{Testing for Weak lock out mechanism}

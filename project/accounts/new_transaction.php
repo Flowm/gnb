@@ -26,7 +26,7 @@ $tan_code		= ( isset($_POST["tan_code"]) ? $_POST["tan_code"] : '' );
 
 <br><h1 class="title2">Transaction page</h1>
 <h1 class="simple-text">This form is used to perform a single transaction</h1>
-<h1 class="simple-text">Note: All Transactions over 10,000 will require manual approval by an employee</p>
+<p class="simple-text">Note: All Transactions over 10,000 will require manual approval by an employee</p>
 <form method="post" id="transactionForm" onsubmit="verifyTransaction()">
     <div class="transaction-container">
         <div class="formRow">

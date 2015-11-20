@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/black.css" id="theme">
+        <link rel="stylesheet" href="css/gnb.css">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+
+                <section data-state="intro">
+                    <img src="pictures/gnb_logo.svg" class="logo">
+                    <h1>Secure Coding</h1>
+                    <h2>Team 12 - Phase 2</h2>
+
+                    <h3>Members</h3>
+                    <ul>
+                        <li>Alexander Lill</li>
+                        <li>Lorenzo Donini</li>
+                        <li>Florian Mauracher</li>
+                        <li>Mahmoud Naser</li>
+                    </ul>
+                </section>
+
+                <section data-state="vulns">
+
+                    <section>
+                        <h1>Most Important Vulnerabilities</h1>
+                    </section>
+
+                    <section>
+                        <h1>No. 5</h1>
+                        <h2>VulnName</h2>
+                        <h3>Impact</h3>
+                        <h3>Likelihood, yo</h3>
+                        <h3>CVSS score</h3>
+                    </section>
+
+                </section>
+
+                <section data-state="demo">
+                    <h1>Live-Demo!</h1>
+                </section>
+
+                <section data-state="features">
+                    <h1>Features</h1>
+                    <h2>the team implemented</h2>
+                </section>
+
+                <section data-state="features">
+                    <h1>Features</h1>
+                    <H2>the team didn't implement</h2>
+                </section>
+
+                <section data-state="features">
+                    <h1>Features</h1>
+                    <h2>the team implemented</h2>
+                    <h4>but didn't tell us about</h4>
+                </section>
+
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+
+            // Full list of configuration options available at:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+                // Optional reveal.js plugins
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true },
+                    { src: 'plugin/notes/notes.js', async: true }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>

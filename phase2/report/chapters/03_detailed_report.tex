@@ -4,32 +4,9 @@
 
 \newpage
 \section{Configuration and Deploy Management Testing}
-%SAMPLE
-\vulntitle{OTG-CONFIG-XXX}{SAMPLE}
-\vultable{\doge}{%
-		observation text
-	}{%
-		discovery text
-	}{%
-		likelihood text
-	}{%
-		implication text
-	}{%
-		\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
-}
-\vultable{\gnb}{%
-		observation text
-	}{%
-		discovery text
-	}{%
-		likelihood text
-	}{%
-		implication text
-	}{%
-		\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
-}
+
 %CONFIG 003
-\vulntitle{OTG-CONFIG-003}{Test File Extensions Handling for Sensitive Information}
+\simpleVulntitle{OTG-CONFIG-003}{Test File Extensions Handling for Sensitive Information}
 \vultable{\doge}{%
 	The batch transaction functionality at \url{http:/IPADDRESS/tran.php} does not seem to check the extension of the uploaded files.\newline
 	Also, while exploring the folder structure of the server, some leftover files were found, as well as hidden folders.

@@ -501,8 +501,84 @@ Testing for Format string\\
 \newpage
 \section{Cryptography}
 \simpleVulntitle{OTG-CRYPST-001}{Testing for Weak SSL/TSL Ciphers, Insufficient Transport Layer Protection}
+\vultable{\doge}{%
+	Due to the fact, that the application is only accessible via HTTP and no SSL/TLS encryption is used no testing for weak ciphers could be performed.
+	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007}
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+\vultable{\gnb}{%
+	The same observations made for the DogeBank application apply.
+	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007}
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-CRYPST-002}{Testing for Padding Oracle}
+\vultable{\doge}{%
+	Due to the fact, that no encryption is used when accessing the application, no padding of information is used.
+	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007}
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+\vultable{\gnb}{%
+	The same observations made for the DogeBank application apply.
+	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007}
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-CRYPST-003}{Testing for Sensitive information sent via unencrypted channels}
+\vultable{\doge}{%
+	As the application is only accessible via HTTP and no SSL/TLS encryption is
+	used, sensitive information is sent over unencrypted channels in every
+	request the user performs.
+	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007}
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+\vultable{\gnb}{%
+	The same observations made for the DogeBank application apply.
+	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007}
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
 
 \newpage
 \section{Business Logic Testing}

@@ -143,7 +143,7 @@ implication text
 
 \begin{figure}[h!tbp]
 	\centering
-	%\includegraphics[width=\textwidth]{figures/RoleDefinitionsGNB}
+	\includegraphics[width=\textwidth]{figures/RoleDefinitionsGNB}
 	\caption{Role Definitions}
 	\label{figure:RoleDefinitionsGNB}
 \end{figure}
@@ -154,12 +154,17 @@ implication text
 	The registration process is set up for anyone to register, the process then awaits human interaction for the approval stage, this will serve an extra step of verification.
 
 	Identities are not verified nor checked at this stage due to application limitations, email format verification is missing from the form.
+	
+	No CAPTCHA or similar tests available to test for human accounts
 }{%
 	The email verification test was discovered through trail and error while registering.
+	Lack of human testing was found through simple observation.
 }{%
 	likely, due to intentional or unintentional mistyping.
+	Robot accounts are less likely to occur and it depends on the skill level of the attacker.
 }{%
-	No serious impact as TAN codes are not sent to the email. 
+	No serious impact as TAN codes are not sent to the email.
+	Robot accounts can be used to perform a DOS attack. 
 }{%
 \cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
 }
@@ -168,60 +173,293 @@ implication text
 	The registration process is set up for anyone to register, the process then awaits human interaction for the approval stage, this will serve an extra step of verification.
 	
 	Identities are not verified nor checked at this stage due to application limitations.
+	
+	No CAPTCHA or similar tests available to test for human accounts.
 }{%
-	Trail and error.
+	Lack of human testing was found through simple observation.
 }{%
-	N/A since no vulnerability was found.
+	Robot accounts are less likely to occur and it depends on the skill level of the attacker.
 }{%
-	N/A since no vulnerability was found. 
+	Robot accounts can be used to perform a DOS attack. 
 }{%
 \cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
 }
 
 \vulntitle{OTG-IDENT-003}{Test Account Provisioning Process}
 \vultable{\doge}{%
-	The registration process is set up for anyone to register, the process then awaits human interaction for the approval stage, this will serve an extra step of verification.
+	Provisioning clients is an easy process with no effective mechanisms to verify or vet clients besides a manual approval process.
 	
-	Identities are not verified nor checked at this stage due to application limitations, email format verification is missing from the form.
+	Vulnerabilities with creating the client account have been discussed in the previous section \ref{vuln:OTG-IDENT-002}, but using Bug No.2 an non-authenticated user is able to approve a client user request.
+	
+	Provisioning Employees is set up to only be possible by other employees, but using Bug No.12, a non-authenticated user is able to create an employee account.
 }{%
-The email verification test was discovered through trail and error while registering.
+	This was discovered through trail and error in the bug discovery phase.
 }{%
-likely, due to intentional or unintentional mistyping.
+	This vulnerability requires some basic knowledge of the PHP pages and variable names, which can be obtained using basic testing tools, so while this vulnerability is likely to be discovered by an attacker with some basic skills.
 }{%
-No serious impact as TAN codes are not sent to the email. 
+	This presents some serious impact, as creating an employee account will give the attacker full access to the application and administrative functions such as creating accounts and approving money transfers. 
 }{%
 \cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
 }
 
 \vultable{\gnb}{%
-	The registration process is set up for anyone to register, the process then awaits human interaction for the approval stage, this will serve an extra step of verification.
+	Provisioning clients is an easy process with no effective mechanisms to verify or vet clients besides a manual approval process, provisioning Employees is set up in a similar matter.
 	
-	Identities are not verified nor checked at this stage due to application limitations, email format verification is missing from the form.
+	Vulnerabilities with creating the client account have been discussed in the previous section \ref{vuln:OTG-IDENT-002}, the same applies to creating employee accounts, so a potential DOS attack is possible by creating robot accounts. 
 }{%
-The email verification test was discovered through trail and error while registering.
+	This was found through following the given process for creating accounts.
 }{%
-likely, due to intentional or unintentional mistyping.
+	Robot accounts are less likely to occur and it depends on the skill level of the attacker.
 }{%
-No serious impact as TAN codes are not sent to the email. 
+	If the DOS attack is severe enough it could stop the application from from working. 
 }{%
 \cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
 }
 
 \vulntitle{OTG-IDENT-004}{Testing for Account Enumeration and Guessable User Account}
-\vulntitle{OTG-IDENT-005}{Testing for Weak or unenforced username policy}
+\vultable{\doge}{%
+	Errors provided from enumerating through the different cases are as follows :
+	\begin{itemize}
+		\item Valid username with correct password : Expected result of logging in 
+		\item Valid username with incorrect password : Returns "Username or Password incorrect! Please try again!"
+		\item Invalid username : Returns "Username or Password incorrect! Please try again!"
+	\end{itemize}
+}{%
+	This was found through trail and error on different combinations of credentials.
+}{%
+	\na
+}{%
+	\na
+}{%
+	Secure
+}
 
+\vultable{\gnb}{%
+	Errors provided from enumerating through the different cases are as follows :
+	\begin{itemize}
+		\item Valid username with correct password: Expected result of logging in 
+		\item Valid username with incorrect password: Returns "Invalid login credentials!"
+		\item Invalid username : Returns "Invalid login credentials!"
+	\end{itemize}
+}{%
+	This was found through trail and error on different combinations of credentials.
+}{%
+	\na
+}{%
+	\na
+}{%
+	Secure
+}
+
+\vulntitle{OTG-IDENT-005}{Testing for Weak or unenforced username policy}
+\vultable{\doge}{%
+	No username policy applied.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
+\vultable{\gnb}{%
+	Username has to be in valid email address format.
+}{%
+	Through trail and error.
+}{%
+	\na
+}{%
+	\na
+}{%
+	Secure. 
+}
 \newpage
 \section{Authentication Testing}	
 \simpleVulntitle{OTG-AUTHN-001}{Testing for Credentials Transported over an Encrypted Channel}
+\vultable{\doge}{%
+	Due to the fact, that no encryption is used when accessing the application, credentials transported over an encrypted channel are vulnerable.
+		
+	Relevant information regarding unencrypted communication has already been mainly covered in section \ref{vuln:OTG-CRYPST-003} and in \ref{vuln:OTG-CONFIG-007}.				
+}{%
+	Through observation.
+}{%
+	Given that a simple network sniffing tracking tool would pick up the credentials, this vulnerability is likely to be exploited.
+}{%
+	The attacker is able access the said account, and perform actions on behalf of said user, and it the account is an employee account, the attacker would gain access to the administrative tasks
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
+\vultable{\gnb}{%
+	\same				
+}{%
+	\same
+}{%
+	\same
+}{%
+	\same 
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
 \vulntitle{OTG-AUTHN-002}{Testing for default credentials}
+\vultable{\doge}{%
+	The Administrator had a predictable username "employee" and an easy to guess short password "pass".				
+}{%
+	Credentials were provided in the team report.
+}{%
+	If an attacker is performing a basic dictionary attack, this vulnerability would very likely be discovered. 
+}{%
+	Gaining access to the employee account would allow the attacker to perform administrative tasks on the application.	
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
+\vultable{\gnb}{%
+	Administrator(Employee) and client users did not have predictable credentials.				
+}{%
+	Credentials were provided in the team report.
+}{%
+	\na 
+}{%
+	\na
+}{%
+	Secure
+}
+
 \vulntitle{OTG-AUTHN-003}{Testing for Weak lock out mechanism}
+\vultable{\doge}{%
+	No lockout mechanism is deployed. 
+}{%
+	Through trail and error.
+}{%
+	This allows for brute force attacks on accounts if the attacker has a username. 
+}{%
+	Gaining access to an employee or client account, which allow the attacker to perform that accounts tasks.	
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
+\vultable{\gnb}{%
+	\same				
+}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
 \vulntitle{OTG-AUTHN-004}{Testing for bypassing authentication schema}
+\vultable{\doge}{%
+	Through direct page request, parameter modification, and SQL injection a non-authenticated user is able to gain access to both client and employee functions see Bug No.12 and Bug No.2 for more details on how to exploit such bugs, from more details on what is possible, please refer to \ref{figure:RoleDefinitionsDoge}.
+}{%
+	This was discovered through trail and error in the bug discovery phase.
+}{%
+	This vulnerability requires some basic knowledge of the PHP pages and variable names, which can be obtained using basic testing tools, so while this vulnerability is likely to be discovered by an attacker with some basic skills.
+}{%
+	This presents some serious impact, as creating an employee account will give the attacker full access to the application and administrative functions such as creating accounts and approving money transfers. 	
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
+\vultable{\gnb}{%
+	The PHP Session ID cookie variable is not destroyed after logout, and even though the user is unable to use the "back" option on the browser, the PHP Session ID does not change though making it extremely predictable after logging 
+}{%
+	This was done through cookie inspection using the chrome and Firefox Developer extensions.
+}{%
+	The skill level required for exploiting this is minimal, Knowledge needed for this attack is basic cookie inspection and injection and Network sniffing.
+}{%
+	Overtake an existing user session and gain access to that users privileges.
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
 \vulntitle{OTG-AUTHN-005}{Test remember password functionality}
+\vultable{\doge}{%
+	Passwords in this application are sent in clear text.
+}{%
+	Through HTTP Header inspection
+}{%
+	The skill level required for exploiting this is minimal, Knowledge needed for this attack is basic HTTP Header inspection and Network sniffing.
+}{%
+	Gaining access to an employee or client account, which allow the attacker to perform that accounts tasks.	
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
+\vultable{\gnb}{%
+	\same				
+}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
+
 \vulntitle{OTG-AUTHN-006}{Testing for Browser cache weakness}
+\vultable{\doge}{%
+	Browser Cache settings are set up correctly, so 'Back' on the browser does not work.
+}{%
+	Though observation.
+}{%
+	\na
+}{%
+	\na	
+}{%
+	Secure
+}
+
+\vultable{\gnb}{%
+	\same				
+}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}
+
+
 \vulntitle{OTG-AUTHN-007}{Testing for Weak password policy}
-\vulntitle{OTG-AUTHN-008}{Testing for Weak security question/answer}
-\vulntitle{OTG-AUTHN-009}{Testing for weak password change or reset functionalities}
-\vulntitle{OTG-AUTHN-010}{Testing for Weaker authentication in alternative channel}
+\vultable{\doge}{%
+	No password policy is implemented.
+}{%
+	Though observation.
+}{%
+	The skill level required for exploiting a week password is minimal,  either through password cracking tools or social engineering.
+}{%
+	Gaining access to an employee or client account, which allow the attacker to perform that accounts tasks.	
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
+\vultable{\gnb}{%
+	\same				
+}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
+
+%\vulntitle{OTG-AUTHN-008}{Testing for Weak security question/answer}
+%\vulntitle{OTG-AUTHN-009}{Testing for weak password change or reset functionalities}
+%\vulntitle{OTG-AUTHN-010}{Testing for Weaker authentication in alternative channel}
 
 \newpage
 \section{Authorization Testing}

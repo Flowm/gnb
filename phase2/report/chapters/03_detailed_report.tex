@@ -92,7 +92,7 @@ implication text
 }{%
 	\na
 }{%
-	\na
+	\naScore
 }
 \vultable{\gnb}{%
 	The web application doesn't support additional technologies like Flash, Silverlight or Java.
@@ -103,7 +103,7 @@ implication text
 }{%
 	\na
 }{%
-	\na
+	\naScore
 }
 
 \newpage
@@ -357,9 +357,8 @@ implication text
 
 \vulntitle{OTG-AUTHN-004}{Testing for bypassing authentication schema}
 \vultable{\doge}{%
-	Through direct page request, parameter modification, and SQL injection a non-authenticated user is able to gain access to both client and employee functions see Bug No.12 and Bug No.2  for more details on how to exploit such bugs, from more details on what is possible, please refer to \ref{figure:RoleDefinitionsDoge}.
+	Through direct page request, parameter modification, and SQL injection a non-authenticated user is able to gain access to both client and employee functions see \vulnref{OTG-AUTHZ-002} and \vulnref{OTG-AUTHZ-004} for more details on how to exploit such bugs, from more details on what is possible, please refer to \ref{figure:RoleDefinitionsDoge}. %TODO: Split first sentence (direct page request and SQL injection, bug is only for direct page request)
 	e.g. The url \texttt{/downloadTans.php?userid=1} allows a non authorized user to download the TAN codes for the user with the user id of 1.
-	%TODO Add bug referencing in this section 
 }{%
 	This was discovered through trail and error in the bug discovery phase.
 }{%
@@ -737,7 +736,7 @@ implication text
 }{%
 	\na
 }{%
-	Secure
+	\secure
 }
 \vultable{\gnb}{%
 	The same observations made for the DogeBank application apply.
@@ -748,7 +747,7 @@ implication text
 }{%
 	\na
 }{%
-	Secure
+	\secure
 }
 
 \newpage
@@ -813,30 +812,7 @@ implication text
 	\naScore
 }
 
-\vulntitle{OTG-INPVAL-012-2}{Testing for Remote File Inclusion}
-\vultable{\doge}{%
-	This vulnerability is not applicable due to the fact that none of the pages of \doge{} allows to provide a parameter specifying files.
-}{%
-	This was observed using a Proxy that intercepted all GET/POST requests and responses to/from the server. For this the Burp Suite tool was used.
-}{%
-	\na
-}{%
-	\na
-}{%
-	\naScore
-}
-\vultable{\gnb}{%
-	\same
-}{%
-	\same
-}{%
-	\na
-}{%
-	\na
-}{%
-	\naScore
-}
-
+%\vulntitle{OTG-INPVAL-012-2}{Testing for Remote File Inclusion}
 \vulntitle{OTG-INPVAL-013}{Testing for Command Injection}
 \vulntitle{OTG-INPVAL-014}{Testing for Buffer overflow}
 Testing for Heap overflow\\
@@ -844,11 +820,12 @@ Testing for Stack overflow\\
 Testing for Format string\\
 \vulntitle{OTG-INPVAL-015}{Testing for incubated vulnerabilities}
 \vulntitle{OTG-INPVAL-016}{Testing for HTTP Splitting/Smuggling}
+This vulnerability was not tested as we did not extend our testing to the Apache Web Server.
 
-\newpage
-\section{Error Handling}
-\simpleVulntitle{OTG-ERR-001}{Analysis of Error Codes}
-\vulntitle{OTG-ERR-002}{Analysis of Stack Traces}
+%\newpage
+%\section{Error Handling}
+%\simpleVulntitle{OTG-ERR-001}{Analysis of Error Codes}
+%\vulntitle{OTG-ERR-002}{Analysis of Stack Traces}
 
 \newpage
 \section{Cryptography}
@@ -863,7 +840,7 @@ Testing for Format string\\
 }{%
 	\na
 }{%
-	\na
+	\naScore
 }
 \vultable{\gnb}{%
 	The same observations made for the DogeBank application apply.
@@ -875,7 +852,7 @@ Testing for Format string\\
 }{%
 	\na
 }{%
-	\na
+	\naScore
 }
 
 \vulntitle{OTG-CRYPST-002}{Testing for Padding Oracle}
@@ -889,7 +866,7 @@ Testing for Format string\\
 }{%
 	\na
 }{%
-	\na
+	\naScore
 }
 \vultable{\gnb}{%
 	The same observations made for the DogeBank application apply.
@@ -901,7 +878,7 @@ Testing for Format string\\
 }{%
 	\na
 }{%
-	\na
+	\naScore
 }
 
 \vulntitle{OTG-CRYPST-003}{Testing for Sensitive information sent via unencrypted channels}
@@ -932,12 +909,67 @@ Testing for Format string\\
 \newpage
 \section{Business Logic Testing}
 \simpleVulntitle{OTG-BUSLOGIC-001}{Test Business Logic Data Validation}
-\vulntitle{OTG-BUSLOGIC-002}{Test Ability to Forge Requests}
-\vulntitle{OTG-BUSLOGIC-003}{Test Integrity Checks}
+\vultable{\doge}{%
+	We observed that the \doge{} is not validating user inputs. This includes the following fields from a business logic perspective:
+	
+	\begin{itemize}
+	
+	\item Transaction Destination Account number
+	\item Transaction Amount
+	\item Transaction Description
+	
+	\end{itemize}
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\naScore
+}
+\vultable{\gnb}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\naScore
+}
+
+%\vulntitle{OTG-BUSLOGIC-002}{Test Ability to Forge Requests}
+%\vulntitle{OTG-BUSLOGIC-003}{Test Integrity Checks}
+
 \vulntitle{OTG-BUSLOGIC-004}{Test for Process Timing}
-\vulntitle{OTG-BUSLOGIC-005}{Test Number of Times a Function Can be Used Limits}
-\vulntitle{OTG-BUSLOGIC-006}{Testing for the Circumvention of Work Flows}
-%BUSLOGIC 007
+\vultable{\doge}{%
+	We did not observe any process timing vulnerabilities at the \doge{}.
+}{%
+	We used a custom script to test the response time given invalid and valid usernames and calculated the median response time.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	We observed a timing attack at the \gnb{}. The response times differ depending on the existence of the provided mail address in the database.
+}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: These are mock values
+}
+
+%\vulntitle{OTG-BUSLOGIC-005}{Test Number of Times a Function Can be Used Limits}
+%\vulntitle{OTG-BUSLOGIC-006}{Testing for the Circumvention of Work Flows}
+
 \vulntitle{OTG-BUSLOGIC-007}{Test Defenses Against Application Mis-use}
 \vultable{\doge}{%
 	After thorough testing and observation we concluded that no mechanisms to prevent against application mis-use are in place. No critical functionalities are disabled and no logs are kept.
@@ -961,7 +993,7 @@ Testing for Format string\\
 }{%
 \cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
 }
-%BUSLOGIC 008
+
 \vulntitle{OTG-BUSLOGIC-008}{Test Upload of Unexpected File Types}
 \vultable{\doge}{%
 	We discovered that the tran.php page allows to upload any kind of file, without performing extension checks on it. However, it seems that the server accepts only files with a limited size, making it impossible to generate more than 3 transactions at once, or uploadin huge files for that matter. Regardless, as long as the filesize stays below 500 bytes, any file will be accepted by the server and stored forever inside the /uploads folder.
@@ -983,9 +1015,9 @@ Testing for Format string\\
 }{%
 	\na
 }{%
-	Secure
+	\secure
 }
-%BUSLOGIC 009
+
 \vulntitle{OTG-BUSLOGIC-009}{Test Upload of Malicious Files}
 \vultable{\gnb}{%
 	Once discovered that the tran.php page allowed to upload any kind of file, we did multiple tests and finally observed that it was indeed possible to upload malicious code. This vulnerability was used to execute both arbitrary C code and custom PHP scripts. Although eventually we gained full access to the application, including credentials, database access and source code, we couldn't tamper too much with the operating system since we didn't have root access.
@@ -1021,16 +1053,16 @@ Testing for Format string\\
 \section{Client Side Testing}
 This section was prioritized as low, therefore the client side was not tested in depth. Furthermore, as stated in the OWASP testing guide, black box testing of the client side is usually not performed, since access to the source code is always available, as it needs to be sent to the client to be executed.
 
-\simpleVulntitle{OTG-CLIENT-001}{Testing for DOM based Cross Site Scripting}
-\simpleVulntitle{OTG-CLIENT-002}{Testing for JavaScript Execution}
-\simpleVulntitle{OTG-CLIENT-003}{Testing for HTML Injection}
-\simpleVulntitle{OTG-CLIENT-004}{Testing for Client Side URL Redirect}
-\simpleVulntitle{OTG-CLIENT-005}{Testing for CSS Injection}
-\simpleVulntitle{OTG-CLIENT-006}{Testing for Client Side Resource Manipulation}
-\simpleVulntitle{OTG-CLIENT-007}{Test Cross Origin Resource Sharing}
-\simpleVulntitle{OTG-CLIENT-008}{Testing for Cross Site Flashing}
+\vulntitle{OTG-CLIENT-001}{Testing for DOM based Cross Site Scripting}
+\vulntitle{OTG-CLIENT-002}{Testing for JavaScript Execution}
+\vulntitle{OTG-CLIENT-003}{Testing for HTML Injection}
+\vulntitle{OTG-CLIENT-004}{Testing for Client Side URL Redirect}
+\vulntitle{OTG-CLIENT-005}{Testing for CSS Injection}
+\vulntitle{OTG-CLIENT-006}{Testing for Client Side Resource Manipulation}
+\vulntitle{OTG-CLIENT-007}{Test Cross Origin Resource Sharing}
+\vulntitle{OTG-CLIENT-008}{Testing for Cross Site Flashing}
 %CLIENT 009
-\simpleVulntitle{OTG-CLIENT-009}{Testing for Clickjacking}
+\vulntitle{OTG-CLIENT-009}{Testing for Clickjacking}
 \vultable{\doge}{%
 	We observed that it is entirely possible to load all of the pages inside
 }{%
@@ -1053,8 +1085,8 @@ This section was prioritized as low, therefore the client side was not tested in
 }{%
 \cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
 }
-%CLIENT 010
-\simpleVulntitle{OTG-CLIENT-010}{Testing WebSockets}
+
+\vulntitle{OTG-CLIENT-010}{Testing WebSockets}
 \vultable{\doge}{%
 	The Doge Web Application does not make use of any asynchronous operation, neither using AJAX nor using WebSockets.
 }{%
@@ -1064,7 +1096,7 @@ This section was prioritized as low, therefore the client side was not tested in
 }{%
 	\na
 }{%
-	Secure
+	\secure
 }
 \vultable{\gnb}{%
 	Although the application makes use of asynchronous requests for the client search functionality, this is done using traditional AJAX and not HTML5 WebSockets. Hence, the application is secure against attacks on WebSockets.
@@ -1075,8 +1107,8 @@ This section was prioritized as low, therefore the client side was not tested in
 }{%
 	\na
 }{%
-	Secure
+	\secure
 }
-%CLIENT 011
-\simpleVulntitle{OTG-CLIENT-011}{Test Web Messaging}
-\simpleVulntitle{OTG-CLIENT-012}{Test Local Storage}
+
+\vulntitle{OTG-CLIENT-011}{Test Web Messaging}
+\vulntitle{OTG-CLIENT-012}{Test Local Storage}

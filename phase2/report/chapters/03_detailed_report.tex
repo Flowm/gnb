@@ -1,6 +1,6 @@
 \chapter{Detailed Report}\label{chapter:detailed_report}
 
-\section{Tools description}
+\section{Tool description}
 
 \newpage
 \section{Configuration and Deploy Management Testing}
@@ -463,8 +463,72 @@ implication text
 
 \newpage
 \section{Authorization Testing}
+
 \simpleVulntitle{OTG-AUTHZ-001}{Testing Directory traversal/file include}
+\vultable{\doge}{%
+	No user defined input vectors to include additional files were discovered during testing.
+}{%
+	After capturing the requests and responses of all pages available in the application with Zed Attack proxy, the recorded traffic was checked for possible input vectors.
+	No input vectors referencing files were found.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+\vultable{\gnb}{%
+	User defined input vectors were observed on all pages of the application which require authentication.
+	These input vectors don't seem to be direct references to files in the wep application, thus an indirect mapping of the specified names to included files is assumed.
+	Due to this indirect mapping accessing arbitrary files on the server is not possible by modifying these input vectors.
+	Nevertheless an authenticated attacker is able to use this mechanism to get access to all included pages as described in \vulnref{OTG-AUTHZ-002}
+}{%
+	After capturing the requests and responses of all pages available in the application with Zed Attack proxy, the recorded traffic was checked for possible input vectors.
+	Multiple input vectors referencing sections of the site were identified, but manual testing revealed that none of these referred to filenames directly.
+}{%
+	See \vulnref{OTG-AUTHZ-002}
+}{%
+	See \vulnref{OTG-AUTHZ-002}
+}{%
+	See \vulnref{OTG-AUTHZ-002}
+}
+
 \vulntitle{OTG-AUTHZ-002}{Testing for bypassing authorization schema}
+\vultable{\doge}{%
+	All employee pages are fully accessible for any authenticated user e.g. client.
+}{%
+	Manually accessing the address of the employee pages while being logged in as user allowed full access to these sites.
+	\texttt{http://ADDRESS/employee\_home.php}
+}{%
+	To exploit this vulnerability an attacker needs to be aware of the address of the employee pages and have an valid client account.
+}{%
+	This vulnerability allows bypassing all authorization mechanisms put in place, granting the attacker the highest privileges available in the application.
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+}
+\vultable{\gnb}{%
+	Direct access to the employee page is not possible as client.
+	However by using the file inclusion technique described in \vulnref{OTG-AUTHZ-001} an authenticated attacker is able to access all included pages of the application.
+}{%
+	Manual testing direct access to the employee pages (\texttt{http://ADDRESS/employee/employee.php}) did not grant any positive results.\newline 
+	Using the information gathered in \vulnref{OTG-AUTHZ-001} it was possible to access the employee pages by modifying the POST parameters of the client page to reference the employee pages.
+	Page: \texttt{http://ADDRESS/client/client.php}\newline
+	Original POST parameters:\newline
+	\texttt{section=my\_accounts\&frame=account\_overview\&account=10000002}\newline
+	Updated POST parameters:\newline
+	\texttt{section=employee\_area\&frame=manage\_registration}\newline
+	This opened the page with pending registrations which should only be visible as employee.
+	Additional effort is required to start any further actions from this page (e.g.\ approving users) as the required javascript is missing and all references lead to the wrong page.
+	The same applies for all other employee pages.
+}{%
+	To access these sites an attacker has to be authenticated and aware of the names of the employee pages.
+	As the client area pages doesn't contain the required javascript code for the employee area, additional knowledge and effort is required to perform actions on the pages accessed by this method.
+}{%
+	This vulnerability allows bypassing all authorization mechanisms put in place, granting the attacker the highest privileges available in the application.
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+}
+
 \vulntitle{OTG-AUTHZ-003}{Testing for Privilege Escalation}
 \vulntitle{OTG-AUTHZ-004}{Testing for Insecure Direct Object References}
 
@@ -788,7 +852,7 @@ Testing for Format string\\
 \simpleVulntitle{OTG-CRYPST-001}{Testing for Weak SSL/TSL Ciphers, Insufficient Transport Layer Protection}
 \vultable{\doge}{%
 	Due to the fact, that the application is only accessible via HTTP and no SSL/TLS encryption is used no testing for weak ciphers could be performed.
-	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007} and~\ref{vuln:OTG-CRYPST-003}.
+	Relevant information leakage resulting from the unencrypted communication has already been covered in \vulnref{OTG-CONFIG-007} and \vulnref{OTG-CRYPST-003}.
 }{%
 	\na
 }{%
@@ -800,7 +864,7 @@ Testing for Format string\\
 }
 \vultable{\gnb}{%
 	The same observations made for the DogeBank application apply.
-	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007} and~\ref{vuln:OTG-CRYPST-003}.
+	Relevant information leakage resulting from the unencrypted communication has already been covered in \vulnref{OTG-CONFIG-007} and \vulnref{OTG-CRYPST-003}.
 }{%
 	\na
 }{%
@@ -814,7 +878,7 @@ Testing for Format string\\
 \vulntitle{OTG-CRYPST-002}{Testing for Padding Oracle}
 \vultable{\doge}{%
 	Due to the fact, that no encryption is used when accessing the application, no padding of information is used.
-	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007} and~\ref{vuln:OTG-CRYPST-003}.
+	Relevant information leakage resulting from the unencrypted communication has already been covered in \vulnref{OTG-CONFIG-007} and \vulnref{OTG-CRYPST-003}.
 }{%
 	\na
 }{%
@@ -826,7 +890,7 @@ Testing for Format string\\
 }
 \vultable{\gnb}{%
 	The same observations made for the DogeBank application apply.
-	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007} and~\ref{vuln:OTG-CRYPST-003}.
+	Relevant information leakage resulting from the unencrypted communication has already been covered in \vulnref{OTG-CONFIG-007} and \vulnref{OTG-CRYPST-003}.
 }{%
 	\na
 }{%
@@ -841,11 +905,11 @@ Testing for Format string\\
 \vultable{\doge}{%
 	Sensitive information is sent over unencrypted channels in every request the user performs as the application is only accessible via HTTP and no SSL/TLS encryption is used.
 }{%
-	As documented in section~\ref{vuln:OTG-CONFIG-007}, the site is not available via HTTPS.
+	As documented in \vulnref{OTG-CONFIG-007}, the site is not available via HTTPS.
 }{%
 	Every requests gets sent over an unecrypted channel automatically.
 }{%
-	The same implications as in section~\ref{vuln:OTG-CONFIG-007} apply.
+	The same implications as in \vulnref{OTG-CONFIG-007} apply.
 	By sniffing the network traffic, all data exchanged between the server and the client can be read as clear text. No confidentiality at all is supported on this end.
 }{%
 	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values

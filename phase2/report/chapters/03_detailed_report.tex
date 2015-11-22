@@ -459,9 +459,79 @@ No serious impact as TAN codes are not sent to the email.
 \vulntitle{OTG-INPVAL-009}{Testing for SSI Injection}
 \vulntitle{OTG-INPVAL-010}{Testing for XPath Injection}
 \vulntitle{OTG-INPVAL-011}{IMAP/SMTP Injection}
+
 \vulntitle{OTG-INPVAL-012}{Testing for Code Injection}
-Testing for Local File Inclusion\\
-Testing for Remote File Inclusion\\
+\vultable{\doge}{%
+	This vulnerability is not applicable due to the fact that none of the pages of the \doge{} allows to provide a parameter that will be executed. See~\ref{vuln:OTG-INPVAL-013} for a similiar attack using the filename of the uploaded batch transactions file.
+}{%
+	This was observed using a Proxy that intercepted all GET/POST requests and responses to/from the server. For this the Burp Suite tool was used.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\naScore
+}
+\vultable{\gnb}{%
+	This vulnerability is not applicable due to the fact that none of the pages of the \gnb{} allows to provide a parameter that will be executed.
+}{%
+	This was observed using a Proxy that intercepted all GET/POST requests and responses to/from the server. For this the Burp Suite tool was used.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\naScore
+}
+
+\vulntitle{OTG-INPVAL-012-1}{Testing for Local File Inclusion}
+\vultable{\doge}{%
+	This vulnerability is not applicable due to the fact that none of the pages of the \doge{} allows to provide a parameter specifying files.
+}{%
+	This was observed using a Proxy that intercepted all GET/POST requests and responses to/from the server. For this the Burp Suite tool was used.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\naScore
+}
+\vultable{\gnb}{%
+	This vulnerability is not applicable due to the fact that none of the pages of \gnb{} allows to provide a parameter specifying files. The \gnb{} can be exploited though by messing with the internal lookup that gets the php filename from a keyword. See~\ref{vuln:OTG-AUTHZ-001} for a more detailed description.
+}{%
+	This was observed using a Proxy that intercepted all GET/POST requests and responses to/from the server. For this the Burp Suite tool was used.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\naScore
+}
+
+\vulntitle{OTG-INPVAL-012-2}{Testing for Remote File Inclusion}
+\vultable{\doge}{%
+	This vulnerability is not applicable due to the fact that none of the pages of \doge{} allows to provide a parameter specifying files.
+}{%
+	This was observed using a Proxy that intercepted all GET/POST requests and responses to/from the server. For this the Burp Suite tool was used.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\naScore
+}
+\vultable{\gnb}{%
+	\same
+}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	\naScore
+}
+
 \vulntitle{OTG-INPVAL-013}{Testing for Command Injection}
 \vulntitle{OTG-INPVAL-014}{Testing for Buffer overflow}
 Testing for Heap overflow\\

@@ -192,6 +192,7 @@ implication text
 	Vulnerabilities with creating the client account have been discussed in the previous section \ref{vuln:OTG-IDENT-002}, but using Bug No.2 an non-authenticated user is able to approve a client user request.
 	
 	Provisioning Employees is set up to only be possible by other employees, but using Bug No.12, a non-authenticated user is able to create an employee account.
+	%TODO Add bug referencing in this section 
 }{%
 	This was discovered through trail and error in the bug discovery phase.
 }{%
@@ -356,7 +357,9 @@ implication text
 
 \vulntitle{OTG-AUTHN-004}{Testing for bypassing authentication schema}
 \vultable{\doge}{%
-	Through direct page request, parameter modification, and SQL injection a non-authenticated user is able to gain access to both client and employee functions see Bug No.12 and Bug No.2 for more details on how to exploit such bugs, from more details on what is possible, please refer to \ref{figure:RoleDefinitionsDoge}.
+	Through direct page request, parameter modification, and SQL injection a non-authenticated user is able to gain access to both client and employee functions see Bug No.12 and Bug No.2  for more details on how to exploit such bugs, from more details on what is possible, please refer to \ref{figure:RoleDefinitionsDoge}.
+	e.g. The url \texttt{/downloadTans.php?userid=1} allows a non authorized user to download the TAN codes for the user with the user id of 1.
+	%TODO Add bug referencing in this section 
 }{%
 	This was discovered through trail and error in the bug discovery phase.
 }{%

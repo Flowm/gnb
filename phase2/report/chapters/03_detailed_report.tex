@@ -480,7 +480,7 @@ Testing for Format string\\
 \simpleVulntitle{OTG-CRYPST-001}{Testing for Weak SSL/TSL Ciphers, Insufficient Transport Layer Protection}
 \vultable{\doge}{%
 	Due to the fact, that the application is only accessible via HTTP and no SSL/TLS encryption is used no testing for weak ciphers could be performed.
-	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007}
+	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007} and~\ref{vuln:OTG-CRYPST-003}.
 }{%
 	\na
 }{%
@@ -492,7 +492,7 @@ Testing for Format string\\
 }
 \vultable{\gnb}{%
 	The same observations made for the DogeBank application apply.
-	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007}
+	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007} and~\ref{vuln:OTG-CRYPST-003}.
 }{%
 	\na
 }{%
@@ -506,7 +506,7 @@ Testing for Format string\\
 \vulntitle{OTG-CRYPST-002}{Testing for Padding Oracle}
 \vultable{\doge}{%
 	Due to the fact, that no encryption is used when accessing the application, no padding of information is used.
-	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007}
+	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007} and~\ref{vuln:OTG-CRYPST-003}.
 }{%
 	\na
 }{%
@@ -518,7 +518,7 @@ Testing for Format string\\
 }
 \vultable{\gnb}{%
 	The same observations made for the DogeBank application apply.
-	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007}
+	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007} and~\ref{vuln:OTG-CRYPST-003}.
 }{%
 	\na
 }{%
@@ -531,30 +531,27 @@ Testing for Format string\\
 
 \vulntitle{OTG-CRYPST-003}{Testing for Sensitive information sent via unencrypted channels}
 \vultable{\doge}{%
-	As the application is only accessible via HTTP and no SSL/TLS encryption is
-	used, sensitive information is sent over unencrypted channels in every
-	request the user performs.
-	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007}
+	Sensitive information is sent over unencrypted channels in every request the user performs as the application is only accessible via HTTP and no SSL/TLS encryption is used.
 }{%
-	\na
+	As documented in section~\ref{vuln:OTG-CONFIG-007}, the site is not available via HTTPS.
 }{%
-	\na
+	Every requests gets sent over an unecrypted channel automatically.
 }{%
-	\na
+	The same implications as in section~\ref{vuln:OTG-CONFIG-007} apply.
+	By sniffing the network traffic, all data exchanged between the server and the client can be read as clear text. No confidentiality at all is supported on this end.
 }{%
-	\na
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
 }
 \vultable{\gnb}{%
-	The same observations made for the DogeBank application apply.
-	Relevant information leakage resulting from the unencrypted communication has already been covered in section~\ref{vuln:OTG-CONFIG-007}
+	\same
 }{%
-	\na
+	\same
 }{%
-	\na
+	\same
 }{%
-	\na
+	\same
 }{%
-	\na
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
 }
 
 \newpage

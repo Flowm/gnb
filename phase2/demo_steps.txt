@@ -1,6 +1,5 @@
-Live demo ideas
-
-Step for first demo 
+Steps for demo
+ 
 > Register user with own email to get the TAN codes 
 ==============================================================
 SHOWCASING CODE INJECTION 

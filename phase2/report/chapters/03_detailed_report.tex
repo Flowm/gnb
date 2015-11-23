@@ -357,8 +357,14 @@ implication text
 
 \vulntitle{OTG-AUTHN-004}{Testing for bypassing authentication schema}
 \vultable{\doge}{%
-	Through direct page request, parameter modification, and SQL injection a non-authenticated user is able to gain access to both client and employee functions see \vulnref{OTG-AUTHZ-002} and \vulnref{OTG-AUTHZ-004} for more details on how to exploit such bugs, from more details on what is possible, please refer to \ref{figure:RoleDefinitionsDoge}. %TODO: Split first sentence (direct page request and SQL injection, bug is only for direct page request)
-	e.g. The url \texttt{/downloadTans.php?userid=1} allows a non authorized user to download the TAN codes for the user with the user id of 1.
+	Through direct page access (see \vulnref{OTG-AUTHZ-002} and \vulnref{OTG-AUTHZ-004}), and SQL injection (see \ref{over:sql}) a non-authenticated user is able to gain access to both client and employee functions without being logged in.
+	
+	For more details on what privileges can a non-authenticated user can exploite, please refer to \ref{figure:RoleDefinitionsDoge}.
+	\begin{itemize}
+	\item Direct page access example : the url \texttt{/downloadTans.php?userid=1} allows a non authorized user to download the TAN codes for the user with the user\_id of 1.
+	\item SQL Injection example : by using the username 
+	\textit{\rq OR 1=1 AND user\_name=`employee' \#} an attacker can gain access to the admin account `employee'
+	\end{itemize}
 }{%
 	This was discovered through trail and error in the bug discovery phase.
 }{%

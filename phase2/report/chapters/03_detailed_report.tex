@@ -114,7 +114,7 @@ implication text
 }{%
 	This was discovered through the bug searching stage and while completing the \vulnref{OTG-AUTHN-004} "Testing for bypassing authentication schema" test.
 }{%
-	This is a relatively easy bug to uncover, so the likelihood of is quite high 
+	Skill level needed to uncover this is moderate, using simple direct page access and basic trail and error with parameters is enough to exploit this bug, so the likelihood of this vulnerability is quite high 
 }{%
 	This could have tremendous damages to the bank, as adding employee accounts and transferring functions 
 }{%
@@ -189,10 +189,9 @@ implication text
 \vultable{\doge}{%
 	Provisioning clients is an easy process with no effective mechanisms to verify or vet clients besides a manual approval process.
 	
-	Vulnerabilities with creating the client account have been discussed in the previous section \vulnref{OTG-IDENT-002}, but using Bug No.2 an non-authenticated user is able to approve a client user request.
+	Vulnerabilities with creating the client account have been discussed in the previous section \vulnref{OTG-IDENT-002}, but using  \bugref{2} an non-authenticated user is able to approve a client user request.
 	
-	Provisioning Employees is set up to only be possible by other employees, but using Bug No.12, a non-authenticated user is able to create an employee account.
-	%TODO Add bug referencing in this section 
+	Provisioning Employees is set up to only be possible by other employees, but using  \bugref{12}, a non-authenticated user is able to create an employee account.
 }{%
 	This was discovered through trail and error in the bug discovery phase.
 }{%

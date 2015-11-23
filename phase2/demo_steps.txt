@@ -33,10 +33,10 @@ SHOWCASING UPLOADING MALICIOUS FILE
 
 
 ==============================================================
-SHOWCASING TRANSFER NEGATIVE MONEY WITH NO TAN  
+SHOWCASING TRANSFER NEGATIVE MONEY  
 ==============================================================
-
-
+> get accountid from  /customer_home.php 
+> transfer negative money from other account to your account number 
 
  
  

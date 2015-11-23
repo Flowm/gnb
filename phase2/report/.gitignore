@@ -1,9 +1,0 @@
-/build/*
-!/build/main.pdf
-.texpadtmp/
-main.pdf
-main.aux
-main.log
-main.out
-main.synctex.gz
-main.toc

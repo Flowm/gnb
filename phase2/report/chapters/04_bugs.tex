@@ -1,28 +1,54 @@
 \chapter{Bugs}\label{chapter:bugs}
-\bugtable{1}{BugName}{%
-	Location
+\bugtable{1}{Transaction Batch format not documented}{%
+	\url{http:/HOST/tran.php}
 }{%
-Referenced Vulnerabilities
+	\na
 }{%
-Discription
+	There is no reference on how to use the transaction batch file upload. Neither the required file extension nor the format of the file contents are mentioned on the page. It is only possible to access this information by browsing through the directories of the web application.		
 }{%
-How to trigger
+	\na
 }
 
-see \bugref{1}.
-
-1) There is not reference whatsoever to how a batch file should be like. Neither the required file extension nor the format of the file contents, are mentioned in any way. It is only possible to access this information by browsing through the directories of the web application.
-24	Florian	Manual	BUG	done	/tran.php (batch)	Sending a Transaction by batchfile	Batch fromat not documented																					
+\hrulefill \newline
+\bugtable{5}{Visible TAN Code}{%
+	\url{http:/HOST/tran.php}
+}{%
+	Referenced Vulnerabilities
+}{%
+	When inserting an invalid TAN using the batch file upload, the server will respond with an error message in which the expected valid TAN is sent back to client in clear text.
+}{%
+	Upload a transaction batch file with an invalid TAN code, and you will be able to find the required TAN code.
+}
 
 \hrulefill \newline
-5) When inserting an invalid TAN, the server sends an error message in which the expected valid TAN is sent back to client in clear text.
+\bugtable{7}{Predictable TAN Codes}{%
+	\url{http:/HOST/downloadTans.php}
+}{%
+	\na
+}{%
+	TAN codes appear to be randomly generated. However, when generating TAN codes, the user\_id and the number of the code are perpended to the string. So, if a user ID was of length 5 and the number of a code of length 2, the actual length of the code, which was randomly generated, would be 15-5-2=8. An attacker could register an arbitrary number of users to make the user ID counter go up inside the database (auto-increment is used). Once the counter is reasonably high, the TAN code complexity would be reduced drastically, making the application more susceptible to brute-force attacks.
+}{%
+	By writing a script that will continue to create users, and once users hit the limit, TAN codes will be predictable.
+}
 
 \hrulefill \newline
-7) TAN codes appear to be randomly generated. However, when generating TAN codes, the user id and the number of the code are prepended to the string. So, if a user ID was of length 5 and the number of a code of length 2, the actual length of the code, which was randomly generated, would be 15 -5 -2 = 8. An attcker could register an arbitrary number of users to make the user ID counter go up inside the database (auto-increment is used). Once the counter is reasonably high, the TAN code complexity would reduce drastically, allowing to brute-force them easily.
+\bugtable{8}{Limited batch file size}{%
+	\url{http:/HOST/downloadTans.php}
+}{%
+	\na
+}{%
+	The size limit of a batch transaction file is of 500 bytes. This size is only sufficient to cover 3 transactions at most, and this is a non-acceptable number for this application.
+}{%
+	\na
+}
 
 \hrulefill \newline
-8) The size limit of a batch transaction file is of 500 bytes. This is ridiculous for multiple transaction purposes, since it allows to actually insert only up to 3 transactions at once.
-14	Alex	Manual	BUG	done	/tran.php	Can not upload batch files with more than 500 Byte size		
-
-\hrulefill \newline
-18	Florian	Manual	BUG	todo	/employee\_home.php	Clicking on home as employee	Home button redirecting to /employee\_home without php, which results in 404																					
+\bugtable{18}{Redirection to incorrect PHP}{%
+	\url{http:/HOST/employee\_home.php}
+}{%
+	\na
+}{%
+	Clicking on `Home' while logged in as an employee will redirect the user to \url{http:/HOST/employee\_home} without the `.php', which results in a 404 error.
+}{%
+	Click on `Home' while logged in as an employee.
+}																		

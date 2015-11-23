@@ -189,9 +189,9 @@ implication text
 \vultable{\doge}{%
 	Provisioning clients is an easy process with no effective mechanisms to verify or vet clients besides a manual approval process.
 	
-	Vulnerabilities with creating the client account have been discussed in the previous section \vulnref{OTG-IDENT-002}, but using  \bugref{2} an non-authenticated user is able to approve a client user request.
+	Vulnerabilities with creating the client account have been discussed in the previous section \vulnref{OTG-IDENT-002}, but using  \vulnref{OTG-AUTHZ-002} an non-authenticated user is able to approve a client user request.
 	
-	Provisioning Employees is set up to only be possible by other employees, but using  \bugref{12}, a non-authenticated user is able to create an employee account.
+	Provisioning Employees is set up to only be possible by other employees, but using  \vulnref{OTG-AUTHZ-001}, a non-authenticated user is able to create an employee account.
 }{%
 	This was discovered through trail and error in the bug discovery phase.
 }{%

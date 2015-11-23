@@ -993,52 +993,53 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 \section{Business Logic Testing}
 \simpleVulntitle{OTG-BUSLOGIC-001}{Test Business Logic Data Validation}
 \vultable{\doge}{%
-	We observed that the \doge{} is not validating user inputs. This includes the following fields from a business logic perspective:
+	We observed several flaws in the input validation on the \doge{} site. This includes the following fields from a business logic perspective:
 	
 	\begin{itemize}
 	
-	\item Transaction Destination Account number
-	\item Transaction Amount
-	\item Transaction Description
+	\item Transaction Destination Account number \hfill \newline
+	This field is not validated. This means money can be transferred to any given account, even if it does not exist. This also enables transferring money to the same account it is coming from. This would not be an issue if this worked properly - but the amount does not get deducted from the source account in this case. Any user may generate infinite money this way.
+	
+	\item Transaction Amount \hfill \newline
+	This field is not validated. This means the transaction amount can even be negative, leading to the specified amount being subtracted from the destination account. This enables "stealing" money from other people's accounts.
+
+	\item Transaction Number \hfill \newline
+	This field is not validated. The TAN is not checked for its format which always leads to a check for the given TAN in the database. In combination with the issue that there are no new TANs generated once the 100 given ones are used this leads to the strange vulnerability that the 101st transaction and all following ones do not need a TAN in order to succeed. This means that all transactions accept an empty TAN once all 100 TANs are used.
+	
+	\end{itemize}
+	
+	There furthermore is an issue with the logic behind the approval of transactions: Transactions with an amount above 10.000 EUR are only deducted once they are approved. This means it is possible to create additional transactions during the transaction is unapproved, even if the account balance would be negative after the first transaction. Additionally transactions leading to increased negative balance can be done once the account balance is negative.
+		
+}{%
+	Manual testing
+}{%
+	High
+}{%
+	Everything
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: These are mock values
+}
+\vultable{\gnb}{%
+
+	\begin{itemize}
+	
+	\item Transaction Destination Account number \hfill \newline
+	\same
 	
 	\end{itemize}
 }{%
-	\na
+	Manual testing
 }{%
-	\na
+	High
 }{%
-	\na
+	Everything
 }{%
-	\naScore
-}
-\vultable{\gnb}{%
-	\same
-}{%
-	\na
-}{%
-	\na
-}{%
-	\na
-}{%
-	\naScore
+	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: These are mock values
 }
 
 %\vulntitle{OTG-BUSLOGIC-002}{Test Ability to Forge Requests}
 %\vulntitle{OTG-BUSLOGIC-003}{Test Integrity Checks}
 
-While testing the DogeBank application, we found out several quite disturbing bugs and issues, which will be presented here. Although not all of them could be considered to be strictly related to Data Validation, they are still Business logic issues which we couldn't point out in other sections.
-
-1) There is not reference whatsoever to how a batch file should be like. Neither the required file extension nor the format of the file contents, are mentioned in any way. It is only possible to access this information by browsing through the directories of the web application.
-2) A user can make money transfers to himself. This would not be the biggest issue, except that the transfer amount does not get deducted from the source account (being the same account as the destination) in this case. Any user may generate infinite money in this way (holds true for GNB as well).
-3) A similar issue as in {3} is related to negative balance in accounts. While this is normally checked in single transactions, a user could still start a transaction which requires manual approval, then empty his bank account (via smaller transactions) and wait for an approval. Since the money gets deducted only at the moment when a transfer is approved, this could lead to a negative balance. Once the balance is negative, this can be returned back to positive amount by performing negative transactions. How convenient.
-4) Similarly to issue {4} a user can simply insert a negative amount when performing a transaction (without the need to currently have a negative balance). Doing this will allow him to "steal" money from another account, as the destination account will act as a source account and get the amount deducted, while the same amount is added to the user who initiated the transfer.
-5) When inserting an invalid TAN, the server sends an error message in which the expected valid TAN is sent back to client in clear text.
-6) After having used up all TANs, no new TAN list is sent (holds true for GNB as well). However, it is still possible for a user to perform transactions without TANs, by simply leaving the TAN field blank inside the transaction form. This defeats the purpose of having TANs in the first place.
-7) TAN codes appear to be randomly generated. However, when generating TAN codes, the user id and the number of the code are prepended to the string. So, if a user ID was of length 5 and the number of a code of length 2, the actual length of the code, which was randomly generated, would be 15 -5 -2 = 8. An attcker could register an arbitrary number of users to make the user ID counter go up inside the database (auto-increment is used). Once the counter is reasonably high, the TAN code complexity would reduce drastically, allowing to brute-force them easily.
-8) The size limit of a batch transaction file is of 500 bytes. This is ridiculous for multiple transaction purposes, since it allows to actually insert only up to 3 transactions at once.
-
-\vulntitle{OTG-BUSLOGIC-002}{Test Ability to Forge Requests}
-\vulntitle{OTG-BUSLOGIC-003}{Test Integrity Checks}
 \vulntitle{OTG-BUSLOGIC-004}{Test for Process Timing}
 \vultable{\doge}{%
 	We did not observe any process timing vulnerabilities at the \doge{}.

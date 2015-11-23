@@ -112,7 +112,7 @@ implication text
 \vultable{\doge}{%
 	Clients and non-logged in users are able to access Employee privileges, see \ref{figure:RoleDefinitionsDoge}
 }{%
-	This was discovered through the bug searching stage and while completing the "OTG-AUTHN-004 Testing for bypassing authentication schema" test.
+	This was discovered through the bug searching stage and while completing the \vulnref{OTG-AUTHN-004} "Testing for bypassing authentication schema" test.
 }{%
 	This is a relatively easy bug to uncover, so the likelihood of is quite high 
 }{%
@@ -189,7 +189,7 @@ implication text
 \vultable{\doge}{%
 	Provisioning clients is an easy process with no effective mechanisms to verify or vet clients besides a manual approval process.
 	
-	Vulnerabilities with creating the client account have been discussed in the previous section \ref{vuln:OTG-IDENT-002}, but using Bug No.2 an non-authenticated user is able to approve a client user request.
+	Vulnerabilities with creating the client account have been discussed in the previous section \vulnref{OTG-IDENT-002}, but using Bug No.2 an non-authenticated user is able to approve a client user request.
 	
 	Provisioning Employees is set up to only be possible by other employees, but using Bug No.12, a non-authenticated user is able to create an employee account.
 	%TODO Add bug referencing in this section 
@@ -206,7 +206,7 @@ implication text
 \vultable{\gnb}{%
 	Provisioning clients is an easy process with no effective mechanisms to verify or vet clients besides a manual approval process, provisioning Employees is set up in a similar matter.
 	
-	Vulnerabilities with creating the client account have been discussed in the previous section \ref{vuln:OTG-IDENT-002}, the same applies to creating employee accounts, so a potential DOS attack is possible by creating robot accounts. 
+	Vulnerabilities with creating the client account have been discussed in the previous section \vulnref{OTG-IDENT-002}, the same applies to creating employee accounts, so a potential DOS attack is possible by creating robot accounts.
 }{%
 	This was found through following the given process for creating accounts.
 }{%
@@ -277,12 +277,12 @@ implication text
 	Secure. 
 }
 \newpage
-\section{Authentication Testing}	
+\section{Authentication Testing}
 \simpleVulntitle{OTG-AUTHN-001}{Testing for Credentials Transported over an Encrypted Channel}
 \vultable{\doge}{%
 	Due to the fact, that no encryption is used when accessing the application, credentials transported over an encrypted channel are vulnerable.
 		
-	Relevant information regarding unencrypted communication has already been mainly covered in section \ref{vuln:OTG-CRYPST-003} and in \ref{vuln:OTG-CONFIG-007}.				
+	Relevant information regarding unencrypted communication has already been mainly covered in section \vulnref{OTG-CRYPST-003} and in \vulnref{OTG-CONFIG-007}.
 }{%
 	Through observation.
 }{%
@@ -531,8 +531,21 @@ implication text
 	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
 }
 
-\vulntitle{OTG-AUTHZ-003}{Testing for Privilege Escalation}
+%\vulntitle{OTG-AUTHZ-003}{Testing for Privilege Escalation}
 \vulntitle{OTG-AUTHZ-004}{Testing for Insecure Direct Object References}
+\vultable{\doge}{%
+}{%
+}{%
+}{%
+}{%
+}
+\vultable{\gnb}{%
+}{%
+}{%
+}{%
+}{%
+}
+%TODO
 
 \newpage
 \section{Session Management Testing}
@@ -752,21 +765,26 @@ implication text
 
 \newpage
 \section{Data Validation Testing}
-\simpleVulntitle{OTG-INPVAL-001}{Testing for Reflected Cross Site Scripting}
-\vulntitle{OTG-INPVAL-002}{Testing for Stored Cross Site Scripting}
+%\simpleVulntitle{OTG-INPVAL-001}{Testing for Reflected Cross Site Scripting}
+\simpleVulntitle{OTG-INPVAL-002}{Testing for Stored Cross Site Scripting}
 \vulntitle{OTG-INPVAL-003}{Testing for HTTP Verb Tampering}
-\vulntitle{OTG-INPVAL-004}{Testing for HTTP Parameter pollution}
+%\vulntitle{OTG-INPVAL-004}{Testing for HTTP Parameter pollution}
 \vulntitle{OTG-INPVAL-005}{Testing for SQL Injection}
-\vulntitle{OTG-INPVAL-006}{Testing for LDAP Injection}
-\vulntitle{OTG-INPVAL-007}{Testing for ORM Injection}
+%TODO
+
+%\vulntitle{OTG-INPVAL-006}{Testing for LDAP Injection}
+%\vulntitle{OTG-INPVAL-007}{Testing for ORM Injection}
+
 \vulntitle{OTG-INPVAL-008}{Testing for XML Injection}
-\vulntitle{OTG-INPVAL-009}{Testing for SSI Injection}
-\vulntitle{OTG-INPVAL-010}{Testing for XPath Injection}
-\vulntitle{OTG-INPVAL-011}{IMAP/SMTP Injection}
+%TODO
+
+%\vulntitle{OTG-INPVAL-009}{Testing for SSI Injection}
+%\vulntitle{OTG-INPVAL-010}{Testing for XPath Injection}
+%\vulntitle{OTG-INPVAL-011}{IMAP/SMTP Injection}
 
 \vulntitle{OTG-INPVAL-012}{Testing for Code Injection}
 \vultable{\doge}{%
-	This vulnerability is not applicable due to the fact that none of the pages of the \doge{} allows to provide a parameter that will be executed. See~\ref{vuln:OTG-INPVAL-013} for a similiar attack using the filename of the uploaded batch transactions file.
+	This vulnerability is not applicable due to the fact that none of the pages of the \doge{} allows to provide a parameter that will be executed. See \vulnref{OTG-INPVAL-013} for a similiar attack using the filename of the uploaded batch transactions file.
 }{%
 	This was observed using a Proxy that intercepted all GET/POST requests and responses to/from the server. For this the Burp Suite tool was used.
 }{%

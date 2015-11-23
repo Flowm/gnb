@@ -2,7 +2,7 @@
 
 \section{Tool description}
 
-\newpage
+\clearpage
 \section{Configuration and Deploy Management Testing}
 
 %CONFIG 003
@@ -106,7 +106,7 @@ implication text
 	\naScore
 }
 
-\newpage
+\clearpage
 \section{Identity Management Testing}
 \simpleVulntitle{OTG-IDENT-001}{Test Role Definitions}
 \vultable{\doge}{%
@@ -275,7 +275,8 @@ implication text
 }{%
 	Secure. 
 }
-\newpage
+
+\clearpage
 \section{Authentication Testing}
 \simpleVulntitle{OTG-AUTHN-001}{Testing for Credentials Transported over an Encrypted Channel}
 \vultable{\doge}{%
@@ -468,7 +469,7 @@ implication text
 %\vulntitle{OTG-AUTHN-009}{Testing for weak password change or reset functionalities}
 %\vulntitle{OTG-AUTHN-010}{Testing for Weaker authentication in alternative channel}
 
-\newpage
+\clearpage
 \section{Authorization Testing}
 
 \simpleVulntitle{OTG-AUTHZ-001}{Testing Directory traversal/file include}
@@ -517,7 +518,7 @@ implication text
 	Direct access to the employee page is not possible as client.
 	However by using the file inclusion technique described in \vulnref{OTG-AUTHZ-001} an authenticated attacker is able to access all included pages of the application.
 }{%
-	Manual testing direct access to the employee pages (\texttt{http://ADDRESS/employee/employee.php}) did not grant any positive results.\newline 
+	Manual testing direct access to the employee pages (\texttt{http://ADDRESS/employee/employee.php}) did not grant any positive results.\newline
 	Using the information gathered in \vulnref{OTG-AUTHZ-001} it was possible to access the employee pages by modifying the POST parameters of the client page to reference the employee pages.
 	Page: \texttt{http://ADDRESS/client/client.php}\newline
 	Original POST parameters:\newline
@@ -539,20 +540,27 @@ implication text
 %\vulntitle{OTG-AUTHZ-003}{Testing for Privilege Escalation}
 \vulntitle{OTG-AUTHZ-004}{Testing for Insecure Direct Object References}
 \vultable{\doge}{%
+	None of the direct object references that were observed in the application appears to have additional authorization or authentication checks.
 }{%
+	After capturing the requests and responses of all pages available in the application with Zed Attack proxy, the recorded traffic was checked for direct references to objects supplied by the user.
+	Manual testing of these revealed that no authorization or authentication was in place when accessing these objects.
+	\begin{itemize}
+		\item Download transaction history of an arbitrary user\newline\texttt{/downloadTransaction.php?userid=1}
+		\item Download tans of an arbitrary user\newline\texttt{/downloadTans.php?userid=1}
+		\item Approve an arbitrary transaction without being logged in\newline\texttt{/approvetransaction.php?transid=2}
+		\item Approve an arbitrary user who just registered\newline\texttt{/approveuser.php?userid=2}
+	\end{itemize}
 }{%
+	To exploit this vulnerability an attacker needs to know the address of the pages containing the direct object references.
+	The sequentially increasing user IDs starting with 1 make it easy to obtain this information for all users of the bank.
 }{%
+	Trough this vulnerability it is possible to directly access all functionality an employee has available.
+	As this is possible even for an unauthenticated user this vulnerability is also referenced in \vulnref{OTG-AUTHN-004}.
 }{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
 }
-\vultable{\gnb}{%
-}{%
-}{%
-}{%
-}{%
-}
-%TODO
 
-\newpage
+\clearpage
 \section{Session Management Testing}
 %SESSION 001
 \simpleVulntitle{OTG-SESS-001}{Testing for Bypassing Session Management Schema}
@@ -824,7 +832,7 @@ implication text
 	\naScore
 }
 \vultable{\gnb}{%
-	This vulnerability is not applicable due to the fact that none of the pages of \gnb{} allows to provide a parameter specifying files. The \gnb{} can be exploited though by messing with the internal lookup that gets the php filename from a keyword. See~\ref{vuln:OTG-AUTHZ-001} for a more detailed description.
+	This vulnerability is not applicable due to the fact that none of the pages of \gnb{} allows to provide a parameter specifying files. The \gnb{} can be exploited though by messing with the internal lookup that gets the php filename from a keyword. See \vulnref{OTG-AUTHZ-001} for a more detailed description.
 }{%
 	This was observed using a Proxy that intercepted all GET/POST requests and responses to/from the server. For this the Burp Suite tool was used.
 }{%
@@ -905,12 +913,12 @@ Inserting null characters inside the file also makes the program not work as int
 \vulntitle{OTG-INPVAL-016}{Testing for HTTP Splitting/Smuggling}
 This vulnerability was not tested as we did not extend our testing to the Apache Web Server.
 
-%\newpage
+%\clearpage
 %\section{Error Handling}
 %\simpleVulntitle{OTG-ERR-001}{Analysis of Error Codes}
 %\vulntitle{OTG-ERR-002}{Analysis of Stack Traces}
 
-\newpage
+\clearpage
 \section{Cryptography}
 \simpleVulntitle{OTG-CRYPST-001}{Testing for Weak SSL/TSL Ciphers, Insufficient Transport Layer Protection}
 \vultable{\doge}{%
@@ -989,7 +997,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
 }
 
-\newpage
+\clearpage
 \section{Business Logic Testing}
 \simpleVulntitle{OTG-BUSLOGIC-001}{Test Business Logic Data Validation}
 \vultable{\doge}{%
@@ -1151,7 +1159,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
 }
 
-\newpage
+\clearpage
 \section{Client Side Testing}
 This section was prioritized as low, therefore the client side was not tested in depth. Furthermore, as stated in the OWASP testing guide, black box testing of the client side is usually not performed, since access to the source code is always available, as it needs to be sent to the client to be executed.
 

@@ -776,11 +776,48 @@ implication text
 	\secure
 }
 
-\newpage
+\clearpage
 \section{Data Validation Testing}
 %\simpleVulntitle{OTG-INPVAL-001}{Testing for Reflected Cross Site Scripting}
 \simpleVulntitle{OTG-INPVAL-002}{Testing for Stored Cross Site Scripting}
-\vulntitle{OTG-INPVAL-003}{Testing for HTTP Verb Tampering}
+\vultable{\doge}{%
+	All pages showing user defined input are vulnerable to stored cross site scripting.
+	No input is validated after it is entered by the user as described in \vulnref{OTG-BUSLOGIC-001}.
+}{%
+	Issues on multiple pages were discovered during manual testing of the input vectors:
+	\begin{itemize}
+		\item Site: \texttt{/register.php}
+		\item Fields: \texttt{First Name} \texttt{Last Name}
+		\item Input example: \texttt{<script>alert(1);</script>}
+		\item Shown on:
+		\begin{itemize}
+			\item \texttt{/customer\_home.php}
+			\item \texttt{/tran.php}
+			\item \texttt{/employee\_home.php}
+		\end{itemize}
+	\end{itemize}
+	Javascript code can be written to the database using forms. It will later on be automatically executed on client side (e.g.\ comments in transactions)
+}{%
+	\na
+}{%
+	\na
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+\vultable{\gnb}{%
+	%TODO: !!!
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+
+%\vulntitle{OTG-INPVAL-003}{Testing for HTTP Verb Tampering}
 %\vulntitle{OTG-INPVAL-004}{Testing for HTTP Parameter pollution}
 \vulntitle{OTG-INPVAL-005}{Testing for SQL Injection}
 %TODO

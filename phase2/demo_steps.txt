@@ -1,0 +1,43 @@
+Live demo ideas
+
+Step for first demo 
+> Register user with own email to get the TAN codes 
+==============================================================
+SHOWCASING CODE INJECTION 
+==============================================================
+> get Registration to show a gif of Barney via code injection
+> Once logged in get the user_id from hovering over the Downloaded TANs  
+==============================================================
+SHOWCASING DIRECT PAGE ACCESS	& PRIVILLEGE ESCALATION 
+==============================================================
+> Approve user without being employee from 
+	/approveuser.php?userid=
+> get accountid from  /customer_home.php 
+> copy TANs ( only ) from email to tans.txt
+==============================================================
+SHOWCASING TRANSFER MONEY TO SELF BUG 
+==============================================================
+> Use such_secure.py 
+	- change the account number
+	- Choose the option 
+	- Enter creadentails 
+	- Enter ammount 100 
+4- show new amount
+==============================================================
+SHOWCASING TRANSFER MONEY WITH NO TAN  
+==============================================================
+5- send 10,001 without using a TAN ( showcasing TAN are not checked after 100th)
+
+==============================================================
+SHOWCASING UPLOADING MALICIOUS FILE   
+==============================================================
+
+
+==============================================================
+SHOWCASING TRANSFER NEGATIVE MONEY WITH NO TAN  
+==============================================================
+
+
+
+ 
+ 

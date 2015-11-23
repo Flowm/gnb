@@ -8,6 +8,7 @@
 %CONFIG 003
 \simpleVulntitle{OTG-CONFIG-003}{Test File Extensions Handling for Sensitive Information}
 \vultable{\doge}{%
+	%TODO: Add directory listing here
 	The batch transaction functionality at \url{http:/HOST/tran.php} does not seem to check the extension of the uploaded files.\newline
 	Also, while exploring the folder structure of the server, some leftover files were found, as well as hidden folders.
 }{%
@@ -18,18 +19,18 @@
 }{%
 	Having access to the data contained inside the hidden .git folder allows to get access to the whole source code of the web application, also thanks to the fact that directory listing is active.
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{N}{N}
 }
 \vultable{\gnb}{%
 	Although the web application doesn't allow directory listing, it is still possible to directly open certain files. We found that some hidden folders and files containing sensitive information were left inside the folder of the web application.
 }{%
 	We noticed this flaw by simply observing the structure of the web application. More specifically, we found that the root folder still contained the .git folder of the project, along with a README.md file that contained the credentials to access the system as well as the database. It would also be possible to find the files contained inside the /database folder, in which the database structure as well a basic setup is stored.
 }{%
-	An attacker could easily brute-force the names of files and folders cointained inside the root folder of the web application (perhaps using an appropriate tool). Figuring out the existence of such vulnerability is, hence, doomed to happen.
+	An attacker could easily brute-force the names of files and folders contained inside the root folder of the web application (perhaps using an appropriate tool). Figuring out the existence of such vulnerability is, hence, doomed to happen.
 }{%
 	This was the most severe vulnerability found in the GNB web application. Knowing about the existence of the .git folder doesn't help an attacker much, since directory listing is disabled (an attacker would have to brute-force the names of the objects inside of it); however, the unprotected README.md is a different matter. Once an attacker has read the credentials inside this file, he could connect to the server via ssh and get complete control over the system (root privileges included).
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{H}{H}{H}
 }
 %CONFIG 006
 \vulntitle{OTG-CONFIG-006}{Test HTTP Methods}
@@ -67,7 +68,7 @@ implication text
 }{%
 	Sniffing the network traffic, all data exchanged between the server and the client can be read as clear text. No confidentiality at all is supported on this end.
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
 }
 \vultable{\gnb}{%
 	The application is only accessible over HTTP.
@@ -78,7 +79,7 @@ implication text
 }{%
 	Sniffing the network traffic, all data exchanged between the server and the client can be read as clear text. No confidentiality at all is supported on this end.
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
 }
 
 %CONFIG 008
@@ -116,9 +117,9 @@ implication text
 }{%
 	Skill level needed to uncover this is moderate, using simple direct page access and basic trail and error with parameters is enough to exploit this bug, so the likelihood of this vulnerability is quite high 
 }{%
-	This could have tremendous damages to the bank, as adding employee accounts and transferring functions 
+	This could have tremendous damages to the bank, as adding employee accounts and transferring functions
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{H}{H}{L}
 }
 
 \begin{figure}[h!tbp]
@@ -134,11 +135,11 @@ implication text
 }{%
 	This was verified through basic function testing and security testing tools (ZAP).
 }{%
-	N/A since no vulnerability was found.
+	\na
 }{%
-	N/A 
+	\na
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\secure
 }
 
 \begin{figure}[h!tbp]
@@ -166,7 +167,7 @@ implication text
 	No serious impact as TAN codes are not sent to the email.
 	Robot accounts can be used to perform a DOS attack. 
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{N}{N}{L}
 }
 
 \vultable{\gnb}{%
@@ -182,7 +183,7 @@ implication text
 }{%
 	Robot accounts can be used to perform a DOS attack. 
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{N}{N}{L}
 }
 
 \vulntitle{OTG-IDENT-003}{Test Account Provisioning Process}
@@ -199,7 +200,7 @@ implication text
 }{%
 	This presents some serious impact, as creating an employee account will give the attacker full access to the application and administrative functions such as creating accounts and approving money transfers. 
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{N}{L}{N}
 }
 
 \vultable{\gnb}{%
@@ -211,9 +212,9 @@ implication text
 }{%
 	Robot accounts are less likely to occur and it depends on the skill level of the attacker.
 }{%
-	If the DOS attack is severe enough it could stop the application from from working. 
+	If the DOS attack is severe enough it could stop the application from from working.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{N}{N}{N}
 }
 
 \vulntitle{OTG-IDENT-004}{Testing for Account Enumeration and Guessable User Account}
@@ -231,7 +232,7 @@ implication text
 }{%
 	\na
 }{%
-	Secure
+	\secure
 }
 
 \vultable{\gnb}{%
@@ -248,7 +249,7 @@ implication text
 }{%
 	\na
 }{%
-	Secure
+	\secure
 }
 
 \vulntitle{OTG-IDENT-005}{Testing for Weak or unenforced username policy}
@@ -273,7 +274,7 @@ implication text
 }{%
 	\na
 }{%
-	Secure. 
+	\secure
 }
 
 \clearpage
@@ -290,7 +291,7 @@ implication text
 }{%
 	The attacker is able access the said account, and perform actions on behalf of said user, and it the account is an employee account, the attacker would gain access to the administrative tasks
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
 }
 
 \vultable{\gnb}{%
@@ -302,7 +303,7 @@ implication text
 }{%
 	\same 
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
 }
 
 \vulntitle{OTG-AUTHN-002}{Testing for default credentials}
@@ -315,7 +316,7 @@ implication text
 }{%
 	Gaining access to the employee account would allow the attacker to perform administrative tasks on the application.	
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{H}{H}{L}
 }
 
 \vultable{\gnb}{%
@@ -327,7 +328,7 @@ implication text
 }{%
 	\na
 }{%
-	Secure
+	\secure
 }
 
 \vulntitle{OTG-AUTHN-003}{Testing for Weak lock out mechanism}
@@ -340,26 +341,26 @@ implication text
 }{%
 	Gaining access to an employee or client account, which allow the attacker to perform that accounts tasks.	
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{N}
 }
 
 \vultable{\gnb}{%
-	\same				
-}{%
 	\same
 }{%
 	\same
 }{%
 	\same
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\same
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{N}
 }
 
 \vulntitle{OTG-AUTHN-004}{Testing for bypassing authentication schema}
 \vultable{\doge}{%
 	Through direct page access (see \vulnref{OTG-AUTHZ-002} and \vulnref{OTG-AUTHZ-004}), and SQL injection (see \ref{over:sql}) a non-authenticated user is able to gain access to both client and employee functions without being logged in.
 	
-	For more details on what privileges can a non-authenticated user can exploite, please refer to \ref{figure:RoleDefinitionsDoge}.
+	For more details on what privileges can a non-authenticated user can exploit, please refer to \ref{figure:RoleDefinitionsDoge}.
 	\begin{itemize}
 	\item Direct page access example : the url \texttt{/downloadTans.php?userid=1} allows a non authorized user to download the TAN codes for the user with the user\_id of 1.
 	\item SQL Injection example : by using the username 
@@ -372,7 +373,7 @@ implication text
 }{%
 	This presents some serious impact, as creating an employee account will give the attacker full access to the application and administrative functions such as creating accounts and approving money transfers. 	
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{H}{H}{L}
 }
 
 \vultable{\gnb}{%
@@ -384,7 +385,7 @@ implication text
 }{%
 	Overtake an existing user session and gain access to that users privileges.
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 }
 
 \vulntitle{OTG-AUTHN-005}{Test remember password functionality}
@@ -397,7 +398,7 @@ implication text
 }{%
 	Gaining access to an employee or client account, which allow the attacker to perform that accounts tasks.	
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 }
 
 \vultable{\gnb}{%
@@ -409,7 +410,7 @@ implication text
 }{%
 	\same
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 }
 
 
@@ -423,7 +424,7 @@ implication text
 }{%
 	\na	
 }{%
-	Secure
+	\secure
 }
 
 \vultable{\gnb}{%
@@ -435,7 +436,7 @@ implication text
 }{%
 	\same
 }{%
-	\same
+	\secure
 }
 
 
@@ -449,7 +450,7 @@ implication text
 }{%
 	Gaining access to an employee or client account, which allow the attacker to perform that accounts tasks.	
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{N}
 }
 
 \vultable{\gnb}{%
@@ -461,7 +462,7 @@ implication text
 }{%
 	\same
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{N}
 }
 
 
@@ -487,18 +488,18 @@ implication text
 }
 \vultable{\gnb}{%
 	User defined input vectors were observed on all pages of the application which require authentication.
-	These input vectors don't seem to be direct references to files in the wep application, thus an indirect mapping of the specified names to included files is assumed.
+	These input vectors don't seem to be direct references to files in the web application, thus an indirect mapping of the specified names to included files is assumed.
 	Due to this indirect mapping accessing arbitrary files on the server is not possible by modifying these input vectors.
 	Nevertheless an authenticated attacker is able to use this mechanism to get access to all included pages as described in \vulnref{OTG-AUTHZ-002}
 }{%
 	After capturing the requests and responses of all pages available in the application with Zed Attack proxy, the recorded traffic was checked for possible input vectors.
 	Multiple input vectors referencing sections of the site were identified, but manual testing revealed that none of these referred to filenames directly.
 }{%
-	See \vulnref{OTG-AUTHZ-002}
+	\na
 }{%
-	See \vulnref{OTG-AUTHZ-002}
+	\na
 }{%
-	See \vulnref{OTG-AUTHZ-002}
+	\secure
 }
 
 \vulntitle{OTG-AUTHZ-002}{Testing for bypassing authorization schema}
@@ -506,21 +507,21 @@ implication text
 	All employee pages are fully accessible for any authenticated user e.g. client.
 }{%
 	Manually accessing the address of the employee pages while being logged in as user allowed full access to these sites.
-	\texttt{http://ADDRESS/employee\_home.php}
+	\texttt{/employee\_home.php}
 }{%
 	To exploit this vulnerability an attacker needs to be aware of the address of the employee pages and have an valid client account.
 }{%
 	This vulnerability allows bypassing all authorization mechanisms put in place, granting the attacker the highest privileges available in the application.
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{L}{N}{U}{H}{H}{H}
 }
 \vultable{\gnb}{%
 	Direct access to the employee page is not possible as client.
 	However by using the file inclusion technique described in \vulnref{OTG-AUTHZ-001} an authenticated attacker is able to access all included pages of the application.
 }{%
-	Manual testing direct access to the employee pages (\texttt{http://ADDRESS/employee/employee.php}) did not grant any positive results.\newline
+	Manual testing direct access to the employee pages (\texttt{/employee/employee.php}) did not grant any positive results.\newline
 	Using the information gathered in \vulnref{OTG-AUTHZ-001} it was possible to access the employee pages by modifying the POST parameters of the client page to reference the employee pages.
-	Page: \texttt{http://ADDRESS/client/client.php}\newline
+	Page: \texttt{/client/client.php}\newline
 	Original POST parameters:\newline
 	\texttt{section=my\_accounts\&frame=account\_overview\&account=10000002}\newline
 	Updated POST parameters:\newline
@@ -534,7 +535,7 @@ implication text
 }{%
 	This vulnerability allows bypassing all authorization mechanisms put in place, granting the attacker the highest privileges available in the application.
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{L}{N}{U}{H}{H}{H}
 }
 
 %\vulntitle{OTG-AUTHZ-003}{Testing for Privilege Escalation}
@@ -557,7 +558,18 @@ implication text
 	Trough this vulnerability it is possible to directly access all functionality an employee has available.
 	As this is possible even for an unauthenticated user this vulnerability is also referenced in \vulnref{OTG-AUTHN-004}.
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{H}{H}{L}
+}
+\vultable{\gnb}{%
+	No direct object references were observed.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
 }
 
 \clearpage
@@ -571,9 +583,9 @@ implication text
 }{%
 	\na
 }{%
-	Since the only used cookie only contains the session ID, even though it is easy to change the value of the cookie, no other session values are exposed to the user. It is still possible to hijack another session by changing the entire value of the cookie with the one associated to another user (see Session 004).
+	Since the only used cookie only contains the session ID, even though it is easy to change the value of the cookie, no other session values are exposed to the user. It is still possible to hijack another session by changing the entire value of the cookie with the one associated to another user (see \vulnref{OTG-SESS-004}).
 }{%
-\na
+	\na
 }
 \vultable{\gnb}{%
 	The same observations made for the DogeBank application apply.
@@ -582,9 +594,9 @@ implication text
 }{%
 	\na
 }{%
-	The same implications mentioned for the DogeBank application apply.
+	\same
 }{%
-\na
+	\na
 }
 %SESSION 002
 \vulntitle{OTG-SESS-002}{Testing for Cookies attributes}
@@ -603,7 +615,7 @@ implication text
 }{%
 	Weak protection for cookies means that these can be accessed via Javascript to perform XSS attacks.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 }
 \vultable{\gnb}{%
 	The same observations made for the DogeBank application apply.
@@ -614,7 +626,7 @@ implication text
 }{%
 	Weak protection for cookies means that these can be accessed via Javascript to perform XSS attacks.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 }
 %SESSION 003
 \vulntitle{OTG-SESS-003}{Testing for Session Fixation}
@@ -627,7 +639,7 @@ implication text
 }{%
 	An attacker could generate a session ID for himself, then force the same ID onto a user, hijacking that users' session in case of successful authentication with the server. This implicates full access to the account of a user.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 }
 \vultable{\gnb}{%
 	The same observations made for the DogeBank application apply.
@@ -638,20 +650,20 @@ implication text
 }{%
 	The same implications mentioned for the DogeBank application apply.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 }
 %SESSION 004
 \vulntitle{OTG-SESS-004}{Testing for Exposed Session Variables}
 \vultable{\doge}{%
-	After observing requests and responses between the client and the server, we observed that session IDs are always sent in HTTP headers. Although the session ID is never explicitly passed in URLs, no encryption is provided whatsover and the session ID does not change until a user explicitly logs out. No other session variables are generated, therefore only the session ID is affected.
+	After observing requests and responses between the client and the server, we observed that session IDs are always sent in HTTP headers. Although the session ID is never explicitly passed in URLs, no encryption is provided whatsoever and the session ID does not change until a user explicitly logs out. No other session variables are generated, therefore only the session ID is affected.
 }{%
-	This observation was made when analyzing session management. Refer to Section 001, 003.
+	This observation was made when analyzing session management. Refer to \vulnref{OTG-SESS-001} and \vulnref{OTG-SESS-003}.
 }{%
 	As long as an attacker can sniff the network traffic and read the session ID of a user, it is very easy to hijack a session. This approach makes it even easier than hijacking a session through social engineering.
 }{%
 	An attacker can perform a man in the middle attack, read the unencrypted HTTP messages exchanged between a user and the server, in order to impersonate the user and hijack an existing session. This implicates full access to the account of a user.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 }
 \vultable{\gnb}{%
 	The same observations made for the DogeBank application apply.
@@ -662,18 +674,18 @@ implication text
 }{%
 	The same implications mentioned for the DogeBank application apply.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 }
 %SESSION 005
 \vulntitle{OTG-SESS-005}{Testing for Cross Site Request Forgery}
 \vultable{\doge}{%
 	Having observed different functionalities offered by the server, we noticed that no encryption is used at all; furthermore the session ID is stored as a cookie in the browser of the user, which makes things a lot easier. In order to trick a user into execute specific operations, however, we found out that some knowledge of the web application was required. Given this knowledge, it proves easy to compromise the entire web application. We found a list of pages potentially subject to CSRF:
 	\begin{itemize}
-		\item approveuser.php: can be exploited without privileges as well;
-		\item approvetransaction.php: can be exploited without privileges as well;
-		\item downloadTans.php: can be exploited without privileges as well;
-		\item register\_employee.php: only accessible to employees. The existence of this page has to be known to an attacker beforehand;
-		\item tran.php: although this page is easy to exploit, an attacker would need to have access to the TANs of a user. This could be done beforehand by downloading from \url{http://ADDRESS/downloadTans.php}.
+		\item approveuser.php: can be exploited without privileges
+		\item approvetransaction.php: can be exploited without privileges
+		\item downloadTans.php: can be exploited without privileges
+		\item register\_employee.php: only accessible to employees. The existence of this page has to be known to an attacker beforehand
+		\item tran.php: although this page is easy to exploit, an attacker would need to have access to the TANs of a user. This could be done beforehand by downloading from \url{/downloadTans.php}
 	\end{itemize}
 }{%
 	All of the observations were made while navigating the website and brute-forcing different combinations of attacks. Other helpful tools helpful were DirBuster and the DogeBankHack custom script, since these allowed to gain a better understanding of the website's structure.
@@ -682,7 +694,7 @@ implication text
 }{%
 	An attacker in possession of the previously described information could be able to trick a victim into executing operations predetermined by the attacker himself, like starting transactions to arbitrary accounts or registering arbitrary employees. The impact in the former case would compromise the whole bank account of a user, or grant a privilege escalation in the latter case.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{H}{L}
 }
 \vultable{\gnb}{%
 	The same predisposition showed by the DogeBank application holds true, i.e. no encryption is used in client-server message exchanges and the session ID is stored as a cookie in the browser of the user. Similar observations regarding the knowledge required to perform a CSRF attack also hold. In particular, these pages proved to be vulnerable:
@@ -700,23 +712,24 @@ implication text
 }{%
 	Assuming an attacker is capable of obtaining the required information for such an attack to work, this would have the same implications described in the DogeBank case.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 }
 %SESSION 006
 \vulntitle{OTG-SESS-006}{Testing for logout functionality}
 \vultable{\doge}{%
 	We observed that the logout functionality is working properly, as the logoutAction.php destroys an existing session, creating a new one. Trying to access a page that requires authentication, after having logged out, fails and the server responds with a "PHPSESSID=deleted" cookie, redirecting the browser to the login page.
-	We also observed that there is no logout timer, allowing a user to be logged in indefinetely, as long as the logout is not manually triggered.
+	We also observed that there is no logout timer, allowing a user to be logged in indefinitely, as long as the logout is not manually triggered.
 }{%
 	These observations were made using the Burp Repeater tool.
 }{%
 	\na
 }{%
-	Since there is no session timeout policy whatsoever, this could prove to be a vulnerability. This is analyzed in more details in SESS-007
+	Since there is no session timeout policy whatsoever, this could prove to be a vulnerability. This is analyzed in more details in \vulnref{OTG-SESS-007}.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\secure
 }
 \vultable{\gnb}{%
+	%TODO
 	The same observations made for the DogeBank application apply.
 }{%
 	These observations were made using the Burp Repeater tool.
@@ -725,7 +738,7 @@ implication text
 }{%
 	The same implications described for the DogeBank application apply.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\secure
 }
 %SESSION 007
 \vulntitle{OTG-SESS-007}{Test Session Timeout}
@@ -738,7 +751,7 @@ implication text
 }{%
 	The lack of a session timeout gives a potential attacker indefinite time to perform a session hijacking. Once a session has been hijacked, an attacker has complete access over a user's account.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{N}{U}{L}{L}{L}
 }
 \vultable{\gnb}{%
 	The same observations made for the DogeBank application apply.
@@ -749,7 +762,7 @@ implication text
 }{%
 	The same implications mentioned for the DogeBank application apply.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{N}{U}{L}{L}{L}
 }
 %SESSION 008
 \vulntitle{OTG-SESS-008}{Testing for Session puzzling}
@@ -802,7 +815,7 @@ implication text
 }{%
 	\na
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{H}{H}{H}
 }
 \vultable{\gnb}{%
 	%TODO: !!!
@@ -814,7 +827,7 @@ implication text
 }{%
 	\same
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{H}{H}{H}
 }
 
 %\vulntitle{OTG-INPVAL-003}{Testing for HTTP Verb Tampering}
@@ -824,10 +837,7 @@ implication text
 
 %\vulntitle{OTG-INPVAL-006}{Testing for LDAP Injection}
 %\vulntitle{OTG-INPVAL-007}{Testing for ORM Injection}
-
-\vulntitle{OTG-INPVAL-008}{Testing for XML Injection}
-%TODO
-
+%\vulntitle{OTG-INPVAL-008}{Testing for XML Injection}
 %\vulntitle{OTG-INPVAL-009}{Testing for SSI Injection}
 %\vulntitle{OTG-INPVAL-010}{Testing for XPath Injection}
 %\vulntitle{OTG-INPVAL-011}{IMAP/SMTP Injection}
@@ -883,7 +893,7 @@ implication text
 %\vulntitle{OTG-INPVAL-012-2}{Testing for Remote File Inclusion}
 \vulntitle{OTG-INPVAL-013}{Testing for Command Injection}
 \vultable{\doge}{%
-	We found that this vulnerability was strictly related to BUSLOGIC 009, since we managed to exploit this vulnerability inside the tran.php page, when uploading a batch transaction file. We observed that it was possible to make the server execute arbitrary commands by injecting them inside the filename of the batch file. The results from stdout were also clearly visible inside the tran.php page.
+	We found that this vulnerability was strictly related to \vulnref{ORG-BUSLOGIC-009}, since we managed to exploit this vulnerability inside the \texttt{tran.php} page, when uploading a batch transaction file. We observed that it was possible to make the server execute arbitrary commands by injecting them inside the filename of the batch file. The results from stdout were also clearly visible inside the \texttt{tran.php} page.
 }{%
 	In order to execute arbitrary commands we had to insert them in the name of the uploaded file. Here is an example:\newline
 	;cat /etc/passwd;\#\newline
@@ -893,7 +903,7 @@ implication text
 }{%
 	This vulnerability proves as really severe, since an attacker can execute arbitrary commands on the webserver. The results are not too devastating, as long as the attacker does not have access to the root user; however all the source code is visible this way, which can aid the attacker in attempting to exploit further vulnerabilities.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{L}{N}{C}{H}{H}{H}
 }
 \vultable{\gnb}{%
 	Similarly to the case of the DogeBank application, we observed that on the new\_transaction\_multiple.php page it was indeed possible to inject commands by inserting them directly into the filename of the file that was to be uploaded.
@@ -904,22 +914,23 @@ implication text
 }{%
 	The likelihood of an attacker attempting a command injection through a file upload is very high.
 }{%
-	The same implications mentioned for the DogeBank case apply. However, since in this case an attacker could have gotten root access (refer to CONFIG 001), the implications are much worse.
+	The same implications mentioned for the DogeBank case apply. However, since in this case an attacker could have gotten root access (refer to \vulnref{OTG-CONFIG-001}), the implications are much worse.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{L}{N}{C}{H}{H}{H}
+	%TODO ADD TO STACK: \cvssBaseScorePretty{N}{H}{L}{N}{C}{H}{H}{H}
 }
 %INPVAL 014
 \vulntitle{OTG-INPVAL-014}{Testing for Buffer overflow}
 \vultable{\doge}{%
 	We observed that is indeed possible to break the C parser on the DogeBank application, by producing overflows inside the code. This was possible exploiting the file upload functionality. More detailed observations about specific cases are presented at the end of this subsection.
 }{%
-	Finding out these vulnerabilities required multiple attempts. In order to find these vulnerabilities we performed manual attacks and used the Fuzz funcionality of the Zed Attack Proxy tool.
+	Finding out these vulnerabilities required multiple attempts. In order to find these vulnerabilities we performed manual attacks and used the Fuzz functionality of the Zed Attack Proxy tool.
 }{%
 	The complexity of this attack proved to be much higher than any other while stress-testing this application. Since we were doing Black-box testing, we had to come up with possible combinations of strings in order to find weaknesses inside the C code. Hence an attacker could find vulnerabilities through brute-force, making the attack less likely.
 }{%
-	?
+	%TODO
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\naScore
 }
 \vultable{\gnb}{%
 	The C Parser seems to be robust, as e did not find any buffer overflow vulnerability, neither due to bad string formats nor due to stack/heap overflow.
@@ -930,7 +941,7 @@ implication text
 }{%
 	\na
 }{%
-	Secure
+	\secure
 }
 While testing the DogeBank application for C vulnerabilities, we found the actual code to be somewhat robust, as inserting any kind of value inside the transaction file tags would not result in segmentation fault or other visible errors. In order to actually break the program, we had exploit the filename vulnerability, as it allowed us to pass in custom parameters to the C program. It is also important to stress that the batch transaction functionality offers a transaction log, which is displayed on client side after a request and proved to be the direct output of the C parser. This, however, includes by default only stdout messages and not stderr messages. To bypass this, we had to tamper with the transaction filename, in order to redirect stderr messages on stdout and get some feedback.\newline
 
@@ -943,7 +954,6 @@ The only way we managed to produce stack overflows was by tampering with the fil
 Testing for Format string\\
 The only issue we found when working with string formats was regarding to the length of a string. When passed a huge string, the program will simply not work as intended, probably due to buffer limitations. However, no relevant error messages were returned, hence the file is definitely not read using the \textit{gets} function.
 Inserting null characters inside the file also makes the program not work as intended, but it is not possible to exploit the actual transaction functionality by doing this.
-
 
 %INPVAL 015
 \vulntitle{OTG-INPVAL-015}{Testing for incubated vulnerabilities}
@@ -1015,12 +1025,12 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	As documented in \vulnref{OTG-CONFIG-007}, the site is not available via HTTPS.
 }{%
-	Every requests gets sent over an unecrypted channel automatically.
+	Every requests gets sent over an unencrypted channel automatically.
 }{%
 	The same implications as in \vulnref{OTG-CONFIG-007} apply.
 	By sniffing the network traffic, all data exchanged between the server and the client can be read as clear text. No confidentiality at all is supported on this end.
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
 }
 \vultable{\gnb}{%
 	\same
@@ -1031,7 +1041,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	\same
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
 }
 
 \clearpage
@@ -1062,15 +1072,12 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	Everything
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: These are mock values
+	\cvssBaseScorePretty{N}{L}{L}{N}{U}{N}{H}{L}
 }
 \vultable{\gnb}{%
-
 	\begin{itemize}
-	
 	\item Transaction Destination Account number \hfill \newline
-	\same
-	
+	This field is not validated. This means money can be transferred to any given account, even if it does not exist. This also enables transferring money to the same account it is coming from. This would not be an issue if this worked properly - but the amount does not get deducted from the source account in this case. Any user may generate infinite money this way.
 	\end{itemize}
 }{%
 	Manual testing
@@ -1078,8 +1085,9 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 	High
 }{%
 	Everything
+	%TODO
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: These are mock values
+	\cvssBaseScorePretty{N}{L}{L}{N}{U}{N}{H}{N}
 }
 
 %\vulntitle{OTG-BUSLOGIC-002}{Test Ability to Forge Requests}
@@ -1106,7 +1114,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	\na
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: These are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{N}{N}
 }
 
 %\vulntitle{OTG-BUSLOGIC-005}{Test Number of Times a Function Can be Used Limits}
@@ -1122,7 +1130,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	This vulnerability implicates that an attacker will be able to attempt countless attacks and abuse functionalities without any repercussion.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L}
 }
 \vultable{\gnb}{%
 	The same observations made for the DogeBank application apply.
@@ -1133,12 +1141,12 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	The same implications mentioned for the Doge application apply.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L}
 }
 
 \vulntitle{OTG-BUSLOGIC-008}{Test Upload of Unexpected File Types}
 \vultable{\doge}{%
-	We discovered that the tran.php page allows to upload any kind of file, without performing extension checks on it. However, it seems that the server accepts only files with a limited size, making it impossible to generate more than 3 transactions at once, or uploadin huge files for that matter. Regardless, as long as the filesize stays below 500 bytes, any file will be accepted by the server and stored forever inside the /uploads folder.
+	We discovered that the tran.php page allows to upload any kind of file, without performing extension checks on it. However, it seems that the server accepts only files with a limited size, making it impossible to generate more than 3 transactions at once, or uploading huge files for that matter. Regardless, as long as the filesize stays below 500 bytes, any file will be accepted by the server and stored forever inside the /uploads folder.
 }{%
 	It is important to stress that no file format was described on the documentation nor on the transaction page. Nonetheless, after having found out the structure of the web application (using DirBuster and Burp), we found a sample batch transaction file in txt format. Afterwards we simply tried uploading files with different extensions to see the outcome.
 }{%
@@ -1146,7 +1154,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	This was by far the most severe vulnerability we found, since all uploaded files are kept inside a well known folder on the web server. An attacker is this way able to upload any file, as well as custom scripts and programs to the server. This issue is analyzed in depth in section 009.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{L}{N}{C}{H}{H}{H}
 }
 \vultable{\gnb}{%
 	The only page which allows to upload a file to the server is the new\_transaction\_multiple.php (loaded as a frame under the my\_accounts.php section inside the client.php file). When uploading a file, the server performs an explicit check, eventually accepting only .csv and .txt files.
@@ -1175,9 +1183,9 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	Once an attacker asserted the possibility of uploading any kind of file, the likelihood of such an attack becomes very high.
 }{%
-	As stated in the BUSLOGIC 008 section, this was the most severe vulnerability found, since it allows to get full control over the application.	
+	As stated in the \vulnref{OTG-BUSLOGIC-008} section, this was the most severe vulnerability found, since it allows to get full control over the application.	
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{L}{N}{C}{H}{H}{H}
 }
 \vultable{\gnb}{%
 	Although the application performs a check on the extension of the file uploaded via the new\_transaction\_multiple.php page, it does not check the content nor the basename of the file. Combined with the fact code injection is possible due to the same vulnerability (discussed in INPVAL 013), we observed that it is perfectly feasible to upload malicious files and rename them afterwards.
@@ -1193,21 +1201,21 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	The implications of a code injection attack are very severe, since an attacker could execute arbitrary code on the webserver. Even reading source code becomes possible.
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{L}{L}{N}{C}{H}{H}{H}
 }
 
 \clearpage
 \section{Client Side Testing}
 This section was prioritized as low, therefore the client side was not tested in depth. Furthermore, as stated in the OWASP testing guide, black box testing of the client side is usually not performed, since access to the source code is always available, as it needs to be sent to the client to be executed.
 
-\vulntitle{OTG-CLIENT-001}{Testing for DOM based Cross Site Scripting}
-\vulntitle{OTG-CLIENT-002}{Testing for JavaScript Execution}
-\vulntitle{OTG-CLIENT-003}{Testing for HTML Injection}
-\vulntitle{OTG-CLIENT-004}{Testing for Client Side URL Redirect}
-\vulntitle{OTG-CLIENT-005}{Testing for CSS Injection}
-\vulntitle{OTG-CLIENT-006}{Testing for Client Side Resource Manipulation}
-\vulntitle{OTG-CLIENT-007}{Test Cross Origin Resource Sharing}
-\vulntitle{OTG-CLIENT-008}{Testing for Cross Site Flashing}
+%\vulntitle{OTG-CLIENT-001}{Testing for DOM based Cross Site Scripting}
+%\vulntitle{OTG-CLIENT-002}{Testing for JavaScript Execution}
+%\vulntitle{OTG-CLIENT-003}{Testing for HTML Injection}
+%\vulntitle{OTG-CLIENT-004}{Testing for Client Side URL Redirect}
+%\vulntitle{OTG-CLIENT-005}{Testing for CSS Injection}
+%\vulntitle{OTG-CLIENT-006}{Testing for Client Side Resource Manipulation}
+%\vulntitle{OTG-CLIENT-007}{Test Cross Origin Resource Sharing}
+%\vulntitle{OTG-CLIENT-008}{Testing for Cross Site Flashing}
 %CLIENT 009
 \vulntitle{OTG-CLIENT-009}{Testing for Clickjacking}
 \vultable{\doge}{%
@@ -1219,7 +1227,7 @@ This section was prioritized as low, therefore the client side was not tested in
 }{%
 	The Doge web application is entirely vulnerable to clickjacking attacks and an attacker could handle all of the actions started on the php pages in a malicious way.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 }
 \vultable{\gnb}{%
 	The same observations made for the DogeBank application apply.
@@ -1230,7 +1238,7 @@ This section was prioritized as low, therefore the client side was not tested in
 }{%
 	The GNB web application is entirely vulnerable to clickjacking attacks and an attacker could handle all of the actions started on the php pages in a malicious way.
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 }
 
 \vulntitle{OTG-CLIENT-010}{Testing WebSockets}
@@ -1257,5 +1265,5 @@ This section was prioritized as low, therefore the client side was not tested in
 	\secure
 }
 
-\vulntitle{OTG-CLIENT-011}{Test Web Messaging}
-\vulntitle{OTG-CLIENT-012}{Test Local Storage}
+%\vulntitle{OTG-CLIENT-011}{Test Web Messaging}
+%\vulntitle{OTG-CLIENT-012}{Test Local Storage}

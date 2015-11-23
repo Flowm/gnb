@@ -1,6 +1,5 @@
 \chapter{Executive Summary}
 
-%TODO: Write executive summary
 
 \section{\doge - Team 27}
 During our intensive testing of the DogeBank application, we found many severe vulnerabilities, as well as bugs, that could easily be exploited to compromise the entire application. Under no circumstances should this web application be used 
@@ -12,5 +11,8 @@ The business logic also seems to be somewhat broken, as a customer can increase 
 We found several vulnerabilities and bugs, most of them having minor impact on the web application as a whole, but still allowing an attacker to gain access to other user accounts (both clients and employees).\newline\newline
 Even though the folder listing is disabled on the server, an astute attacker may either brute-force or figure out the names of some PHP files, by analyzing the logical names inside the client code. Since not all of these files seem to perform checks (and automatically redirect a user to a safe path), some  
 Among the major issues found, SQL injection and XSS is possible from the registration page.
+%TODO: Add some stuff
+
 \section{Comparison}
-In summary
+%TODO: Write summary
+% TL;DR: Our bank has less severe vulns...

@@ -51,4 +51,16 @@
 	Clicking on `Home' while logged in as an employee will redirect the user to \url{http:/HOST/employee\_home} without the `.php', which results in a 404 error.
 }{%
 	Click on `Home' while logged in as an employee.
+}
+
+
+\hrulefill \newline
+\bugtable{27}{No more TAN codes generated after the first 100}{%
+	\url{http:/HOST/tran.php}
+}{%
+	\na
+}{%
+	Once a customer uses all 100 allocated TAN Codes, the application does not support generating more TAN codes for the customer, the TAN codes are only generated at the registration phase.
+}{%
+	Use all 100 allocated TAN Codes.
 }																		

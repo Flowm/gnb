@@ -1,0 +1,1 @@
+This is just an example of a command that could be injected using the upload functionality :)

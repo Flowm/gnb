@@ -8,7 +8,7 @@
 %CONFIG 003
 \simpleVulntitle{OTG-CONFIG-003}{Test File Extensions Handling for Sensitive Information}
 \vultable{\doge}{%
-	The batch transaction functionality at \url{http:/IPADDRESS/tran.php} does not seem to check the extension of the uploaded files.\newline
+	The batch transaction functionality at \url{http:/HOST/tran.php} does not seem to check the extension of the uploaded files.\newline
 	Also, while exploring the folder structure of the server, some leftover files were found, as well as hidden folders.
 }{%
 	If the user tries to upload any file other than a txt file, the server does not provide any error messages. This particular vulnerability will be discussed later in 3.X.X.\newline
@@ -16,18 +16,18 @@
 }{%
 	In order to access the hidden .git folder, however, an attacker must be skilled and know where to search for sensitive information.
 }{%
-	Having access to the data contained inside the hidden .git folder allows to potentially get access to the whole source code of the web application.
+	Having access to the data contained inside the hidden .git folder allows to get access to the whole source code of the web application, also thanks to the fact that directory listing is active.
 }{%
 	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
 }
 \vultable{\gnb}{%
-	?
+	Although the web application doesn't allow directory listing, it is still possible to directly open certain files. We found that some hidden folders and files containing sensitive information were left inside the folder of the web application.
 }{%
-	?
+	We noticed this flaw by simply observing the structure of the web application. More specifically, we found that the root folder still contained the .git folder of the project, along with a README.md file that contained the credentials to access the system as well as the database. It would also be possible to find the files contained inside the /database folder, in which the database structure as well a basic setup is stored.
 }{%
-	?
+	An attacker could easily brute-force the names of files and folders cointained inside the root folder of the web application (perhaps using an appropriate tool). Figuring out the existence of such vulnerability is, hence, doomed to happen.
 }{%
-	?
+	This was the most severe vulnerability found in the GNB web application. Knowing about the existence of the .git folder doesn't help an attacker much, since directory listing is disabled (an attacker would have to brute-force the names of the objects inside of it); however, the unprotected README.md is a different matter. Once an attacker has read the credentials inside this file, he could connect to the server via ssh and get complete control over the system (root privileges included).
 }{%
 	\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
 }
@@ -837,10 +837,70 @@ implication text
 
 %\vulntitle{OTG-INPVAL-012-2}{Testing for Remote File Inclusion}
 \vulntitle{OTG-INPVAL-013}{Testing for Command Injection}
+\vultable{\doge}{%
+	We found that this vulnerability was strictly related to BUSLOGIC 009, since we managed to exploit this vulnerability inside the tran.php page, when uploading a batch transaction file. We observed that it was possible to make the server execute arbitrary commands by injecting them inside the filename of the batch file. The results from stdout were also clearly visible inside the tran.php page.
+}{%
+	In order to execute arbitrary commands we had to insert them in the name of the uploaded file. Here is an example:\newline
+	;cat /etc/passwd;\#\newline
+	The content of the file were not really relevant, since we just wanted to execute code on the machine.
+}{%
+	The likelihood of an attacker attempting a command injection through a file upload is very high.
+}{%
+	This vulnerability proves as really severe, since an attacker can execute arbitrary commands on the webserver. The results are not too devastating, as long as the attacker does not have access to the root user; however all the source code is visible this way, which can aid the attacker in attempting to exploit further vulnerabilities.
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+\vultable{\gnb}{%
+	Similarly to the case of the DogeBank application, we observed that on the new\_transaction\_multiple.php page it was indeed possible to inject commands by inserting them directly into the filename of the file that was to be uploaded.
+}{%
+	In comparison to the DogeBank case, we had to append the commands after an apostrophe, since the call to the C parser would take parameters inside apostrophes. We also had to camouflage the file itself as a .txt/.csv file, since the web application performs checks on the file extension.
+	Here is an example of the filename use for a successful attack:\newline
+	hack';cd ..;ls -la;\#.txt\newline	
+}{%
+	The likelihood of an attacker attempting a command injection through a file upload is very high.
+}{%
+	The same implications mentioned for the DogeBank case apply. However, since in this case an attacker could have gotten root access (refer to CONFIG 001), the implications are much worse.
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+}
+%INPVAL 014
 \vulntitle{OTG-INPVAL-014}{Testing for Buffer overflow}
+\vultable{\doge}{%
+	We observed that is indeed possible to break the C parser on the DogeBank application, by producing overflows inside the code. This was possible exploiting the file upload functionality. More detailed observations about specific cases are presented at the end of this subsection.
+}{%
+	Finding out these vulnerabilities required multiple attempts. In order to find these vulnerabilities we performed manual attacks and used the Fuzz funcionality of the Zed Attack Proxy tool.
+}{%
+	The complexity of this attack proved to be much higher than any other while stress-testing this application. Since we were doing Black-box testing, we had to come up with possible combinations of strings in order to find weaknesses inside the C code. Hence an attacker could find vulnerabilities through brute-force, making the attack less likely.
+}{%
+	?
+}{%
+\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
+}
+\vultable{\gnb}{%
+	The C Parser seems to be robust, as e did not find any buffer overflow vulnerability, neither due to bad string formats nor due to stack/heap overflow.
+}{%	?
+	We tried several combinations of brute force attacks, both manually and using the Fuzz functionality of the Zed Attack Proxy tool. We even tried SQL injection inside the fields of the transaction file, with no success.
+}{%
+	\na
+}{%
+	\na
+}{%
+	Secure
+}
+While testing the DogeBank application for C vulnerabilities, we found the actual code to be somewhat robust, as inserting any kind of value inside the transaction file tags would not result in segmentation fault or other visible errors. In order to actually break the program, we had exploit the filename vulnerability, as it allowed us to pass in custom parameters to the C program. It is also important to stress that the batch transaction functionality offers a transaction log, which is displayed on client side after a request and proved to be the direct output of the C parser. This, however, includes by default only stdout messages and not stderr messages. To bypass this, we had to tamper with the transaction filename, in order to redirect stderr messages on stdout and get some feedback.\newline
+
 Testing for Heap overflow\\
+We did not manage to produce any heap overflows.
+
 Testing for Stack overflow\\
+The only way we managed to produce stack overflows was by tampering with the filenames and calling the C program using custom arguments. This way we were able to generate two different kinds of messages, as shown in the pictures below. Although in both cases a stack overflow is generated, it definitely happens in a different part of the code, since the error messages are different. It is likely that, by using SQL injection for the user/account parameter, a different variable is actually overwritten after a database query.
+
 Testing for Format string\\
+The only issue we found when working with string formats was regarding to the length of a string. When passed a huge string, the program will simply not work as intended, probably due to buffer limitations. However, no relevant error messages were returned, hence the file is definitely not read using the \textit{gets} function.
+Inserting null characters inside the file also makes the program not work as intended, but it is not possible to exploit the actual transaction functionality by doing this.
+
+
+%INPVAL 015
 \vulntitle{OTG-INPVAL-015}{Testing for incubated vulnerabilities}
 \vulntitle{OTG-INPVAL-016}{Testing for HTTP Splitting/Smuggling}
 This vulnerability was not tested as we did not extend our testing to the Apache Web Server.
@@ -966,6 +1026,19 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 %\vulntitle{OTG-BUSLOGIC-002}{Test Ability to Forge Requests}
 %\vulntitle{OTG-BUSLOGIC-003}{Test Integrity Checks}
 
+While testing the DogeBank application, we found out several quite disturbing bugs and issues, which will be presented here. Although not all of them could be considered to be strictly related to Data Validation, they are still Business logic issues which we couldn't point out in other sections.
+
+1) There is not reference whatsoever to how a batch file should be like. Neither the required file extension nor the format of the file contents, are mentioned in any way. It is only possible to access this information by browsing through the directories of the web application.
+2) A user can make money transfers to himself. This would not be the biggest issue, except that the transfer amount does not get deducted from the source account (being the same account as the destination) in this case. Any user may generate infinite money in this way (holds true for GNB as well).
+3) A similar issue as in {3} is related to negative balance in accounts. While this is normally checked in single transactions, a user could still start a transaction which requires manual approval, then empty his bank account (via smaller transactions) and wait for an approval. Since the money gets deducted only at the moment when a transfer is approved, this could lead to a negative balance. Once the balance is negative, this can be returned back to positive amount by performing negative transactions. How convenient.
+4) Similarly to issue {4} a user can simply insert a negative amount when performing a transaction (without the need to currently have a negative balance). Doing this will allow him to "steal" money from another account, as the destination account will act as a source account and get the amount deducted, while the same amount is added to the user who initiated the transfer.
+5) When inserting an invalid TAN, the server sends an error message in which the expected valid TAN is sent back to client in clear text.
+6) After having used up all TANs, no new TAN list is sent (holds true for GNB as well). However, it is still possible for a user to perform transactions without TANs, by simply leaving the TAN field blank inside the transaction form. This defeats the purpose of having TANs in the first place.
+7) TAN codes appear to be randomly generated. However, when generating TAN codes, the user id and the number of the code are prepended to the string. So, if a user ID was of length 5 and the number of a code of length 2, the actual length of the code, which was randomly generated, would be 15 -5 -2 = 8. An attcker could register an arbitrary number of users to make the user ID counter go up inside the database (auto-increment is used). Once the counter is reasonably high, the TAN code complexity would reduce drastically, allowing to brute-force them easily.
+8) The size limit of a batch transaction file is of 500 bytes. This is ridiculous for multiple transaction purposes, since it allows to actually insert only up to 3 transactions at once.
+
+\vulntitle{OTG-BUSLOGIC-002}{Test Ability to Forge Requests}
+\vulntitle{OTG-BUSLOGIC-003}{Test Integrity Checks}
 \vulntitle{OTG-BUSLOGIC-004}{Test for Process Timing}
 \vultable{\doge}{%
 	We did not observe any process timing vulnerabilities at the \doge{}.
@@ -1043,27 +1116,32 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 
 \vulntitle{OTG-BUSLOGIC-009}{Test Upload of Malicious Files}
 \vultable{\gnb}{%
-	Once discovered that the tran.php page allowed to upload any kind of file, we did multiple tests and finally observed that it was indeed possible to upload malicious code. This vulnerability was used to execute both arbitrary C code and custom PHP scripts. Although eventually we gained full access to the application, including credentials, database access and source code, we couldn't tamper too much with the operating system since we didn't have root access.
+	Once discovered that the tran.php page allowed to upload any kind of file, we did multiple tests and finally observed that it was indeed possible to upload malicious code. This vulnerability was later on used to execute custom PHP scripts. Although eventually we gained full access to the application, including credentials, database access and source code, we couldn't tamper too much with the operating system since we didn't have root access.
 }{%
-	This discovery is a corollary of the one made in section 008. All the attacks performed exploiting this vulnerability were manual attempts.
+	This discovery is a corollary of the one made in section 008.
+	We tried multiple attacks in order to exploit this vulnerability, all of which worked without flawlessly:
+	\begin{itemize}
+		\item Upload a php script which allowed us to start a reverse shell attack.
+		\item Upload an interactive php script which could allow us to enter commands directly or perform specific operations.
+		\item Upload a php script which could make us tamper with the database.
+	\end{itemize}
+	Once uploaded, each script could simply be executed by opening the page \url{http://HOST/upload/SCRIPTNAME}
 }{%
 	Once an attacker asserted the possibility of uploading any kind of file, the likelihood of such an attack becomes very high.
 }{%
-	As stated in the BUSLOGIC 008 section, this was the most severe vulnerability found, since it allows to get full control over the application.
-	We tried multiple attacks, all of which worked without flawlessly:
-	\begin{itemize}
-		\item Upload a file which contained malicious code in its filename. The server would simply execute this inside the batch parser and output the results to tran.php page;
-		\item Upload a php script which allowed us to start a reverse shell attack.
-		\item Upload an interactive php script which could allow us to upload compiled code and execute it.
-		\item Upload a php script which could make us tamper with the database
-	\end{itemize}
+	As stated in the BUSLOGIC 008 section, this was the most severe vulnerability found, since it allows to get full control over the application.	
 }{%
 	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L} %FIXME: This are mock values
 }
 \vultable{\gnb}{%
-	Although the application performs a check on the extension of the file uploaded via the new\_transaction\_multiple.php page, we still managed to upload malicious code by inserting shell commands inside the filename. Since the application only accepts txt and csv files, we simply appended \#.txt at the end of the bad filename.
+	Although the application performs a check on the extension of the file uploaded via the new\_transaction\_multiple.php page, it does not check the content nor the basename of the file. Combined with the fact code injection is possible due to the same vulnerability (discussed in INPVAL 013), we observed that it is perfectly feasible to upload malicious files and rename them afterwards.
 }{%
-	This discovery was made thanks to manual attempts to perform code injection.
+	This discovery was made thanks to manual attempts to perform code injection. More specifically, we could upload a malicious file and execute by following these steps:
+	\begin{enumerate}
+		\item Upload a file named \textit{maliciousFile.txt};
+		\item Upload a second file named \textit{test';mv maliciousFile.txt maliciousFile.php;\#.txt}
+		\item Knowing that the uploaded files are stored inside the /uploads folder, the maliciousFile could be executed opening the page \url{http://HOST/gnb/project/uploads/maliciousFile.php}
+	\end{enumerate}
 }{%
 	The likelihood of an attacker attempting a code injection through a file upload is very high.
 }{%

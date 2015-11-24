@@ -25,11 +25,11 @@
 \simpleVulntitle{OTG-CONFIG-003}{Test File Extensions Handling for Sensitive Information}
 \vultable{\doge}{%
 	%TODO: Add directory listing here
-	The batch transaction functionality at \url{http:/HOST/tran.php} does not seem to check the extension of the uploaded files.\newline
+	The batch transaction functionality at \url{/tran.php} does not seem to check the extension of the uploaded files.\newline
 	Also, while exploring the folder structure of the server, some leftover files were found, as well as hidden folders.
 }{%
 	If the user tries to upload any file other than a txt file, the server does not provide any error messages. This particular vulnerability will be discussed later in 3.X.X.\newline
-	Additionally, leftover files (e.g. \url{http:/IPADDRESS/employee_registration.php~}) were not deleted from the server, as well as other files containing sensitive information. More specifically, this is the case of the .git folder.
+	Additionally, leftover files (e.g. \url{/employee_registration.php~}) were not deleted from the server, as well as other files containing sensitive information. More specifically, this is the case of the .git folder.
 }{%
 	In order to access the hidden .git folder, however, an attacker must be skilled and know where to search for sensitive information.
 }{%
@@ -848,8 +848,46 @@ implication text
 
 %\vulntitle{OTG-INPVAL-003}{Testing for HTTP Verb Tampering}
 %\vulntitle{OTG-INPVAL-004}{Testing for HTTP Parameter pollution}
+
 \vulntitle{OTG-INPVAL-005}{Testing for SQL Injection}
-%TODO
+\vultable{\doge}{%
+	We observed several effective SQL Injection vulnerabilities in the \doge{} site.
+	
+	The following could be accomplished:
+	\begin{itemize}
+	
+	\item Timing attacks, e.g. using \texttt{username=miWm' AND (SELECT * FROM (SELECT(SLEEP(5)))lqlT)\#}
+	\item Logging in without valid user credentials, e.g. using \texttt{username=-6505' OR 7530=7530-- -}	
+	
+	\end{itemize}
+	
+}{%
+	This was observed using the tool sqlmap and by manual trial and error.
+}{%
+	This has a high likelihood as this is covered by almost all simple tools for penetration testing and can be easily done by hand.
+}{%
+	You can log in as the first user in the database without valid login credentials.
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{H}{H}{H}
+}
+\vultable{\gnb}{%
+	We observed several effective SQL Injection vulnerabilities in the \gnb{} site.
+	
+	The following could be accomplished:
+	\begin{itemize}
+	
+	\item Timing attacks, e.g. using \texttt{username=miWm' AND (SELECT * FROM (SELECT(SLEEP(5)))lqlT)\#}
+	
+	\end{itemize}
+}{%
+	\same
+}{%
+	\same
+}{%
+	This allows to send commands to the SQL database and retrieve some information, but not to log in the user.
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{H}{H}{H}
+}
 
 %\vulntitle{OTG-INPVAL-006}{Testing for LDAP Injection}
 %\vulntitle{OTG-INPVAL-007}{Testing for ORM Injection}
@@ -1086,7 +1124,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	High
 }{%
-	Everything
+	This allows an attacker to increase his own account balance without limit and create transactions without the necessary TANs.
 }{%
 	\cvssBaseScorePretty{N}{L}{L}{N}{U}{N}{H}{L}
 }
@@ -1100,8 +1138,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	High
 }{%
-	Everything
-	%TODO
+	This allows an attacker to increase his own account balance without limit.
 }{%
 	\cvssBaseScorePretty{N}{L}{L}{N}{U}{N}{H}{N}
 }

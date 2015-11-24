@@ -11,11 +11,4 @@ Furthermore any registered user may potentially upload arbitrary malicious code 
 The business logic also seems to be somewhat broken, as a customer can increase his/her balance arbitrarily, by exploiting multiple flaws in the transaction functionalities. Moreover TANs are not entirely random and will be generated only once per user, allowing endless transactions after all the codes have been used up.
 
 \section{\gnb - Team 12}
-We found several vulnerabilities and bugs, most of them having minor impact on the web application as a whole, but still allowing an attacker to gain access to other user accounts (both clients and employees). \newline
-
-Even though the folder listing is disabled on the server, an astute attacker may either brute-force or figure out the names of some PHP files, by analyzing the logical names inside the client code. Since not all of these files seem to perform checks (and automatically redirect a user to a safe path), some among the major issues found, SQL injection and XSS is possible from the registration page.
-%TODO: Add some stuff
-
-\section{Comparison}
-%TODO: Write summary
-% TL;DR: Our bank has less severe vulns...
+We found several vulnerabilities and bugs, most of them having minor impact on the web application as a whole, but a few of them were still pretty severe, as they allowed an attacker to gain root access or simply hijack sessions and gaining access to other user accounts (both clients and employees). \newline

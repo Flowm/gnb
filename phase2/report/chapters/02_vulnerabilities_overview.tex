@@ -86,33 +86,6 @@ Given that uploading a file allows to execute arbitrary commands, it also allows
 
 %OUR SECTION
 \section{\gnb}
-\subsection{Test Upload of Malicious Files} \label{over:maliciousgnb}
-\begin{itemize}
-	\item Likelihood: \textit{medium}
-	\item Implication: \textit{high}
-	\item Risk: \textit{high}
-	\item Reference: OWASP \vulnref{OTG-BUSLOGIC-009}
-\end{itemize}
-The weak file upload policy leads to another big issue, since the uploaded file may contain malicious code. Exploiting this vulnerability allows to gain complete control of the web application.
-
-\subsection{Login prompt susceptible to Timing attack} \label{over:timeattack}
-\begin{itemize}
-	\item Likelihood: \textit{low}
-	\item Implication: \textit{low}
-	\item Risk: \textit{low}
-	\item Reference: OWASP \vulnref{OTG-BUSLOGIC-004}
-\end{itemize}
-A timing attack was found when comparing the credentials of an invalid username or an invalid password, the response times differ between the two cases.
-
-\subsection{Command Injection} \label{over:command_injection}
-\begin{itemize}
-	\item Likelihood: \textit{high}
-	\item Implication: \textit{high}
-	\item Risk: \textit{high}
-	\item Reference: OWASP \vulnref{OTG-INPVAL-013}
-\end{itemize}
-Injecting commmands was possible in the by \url{new\_transaction\_multiple.php} by inserting them directly into the filename of the file that was to be uploaded.
-
 \subsection{SQL injection in all forms} \label{over:sqlgnb}
 \begin{itemize}
 	\item Likelihood: \textit{medium}
@@ -123,8 +96,6 @@ Injecting commmands was possible in the by \url{new\_transaction\_multiple.php} 
 Since some input values in forms are not validated, it is possible to inject SQL statements. Even though multiple SQL queries are not supported, tricking the server into authenticating a user without valid credentials, or using invalid TANs for that matter, is still easy.
 \clearpage
 
-
-%TODO: Write!
 \subsection{Accessible sensitive information} \label{over:configuration}
 \begin{itemize}
 	\item Likelihood: \textit{high}
@@ -161,16 +132,16 @@ Input values in forms are not validated whatsoever, allowing to store custom scr
 \end{itemize}
 The server exchanges the session id with the client in clear-text, allowing man in the middle attacks or social engineering techniques aimed at hijacking a session. Once the session of a user has been hijacked, an attacker could even gain employee privileges.
 
-\subsection{Command injection} \label{over:gnb_command}
+\subsection{Command Injection} \label{over:command_injection}
 \begin{itemize}
-	\item Likelihood: \textit{low}
+	\item Likelihood: \textit{high}
 	\item Implication: \textit{high}
 	\item Risk: \textit{high}
 	\item Reference: OWASP \vulnref{OTG-INPVAL-013}
 \end{itemize}
-When uploading a file, it is possible the use bad filenames which will result in arbitrary shell command injections.
+Injecting commmands was possible in the by \url{new\_transaction\_multiple.php} by inserting them directly into the filename of the file that was to be uploaded.
 
-\subsection{Test Upload of Malicious Files} \label{over:gnb_malicious}
+\subsection{Test Upload of Malicious Files} \label{over:maliciousgnb}
 \begin{itemize}
 	\item Likelihood: \textit{medium}
 	\item Implication: \textit{high}
@@ -182,4 +153,4 @@ Even though the GNB application checks for file extensions, it does not parse th
 \section{Comparison}
 Comparing the two web applications, we found many similar vulnerabilities: both are completely exposed to stored XSS attacks, session hijacking and allow to upload malicious files as well as inject commands during the batch transaction operation.\newline
 Moreover, both have some unique vulnerabilities, like the possibility to easily bypass any kind of authorization mechanism and create C buffer overflows on the DogeBank application, or reading files containing sensitive information on the GNB application.\newline
-However, we found the GNB application to be more secure than the DogeBank application, since most the complexity of the attacks on GNB vulnerabilities proves to be much higher, compared to DogeBank, where the same vulnerabilities can be easily spotted and exploited.
+While both applications were definitely not secure, we concluded, however, that the GNB application was less vulnerable than the DogeBank application, since the complexity of the attacks carried out to exploit the GNB vulnerabilities proved to be much higher compared to DogeBank: for example bypassing authorization requires much more knowledge in the GNB case.

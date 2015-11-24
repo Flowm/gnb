@@ -4,7 +4,9 @@ Steps for demo
 ==============================================================
 SHOWCASING CODE INJECTION 
 ==============================================================
-> get Registration to show a gif of Barney via code injection
+> add this in the name 
+	<script>alert("Ted Ted Ted look at me")</script> 
+Skip :	 get Registration to show a gif of Barney via code injection
 > Once logged in get the user_id from hovering over the Downloaded TANs  
 ==============================================================
 SHOWCASING DIRECT PAGE ACCESS	& PRIVILLEGE ESCALATION 
@@ -12,41 +14,45 @@ SHOWCASING DIRECT PAGE ACCESS	& PRIVILLEGE ESCALATION
 > Approve user without being employee from 
 	/approveuser.php?userid=
 > get accountid from  /customer_home.php 
-> copy TANs ( only ) from email to tans.txt
+> copy TANs ( only ) from email to tans.txt which has to be in the same folder as the python script 
 ==============================================================
 SHOWCASING TRANSFER MONEY TO SELF BUG 
 ==============================================================
 > Use such_secure.py 
-	- change the account number
-	- Choose the option 
-	- Enter creadentails 
+	- change the account number in the script
+	- login with your credentials
+	- Choose the option - flood transactions #4
 	- Enter ammount 100 
+	- Enter start TAN (#0) and end TAN (#100) -- this is non-inclusive 
 4- show new amount
 ==============================================================
 SHOWCASING TRANSFER MONEY WITH NO TAN  
 ==============================================================
-5- send 10,001 without using a TAN ( showcasing TAN are not checked after 100th)
+> send 5,000 without using a TAN ( showcasing TAN are not checked after 100th)
+	mention this would also work for over 10,000 but needs transaction ID 
 
 ==============================================================
 SHOWCASING UPLOADING A FILE TO EXECUTE A COMMAND AND CREATE A REVERSE SHELL  
 ==============================================================
-> Upload the uploader.php through the TAN transactions file upload
-> Upload the awesome.php using the new uploader.php 
-> Execute arbitarty code on awesome.php code 
+> Upload the myUpload.php through the TAN transactions file upload
+> go to /upload
+> click on the my myUpload.php
+> Upload the legenedary.php using the new myUpload.php 
+> go to /upload
+> click on the my legenedary.php
+> Execute arbitarty code on legenedary.php code 
 
-
-
-==============================================================
-SHOWCASING UPLOADING MALICIOUS FILE   
-==============================================================
-testinput.txt hackhackhackhackhack 2>&1 #
-testinput.txt hackhackhackhackhackhackhackhackhackhack 2>&1 #
 
 ==============================================================
 SHOWCASING TRANSFER NEGATIVE MONEY  
 ==============================================================
 > get accountid from  /customer_home.php 
+> get Victim account ID from  /customer_home.php 
 > transfer negative money from other account to your account number 
 
  
- 
+==============================================================
+SHOWCASING UPLOADING MALICIOUS FILE   
+==============================================================
+testinput.txt hackhackhackhackhack 2>&1 #
+testinput.txt hackhackhackhackhackhackhackhackhackhack 2>&1 #

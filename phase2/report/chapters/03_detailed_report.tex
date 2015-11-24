@@ -58,14 +58,13 @@
 %CONFIG 003
 \simpleVulntitle{OTG-CONFIG-003}{Test File Extensions Handling for Sensitive Information}
 \vultable{\doge}{%
-	%TODO: Add directory listing here
-	The batch transaction functionality at \url{/tran.php} does not seem to check the extension of the uploaded files.\newline
+	The whole configuration allows to list the content of directories and see files which should otherwise not be visible to the outside. This made analyzing the web application a lot easier.
 	Also, while exploring the folder structure of the server, some leftover files were found, as well as hidden folders.
 }{%
-	If the user tries to upload any file other than a txt file, the server does not provide any error messages. This particular vulnerability will be discussed later in 3.X.X.\newline
-	Additionally, leftover files (e.g. \url{/employee_registration.php~}) were not deleted from the server, as well as other files containing sensitive information. More specifically, this is the case of the .git folder.
+	The web application structure was brute-forced thanks to the DirBuster tool.
+	Additionally, leftover files (e.g. \texttt{/employee\_registration.php~}) were found later by listing the contents of some folders, as well as other files containing sensitive information. More specifically, this is the case of the .git folder.
 }{%
-	In order to access the hidden .git folder, however, an attacker must be skilled and know where to search for sensitive information.
+	Listing directories is a trivial task. Howver, in order to access the hidden .git folder an attacker must be skilled and know where to search for sensitive information.
 }{%
 	Having access to the data contained inside the hidden .git folder allows to get access to the whole source code of the web application, also thanks to the fact that directory listing is active.
 }{%
@@ -85,26 +84,26 @@
 %CONFIG 006
 \vulntitle{OTG-CONFIG-006}{Test HTTP Methods}
 \vultable{\doge}{%
-	observation text
+	We observed that the GET, POST, HEAD and OPTIONS methods are allowed. The methods PUT, DELETE and TRACE are not allowed, while other methods like COPY and MOVE are not implemented at all.
 }{%
-discovery text
+	This discovery was made using netcat.
 }{%
-likelihood text
+	\na
 }{%
-implication text
+	\na
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\secure
 }
 \vultable{\gnb}{%
-	observation text
+	We observed that the GET, POST, HEAD and OPTIONS methods are allowed.	
 }{%
-discovery text
+	This discovery was made using netcat.
 }{%
-likelihood text
+	\na
 }{%
-implication text
+	\na
 }{%
-\cvssBaseScorePretty{N}{L}{N}{N}{C}{L}{L}{L} %FIXME: This are mock values
+	\secure
 }
 
 %CONFIG 007
@@ -678,6 +677,13 @@ implication text
 }{%
 	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 }
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{figures/Doge_Session_Cookie.png}
+	\caption{PHPSESSID cookie for the DogeBank application}
+\end{figure}
+
+
 %SESSION 003
 \vulntitle{OTG-SESS-003}{Testing for Session Fixation}
 \vultable{\doge}{%
@@ -692,9 +698,9 @@ implication text
 	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 }
 \vultable{\gnb}{%
-	The same observations made for the DogeBank application apply.
+	Unlike the DogeBank case, the session ID, once generated, never changes. Even though the server destroys all session variables associated to a user, after a logout operation, the session ID is not unset. The session ID is first generated on login page, same as for the DogeBank application.
 }{%
-	The discovery was made thanks to GET/POST requests interception.
+	This discovery was made while analyzing the session cookies thanks to the Cookies browser extension.
 }{%
 	The same likelihood described for the DogeBank application applies.
 }{%
@@ -707,7 +713,7 @@ implication text
 \vultable{\doge}{%
 	After observing requests and responses between the client and the server, we observed that session IDs are always sent in HTTP headers. Although the session ID is never explicitly passed in URLs, no encryption is provided whatsoever and the session ID does not change until a user explicitly logs out. No other session variables are generated, therefore only the session ID is affected.
 }{%
-	This observation was made when analyzing session management. Refer to \vulnref{OTG-SESS-001} and \vulnref{OTG-SESS-003}.
+	This observation was made when analyzing session management. Refer to sections \vulnref{OTG-SESS-001} and \vulnref{OTG-SESS-003}.
 }{%
 	As long as an attacker can sniff the network traffic and read the session ID of a user, it is very easy to hijack a session. This approach makes it even easier than hijacking a session through social engineering.
 }{%
@@ -779,8 +785,7 @@ implication text
 	\secure
 }
 \vultable{\gnb}{%
-	%TODO
-	The same observations made for the DogeBank application apply.
+	The same observations made for the DogeBank application apply. Additionally, we found out that the logout functionality does not create a new session ID for the user, but rather destroys all of the server-side variables associated to that user only.
 }{%
 	These observations were made using the Burp Repeater tool.
 }{%
@@ -1005,18 +1010,18 @@ implication text
 	The same implications mentioned for the DogeBank case apply. However, since in this case an attacker could have gotten root access (refer to \vulnref{OTG-CONFIG-001}), the implications are much worse.
 }{%
 	\cvssBaseScorePretty{N}{H}{L}{N}{C}{H}{H}{H}
-	%TODO ADD TO STACK: \cvssBaseScorePretty{N}{H}{L}{N}{C}{H}{H}{H}
 }
 %INPVAL 014
 \vulntitle{OTG-INPVAL-014}{Testing for Buffer overflow}
 \vultable{\doge}{%
-	We observed that is indeed possible to break the C parser on the DogeBank application, by producing overflows inside the code. This was possible exploiting the file upload functionality. More detailed observations about specific cases are presented at the end of this subsection.
+	While testing the DogeBank application for C vulnerabilities, we found the actual code to be difficult to exploit, as inserting any kind of value inside the transaction file tags would not result in segmentation fault or other visible errors. In order to produce overflows and break the program, we had exploit the filename vulnerability, as it allowed us to pass in custom parameters to the C program. It is also important to stress that the batch transaction functionality offers a transaction log, which is displayed on client side after a request and proved to be the direct output of the C parser. This, however, includes by default only stdout messages and not stderr messages. To bypass this, we had to tamper with the transaction filename, in order to redirect stderr messages on stdout and get some feedback.\newline
+	More detailed observations about the found vulnerabilities are presented inside the following sections: \vulnref{OTG-INPVAL-014-2}, \vulnref{OTG-INPVAL-014-3} and \vulnref{OTG-INPVAL-014-4}.
 }{%
 	Finding out these vulnerabilities required multiple attempts. In order to find these vulnerabilities we performed manual attacks and used the Fuzz functionality of the Zed Attack Proxy tool.
 }{%
-	The complexity of this attack proved to be much higher than any other while stress-testing this application. Since we were doing Black-box testing, we had to come up with possible combinations of strings in order to find weaknesses inside the C code. Hence an attacker could find vulnerabilities through brute-force, making the attack less likely.
+	The complexity of these attacks proved to be much higher than any other while stress-testing this application. Since we were doing Black-box testing, we had to come up with possible combinations of strings in order to find weaknesses inside the C code. Hence an attacker could find vulnerabilities through brute-force, which makes an attack less likely.
 }{%
-	%TODO
+	\na
 }{%
 	\naScore
 }
@@ -1031,20 +1036,85 @@ implication text
 }{%
 	\secure
 }
-While testing the DogeBank application for C vulnerabilities, we found the actual code to be somewhat robust, as inserting any kind of value inside the transaction file tags would not result in segmentation fault or other visible errors. In order to actually break the program, we had exploit the filename vulnerability, as it allowed us to pass in custom parameters to the C program. It is also important to stress that the batch transaction functionality offers a transaction log, which is displayed on client side after a request and proved to be the direct output of the C parser. This, however, includes by default only stdout messages and not stderr messages. To bypass this, we had to tamper with the transaction filename, in order to redirect stderr messages on stdout and get some feedback.\newline
+\vulntitle{OTG-INPVAL-014-2}{Testing for Stack overflow}
+\vultable{\doge}{%
+	We observed that it was possible to produce stack overflows by tampering with the filenames and calling the C program using custom arguments. This way we were able to generate two different kinds of messages: the program either crashed before starting the correct execution (segmentation fault) or produced a stack smashing error at some point during the transaction processing. Although in both cases a stack overflow is generated, it definitely happens in a different part of the code, since the error messages are different.
+}{%
+	We discovered this issue by brute-forcing arbitrary values inside the filename. More specifically, we found out that the C program would take in other arguments besides the filename (user/account id most likely). Being this parameter of fixed size, we managed to inject longer values, which could result into stack smashing.
+	Here are two examples of filenames that generated two different errors (probably due to difference in length):
+	\begin{itemize}
+		\item \texttt{testinput.txt hackhackhackhackhack 2>\&1 \#}
+		\item \texttt{textinput.txt '0 UNION ALL SELECT tan6 from tans\_lists' 2>\&1 \#}
+	\end{itemize}
+}{%
+	The attack proved to be rather difficult and exploiting the vulnerability properly also requires some skills.
+}{%
+	Stack overflows allow an attacker to modify the program flow, for example overwriting return addresses.
+}{%
+	\cvssBaseScorePretty{N}{H}{L}{N}{C}{H}{H}{H}
+}
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/Doge_C_Stack.png}
+	\caption{Stack smashing error generated on the DogeBank \texttt{tran.php} page by uploading the file \texttt{testinput.txt hackhackhackhackhack 2>\&1 \#}}
+\end{figure}
 
-Testing for Heap overflow\\
-We did not manage to produce any heap overflows.
-
-Testing for Stack overflow\\
-The only way we managed to produce stack overflows was by tampering with the filenames and calling the C program using custom arguments. This way we were able to generate two different kinds of messages, as shown in the pictures below. Although in both cases a stack overflow is generated, it definitely happens in a different part of the code, since the error messages are different. It is likely that, by using SQL injection for the user/account parameter, a different variable is actually overwritten after a database query.
-
-Testing for Format string\\
-The only issue we found when working with string formats was regarding to the length of a string. When passed a huge string, the program will simply not work as intended, probably due to buffer limitations. However, no relevant error messages were returned, hence the file is definitely not read using the \textit{gets} function.
-Inserting null characters inside the file also makes the program not work as intended, but it is not possible to exploit the actual transaction functionality by doing this.
+\vulntitle{OTG-INPVAL-014-3}{Testing for Heap overflow}
+\vultable{\doge}{% 
+	Similarly as for the stack overflow, we managed to get a heap overflow by tampering with the filenames and calling the C program using custom arguments. Differently from the stack overfow, we tried using a longer string as a parameter and simultaneously performing SQL injection through it. Although we can't be sure if the SQL injection actually worked, the resulting error was caused by a free() operation. We also noticed that the one filename produced different results in time: \texttt{textinput.txt '0 UNION ALL SELECT tan6 from tans\_lists' 2>\&1 \#} cause both a stack overflow and a heap overflow.
+}{%
+	Discovery made by fuzzing the values inside the batch transaction file and comparing the results we got back by the server. We also tried several argument strings manually.
+}{%
+	The attack proved to be rather difficult and exploiting the vulnerability properly also requires some skills.
+}{%
+	Heap overflows allow an attacker to modify the program flow, leading to arbitrary code execution.
+}{%
+	\cvssBaseScorePretty{N}{H}{L}{N}{C}{H}{H}{H}
+}
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/Doge_C_Heap.png}
+	\caption{Heap error generated on the DogeBank \texttt{tran.php} page by uploading the file \texttt{textinput.txt '0 UNION ALL SELECT tan6 from tans\_lists' 2>\&1 \#}}
+\end{figure}
+\vulntitle{OTG-INPVAL-014-4}{Testing for Format string}
+\vultable{\doge}{%
+	The only issue we found when working with string formats was regarding to the length of a string. When passed a huge string, the program will simply not work as intended, probably due to buffer limitations. However, no relevant error messages were returned, hence the file is definitely not read using the \textit{gets} function.\newline
+	Inserting null characters inside the file also makes the program not work as intended, but it is not possible to exploit the actual transaction functionality by doing this.
+}{%
+	Most of these discoveries were made by fuzzing the values inside the batch transaction file and comparing the results we got back by the server.
+}{%
+	This does not prove to be an actual attack, since it doesn't break the C program by allowing to exploit the code.
+}{%
+	\na
+}{%
+	\naScore
+}
 
 %INPVAL 015
 \vulntitle{OTG-INPVAL-015}{Testing for incubated vulnerabilities}
+\vultable{\doge}{%
+	Since it is possible to upload files permanently onto the webserver and the application is already vulnerable to XSS attacks and SQL injections, incubated attacks are definitely an option.
+}{%
+	This vulnerability depends on the possibility to store malicious code on the server, hence it is a consequence of discovering other vulnerabilities like the upload of malicious files.
+}{%
+	The likelihood of such an attack is high, although in some cases social engineering may be required. For example, performing a stored XSS attack during a registration process will result in every employee executing that particular script.
+}{%
+	Tricking a user into executing malicious code can prove to be a very serious issue.
+}{%
+	\cvssBaseScorePretty{N}{H}{L}{N}{U}{L}{L}{L}
+}
+\vultable{\gnb}{%
+	The same observations made for the DogeBank application apply.
+}{%
+	The discovery was made the same way it was for DogeBank case.
+}{%
+	The same likelihood described for the DogeBank application applies.
+}{%
+	The same implications mentioned for the DogeBank application apply.
+}{%
+	\cvssBaseScorePretty{N}{H}{L}{N}{U}{L}{L}{L}
+}
+
 \vulntitle{OTG-INPVAL-016}{Testing for HTTP Splitting/Smuggling}
 This vulnerability was not tested as we did not extend our testing to the Apache Web Server.
 
@@ -1069,7 +1139,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 	\naScore
 }
 \vultable{\gnb}{%
-	The same observations made for the DogeBank application apply.
+	The same observations made for the DogeBank application .
 	Relevant information leakage resulting from the unencrypted communication has already been covered in \vulnref{OTG-CONFIG-007} and \vulnref{OTG-CRYPST-003}.
 }{%
 	\na
@@ -1256,7 +1326,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }
 
 \vulntitle{OTG-BUSLOGIC-009}{Test Upload of Malicious Files}
-\vultable{\gnb}{%
+\vultable{\doge}{%
 	Once discovered that the tran.php page allowed to upload any kind of file, we did multiple tests and finally observed that it was indeed possible to upload malicious code. This vulnerability was later on used to execute custom PHP scripts. Although eventually we gained full access to the application, including credentials, database access and source code, we couldn't tamper too much with the operating system since we didn't have root access.
 }{%
 	This discovery is a corollary of the one made in section 008.
@@ -1290,6 +1360,11 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	\cvssBaseScorePretty{N}{L}{L}{N}{C}{H}{H}{H}
 }
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/Doge_Upload.png}
+	\caption{List of uploaded files accessible via the \texttt{/upload} folder, after having uploaded some custom scripts}
+\end{figure}
 
 \clearpage
 \section{Client Side Testing}

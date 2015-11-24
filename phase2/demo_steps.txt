@@ -4,9 +4,8 @@ Steps for demo
 ==============================================================
 SHOWCASING CODE INJECTION 
 ==============================================================
-> add this in the name 
-	<script>alert("Ted Ted Ted look at me")</script> 
-Skip :	 get Registration to show a gif of Barney via code injection
+> get Registration to show a gif of Barney via code injection
+<img src="http://orig05.deviantart.net/57c5/f/2009/336/e/0/icon__barney_stinson_by_cathycat92.gif"/>
 > Once logged in get the user_id from hovering over the Downloaded TANs  
 ==============================================================
 SHOWCASING DIRECT PAGE ACCESS	& PRIVILLEGE ESCALATION 

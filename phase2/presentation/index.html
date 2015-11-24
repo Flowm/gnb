@@ -40,17 +40,18 @@
 						<h3>Privilege escalation</h3>
                         <h3>Stored XSS in all forms</h3>
                         <h3>SQL injection in all forms</h3>
-                        <h3>No file extension check during upload</h3>
                         <h3>Test Upload of Malicious Files</h3>
                     </section>
 
                 </section>
-				<section data-state="bypassing_authorizations">
+				<section data-state="bypassing_authentication">
                     <section>
-                        <h1>Bypassing authorizations</h1>
-                    </section>
-                    <section>
-						<table>
+                        <h1>Bypassing Authentication</h1>
+                    	<table>
+						<tr>
+                            <td class="left">Score</td>
+                            <td class="right">9.4</td>
+                        </tr>
                         <tr>
                             <td class="left">Access Vector</td>
                             <td class="right">Network</td>
@@ -68,12 +69,16 @@
                             <td class="right">None</td>
                         </tr>
 						<tr>
+                            <td class="left">Scope Change</td>
+                            <td class="right">Unchanged</td>
+                        </tr>
+						<tr>
                             <td class="left">Confidentiality</td>
                             <td class="right">High</td>
                         </tr>
 												<tr>
                             <td class="left">Integrity</td>
-                            <td class="right">Low</td>
+                            <td class="right">High</td>
                         </tr>
 						<tr>
                             <td class="left">Availability</td>
@@ -87,10 +92,11 @@
 
                     <section>
                         <h1>Privilege escalation</h1>
-                    </section>
-
-                                <section>
-						<table>
+                    	<table>
+						<tr>
+                            <td class="left">Score</td>
+                            <td class="right">8.8</td>
+                        </tr>
                         <tr>
                             <td class="left">Access Vector</td>
                             <td class="right">Network</td>
@@ -108,16 +114,20 @@
                             <td class="right">None</td>
                         </tr>
 						<tr>
+                            <td class="left">Scope Change</td>
+                            <td class="right">Unchanged</td>
+                        </tr>
+						<tr>
                             <td class="left">Confidentiality</td>
                             <td class="right">High</td>
                         </tr>
 												<tr>
                             <td class="left">Integrity</td>
-                            <td class="right">Low</td>
+                            <td class="right">High</td>
                         </tr>
 						<tr>
                             <td class="left">Availability</td>
-                            <td class="right">Low</td>
+                            <td class="right">High</td>
                         </tr>
                     </table>
                     </section>
@@ -128,17 +138,18 @@
 
                     <section>
                         <h1>Stored XSS in all forms</h1>
-                    </section>
-
-                                                 <section>
-						<table>
+                    	<table>
+						<tr>
+                            <td class="left">Score</td>
+                            <td class="right">9.8</td>
+                        </tr>
                         <tr>
                             <td class="left">Access Vector</td>
                             <td class="right">Network</td>
                         </tr>
 						<tr>
                             <td class="left">Access Complexity</td>
-                            <td class="right">High</td>
+                            <td class="right">Low</td>
                         </tr>
 						<tr>
                             <td class="left">Privileges Required</td>
@@ -148,17 +159,21 @@
                             <td class="left">User Interaction</td>
                             <td class="right">None</td>
                         </tr>
+							<tr>
+                            <td class="left">Scope Change</td>
+                            <td class="right">Unchanged</td>
+                        </tr>
 						<tr>
                             <td class="left">Confidentiality</td>
-                            <td class="right">Low</td>
+                            <td class="right">High</td>
                         </tr>
 												<tr>
                             <td class="left">Integrity</td>
-                            <td class="right">Low</td>
+                            <td class="right">High</td>
                         </tr>
 						<tr>
                             <td class="left">Availability</td>
-                            <td class="right">Low</td>
+                            <td class="right">High</td>
                         </tr>
                     </table>
                     </section>
@@ -169,9 +184,7 @@
 
                     <section>
                         <h1>SQL injection in all forms</h1>
-                    </section>
-			                                <section>
-						<table>
+                    	<table>
                         <tr>
                             <td class="left">Access Vector</td>
                             <td class="right">Network</td>
@@ -187,6 +200,10 @@
 						<tr>
                             <td class="left">User Interaction</td>
                             <td class="right">None</td>
+                        </tr>
+						<tr>
+                            <td class="left">Scope Change</td>
+                            <td class="right">Unchanged</td>
                         </tr>
 						<tr>
                             <td class="left">Confidentiality</td>
@@ -194,51 +211,11 @@
                         </tr>
 												<tr>
                             <td class="left">Integrity</td>
-                            <td class="right">Low</td>
+                            <td class="right">High</td>
                         </tr>
 						<tr>
                             <td class="left">Availability</td>
-                            <td class="right">None</td>
-                        </tr>
-                    </table>
-                    </section>
-
-                </section>
-				
-				<section data-state="extension_check">
-
-                    <section>
-                        <h1>No file extension check during upload</h1>
-                    </section>
-			                                <section>
-						<table>
-                        <tr>
-                            <td class="left">Access Vector</td>
-                            <td class="right">Network</td>
-                        </tr>
-						<tr>
-                            <td class="left">Access Complexity</td>
-                            <td class="right">Low</td>
-                        </tr>
-						<tr>
-                            <td class="left">Privileges Required</td>
-                            <td class="right">Low</td>
-                        </tr>
-						<tr>
-                            <td class="left">User Interaction</td>
-                            <td class="right">None</td>
-                        </tr>
-						<tr>
-                            <td class="left">Confidentiality</td>
-                            <td class="right">None</td>
-                        </tr>
-												<tr>
-                            <td class="left">Integrity</td>
-                            <td class="right">Low</td>
-                        </tr>
-						<tr>
-                            <td class="left">Availability</td>
-                            <td class="right">Low</td>
+                            <td class="right">High</td>
                         </tr>
                     </table>
                     </section>
@@ -249,17 +226,14 @@
 
                     <section>
                         <h1>Test Upload of Malicious Files</h1>
-                    </section>
-
-                                               <section>
-						<table>
+                    	<table>
                         <tr>
                             <td class="left">Access Vector</td>
                             <td class="right">Network</td>
                         </tr>
 						<tr>
                             <td class="left">Access Complexity</td>
-                            <td class="right">High</td>
+                            <td class="right">Low</td>
                         </tr>
 						<tr>
                             <td class="left">Privileges Required</td>
@@ -270,8 +244,12 @@
                             <td class="right">None</td>
                         </tr>
 						<tr>
+                            <td class="left">Scope Change</td>
+                            <td class="right">Unchanged</td>
+                        </tr>
+						<tr>
                             <td class="left">Confidentiality</td>
-                            <td class="right">Low</td>
+                            <td class="right">High</td>
                         </tr>
 												<tr>
                             <td class="left">Integrity</td>

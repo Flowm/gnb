@@ -39,6 +39,15 @@ Input values in forms are not validated whatsoever, allowing to store custom scr
 \end{itemize}
 The same concept explained in the XSS vulnerability also applies for SQL injection: since the input values in forms are not validated, it is possible to inject SQL statements. Even though multiple SQL queries are not supported, tricking the server into authenticating a user without valid credentials, or using invalid TANs for that matter, is still easy.
 
+\subsection{Session hijacking} \label{over:session}
+\begin{itemize}
+	\item Likelihood: \textit{low}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-SESS-004}
+\end{itemize}
+The server exchanges the session id with the client in clear-text, allowing man in the middle attacks or social engineering techniques aimed at hijacking a session. Once the session of a user has been hijacked, an attacker could even gain employee privileges.
+
 \subsection{No file extension check during upload} \label{over:extension}
 \begin{itemize}
 	\item Likelihood: \textit{medium}
@@ -56,6 +65,24 @@ During the upload of batch files for multiple transactions, the file extension i
 	\item Reference: OWASP \vulnref{OTG-BUSLOGIC-009}
 \end{itemize}
 The weak file upload policy leads to another big issue, since the uploaded file may contain malicious code. Exploiting this vulnerability allows to gain complete control of the web application.
+
+\subsection{Command injection} \label{over:command}
+\begin{itemize}
+	\item Likelihood: \textit{low}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-INPVAL-013}
+\end{itemize}
+When uploading a file, it is possible the use bad filenames which will result in arbitrary shell command injections.
+
+\subsection{Stack overflow} \label{over:stack}
+\begin{itemize}
+	\item Likelihood: \textit{low}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-INPVAL-014}
+\end{itemize}
+Given that uploading a file allows to execute arbitrary commands, it also allows to inject arbitrary strings, which will be parsed as program arguments during a batch transaction operation. Since the length of the additional argument is not checked, this produces a stack overflow.
 
 %OUR SECTION
 \section{\gnb}
@@ -98,6 +125,61 @@ Since some input values in forms are not validated, it is possible to inject SQL
 
 
 %TODO: Write!
+\subsection{Accessible sensitive information} \label{over:configuration}
+\begin{itemize}
+	\item Likelihood: \textit{high}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-CONFIG-003}
+\end{itemize}
+Some sensitive information were left available for attackers to steal. This is the case of a README.md file which can be easily found by listing tools and contains system/root access credentials as well as other important information.
 
+\subsection{Bypassing authorizations} \label{over:authorizations}
+\begin{itemize}
+	\item Likelihood: \textit{low}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-AUTHZ-002}
+\end{itemize}
+Some key pages can be accessed without requiring any privileges. These pages (e.g. \texttt{manage\_registration.php}) are supposed to be accessible only to employees, giving an attacker the highest possible privileges while accessing said pages directly. Exploiting this vulnerability proves to be somewhat tricky, since the Javascript code necessary for this purpose is not delivered directly but needs to be fetched manually.
+
+\subsection{Stored XSS in all forms} \label{over:gnb_xss}
+\begin{itemize}
+	\item Likelihood: \textit{medium}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-INPVAL-002}
+\end{itemize}
+Input values in forms are not validated whatsoever, allowing to store custom scripts inside the database when filling out forms. These scripts will automatically be executed by employees who view the details of the client. This is also valid for stored CSS and HTML injection.
+
+\subsection{Session hijacking} \label{over:gnb_session}
+\begin{itemize}
+	\item Likelihood: \textit{low}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-SESS-004}
+\end{itemize}
+The server exchanges the session id with the client in clear-text, allowing man in the middle attacks or social engineering techniques aimed at hijacking a session. Once the session of a user has been hijacked, an attacker could even gain employee privileges.
+
+\subsection{Command injection} \label{over:gnb_command}
+\begin{itemize}
+	\item Likelihood: \textit{low}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-INPVAL-013}
+\end{itemize}
+When uploading a file, it is possible the use bad filenames which will result in arbitrary shell command injections.
+
+\subsection{Test Upload of Malicious Files} \label{over:gnb_malicious}
+\begin{itemize}
+	\item Likelihood: \textit{medium}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-BUSLOGIC-009}
+\end{itemize}
+Even though the GNB application checks for file extensions, it does not parse the entire filename, which allows to upload malicious code. This attack is somewhat complicated on this web application, since it requires the attacker to rename the file afterwards and find a way to execute the malicious code. This, however, can be done thanks to command injection.
+	
 \section{Comparison}
-%TODO: Write!
+Comparing the two web applications, we found many similar vulnerabilities: both are completely exposed to stored XSS attacks, session hijacking and allow to upload malicious files as well as inject commands during the batch transaction operation.\newline
+Moreover, both have some unique vulnerabilities, like the possibility to easily bypass any kind of authorization mechanism and create C buffer overflows on the DogeBank application, or reading files containing sensitive information on the GNB application.\newline
+However, we found the GNB application to be more secure than the DogeBank application, since most the complexity of the attacks on GNB vulnerabilities proves to be much higher, compared to DogeBank, where the same vulnerabilities can be easily spotted and exploited.

@@ -51,6 +51,20 @@
 	\item \textbf{Useful in}\\ \vulnref{OTG-CONFIG-003}
 \end{itemize}
 
+\subsection*{Burp Suite}
+\begin{itemize}
+	\item \textbf{Used by}\\ Lorenzo Donini
+	\item \textbf{Used for}\\ This tool was essential for most of the tests involving an accurate analysis of the HTTP requests and responses, since it provided Proxy interception, several functionalities useful for information gathering as well as for stress testing the web applications and analyzing sessions. Additionally, Burp offers an intruder, which helped in automating most of the input validation tests (e.g. buffer overflow).
+	\item \textbf{Useful in}\\ \vulnref{OTG-SESS-002}, \vulnref{OTG-SESS-003}, \vulnref{OTG-INPVAL-005}, \vulnref{OTG-INPVAL-013} and \vulnref{OTG-INPVAL-014}
+\end{itemize}
+
+\subsection*{suchsecure.py}
+\begin{itemize}
+	\item \textbf{Used by}\\ Lorenzo Donini
+	\item \textbf{Used for}\\ This python script was useful for analyzing several bugs and business logic flaws inside the DogeBank application. This tool was custom-built for the purpose of performing specific HTTP requests to the server without having to strictly follow the business logic flow. This basic functionality also helped to flood requests and keeping a session state between operations.
+	\item \textbf{Useful in}\\ \vulnref{OTG-SESS-004} and \vulnref{OTG-BUSLOGIC-001}, as well as for other bugs and business logic issues, described in chapter 4.
+\end{itemize}
+
 
 \clearpage
 \section{Configuration and Deploy Management Testing}
@@ -1339,14 +1353,14 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 \vultable{\doge}{%
 	Once discovered that the tran.php page allowed to upload any kind of file, we did multiple tests and finally observed that it was indeed possible to upload malicious code. This vulnerability was later on used to execute custom PHP scripts. Although eventually we gained full access to the application, including credentials, database access and source code, we couldn't tamper too much with the operating system since we didn't have root access.
 }{%
-	This discovery is a corollary of the one made in section 008.
+	This discovery depends directly on the one made in section \vulnref{OTG-BUSLOGIC-008}.
 	We tried multiple attacks in order to exploit this vulnerability, all of which worked without flawlessly:
 	\begin{itemize}
 		\item Upload a php script which allowed us to start a reverse shell attack.
 		\item Upload an interactive php script which could allow us to enter commands directly or perform specific operations.
 		\item Upload a php script which could make us tamper with the database.
 	\end{itemize}
-	Once uploaded, each script could simply be executed by opening the page \url{http://HOST/upload/SCRIPTNAME}
+	Once uploaded, each script could simply be executed by opening the page \texttt{/upload/SCRIPTNAME}
 }{%
 	Once an attacker asserted the possibility of uploading any kind of file, the likelihood of such an attack becomes very high.
 }{%
@@ -1359,9 +1373,9 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	This discovery was made thanks to manual attempts to perform code injection. More specifically, we could upload a malicious file and execute by following these steps:
 	\begin{enumerate}
-		\item Upload a file named \textit{maliciousFile.txt};
-		\item Upload a second file named \textit{test';mv maliciousFile.txt maliciousFile.php;\#.txt}
-		\item Knowing that the uploaded files are stored inside the /uploads folder, the maliciousFile could be executed opening the page \url{http://HOST/gnb/project/uploads/maliciousFile.php}
+		\item Upload a file named \texttt{maliciousFile.txt};
+		\item Upload a second file named \texttt{test';mv maliciousFile.txt maliciousFile.php;\#.txt}
+		\item Knowing that the uploaded files are stored inside the /uploads folder, the maliciousFile could be executed opening the page \texttt{http://HOST/gnb/project/uploads/maliciousFile.php}
 	\end{enumerate}
 }{%
 	The likelihood of an attacker attempting a code injection through a file upload is very high.

@@ -28,6 +28,15 @@ SHOWCASING TRANSFER MONEY WITH NO TAN
 5- send 10,001 without using a TAN ( showcasing TAN are not checked after 100th)
 
 ==============================================================
+SHOWCASING UPLOADING A FILE TO EXECUTE A COMMAND AND CREATE A REVERSE SHELL  
+==============================================================
+> Upload the uploader.php through the TAN transactions file upload
+> Upload the awesome.php using the new uploader.php 
+> Execute arbitarty code on awesome.php code 
+
+
+
+==============================================================
 SHOWCASING UPLOADING MALICIOUS FILE   
 ==============================================================
 testinput.txt hackhackhackhackhack 2>&1 #

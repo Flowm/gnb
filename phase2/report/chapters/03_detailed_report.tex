@@ -17,6 +17,24 @@
 	\item \textbf{Useful in}\\ \vulnref{OTG-INPVAL-005} and \vulnref{OTG-IDENT-002}
 \end{itemize}
 
+\subsection*{SQLMap}
+\begin{itemize}
+	\item \textbf{Used by}\\ Alexander Lill
+	\item \textbf{Used for}\\ This tool was useful for testing the different SQL attack vectors. It was used for fuzzing with different usernames and passwords and was able to retrieve the database structure, the current database user and some more internal mysql information.
+	
+	The disadvantage of using this tool is that it is complicated to test websites that are not simply using POST requests for the data transmission, but nested JavaScript calls.
+	\item \textbf{Useful in}\\ \vulnref{OTG-INPVAL-005}
+\end{itemize}
+
+\subsection*{Skipfish}
+\begin{itemize}
+	\item \textbf{Used by}\\ Alexander Lill
+	\item \textbf{Used for}\\ This tool was useful for finding the common vulnerabilities of the given website. This included vulnerable forms like the \texttt{/login.php}, files and directories that were referenced by the returned HTML files or which cookies were created by the website.
+	
+	The disadvantage of using this tool is that the results of the tool do overlap which all the other tools (e.g. arachni) but it includes less details.
+	\item \textbf{Useful in}\\ \vulnref{OTG-CONFIG-003}
+\end{itemize}
+
 
 \clearpage
 \section{Configuration and Deploy Management Testing}

@@ -852,7 +852,7 @@
 	All pages showing user defined input are vulnerable to stored cross site scripting.
 	No input is validated after it is entered by the user as described in \vulnref{OTG-BUSLOGIC-001}.
 }{%
-	Issues on multiple pages were discovered during manual testing of the input vectors:
+	Issues on multiple pages were discovered during manual testing of the input vectors. For example:
 	\begin{itemize}
 		\item Site: \texttt{/register.php}
 		\item Fields: \texttt{First Name} \texttt{Last Name}
@@ -866,17 +866,27 @@
 	\end{itemize}
 	Javascript code can be written to the database using forms. It will later on be automatically executed on client side (e.g.\ comments in transactions)
 }{%
-	\na
+	Really easy to perform
 }{%
-	\na
+	Total control over the affected sites
 }{%
 	\cvssBaseScorePretty{N}{L}{N}{N}{U}{H}{H}{H}
 }
 \vultable{\gnb}{%
-	%TODO: !!!
-	\same
+	All pages showing user defined input are vulnerable to stored cross site scripting.
+	No input is validated after it is entered by the user as described in \vulnref{OTG-BUSLOGIC-001}.
 }{%
-	\same
+	Issues on multiple pages were discovered during manual testing of the input vectors. For example:
+	\begin{itemize}
+		\item Site: \texttt{/registration.php}
+		\item Fields: \texttt{First Name} \texttt{Last Name}
+		\item Input example: \texttt{<script>alert(1);</script>}
+		\item Shown on:
+		\begin{itemize}
+			\item \texttt{/employee/employee.php} in the manage\_registration section
+			\item \texttt{/client/client.php}
+		\end{itemize}
+	\end{itemize}
 }{%
 	\same
 }{%

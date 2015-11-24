@@ -3,21 +3,21 @@ In this chapter, the major security flaws of both the DogeBank and the Goliath N
 After testing the two web applications thoroughly, we found the following vulnerabilities to be the most serious.
 %THEIR SECTION
 \section{\doge}
-\subsection{Bypassing authorizations} \label{over:bypassing}
+\subsection{Bypassing authentication schema} \label{over:bypassing}
+\begin{itemize}
+	\item Likelihood: \textit{medium}
+	\item Implication: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-AUTHN-004}
+\end{itemize}
+Any unauthenticated user may approve registrations or transactions using the correct GET request. It is also possible to directly register an employee without even having to login. Considering this security issue, the whole authentication process proves to be useless.
+
+\subsection{Bypassing authorization schema} \label{over:privilege}
 \begin{itemize}
 	\item Likelihood: \textit{medium}
 	\item Implication: \textit{high}
 	\item Risk: \textit{high}
 	\item Reference: OWASP \vulnref{OTG-AUTHZ-002}
-\end{itemize}
-Any unauthenticated user may approve registrations or transactions using the correct GET request. It is also possible to directly register an employee without even having to login. Considering this security issue, the whole authentication process proves to be useless.
-
-\subsection{Privilege escalation} \label{over:privilege}
-\begin{itemize}
-	\item Likelihood: \textit{medium}
-	\item Implication: \textit{high}
-	\item Risk: \textit{high}
-	\item Reference: OWASP \vulnref{OTG-AUTHZ-003}
 \end{itemize}
 A logged in customer is able to access employee pages without having the proper privileges, allowing therefore actions which shouldn't be possible. This is also possible the other way around, although this could be considered as a bug, rather than a vulnerability.
 

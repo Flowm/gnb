@@ -9,18 +9,18 @@ class GNBMailer {
 	public function __construct() {
 		$this->mail = new PHPMailer();
 		$this->mail->IsSMTP();
-		$this->mail->Host        = "smtp-mail.outlook.com";
+		$this->mail->Host        = "smtp.postmarkapp.com";
 		$this->mail->SMTPDebug   = 0;
 		$this->mail->SMTPAuth    = TRUE;
 		$this->mail->SMTPSecure  = "tls";
 		$this->mail->Port        = 587;
-		$this->mail->Username    = 'goliath.nb@outlook.com';
-		$this->mail->Password    = 'yqycvqvvjlsdyuaf';
+		$this->mail->Username    = "9cf4340a-59e9-4470-9f3e-3eb94d4123aa";
+		$this->mail->Password    = "9cf4340a-59e9-4470-9f3e-3eb94d4123aa";
 		$this->mail->Priority    = 3;
-		$this->mail->CharSet     = 'UTF-8';
-		$this->mail->Encoding    = '8bit';
-		$this->mail->From        = 'goliath.nb@outlook.com';
-		$this->mail->FromName    = 'Barney Stinson';
+		$this->mail->CharSet     = "UTF-8";
+		$this->mail->Encoding    = "8bit";
+		$this->mail->From        = "goliath.nb@frcy.org";
+		$this->mail->FromName    = "Barney Stinson";
 		$this->mail->WordWrap    = 900;
 	}
 

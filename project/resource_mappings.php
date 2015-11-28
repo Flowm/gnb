@@ -11,8 +11,8 @@ $protocol = isset($_SERVER["HTTPS"]) ? 'https://' : 'http://';
 $domain = $_SERVER['HTTP_HOST'];
 $doc_root = $_SERVER['DOCUMENT_ROOT'];
 $url_dir = str_replace($doc_root, '', $base_dir);
-$base_url = $protocol.$domain.$url_dir; //NORMAL USAGE
-//$base_url = $protocol.$domain."/gnb/project"; //THIS IS STATIC AND ONLY FOR PHPSTORM, DUE TO IDE BUG
+//$base_url = $protocol.$domain.$url_dir; //NORMAL USAGE
+$base_url = $protocol.$domain."/gnb/project"; //THIS IS STATIC AND ONLY FOR PHPSTORM, DUE TO IDE BUG
 define ('BASE_DIR', $base_dir ."/");
 define ('BASE_URL', $base_url ."/");
 
@@ -31,6 +31,7 @@ $pages["user"] = "models/user.php";
 $pages["account"] = "models/account.php";
 $pages["transaction"] = "models/transaction.php";
 $pages["awesome"] = "awesome_data.php";
+$pages["error"] = "errorPage.php";
 
 $pages["drawfunctions"] = "drawfunctions.php";
 $pages["fpdf"] = "lib/fpdf/fpdf.php";

@@ -21,6 +21,10 @@ if (isset($_SESSION["username"]) && isset($_SESSION["role"])) {
     }
 }
 
+session_destroy();
+session_regenerate_id(true);
+session_unset();
+
 $error_types = array(0=>'Invalid login credentials!',1=>'The account is currently blocked');
 
 $logo_svg = getMedia('logo_svg');
@@ -31,7 +35,7 @@ $logo_svg = getMedia('logo_svg');
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>Login</title>
     <link rel="stylesheet" type="text/css" href="style/gnb.css">
     <script type="text/javascript" src="js/index.js"></script>
     <link rel="icon" type="image/png" href="media/gnb_icon.png" />

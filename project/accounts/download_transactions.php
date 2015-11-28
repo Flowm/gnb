@@ -1,13 +1,23 @@
 <?php
 
 require_once __DIR__."/../resource_mappings.php";
+
+//Worst case, an unauthenticated user is trying to access this page directly
+if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
+	include(getPageAbsolute('error'));
+	exit();
+}
+//The user is logged in, but tries to access another page directly
+else if (!isset($frame)) {
+	header("Location:".getPageURL('home'));
+	exit();
+}
+
 require_once getpageabsolute("db_functions");
 require_once getPageAbsolute("fpdf");
 
 session_start();
 
-if (empty($_SESSION["user_id"]))
-	die("User missing");
 if (empty($_SESSION["account_id"]))
 	die("Please choose an account");
 

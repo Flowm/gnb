@@ -8,6 +8,23 @@
 
 require_once __DIR__."/../resource_mappings.php";
 
+//Worst case, an unauthenticated user is trying to access this page directly
+if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
+    include(getPageAbsolute('error'));
+    exit();
+}
+//The user is logged in, but tries to access another page directly
+else if (!isset($section)) {
+    header("Location:".getPageURL('home'));
+    exit();
+}
+//Vertical privilege escalation attempt -> no go
+$role = $_SESSION["role"];
+if ($role != "employee") {
+    include(getPageAbsolute('error'));
+    exit();
+}
+
 $frameKey = 'manage_clients';
 $frame = getFrameAbsolute('manage_clients'); //static default
 if (isset($_POST["frame"])) {

@@ -6,6 +6,14 @@
  * Time: 16:09
  */
 
+function checkPasswordStrength($pass) {
+    $regExp= "#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[#.-_,$%&!]).*$#";
+    if (preg_match($regExp, $pass)) {
+        return true;
+    }
+    return false;
+}
+
 /*Just process the received form, store the data inside the DB,
 maybe return an error if the data already existed and finally return to the index */
 
@@ -59,6 +67,11 @@ if (!filter_var($email,FILTER_VALIDATE_EMAIL)) {
     header("Location:".getPageURL('registration').$error);
     exit();
 }
+if (!checkPasswordStrength($password)) {
+    $error = $error."4";
+    header("Location:".getPageURL('registration').$error);
+    exit();
+}
 
 $result = true;
 if ($type == 'client') {
@@ -66,6 +79,12 @@ if ($type == 'client') {
 }
 else if ($type == 'employee') {
     $result = addEmployee($firstname, $lastname, $email, $password);
+}
+else {
+    //We received a forged request, with an invalid role
+    $error = $error."5";
+    header("Location:".getPageURL('registration').$error);
+    exit();
 }
 if (!$result) {
     $error = $error."3";
@@ -85,7 +104,7 @@ $logo_svg = getMedia('logo_svg'); //GNB logo
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="style/gnb.css">
     <link rel="icon" type="image/png" href="media/gnb_icon.png" />
-    <title></title>
+    <title>Registration</title>
 </head>
 <body>
 <div class="mainContainer">

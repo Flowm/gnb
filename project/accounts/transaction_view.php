@@ -1,5 +1,16 @@
 <?php
 
+//Worst case, an unauthenticated user is trying to access this page directly
+if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
+    include(getPageAbsolute('error'));
+    exit();
+}
+//The user is logged in, but tries to access another page directly
+else if (!isset($section)) {
+    header("Location:".getPageURL('home'));
+    exit();
+}
+
 $t_status = $transaction->status;
 $currency = '€';
 

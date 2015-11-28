@@ -13,12 +13,12 @@ require_once getpageabsolute("user");
 session_start();
 
 if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
-    header("Location:".getPageURL('home'));
+    include(getPageAbsolute('error'));
     exit();
 }
 $role = $_SESSION["role"];
 if ($role != "client") {
-    header("Location:".getPageURL('home'));
+    include(getPageAbsolute('error'));
     exit();
 }
 

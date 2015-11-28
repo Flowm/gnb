@@ -11,7 +11,9 @@ require_once "resource_mappings.php";
 $error_types = array(0=>'All fields are mandatory!',
     1=>'The repeated password does not match the original one!',
     2=>'Invalid email address format',
-    3=>'The email you entered is already associated to an account');
+    3=>'The email you entered is already associated to an account',
+    4=>'Your password must be between 8 and 20 characters long and must contain at least 1 number and 1 letter!',
+    5=>'Invalid role entered');
 
 $logo_svg = getMedia('logo_svg');
 
@@ -21,7 +23,7 @@ $logo_svg = getMedia('logo_svg');
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>Registration</title>
     <link rel="stylesheet" type="text/css" href="style/gnb.css">
     <script type="text/javascript" src="js/registration.js"></script>
     <link rel="icon" type="image/png" href="media/gnb_icon.png" />

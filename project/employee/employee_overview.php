@@ -6,8 +6,24 @@
  * Time: 15:17
  */
 
-//PHASE 2: We will have to check the current role! Someone could just try to access this page randomly,
-// and it would get displayed -> Only a logged in employee can have access to this section
+require_once __DIR__."/../resource_mappings.php";
+
+//Worst case, an unauthenticated user is trying to access this page directly
+if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
+    include(getPageAbsolute('error'));
+    exit();
+}
+//The user is logged in, but tries to access another page directly
+else if (!isset($section)) {
+    header("Location:".getPageURL('home'));
+    exit();
+}
+//Vertical privilege escalation attempt -> no go
+$role = $_SESSION["role"];
+if ($role != "employee") {
+    include(getPageAbsolute('error'));
+    exit();
+}
 
 $BARNEY_QUOTES = array("In my body, where the shame gland should be, there is
                     a second awesome gland. True story.",

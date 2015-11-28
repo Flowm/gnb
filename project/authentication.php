@@ -37,6 +37,7 @@ if (!$result) {
 else {
     $user = new user($result);
     $role = array_search($user->role, $USER_ROLES);
+    session_regenerate_id(true);
     $_SESSION["username"] = $user->email;
     $_SESSION["role"] = $role;
     $_SESSION["user_id"] = $user->id;
@@ -49,7 +50,7 @@ else {
         header("Location:".getPageURL('employee'));
     }
     else {
-        //TODO: ERROR? WTF?
+        //Cannot really happen
     }
     exit();
 }

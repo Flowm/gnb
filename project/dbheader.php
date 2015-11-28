@@ -1,8 +1,8 @@
 <?php
 
 $DB_HOST				= "localhost" ;
-$DB_USERNAME			= "samurai" ;
-$DB_PASSWORD			= "6JEn7RhLAGaavQTx" ;
+$DB_USERNAME			= "root" ;
+$DB_PASSWORD			= "alpha-2013Omega" ;
 $DB_SCHEMA				= "gnbdb" ;
 
 $USER_TABLE_NAME		= "$DB_SCHEMA.user" ;

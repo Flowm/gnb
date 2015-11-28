@@ -11,12 +11,12 @@ require_once __DIR__."/../resource_mappings.php";
 session_start();
 
 if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
-    header("Location:".getPageURL('home'));
+    include(getPageAbsolute('error'));
     exit();
 }
 $role = $_SESSION["role"];
 if ($role != "employee") {
-    header("Location:".getPageURL('home'));
+    include(getPageAbsolute('error'));
     exit();
 }
 

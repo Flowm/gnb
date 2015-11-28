@@ -9,6 +9,30 @@ function register() {
     }
 }
 
+function checkEmail(email, errorText) {
+    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!re.test(email.value)) {
+        errorText.innerHTML = 'Invalid email address format';
+        return false;
+    }
+    return true;
+}
+
+function checkPassword(pass, repeat, errorText) {
+    if(pass.value != repeat.value) {
+        errorText.innerHTML = 'The repeated password does not match the original one!';
+        return false;
+    }
+    var re = /#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[#.-_,$%&!]).*$#/;
+    //var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+    if (!re.test(pass.value)) {
+        errorText.innerHTML = 'Your password must be between 8 and 20 characters long ' +
+            'and must contain at least 1 number and 1 letter!';
+        return false;
+    }
+    return true;
+}
+
 function checkContents() {
     var errorText = document.getElementById('error');
     var type1 = document.getElementById('type1');
@@ -30,14 +54,8 @@ function checkContents() {
         errorText.innerHTML = 'All fields are mandatory!';
         return false;
     }
-    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (!re.test(email.value)) {
-        errorText.innerHTML = 'Invalid email address format';
+    if (!checkEmail(email,errorText)) {
         return false;
     }
-    if(password.value != passwordRepeat.value) {
-        errorText.innerHTML = 'The repeated password does not match the original one!';
-        return false;
-    }
-    return true;
+    return checkPassword(password, passwordRepeat, errorText);
 }

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lorenzodonini
- * Date: 17/10/15
- * Time: 16:09
- */
 
 function checkPasswordStrength($pass) {
     $regExp= "#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[#.-_,$%&!]).*$#";

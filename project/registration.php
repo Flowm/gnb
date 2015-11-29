@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lorenzodonini
- * Date: 17/10/15
- * Time: 01:22
- */
 
 require_once "resource_mappings.php";
 

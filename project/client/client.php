@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lorenzodonini
- * Date: 17/10/15
- * Time: 15:05
- */
 
 require_once __DIR__."/../resource_mappings.php";
 require_once getpageabsolute("db_functions");

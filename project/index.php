@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lorenzodonini
- * Date: 16/10/15
- * Time: 20:47
- */
 
 include "resource_mappings.php";
 include_once getPageAbsolute("awesome");

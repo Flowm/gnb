@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lorenzodonini
- * Date: 17/10/15
- * Time: 14:21
- */
 
 //Check credentials: if ok proceed to the correct overview, otherwise return to login.php and print some error
 //If authentication successful, set some session variables

@@ -33,7 +33,7 @@ if (isset($_POST["section"])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>GNB - Client</title>
     <link rel="stylesheet" type="text/css" href="../style/gnb.css">
     <link rel="stylesheet" type="text/css" href="../style/frame.css">
     <script type="text/javascript" src="../js/client.js"></script>

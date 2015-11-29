@@ -17,7 +17,7 @@ $logo_svg = getMedia('logo_svg');
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Registration</title>
+    <title>GNB - Registration</title>
     <link rel="stylesheet" type="text/css" href="style/gnb.css">
     <script type="text/javascript" src="js/registration.js"></script>
     <link rel="icon" type="image/png" href="media/gnb_icon.png" />

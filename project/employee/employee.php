@@ -31,7 +31,7 @@ if (isset($_POST["section"])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>GNB Employee</title>
+    <title>GNB - Employee</title>
     <link rel="stylesheet" type="text/css" href="../style/frame.css">
     <link rel="stylesheet" type="text/css" href="../style/gnb.css">
     <script type="text/javascript" src="../js/employee.js"></script>

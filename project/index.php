@@ -11,7 +11,7 @@ $logo_svg = getMedia('logo_svg');
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>Goliath National Bank</title>
     <link rel="stylesheet" type="text/css" href="style/gnb.css">
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="js/asyncRequest.js"></script>

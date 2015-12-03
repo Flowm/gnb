@@ -32,6 +32,7 @@ $pages["account"] = "models/account.php";
 $pages["transaction"] = "models/transaction.php";
 $pages["awesome"] = "awesome_data.php";
 $pages["error"] = "errorPage.php";
+$pages["gnb_style"] = "style/gnb.css";
 
 $pages["drawfunctions"] = "drawfunctions.php";
 $pages["fpdf"] = "lib/fpdf/fpdf.php";

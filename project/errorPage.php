@@ -12,8 +12,7 @@ $logo_svg = getMedia('logo_svg'); //GNB logo
 <head>
     <meta charset="UTF-8">
     <title>GNB - 404</title>
-    <link rel="stylesheet" type="text/css" href="style/gnb.css">
-    <script type="text/javascript" src="js/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?= getPageURL('gnb_style') ?>">
     <link rel="icon" type="image/png" href="media/gnb_icon.png" />
 </head>
 <body>

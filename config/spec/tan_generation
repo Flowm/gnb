@@ -9,7 +9,7 @@ Client:
 
 - Compute HASH and TAN
 	- HASH = H(DST+SUM+PIN+SALT)
-	- TAN = HASH concartenate SALT
+	- TAN = HASH concatenate SALT
 
 Sent to server:
 - DST+SUM+DESC+TAN

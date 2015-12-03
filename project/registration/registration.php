@@ -1,6 +1,6 @@
 <?php
 
-require_once "resource_mappings.php";
+require_once __DIR__."/../resource_mappings.php";
 
 $error_types = array(0=>'All fields are mandatory!',
     1=>'The repeated password does not match the original one!',

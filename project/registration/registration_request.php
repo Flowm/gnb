@@ -77,7 +77,7 @@ if (!checkPasswordStrength($password)) {
 //TODO: WE STILL NEED TO SAVE THIS TO DB SOMEHOW
 $random_pin = null;
 //Checking the required banking option
-if ($banking != 'email') {
+if ($banking == 'email') {
     //We will need to send TANs to the user once he has been approved. Need a flag on the db
 }
 else if ($banking == 'app') {

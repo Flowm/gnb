@@ -23,14 +23,25 @@ function checkPassword(pass, repeat, errorText) {
         errorText.innerHTML = 'The repeated password does not match the original one!';
         return false;
     }
-    var re = /#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[#.-_,$%&!]).*$#/;
+    //var re = /#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[#.-_,$%&!]).*$#/;
     //var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
-    if (!re.test(pass.value)) {
+    var numbers = /[0-9]+/;
+    var chars = /[a-zA-Z]+/;
+    var result = true;
+    if (pass.value.length < 8 || pass.value.length > 20) {
+        result = false;
+    }
+    if (!numbers.test(pass.value)) {
+        result = false;
+    }
+    if (!chars.test(pass.value)) {
+        result = false;
+    }
+    if (!result) {
         errorText.innerHTML = 'Your password must be between 8 and 20 characters long ' +
             'and must contain at least 1 number and 1 letter!';
-        return false;
     }
-    return true;
+    return result;
 }
 
 function checkContents() {

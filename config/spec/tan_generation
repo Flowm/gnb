@@ -2,9 +2,10 @@ First draft of the TAN generation algorithm used for the SCS:
 
 Client:
 - Derive SALT from current time
-	- SALT = (TIME_NOW - TIME_2015-11-11) % SALTMAX
-	- EXAMPLE: (1449069990 - 1447196400) % 16777216
-	- BASH: echo $(( (`date "+%s"` - `date -d "2015-11-11" "+%s"`) % (16^6) ))
+	- SALTMAX = 64^5
+	- SALT = encode64((TIME_NOW - TIME_2015-01-01) % SALTMAX)
+	- EXAMPLE: base64((1449069990 - 1447196400) % 1073741824)
+	- BASH: echo $(( (`date "+%s"` - `date -d "2015-01-01" "+%s"`) % (16^5) ))
 
 - Compute HASH and TAN
 	- HASH = H(DST+SUM+PIN+SALT)
@@ -16,18 +17,18 @@ Sent to server:
 Server:
 - Retrieve values
 	- HASH = TAN[0-9]
-	- SALT = TAN[10-15]
-	- DBSALT from DB
+	- SALT = TAN[10-14]
+	- SRVSALT from DB
 	- PIN from DB
 
 - Compute HASH
-	- HASH = H(DST+SUM+PIN+SALT)
+	- SRVHASH = H(DST+SUM+PIN+SALT)
 
 - Continue if
-	- HASH == H(DST+SUM+PIN+SALT) &&
-	- DBSALT < SALT
+	- SRVHASH == HASH &&
+	- decode64(SRVSALT) < decode64(SALT)
 
 - Store SALT in DB
-	- DBSALT = SALT
+	- SRVSALT = SALT
 
 - Execute transaction

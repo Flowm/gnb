@@ -549,6 +549,14 @@ div.select-all-container {
     padding: 6px;
 }
 
+.formSingleColumn {
+    display: block;
+    text-align: left;
+    width: 300px;
+    padding: 6px;
+    white-space: nowrap;
+}
+
 /* A SIMPLE ROW IN A FORM */
 .formRow {
     margin-top: 8px;

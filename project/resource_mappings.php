@@ -22,7 +22,7 @@ $pages["index"] = "index.php";
 $pages["home"] = "index.php";
 $pages["login"] = "login.php";
 $pages["logout"] = "logout.php";
-$pages["registration"] = "registration.php";
+$pages["registration"] = "registration/registration.php";
 $pages["employee"] = "employee/employee.php";
 $pages["client"] = "client/client.php";
 $pages["db_functions"] = "bankfunctions.php";
@@ -50,6 +50,8 @@ $sections["my_accounts"] = "accounts/my_accounts.php";
 
 //FRAMES (each frame is used inside a section, triggered by a submenu button)
 $frames = array();
+$frames["reg_default"] = "registration/registration_default.php";
+$frames["reg_pin"] = "registration/registration_pin.php";
 $frames["manage_clients"] = "employee/manage_clients.php";
 $frames["client_details"] = "employee/client_details.php";
 $frames["client_transaction_details"] = "employee/client_transaction_details.php";

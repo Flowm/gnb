@@ -7,7 +7,8 @@ $error_types = array(0=>'All fields are mandatory!',
     2=>'Invalid email address format',
     3=>'The email you entered is already associated to an account',
     4=>'Your password must be between 8 and 20 characters long and must contain at least 1 number and 1 letter!',
-    5=>'Invalid role entered');
+    5=>'Invalid role entered',
+    6=>'Invalid banking option entered');
 
 $logo_svg = getMedia('logo_svg');
 
@@ -17,15 +18,15 @@ $logo_svg = getMedia('logo_svg');
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>GNB - Registration</title>
-    <link rel="stylesheet" type="text/css" href="style/gnb.css">
-    <script type="text/javascript" src="js/registration.js"></script>
-    <link rel="icon" type="image/png" href="media/gnb_icon.png" />
+    <title>Registration</title>
+    <link rel="stylesheet" type="text/css" href="../style/gnb.css">
+    <script type="text/javascript" src="../js/registration.js"></script>
+    <link rel="icon" type="image/png" href="../media/gnb_icon.png" />
 </head>
 <body>
 <div class="mainContainer">
     <img src="<?php echo $logo_svg ?>" alt="GNB Logo" class="logo_big">
-    <div class="simpleContainer">
+    <div class="simple-container">
         <h1 class="title3">In order to register correctly, you will need to fill in the form below</h1>
         <form method="post" action="registration_request.php" id="registrationForm">
             <div class="formRow">
@@ -79,6 +80,39 @@ $logo_svg = getMedia('logo_svg');
                     <input type="password" id="password_repeat" name="password_repeat" placeholder="Password repeat"><br>
                 </div>
             </div>
+
+            <!-- PHASE 3 CODE -->
+            <hr class="hr-thin">
+            <div class="simple-container">
+                <p class="simple-text simple-text-centered">
+                    In order to perform money transfers in our bank, you will need your own TANs. You can either receive
+                    these TANs directly via an encrypted email, or become one of our futuristic clients and
+                    use our awesome app which makes bank transfers legendary easy.
+                </p>
+            </div>
+            <div class="formRow">
+                <span class="simple-text-big">Choose your preferred online banking method*: </span>
+            </div>
+            <div class="formRow">
+                <div class="formSingleColumn">
+                    <input type="radio" id="banking1" name="banking" value="email" checked>
+                    <label for="banking1"><span></span>Send me the TANs via encrypted email</label>
+                </div>
+            </div>
+            <div class="formRow">
+                <div class="formSingleColumn">
+                    <input type="radio" id="banking2" name="banking" value="app">
+                    <label for="banking2"><span></span>I want to use your awesome app</label><br>
+                </div>
+            </div>
+            <div class="formRow">
+                <p class="simple-text simple-text-italic simple-text-centered">
+                    *Once made, this choice will be <b>IRREVERSIBLE</b>.
+                </p>
+            </div>
+            <hr class="hr-thin">
+            <!-- END PHASE 3 CODE -->
+
             <div class="formRow">
             <span id="error" class="error">
                 <?php

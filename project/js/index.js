@@ -6,7 +6,7 @@ function goToLoginPage() {
 }
 
 function goToRegistrationPage() {
-    location.href="registration.php";
+    location.href="registration/registration.php";
 }
 
 function refreshAwesomeData() {

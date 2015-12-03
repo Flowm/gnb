@@ -1,17 +1,23 @@
 <?php
 
 function checkPasswordStrength($pass) {
-    $regExp= "#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[#.-_,$%&!]).*$#";
-    if (preg_match($regExp, $pass)) {
-        return true;
+    if (strlen($pass) < 8 || strlen($pass) > 20) {
+        return false;
     }
-    return false;
+
+    if (!preg_match("#[0-9]+#",$pass)) {
+        return false;
+    }
+    if (!preg_match("#[a-zA-Z]+#", $pass)) {
+        return false;
+    }
+    return true;
 }
 
 /*Just process the received form, store the data inside the DB,
 maybe return an error if the data already existed and finally return to the index */
 
-require_once "resource_mappings.php";
+require_once __DIR__."/../resource_mappings.php";
 require_once getpageabsolute("db_functions");
 require_once getPageAbsolute("mail");
 require_once getpageabsolute("user");
@@ -23,6 +29,7 @@ if (!isset($_POST['type'])
     || !isset($_POST['email'])
     || !isset($_POST['firstname'])
     || !isset($_POST['lastname'])
+    || !isset($_POST['banking'])
     || !isset($_POST['password'])
     || !isset($_POST['password_repeat'])) {
     $error = $error."0";
@@ -37,14 +44,14 @@ $firstname = $_POST['firstname'];
 $lastname = $_POST['lastname'];
 $password = $_POST['password'];
 $passwordRepeat = $_POST['password_repeat'];
+$banking = $_POST['banking'];
 
-/*Checking all of the conditions on server side as well.
-I know this is security-related, but it just pains me to see someone
-inserting an invalid email or similar flaws in Phase 1 already. */
+// Checking all of the conditions on server side as well.
 if ($type == ''
         || $email == ''
         || $firstname == ''
         || $lastname == ''
+        || $banking == ''
         || $password == ''
         || $passwordRepeat == '') {
     $error = $error."0";
@@ -67,7 +74,28 @@ if (!checkPasswordStrength($password)) {
     exit();
 }
 
+//TODO: WE STILL NEED TO SAVE THIS TO DB SOMEHOW
+$random_pin = null;
+//Checking the required banking option
+if ($banking != 'email') {
+    //We will need to send TANs to the user once he has been approved. Need a flag on the db
+}
+else if ($banking == 'app') {
+    //We need to show a unique PIN to the client and allow him to download the SMC.
+    $random_pin = mt_rand(0,9);
+    for ($i = 0; $i < 6; $i++) {
+        $random_pin .= mt_rand(0,9);
+    }
+}
+else {
+    //We received a forged request, with an invalid role
+    $error = $error."6";
+    header("Location:".getPageURL('registration').$error);
+    exit();
+}
+
 $result = true;
+//Checking the role
 if ($type == 'client') {
     $result = addClient($firstname, $lastname, $email, $password);
 }
@@ -85,6 +113,10 @@ if (!$result) {
     header("Location:".getPageURL('registration').$error);
     exit();
 }
+
+$_SESSION['banking'] = $banking;
+$_SESSION['pin'] = $random_pin;
+
 $gnbmailer = new GNBMailer();
 $gnbmailer->sendMail_Registration($email, "$firstname $lastname");
 
@@ -96,25 +128,31 @@ $logo_svg = getMedia('logo_svg'); //GNB logo
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="style/gnb.css">
-    <link rel="icon" type="image/png" href="media/gnb_icon.png" />
-    <title>GNB - Registration</title>
+    <link rel="stylesheet" type="text/css" href="../style/gnb.css">
+    <link rel="icon" type="image/png" href="../media/gnb_icon.png" />
+    <title>Registration</title>
 </head>
 <body>
 <div class="mainContainer">
     <img src="<?php echo $logo_svg ?>" alt="GNB Logo" class="logo_big">
-    <div class="simpleContainer">
-        <h1 class="title3">Welcome to the Goliath National Bank!</h1>
-        <p class="simple-text-big simple-text-centered">
-            Your request has been received and will be processed shortly.
-            A confirmation email will be sent to you, once your registration has been approved.<br>
-            Thank you for choosing the Goliath National Bank!
-        </p>
+    <div class="simple-container">
+        <?php
+        $frame = null;
+        if ($_SESSION['banking'] == 'email') {
+            $frame = getFrameAbsolute('reg_default');
+        }
+        else if ($_SESSION['banking'] == 'app') {
+            $frame = getFrameAbsolute('reg_pin');
+        }
+        include $frame;
+        ?>
+    </div>
+    <div class="simple-container">
         <h1 class="title4 simple-text-centered">
             This is gonna be LEGENDARY!!!
         </h1>
         <p class="simple-text simple-text-centered">
-            <a href="index.php">Return to Home page</a></p>
+            <a href="../index.php">Return to Home page</a></p>
     </div>
 </div>
 </body>

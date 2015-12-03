@@ -20,15 +20,6 @@ $logo_svg = getMedia('logo_svg');
 <body>
 <div class="mainContainer">
     <img src="<?php echo $logo_svg ?>" alt="GNB Logo" class="logo_big">
-    <!--<div class="simple-container">
-        <h1 class="title1">
-            Join our <span id="nClients"><?php echo $nClients ?></span> LEGENDARY clients!
-        </h1>
-        <h1 class="title3">
-            We have <span id="awesomeAmount"><?php echo $money.$currency ?></span> ... and counting!
-            <button type="button" id="refreshButton" onclick="refreshAwesomeData()">Check again!</button>
-        </h1>
-    </div>-->
     <div class="headerContainer">
         <div class="index-text-container">
             <h1 class="title1">

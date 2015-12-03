@@ -97,10 +97,10 @@ else {
 $result = true;
 //Checking the role
 if ($type == 'client') {
-    $result = addClient($firstname, $lastname, $email, $password);
+    $result = DB::i()->addClient($firstname, $lastname, $email, $password);
 }
 else if ($type == 'employee') {
-    $result = addEmployee($firstname, $lastname, $email, $password);
+    $result = DB::i()->addEmployee($firstname, $lastname, $email, $password);
 }
 else {
     //We received a forged request, with an invalid role

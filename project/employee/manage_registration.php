@@ -35,7 +35,7 @@ if (isset($_POST['action']) && isset($_POST['users'])) {
     }
 }
 
-$data = getPendingRequests();
+$data = DB::i()->getPendingRequests();
 $newUsers = array();
 if ($data != null) {
     foreach ($data as $u) {
@@ -67,7 +67,7 @@ if (count($newUsers) == 0) {
     <?php
     for ($i =0; $i < count($newUsers); $i++) {
         $user = $newUsers[$i];
-        $role = array_search($user->role, $USER_ROLES);
+        $role = DB::i()->mapUserRole($user->role);
         echo "<tr class='tbody-row-default'>
             <td class='td-default'><input type='checkbox' name='action_check' id='$user->id:$role'>
                 <label for='$user->id:$role'><span></span></label></td>

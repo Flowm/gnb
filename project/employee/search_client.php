@@ -25,7 +25,7 @@ if ($json != null) {
     $search = json_decode($json, true);
     if (isset($search['name'])) {
         //query by name
-        $search = getClientsByName($search['name']);
+        $search = DB::i()->getClientsByName($search['name']);
         $result = array();
         for ($i=0; $i < count($search); $i++) {
             $user = new user($search[$i]);
@@ -36,7 +36,7 @@ if ($json != null) {
     }
     else if (isset($search['id'])) {
         //query by id
-		$search = getClient($search['id']);
+		$search = DB::i()->getClient($search['id']);
 		if ($search != false) {
 	        $user = new user($search);
 			$result = array();

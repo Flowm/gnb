@@ -31,7 +31,7 @@ class account {
 		for($i=0;$i<$cnt;$i++) {
 			$retry=5;
 			$newtan = $this->genRandString(15);
-			while(!insertTAN($newtan, $this->id)) {
+			while(!DB::i()->insertTAN($newtan, $this->id)) {
 				$newtan = $this->genRandString(15);
 				if ($retry-- <= 0) {
 					return false;

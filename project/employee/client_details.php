@@ -27,7 +27,7 @@ if (empty($_SESSION["user_id"]))
 
 $user = null;
 if (isset($_POST['client_id'])) {
-    $search = getUser($_POST['client_id']);
+    $search = DB::i()->getUser($_POST['client_id']);
     $user = new user($search);
 }
 
@@ -36,7 +36,7 @@ if ($user == null) {
     exit();
 }
 
-$data = getAccountsForUser($user->id);
+$data = DB::i()->getAccountsForUser($user->id);
 $user->setAccounts($data);
 $accounts = $user->accounts;
 
@@ -54,12 +54,12 @@ if (isset($_POST["account_id"])) {
 
 //Retrieving transaction list for account
 if ($selected != null) {
-    $selected->setTransactions(getAccountTransactions($selected->id));
+    $selected->setTransactions(DB::i()->getAccountTransactions($selected->id));
 }
 
 $currency = '€';
-$role = $USER_ROLES[$user->role];
-$status = $USER_STATUS[$user->status];
+$role = DB::i()->mapUserRole($user->role);
+$status = DB::i()->mapUserStatus($user->status);
 
 //VIEW STARTS FROM HERE
 ?>
@@ -169,14 +169,14 @@ if (count($accounts) == 0 || $selected == null) {
             }
             echo "<tr class='tbody-row-default'>
                     <td class='td-default'>";
-            if ($transaction->status == $TRANSACTION_STATUS['approved']) {
+            if ($transaction->status == DB::i()->mapTransactionStatus('approved')) {
                 echo "<span class='$arrow_class'></span>";
             }
             else {
                 echo "<span class='$arrow_pending'></span>";
             }
             echo "</td>";
-            echo "<td class='td-default'>$TRANSACTION_STATUS[$t_status]</td>";
+            echo "<td class='td-default'>" . DB::i()->mapTransactionStatus($t_status) . "</td>";
             echo "<td class='td-default'>$transaction->src</td>";
             echo "<td class='td-default'>$transaction->dst</td>";
             echo "<td class='td-default'>$transaction->creation_date</td>";

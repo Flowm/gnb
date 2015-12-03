@@ -50,7 +50,7 @@ class transaction {
     public static function approveTransactions($requests, $employee_id) {
         $requests = explode(";",$requests);
         foreach ($requests as $request) {
-            $result = approvePendingTransaction($employee_id, $request);
+            $result = DB::i()->approvePendingTransaction($employee_id, $request);
             if (!$result) {
                 //TODO: handle db error
             }
@@ -60,7 +60,7 @@ class transaction {
     public static function rejectTransactions($requests, $employee_id) {
         $requests = explode(";",$requests);
         foreach ($requests as $request) {
-            $result = rejectPendingTransaction($employee_id, $request);
+            $result = DB::i()->rejectPendingTransaction($employee_id, $request);
             if (!$result) {
                 //TODO: handle db error
             }

@@ -30,7 +30,7 @@ if (isset($_POST["frame"])) {
 
 if (empty($_SESSION["user_id"]))
 	die("User missing");
-$accounts_info = getAccountsForUser($_SESSION["user_id"]);
+$accounts_info = DB::i()->getAccountsForUser($_SESSION["user_id"]);
 
 if (isset($_POST["account"])) {
 	foreach($accounts_info as $acc) {

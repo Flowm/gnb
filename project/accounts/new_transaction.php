@@ -20,7 +20,7 @@ if (empty($_SESSION["account_id"]))
 	die("Please choose an account");
 
 $account_id = $_SESSION["account_id"];
-$acc_info = getAccountDetails($account_id) ;
+$acc_info = DB::i()->getAccountDetails($account_id) ;
 $account_header	= array(
 	'id'			=> 'ID',
 	'balance'		=> 'Balance',

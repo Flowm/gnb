@@ -31,13 +31,13 @@ $pdf_download_link 	= '<a href="'.$download_link.'">'
 					. '</a>' ; 
 
 # showing transactions
-$transaction_data 	= getAccountTransactions($account_id) ; 
+$transaction_data 	= DB::i()->getAccountTransactions($account_id) ; 
 $skip_headers		= array( 'id','approved_by_user_id','approved_at','destination_account_id','tan_id') ; 
 $header_decode 		= array(
 	'status'				=> 'Status',
 	'source_account_id'		=> 'Source/Dest',
-	'creation_timestamp'	=>  'Date/Time',
-	'amount'				=>  'Amount',
+	'creation_timestamp'	=> 'Date/Time',
+	'amount'				=> 'Amount',
 	'description'			=> 'Description'
 );
 	
@@ -82,7 +82,7 @@ for ( $i = 0 ; $i < $num_of_rec ; $i++ ){
     $arrow_class = null;
     $arrow_pending = null;
     $desc = wordwrap($transaction->description, 18, "<br>\n", true);
-    $t_status = $TRANSACTION_STATUS[$transaction->status];
+    $t_status = DB::i()->mapTransactionStatus($transaction->status);
 
     if ($transaction->src == $account_id) {
         $src_dest = $transaction->dst;
@@ -107,27 +107,6 @@ for ( $i = 0 ; $i < $num_of_rec ; $i++ ){
     echo "<td class='td-default'>$transaction->amount</td>";
     echo "<td class='td-default'>".wordwrap( $transaction->description, 18, "<br>\n",true )."</td>";
 
-	/* Sorry, had to change this for presentation purposes.
-	foreach( $transaction_data[$i] as $title => $value){
-		if ( in_array($title,$skip_headers) ) { continue ; }
-		$data	= $value ; 
-		if ( $title	== 'status' ){ $data	= $TRANSACTION_STATUS[$value] ; }
-		if ( $title	== 'source_account_id' ){
-			if( $value == $account_id){
-				$data	= $transaction_data[$i]["destination_account_id"] ; 
-			}
-		}
-		if ( $title == 'amount') {
-			if ($transaction_data[$i]['source_account_id'] == $account_id) {
-				$data = number_format($data * -1.0, 2);
-			}
-		}
-		if ( $title	== 'description' ){ $data	= wordwrap( $data, 18, "<br>\n",true ) ; }
-		if ( $title == 'status' && $data == 'approved') {
-
-		}
-		echo  '<td class="td-default">'.$data.'</td>' ; 
-	} */
 	echo	'</tr>' ;
 }
 echo "</table>" ; 

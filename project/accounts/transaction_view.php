@@ -34,7 +34,7 @@ $currency = '€';
         <?php
         echo "<tr class='tbody-row-default'>
             <td class='td-default'>$transaction->id</td>
-            <td class='td-default'>$TRANSACTION_STATUS[$t_status]</td>
+            <td class='td-default'>" . DB::i()->mapTransactionStatus($t_status) . "</td>
             <td class='td-default'>$transaction->amount $currency</td>
             <td class='td-default'>$transaction->description</td>
             <td class='td-default'>$transaction->creation_date</td>

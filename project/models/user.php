@@ -63,17 +63,17 @@ class user {
 
 	public function approve($approver_id) {
 		if ($this->role == '0') {
-			if (approveClient($this->id, $approver_id)) {
+			if (DB::i()->approveClient($this->id, $approver_id)) {
 				$balance = rand(100,1000);
-				$account_id = addAccountWithBalance($this->id, $balance);
-				$account = new account(array('id'=>$account_id));
+				$account_id = DB::i()->addAccountWithBalance($this->id, $balance);
+				$account = new account(array('id'=>$account_id));     
 				$tans = $account->generateTANs();
 				$name = "$this->firstname $this->lastname";
 				$gnbmailer = new GNBMailer();
 				return $gnbmailer->sendMail_Approval($this->email, $name, $balance, $tans);
 			}
 		} else if ($this->role == '1') {
-			if (approveEmployee($this->id, $approver_id)) {
+			if (DB::i()->approveEmployee($this->id, $approver_id)) {
 				$name = "$this->firstname $this->lastname";
 				$gnbmailer = new GNBMailer();
 				return $gnbmailer->sendMail_Approval($this->email, $name);
@@ -85,13 +85,13 @@ class user {
 
     public function reject($denier_id) {
         if ($this->role == '0') {
-            if (rejectClient($this->id, $denier_id)) {
+            if (DB::i()->rejectClient($this->id, $denier_id)) {
                 //DO SOMETHING IN CASE OF REJECTION?!
                 return true;
 			}
         }
         else if($this->role == '1') {
-            if (rejectEmployee($this->id, $denier_id)) {
+            if (DB::i()->rejectEmployee($this->id, $denier_id)) {
                 //DO SOMETHING IN CASE OF REJECTION?!
                 return true;
 			}
@@ -106,7 +106,7 @@ class user {
 			$exploded = explode(":",$request);
 			$id = $exploded[0];
 			$role = $exploded[1];
-			$data = getUser($id,$role);
+			$data = DB::i()->getUser($id,$role);
 			if (!$data) {
 				return false;
 			}
@@ -125,7 +125,7 @@ class user {
             $exploded = explode(":",$request);
             $id = $exploded[0];
             $role = $exploded[1];
-            $data = getUser($id,$role);
+            $data = DB::i()->getUser($id,$role);
             if (!$data) {
                 return false;
             }

@@ -37,7 +37,7 @@ if (isset($_POST['action']) && isset($_POST['transactions'])) {
 }
 
 //Once request operations have been handled, be get the list of pending transactions and display it
-$data = getPendingTransactions();
+$data = DB::i()->getPendingTransactions();
 $transactions = array();
 if ($data != null) {
     foreach ($data as $t) {

@@ -22,7 +22,7 @@ if (empty($_SESSION["account_id"]))
 	die("Please choose an account");
 
 $account_id = $_SESSION["account_id"];
-$transaction_data 	= getAccountTransactions($account_id) ; 
+$transaction_data 	= DB::i()->getAccountTransactions($account_id) ; 
 $headers			= array_keys($transaction_data[0]) ; 
 
 $pdf = new FPDF();

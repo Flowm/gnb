@@ -24,13 +24,13 @@ if ($username == null || $pw == null) {
     exit();
 }
 
-$result = loginUser($username, $pw);
+$result = DB::i()->loginUser($username, $pw);
 if (!$result) {
     header("Location:".getPageURL('login').$error);
 }
 else {
     $user = new user($result);
-    $role = array_search($user->role, $USER_ROLES);
+    $role = DB::i()->mapUserRole($user->role);
     session_regenerate_id(true);
     $_SESSION["username"] = $user->email;
     $_SESSION["role"] = $role;

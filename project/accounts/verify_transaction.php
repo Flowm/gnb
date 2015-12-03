@@ -29,7 +29,7 @@ $tan_code		= ( isset($_POST["tan_code"]) ? $_POST["tan_code"] : '' );
  
 # Process Transaction 
 if ( isset($_POST["process"]) && $_POST["process"] == 'yes'){
-	$trans_res	 = processTransaction($account_id, $dest_code, $amount, $description, $tan_code) ;
+	$trans_res	 = DB::i()->processTransaction($account_id, $dest_code, $amount, $description, $tan_code) ;
 	if ($trans_res == false){
 		die ("Unkonwn Transaction error, please connect our bros for help!");
 	}
@@ -60,7 +60,7 @@ else
 	# no need for stage one 
 	
 	# Verify Operation
-	$transaction_res = verifyTransaction($account_id, $dest_code, $amount , $description , $tan_code ) ;  
+	$transaction_res = DB::i()->verifyTransaction($account_id, $dest_code, $amount , $description , $tan_code ) ;  
 	if ($transaction_res["result"] == true ){
 		
 		# Setting the summary line 

@@ -24,7 +24,7 @@ require_once getPageAbsolute('db_functions');
 
 $transaction = null;
 if (isset($_POST['transfer_id'])) {
-    $search = getTransaction($_POST['transfer_id']);
+    $search = DB::i()->getTransaction($_POST['transfer_id']);
     if ($search) {
         $transaction = new transaction($search);
     }
@@ -35,15 +35,15 @@ if ($transaction == null) {
     exit();
 }
 
-$data = getAccountDetails($transaction->src);
+$data = DB::i()->getAccountDetails($transaction->src);
 $srcAccount = new account($data);
-$data = getAccountOwnerFromID($srcAccount->id);
-$data = getUser($data['User ID']);
+$data = DB::i()->getAccountOwnerFromID($srcAccount->id);
+$data = DB::i()->getUser($data['User ID']);
 $sender = new user($data);
-$data = getAccountDetails($transaction->dst);
+$data = DB::i()->getAccountDetails($transaction->dst);
 $dstAccount = new account($data);
-$data = getAccountOwnerFromID($dstAccount->id);
-$data = getUser($data['User ID']);
+$data = DB::i()->getAccountOwnerFromID($dstAccount->id);
+$data = DB::i()->getUser($data['User ID']);
 $receiver = new user($data);
 
 $currency = '€';

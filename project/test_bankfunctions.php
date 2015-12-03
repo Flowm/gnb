@@ -1,6 +1,9 @@
 <?php
 
-require_once 'bankfunctions.php' ;
+require_once 'db.php';
+
+$db = DB::i();
+$debug = true;
 
 $TESTPREFIX = 'MYMAGICSTRING';
 
@@ -98,6 +101,7 @@ function addTestUsers() {
 	//function addClient($first_name, $last_name, $email, $password) 
 
 	global $debug;
+	global $db;
 
 	global $USER1_FIRSTNAME;
 	global $USER1_LASTNAME;
@@ -122,7 +126,7 @@ function addTestUsers() {
 
 	if ($debug) print 'Adding Users ' . $USER1_FIRSTNAME . ' and ' . $USER2_FIRSTNAME . ' and ' . $USER3_FIRSTNAME . '<br>';
 
-	$result = addEmployee($USER1_FIRSTNAME, $USER1_LASTNAME, $USER1_EMAIL, $USER1_PASSWORD);
+	$result = $db->addEmployee($USER1_FIRSTNAME, $USER1_LASTNAME, $USER1_EMAIL, $USER1_PASSWORD);
 
 	if ($result != false) {
 		$USER1_ID= $result;
@@ -133,7 +137,7 @@ function addTestUsers() {
 	}
 
 
-	$result = addClient($USER2_FIRSTNAME, $USER2_LASTNAME, $USER2_EMAIL, $USER2_PASSWORD);
+	$result = $db->addClient($USER2_FIRSTNAME, $USER2_LASTNAME, $USER2_EMAIL, $USER2_PASSWORD);
 
 	if ($result != false) {
 		$USER2_ID= $result;
@@ -143,7 +147,7 @@ function addTestUsers() {
 		return false;
 	}
 
-	$result = addClient($USER3_FIRSTNAME, $USER3_LASTNAME, $USER3_EMAIL, $USER3_PASSWORD);
+	$result = $db->addClient($USER3_FIRSTNAME, $USER3_LASTNAME, $USER3_EMAIL, $USER3_PASSWORD);
 
 	if ($result != false) {
 		$USER3_ID= $result;
@@ -157,6 +161,8 @@ function addTestUsers() {
 }
 
 function checkForTestUsers() {
+
+	global $db;
 
 	global $USER1_FIRSTNAME;
 	global $USER1_LASTNAME;
@@ -179,13 +185,13 @@ function checkForTestUsers() {
 	global $USER_TABLE_NAME;
 	global $USER_TABLE_KEY;
 
-	if (! RecordIsInTable($USER1_ID, $USER_TABLE_KEY, $USER_TABLE_NAME)) return false;
-	if (! RecordIsInTable($USER2_ID, $USER_TABLE_KEY, $USER_TABLE_NAME)) return false;
-	if (! RecordIsInTable($USER3_ID, $USER_TABLE_KEY, $USER_TABLE_NAME)) return false;
+	if (! $db->RecordIsInTable($USER1_ID, $USER_TABLE_KEY, $USER_TABLE_NAME)) return false;
+	if (! $db->RecordIsInTable($USER2_ID, $USER_TABLE_KEY, $USER_TABLE_NAME)) return false;
+	if (! $db->RecordIsInTable($USER3_ID, $USER_TABLE_KEY, $USER_TABLE_NAME)) return false;
 
-	if (getEmployee($USER1_ID) == false) return false;
-	if (getClient($USER2_ID) == false) return false;
-	if (getClient($USER3_ID) == false) return false;
+	if ($db->getEmployee($USER1_ID) == false) return false;
+	if ($db->getClient($USER2_ID) == false) return false;
+	if ($db->getClient($USER3_ID) == false) return false;
 	//FIXME: Notice undefined ofset ... if (getUser($USER1_ID, 'client') != false) return false;
 
 	return true;
@@ -193,21 +199,25 @@ function checkForTestUsers() {
 
 function checkTestUserRequests() {
 
+	global $db;
+
 	//function getPendingClientRequests()
 	//function getPendingEmployeeRequests()
 
 	global $debug;
 
-	$numberOfRowsForClients = sizeof(getPendingClientRequests());
+	$numberOfRowsForClients = sizeof($db->getPendingClientRequests());
 	if ($debug) print 'PendingClientRequests: ' . $numberOfRowsForClients . '<br>';
 
-	$numberOfRowsForEmployees = sizeof(getPendingEmployeeRequests());
+	$numberOfRowsForEmployees = sizeof($db->getPendingEmployeeRequests());
 	if ($debug) print 'PendingEmployeeRequests: ' . $numberOfRowsForEmployees . '<br>';
 
 	return $numberOfRowsForClients + $numberOfRowsForEmployees;
 }
 
 function approveTestUsers() {
+
+	global $db;
 
 	//function approveUser($approver_id, $user_id, $role_filter )
 
@@ -234,39 +244,39 @@ function approveTestUsers() {
 	if ($debug) print 'Approving users ' . $USER1_ID . ' and ' . $USER2_ID . ' and ' . $USER3_ID . '<br>';
 
 	// USER 1
-	if (rejectEmployee($USER1_ID, 1) == false) {
+	if ($db->rejectEmployee($USER1_ID, 1) == false) {
 		print 'Could not reject ' . $USER1_ID;
 		return false;
 	}
 
-	if (blockEmployee($USER1_ID, 1) == false) {
+	if ($db->blockEmployee($USER1_ID, 1) == false) {
 		print 'Could not block ' . $USER1_ID;
 		return false;
 	}
 
-	if (approveEmployee($USER1_ID, 1) == false) {
+	if ($db->approveEmployee($USER1_ID, 1) == false) {
 		print 'Could not approve ' . $USER1_ID;
 		return false;
 	}
 
 	// USER 2
-	if (rejectClient($USER2_ID, 1) == false) {
+	if ($db->rejectClient($USER2_ID, 1) == false) {
 		print 'Could not reject ' . $USER2_ID;
 		return false;
 	}
 
-	if (blockClient($USER2_ID, 1) == false) {
+	if ($db->blockClient($USER2_ID, 1) == false) {
 		print 'Could not block ' . $USER2_ID;
 		return false;
 	}
 
-	if (approveClient($USER2_ID, 1) == false) {
+	if ($db->approveClient($USER2_ID, 1) == false) {
 		print 'Could not approve ' . $USER2_ID;
 		return false;
 	}
 
 	// USER 3
-	if (rejectClient($USER3_ID, 1) == false) {
+	if ($db->rejectClient($USER3_ID, 1) == false) {
 		print 'Could not reject ' . $USER3_ID;
 		return false;
 	}
@@ -275,6 +285,8 @@ function approveTestUsers() {
 }
 
 function checkForApprovedTestUsers() {
+
+	global $db;
 
 	global $debug;
 
@@ -299,7 +311,7 @@ function checkForApprovedTestUsers() {
 	global $USER_TABLE_NAME;
 	global $USER_TABLE_KEY;
 
-	$userinfo = getEmployee($USER1_ID);
+	$userinfo = $db->getEmployee($USER1_ID);
 
 	if ($userinfo['status'] == 1 && $userinfo['approved_by_user_id'] != NULL) {
 		if ($debug) print 'User ' . $USER1_ID . ' approved!<br>';
@@ -308,7 +320,7 @@ function checkForApprovedTestUsers() {
 		return false;
 	}
 
-	$userinfo = getClient($USER2_ID);
+	$userinfo = $db->getClient($USER2_ID);
 
 	if ($userinfo['status'] == 1 && $userinfo['approved_by_user_id'] != NULL) {
 		if ($debug) print 'User ' . $USER2_ID . ' approved!<br>';
@@ -317,7 +329,7 @@ function checkForApprovedTestUsers() {
 		return false;
 	}
 
-	$userinfo = getClient($USER3_ID);
+	$userinfo = $db->getClient($USER3_ID);
 
 	if ($userinfo['status'] == 2 && $userinfo['approved_by_user_id'] != NULL) {
 		if ($debug) print 'User ' . $USER3_ID . ' rejected!<br>';
@@ -331,6 +343,8 @@ function checkForApprovedTestUsers() {
 
 function addTestAccounts() {
 
+	global $db;
+
 	//function addAccount($user_id) {
 	//function addAccount($user_id, $balance){
 
@@ -339,9 +353,9 @@ function addTestAccounts() {
 	global $USER1_ID;
 	global $USER2_ID;
 
-	$acc1 = addAccountWithBalance($USER1_ID, 2000.00);
-	$acc2 = addAccountWithBalance($USER2_ID, 100000.00);
-	$acc3 = addAccountWithBalance($USER2_ID, 8000.00);
+	$acc1 = $db->addAccountWithBalance($USER1_ID, 2000.00);
+	$acc2 = $db->addAccountWithBalance($USER2_ID, 100000.00);
+	$acc3 = $db->addAccountWithBalance($USER2_ID, 8000.00);
 
 	if ($debug) print "Accounts: $acc1, $acc2, $acc3<br>";
 
@@ -354,21 +368,25 @@ function addTestAccounts() {
 
 function checkForTestAccounts() {
 
+	global $db;
+
 	global $debug;
 
 	global $USER1_ID;
 	global $USER2_ID;
 
-	$USER1_data = getAccountsForUser($USER1_ID);
+	$USER1_data = $db->getAccountsForUser($USER1_ID);
 	if ($debug) var_dump($USER1_data);
 
-	$USER2_data = getAccountsForUser($USER2_ID);
+	$USER2_data = $db->getAccountsForUser($USER2_ID);
 	if ($debug) var_dump($USER2_data);
 
 	return (sizeof($USER1_data) == 1) && (sizeof($USER2_data) == 2);
 }
 
 function addTestTANs() {
+
+	global $db;
 
 	//function insertTAN($tan, $account_id) {
 
@@ -383,11 +401,11 @@ function addTestTANs() {
 	global $USER2_TESTTAN;
 	global $USER2_TESTTAN2;
 
-	$data = getAccountsForUser($USER1_ID);
+	$data = $db->getAccountsForUser($USER1_ID);
 
 	$USER1_ACCOUNTID = $data[0]['id'];
 
-	$result = insertTAN($USER1_TESTTAN, $USER1_ACCOUNTID);
+	$result = $db->insertTAN($USER1_TESTTAN, $USER1_ACCOUNTID);
 
 	if ($result != false) {
 		if ($debug) print "Inserted TAN $USER1_TESTTAN for account $USER1_ACCOUNTID<br>";
@@ -396,11 +414,11 @@ function addTestTANs() {
 	}
 
 
-    $data = getAccountsForUser($USER2_ID);
+    $data = $db->getAccountsForUser($USER2_ID);
 
     $USER2_ACCOUNTID = $data[0]['id'];
 
-    $result = insertTAN($USER2_TESTTAN, $USER2_ACCOUNTID);
+    $result = $db->insertTAN($USER2_TESTTAN, $USER2_ACCOUNTID);
 
     if ($result != false) {
         if ($debug) print "Inserted TAN $USER2_TESTTAN for account $USER2_ACCOUNTID<br>";
@@ -408,11 +426,11 @@ function addTestTANs() {
         print "Could not insert TAN $USER2_TESTTAN for account $USER2_ACCOUNTID!<br>";
     }
 
-    $data = getAccountsForUser($USER2_ID);
+    $data = $db->getAccountsForUser($USER2_ID);
 
     $USER2_ACCOUNTID = $data[0]['id'];
 
-    $result = insertTAN($USER2_TESTTAN2, $USER2_ACCOUNTID);
+    $result = $db->insertTAN($USER2_TESTTAN2, $USER2_ACCOUNTID);
 
     if ($result != false) {
         if ($debug) print "Inserted TAN $USER2_TESTTAN2 for account $USER2_ACCOUNTID<br>";
@@ -422,6 +440,8 @@ function addTestTANs() {
 }
 
 function checkForTestTANs() {
+
+	global $db;
 
 	global $USER1_ACCOUNTID;
 	global $USER1_TESTTAN;
@@ -439,11 +459,13 @@ function checkForTestTANs() {
 
 function checkTAN($accountid, $tan) {
 
+	global $db;
+
 	//function verifyTANCode($account_id,$tan_code)
 
 	global $debug;
 
-	if (verifyTANCode($accountid, $tan)) {
+	if ($db->verifyTANCode($accountid, $tan)) {
 		if ($debug) print "Successfully verified TAN $tan for Account $accountid<br>";
 		return true;
 	} else {
@@ -456,7 +478,9 @@ function checkTAN($accountid, $tan) {
 // currently unused
 function testTransaction($source_account, $destination_account, $amount, $description, $tan, $expected_outcome) {
 
-	if (processTransaction($source_account, $destination_account, $amount, $description, $tan) == $expected_outcome) {
+	global $db;
+
+	if ($db->processTransaction($source_account, $destination_account, $amount, $description, $tan) == $expected_outcome) {
 		return true;
 	} else {
 		return false;
@@ -464,6 +488,8 @@ function testTransaction($source_account, $destination_account, $amount, $descri
 }
 
 function addTestTransactions() {
+
+	global $db;
 
 	//function processTransaction($src, $dest, $amount, $desc, $tan)
 
@@ -476,14 +502,14 @@ function addTestTransactions() {
 	global $USER2_TESTTAN2;
 	global $TESTPREFIX;
 
-	$SRCACCOUNT = getAccountsForUser($USER1_ID);
+	$SRCACCOUNT = $db->getAccountsForUser($USER1_ID);
 	$SRCACC = $SRCACCOUNT[0]['id'];
 
-	$DSTACCOUNT = getAccountsForUser($USER2_ID);
+	$DSTACCOUNT = $db->getAccountsForUser($USER2_ID);
 	$DSTACC = $DSTACCOUNT[0]['id'];
 
 	$DESC   = $TESTPREFIX . '_DESC' . 1;
-	$result = processTransaction($SRCACC, $DSTACC, 1000, $DESC, $USER1_TESTTAN);
+	$result = $db->processTransaction($SRCACC, $DSTACC, 1000, $DESC, $USER1_TESTTAN);
 
 	if ($result != false) {
 		if ($debug) print "Added transaction NR $result (DESC: $DESC)<br>";
@@ -497,7 +523,7 @@ function addTestTransactions() {
 	$DSTACC = $TEMP;
 
 //	$DESC   = $TESTPREFIX . '_DESC' . 2;
-//	$result = processTransaction($SRCACC, $DSTACC, 5000, $DESC, $USER2_TESTTAN);
+//	$result = $db->processTransaction($SRCACC, $DSTACC, 5000, $DESC, $USER2_TESTTAN);
 //
 //    if ($result != false) {
 //		if ($debug) print "Added transaction NR $result (DESC: $DESC)<br>";
@@ -507,7 +533,7 @@ function addTestTransactions() {
 //    }
 //
 //	$DESC   = $TESTPREFIX . '_DESC' . 3;
-//	$result = processTransaction($SRCACC, '123', 10000, $DESC, $USER2_TESTTAN2);
+//	$result = $db->processTransaction($SRCACC, '123', 10000, $DESC, $USER2_TESTTAN2);
 //
 //    if ($result == false) {
 //		if ($debug) print "Transaction DESC: $DESC with duplicate TAN successfully denied!<br>";
@@ -517,7 +543,7 @@ function addTestTransactions() {
 //    }
 //
 //	$DESC   = $TESTPREFIX . '_DESC' . 4;
-//	$result = processTransaction($SRCACC, $DSTACC, 20000, $DESC, $USER2_TESTTAN2);
+//	$result = $db->processTransaction($SRCACC, $DSTACC, 20000, $DESC, $USER2_TESTTAN2);
 //
 //    if ($result != false) {
 //		if ($debug) print "Transaction DESC: $DESC successfully added<br>";
@@ -526,7 +552,7 @@ function addTestTransactions() {
 //		return false;
 //	}
 
-	$result = processTransaction($SRCACC, $DSTACC, 12000, $DESC, $USER2_TESTTAN2);
+	$result = $db->processTransaction($SRCACC, $DSTACC, 12000, $DESC, $USER2_TESTTAN2);
 
     if ($result != false) {
 		print "Added transaction NR $result (DESC: $DESC SRC: $SRCACC DST: $DSTACC AMT: 5000).<br>";
@@ -538,6 +564,8 @@ function addTestTransactions() {
 
 function checkForTestTransactions() {
 
+	global $db;
+
 	global $debug;
 
 	global $USER1_ACCOUNTID;
@@ -545,10 +573,10 @@ function checkForTestTransactions() {
 
 	//function getAccountTransactions($account_ID, $filter ='ALL')
 
-	$trans1 = getAccountTransactions($USER1_ACCOUNTID);
-	$trans2 = getAccountTransactions($USER2_ACCOUNTID);
-	$trans3 = getAccountTransactions($USER2_ACCOUNTID, 'TO');
-	$trans4 = getAccountTransactions($USER2_ACCOUNTID, 'FROM');
+	$trans1 = $db->getAccountTransactions($USER1_ACCOUNTID);
+	$trans2 = $db->getAccountTransactions($USER2_ACCOUNTID);
+	$trans3 = $db->getAccountTransactions($USER2_ACCOUNTID, 'TO');
+	$trans4 = $db->getAccountTransactions($USER2_ACCOUNTID, 'FROM');
 
 	if ($debug) {
 		print "<br><br>TRANS1";
@@ -567,11 +595,11 @@ function checkForTestTransactions() {
 	if (sizeof($trans3) != 2) return false;
 	if (sizeof($trans4) != 2) return false;
 
-	$pend1 = getPendingTransactions();
+	$pend1 = $db->getPendingTransactions();
 
 	if (sizeof($pend1) != 1) return false;
 
-	$mytrans = getTransaction($pend1[0]['id']);
+	$mytrans = $db->getTransaction($pend1[0]['id']);
 	if (!isset($mytrans['id'])) return false;
 
 	return true;
@@ -579,21 +607,25 @@ function checkForTestTransactions() {
 
 function checkOverviewFunctions() {
 
-	if (getNumberOfUsers() == 0) return false;
-	if (getNumberOfAccounts() == 0) return false;
-	if (getNumberOfTransactions() == 0) return false;
-	if (getTotalAmountOfMoney() == 0) return false;
+	global $db;
+
+	if ($db->getNumberOfUsers() == 0) return false;
+	if ($db->getNumberOfAccounts() == 0) return false;
+	if ($db->getNumberOfTransactions() == 0) return false;
+	if ($db->getTotalAmountOfMoney() == 0) return false;
 
 	return true;
 }
 
 function approveTransactions() {
 
+	global $db;
+
 	//function approvePendingTransaction($approver,$transaction_id)
 
 	global $USER1_ID;
 
-	$transactions = getPendingTransactions();
+	$transactions = $db->getPendingTransactions();
 
 	$transaction1 = $transactions[0];
 	$transaction_id1 = $transaction1['id'];
@@ -601,45 +633,53 @@ function approveTransactions() {
 	$transaction2 = $transactions[1];
 	$transaction_id2 = $transaction2['id'];
 	
-//	if (! approvePendingTransaction($USER1_ID, $transaction_id1)) {return false;};
-	//TODO: if (! approvePendingTransaction($USER1_ID, $transaction_id2)) {return false;};
+//	if (! $db->approvePendingTransaction($USER1_ID, $transaction_id1)) {return false;};
+	//TODO: if (! $db->approvePendingTransaction($USER1_ID, $transaction_id2)) {return false;};
 
-	$transactions2 = getPendingTransactions();
+	$transactions2 = $db->getPendingTransactions();
 
 	return true;
 }
 
 function removeTestUsers() {
 
+	global $db;
+
 	global $TESTPREFIX;
 
-	executeSetStatement('DELETE FROM user WHERE first_name LIKE "%' . $TESTPREFIX . '%"');
+	$db->executeSetStatement('DELETE FROM user WHERE first_name LIKE "%' . $TESTPREFIX . '%"');
 }
 
 function removeTestAccounts() {
 
+	global $db;
+
 	global $TESTPREFIX;
 
-	executeSetStatement('DELETE FROM account WHERE user_id IN (
+	$db->executeSetStatement('DELETE FROM account WHERE user_id IN (
 						 SELECT id FROM user WHERE first_name LIKE "%' . $TESTPREFIX . '%")');
 }
 
 function removeTestTANs() {
 
-	executeSetStatement('DELETE FROM tan WHERE account_id IN (
+	global $db;
+
+	$db->executeSetStatement('DELETE FROM tan WHERE account_id IN (
 						 SELECT ACC.id FROM account AS ACC JOIN user AS U ON ACC.user_id = U.id
 							WHERE U.first_name LIKE "%MYMAGICSTRING%");');
 }
 
 function removeTestTransactions() {
 
+	global $db;
+
 	global $TESTPREFIX;
 
-	executeSetStatement('DELETE FROM transaction WHERE destination_account_id IN (
+	$db->executeSetStatement('DELETE FROM transaction WHERE destination_account_id IN (
 							SELECT id FROM account WHERE user_id IN (
 								SELECT id FROM user WHERE first_name LIKE "%' . $TESTPREFIX . '%"))');
 
-	executeSetStatement('DELETE FROM transaction WHERE source_account_id IN (
+	$db->executeSetStatement('DELETE FROM transaction WHERE source_account_id IN (
 							SELECT id FROM account WHERE user_id IN (
 								SELECT id FROM user WHERE first_name LIKE "%' . $TESTPREFIX . '%"))');
 }

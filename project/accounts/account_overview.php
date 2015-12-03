@@ -20,7 +20,7 @@ if (empty($_SESSION["user_id"]))
 	die("User missing");
 if (empty($_SESSION["account_id"])) {
 
-	//$all_accounts = getAccountsForUser($_SESSION["user_id"]);
+	//$all_accounts = DB::i()->getAccountsForUser($_SESSION["user_id"]);
 
 	//drawMultipleRecordTable($all_accounts, 'Accounts');
 	return;
@@ -28,14 +28,14 @@ if (empty($_SESSION["account_id"])) {
 
 $account_id = $_SESSION["account_id"];
 
-$account_holder_info = getAccountOwnerFromID($account_id);
+$account_holder_info = DB::i()->getAccountOwnerFromID($account_id);
 drawSingleRecordTable($account_holder_info,'Account Holder');
 
 echo '<br>';
 
 
 
-$account_info = getAccountDetails($account_id);
+$account_info = DB::i()->getAccountDetails($account_id);
 $account_header	= array(
 	'id'			=> 'ID :',
 	'balance'		=> 'Balance :',

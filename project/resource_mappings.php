@@ -36,6 +36,7 @@ $pages["gnb_style"] = "style/gnb.css";
 
 $pages["drawfunctions"] = "drawfunctions.php";
 $pages["fpdf"] = "lib/fpdf/fpdf.php";
+$pages["fpdf_protection"] = "lib/fpdf/fpdf_protection.php";
 $pages["phpmailer"] = "lib/phpmailer/PHPMailerAutoload.php";
 $pages["ctransact"] = "lib/ctransact/ctransact";
 $pages["uploads"] = "uploads/";

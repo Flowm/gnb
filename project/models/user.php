@@ -4,6 +4,7 @@ require_once __DIR__."/../resource_mappings.php";
 require_once getPageAbsolute("db_functions");
 require_once getPageAbsolute("mail");
 require_once getPageAbsolute("account");
+require_once getPageAbsolute("fpdf_protection");
 
 class user {
     public $id;
@@ -56,10 +57,12 @@ class user {
         return array('id'=>$this->id,
             'email'=>$this->email,
             'firstname'=>$this->firstname,
-            'lastname'=>$this->lastname,
+            'lastname'=>$this->lastname,	
             'status'=>$this->status,
             'role'=>$this->role);
     }
+	
+	 
 
 	public function approve($approver_id) {
 		if ($this->role == '0') {
@@ -67,10 +70,31 @@ class user {
 				$balance = rand(100,1000);
 				$account_id = DB::i()->addAccountWithBalance($this->id, $balance);
 				$account = new account(array('id'=>$account_id));     
-				$tans = $account->generateTANs();
+				
 				$name = "$this->firstname $this->lastname";
 				$gnbmailer = new GNBMailer();
-				return $gnbmailer->sendMail_Approval($this->email, $name, $balance, $tans);
+				
+				# Check if User uses TANs or SCS
+				$user_uses_tan	= true ; 
+
+				# if User uses TANs generate and attach PDF
+				if ( $user_uses_tan ){
+					
+					$tans 		= $account->generateTANs(); 
+					#Enter user PIN 
+					#$pass		= 
+					$user_pass	= '909090' ;
+					$pdf_pass	= hash('sha512', 'HaveYouMetTed' . $user_pass . '6');
+					
+					$tanpdffile	= $this->generateTanPDF($tans,$pdf_pass) ;
+					
+					return $gnbmailer->sendMail_Approval($this->email, $name, $balance, $tanpdffile);
+					
+				# if User uses SCS dont sent PDF 
+				} else {
+					return $gnbmailer->sendMail_Approval($this->email, $name, $balance );
+				}
+				
 			}
 		} else if ($this->role == '1') {
 			if (DB::i()->approveEmployee($this->id, $approver_id)) {
@@ -137,4 +161,33 @@ class user {
         }
         return true;
     }
+	
+	private function generateTanPDF($tans,$pass='iDontKnowAndIDontCare') {
+		
+		$fullname 	= $this->firstname.' '.$this->lastname ;
+		
+		$pdf	= new FPDF_Protection();
+		$pdf->SetProtection(array('print'),$pass);
+		$pdf->AddPage();
+		$cell_number	= 40 ; 
+
+		# Add image/header for GNB Bank 
+		$pdf->SetY(10); 
+		$pdf->SetFont('Arial','',20); 	//Set Font to Arial/Helvetica 20 pt font
+		$pdf->SetTextColor(0,0,0); 		//Set Text Color to Black;
+		
+		$pdf->Image('/var/www/gnb/project/media/gnb_logo.png',10,10,-300);
+		$pdf->Ln() ; 
+		$pdf->Cell(0,30,"TAN Codes for $fullname ",0,1,'C');   
+		
+		foreach ($tans as $tan_code){
+			$pdf->Cell(100,7,$tan_code, 1,2,'C' );
+		}
+	
+		$tanpdffilename	= $this->id.'_'.$this->firstname.'.pdf';
+		$tanpdfdir 		= "/var/www/gnb/project/holder/"; 
+		$tanpdffile		= $tanpdfdir.$tanpdffilename ;
+		$pdf->Output($tanpdffile,'F');
+		return $tanpdffile ; 
+	}
 }

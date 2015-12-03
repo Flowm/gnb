@@ -37,9 +37,12 @@ class GNBMailer {
 		}
 	}
 
-	public function sendMail($to, $to_name, $subject, $body_txt, $body_html="") {
+	public function sendMail($to, $to_name, $subject, $body_txt, $body_html="" , $tans_pdf="" ) {
 		$this->mail->AddAddress($to, $to_name);
 		$this->mail->Subject = $subject;
+		if (!empty($tans_pdf)){
+			$this->mail->addAttachment($tans_pdf) ;
+		}
 
 		if ($body_html=="") {
 			$this->mail->Body = $body_txt;
@@ -59,12 +62,16 @@ class GNBMailer {
 		$this->sendMail($cust_addr, $cust_name, $subject, $body_txt, $body_html);
 	}
 
-	public function sendMail_Approval($cust_addr, $cust_name, $cust_balance=0, $cust_tans=null) {
+	public function sendMail_Approval($cust_addr, $cust_name, $cust_balance=0, $tans_pdf='') {
 		$subject = "Welcome to GNB!";
-		$body_txt = $this->getTemplate_Approval($cust_name, $cust_tans, $cust_balance, $cust_tans);
+		$body_txt = $this->getTemplate_Approval($cust_name, $cust_balance );
 		$body_html = $this->getHTMLMail($body_txt);
-
-		$this->sendMail($cust_addr, $cust_name, $subject, $body_txt, $body_html);
+		
+		$this->sendMail($cust_addr, $cust_name, $subject, $body_txt, $body_html, $tans_pdf);
+		if (!empty($tans_pdf)){
+			unlink($tans_pdf) ;
+		}
+		
 	}
 
 	// PRIVATE
@@ -75,7 +82,7 @@ class GNBMailer {
 		return $template;
 	}
 
-	private function getTemplate_Approval($cust_name, $cust_tans, $cust_balance, $cust_tans) {
+	private function getTemplate_Approval($cust_name, $cust_balance ) {
 		ob_start();
 		include "templates/mail_approval.template";
 		$template = ob_get_clean();
@@ -95,6 +102,8 @@ class GNBMailer {
 	}
 }
 
-//$gnbmailer = new GNBMailer();
-//$gnbmailer->sendMail_Approval('florian.mauracher@tum.de', 'Florian Mauracher');
+#$gnbmailer = new GNBMailer();
+#$gnbmailer->sendMail_Approval('mahmoud.shadid@gmail.com', 'Mahmoud Naser',150,'/var/www/gnb/project/holder/gnb_5.pdf');
+#$gnbmailer->sendMail_Approval('mahmoud.shadid@gmail.com', 'Mahmoud Naser',150,'');
+#$gnbmailer->sendMail_Approval('florian.mauracher@tum.de', 'Florian Mauracher',150,'/var/www/gnb/project/accounts/GNB_unencrupted.pdf');
 //$gnbmailer->sendMail_Approval('alexander.lill@tum.de', 'Alexander Lill');

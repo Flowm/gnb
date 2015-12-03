@@ -8,15 +8,11 @@ We are pleased to announce, that your registration to GNB was approved and an ac
 
 <?php if (!empty($cust_tans)): ?>
 
-Below you'll find 100 TANs for your Bank account:
-<div id=tans><?php
-	foreach ($cust_tans as $tan) {
-		echo "$tan\n";
-	}
-?>
-</div>
-<?php endif; ?>
+Attached to this email is a password protected PDF file that contains 100 TAN codes, please store in a safe location.
 
+The password to open the TAN PDF is available on your account page.
+
+<?php endif; ?>
 
 Sincerley Barney Stinson
 CEO of GNB

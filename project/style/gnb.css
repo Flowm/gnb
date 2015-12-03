@@ -666,3 +666,10 @@ img.index_img {
     font-size: 18px;
     line-height: 20px;
 }
+
+.success {
+    color: #000080;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+}

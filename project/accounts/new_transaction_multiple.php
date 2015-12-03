@@ -19,29 +19,20 @@ if (empty($_SESSION["account_id"]))
 $account_id = $_SESSION["account_id"];
 if (isset($_FILES['transactionsCSV'])) {
 	$file = $_FILES['transactionsCSV'];
-	$name = $file['name'];
-
-	$file_arr = explode('.',$name);
-	$file_ext = strtolower(array_pop($file_arr));
-	$allowed_ext = array("txt","TXT","csv","CSV");
-	if (in_array($file_ext, $allowed_ext)) {
-		$target_file = getPageAbsolute("uploads") . basename($file["name"]);
-		$ctransact = getPageAbsolute("ctransact");
-		if (move_uploaded_file($file['tmp_name'], $target_file)) {
-			echo "<div id='success'>Fileupload successful!<br />";
-			$cmdln = "$ctransact '$account_id' '$target_file'";
-			exec($cmdln, $cmdout);
-			foreach ($cmdout as $line) {
-				echo $line . "<br/>";
-			}
-			echo "</div>";
-		} else {
-			echo "<div id='fail'>Fileupload failed!</div>";
+	$name = session_id();
+	$target_file = getPageAbsolute("uploads") . $name;
+	$ctransact = getPageAbsolute("ctransact");
+	if (move_uploaded_file($file['tmp_name'], $target_file)) {
+		echo "<div class='success'>Fileupload successful! Starting batch processing...<br />";
+		$cmdln = "$ctransact '$account_id' '$target_file'";
+		exec($cmdln, $cmdout);
+		unlink($target_file);
+		foreach ($cmdout as $line) {
+			echo $line . "<br />";
 		}
+		echo "</div><br />";
 	} else {
-		// Checking by file extention is just to prevent user errors, it offers 
-		// no real security benefit
-		echo "<div id='fail'>Only CSV or TXT documents allowed!</div>";
+		echo "<div class='error'>Fileupload failed!</div><br />";
 	}
 }
 

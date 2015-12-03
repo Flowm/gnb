@@ -65,7 +65,7 @@ final class DB {
 	public $ACCOUNTOVERVIEW_TABLE_USER_ID	= "user_id";
 	public $ACCOUNTOVERVIEW_TABLE_BALANCE	= "balance";
 
-	private $FAKE_APPROVER_USER_ID = 1;
+	public $FAKE_APPROVER_USER_ID = 1;
 	private $MAGIC = 'SUITUP';
 	private $WELCOMECREDIT_DESCRIPTION = 'GNB Welcome Credit';
 
@@ -685,7 +685,7 @@ final class DB {
 		}
 	}
 
-	function setTANused($account_id, $tan) {
+	function checkTanAndSetUsed($account_id, $tan) {
 
 		$SQL = "UPDATE
 					$this->TAN_TABLE_NAME
@@ -847,7 +847,14 @@ final class DB {
 			return false;
 		}
 
-		if ($this->setTANused($source, $tan) == false) {
+		$dst_account_details = $this->getAccountDetails($destination);
+
+		if ($dst_account_details == false) {
+			$this->pdo->rollBack();
+			return false;
+		}
+
+		if ($this->checkTanAndSetUsed($source, $tan) == false) {
 			$this->pdo->rollBack();
 			return false;
 		}

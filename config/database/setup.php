@@ -7,10 +7,6 @@ main();
 
 function main() {
 
-	//executeSetStatement("DROP DATABASE gnbdb ;");
-	//executeSetStatement("source " . __DIR__ . "/gnbdb_create.sql ;");
-
-
 	//function addEmployee($first_name, $last_name, $email, $password)
 	$barney = DB::i()->addEmployee("Barney", "Stinson", "barney.stinson@gnb.com", "ThisIsGonnaBeLegendarySoSuitUp");
 	$ted = DB::i()->addEmployee("Ted", "Mosby", "ted.mosby@gnb.com", "WhoSaysThat");
@@ -23,9 +19,16 @@ function main() {
 
 	print "ROBIN: $robin<br>";
 
+	$status = DB::i()->mapUserStatus('approved');
+	$approver = DB::i()->FAKE_APPROVER_USER_ID;
+	DB::i()->executeSetStatement("UPDATE " . DB::i()->USER_TABLE_NAME . "
+									SET
+										" . DB::i()->USER_TABLE_APPROVER . "= '$status',
+										" . DB::i()->USER_TABLE_STATUS . "= '$approver'
+									WHERE
+										" . DB::i()->USER_TABLE_KEY . "= '$approver'");
 
 	//function approveEmployee($employee_id, $approver_id)
-	DB::i()->approveEmployee($barney, $barney);
 	DB::i()->approveEmployee($ted, $barney);
 
 	//function addAccountWithBalance($user_id, $balance)

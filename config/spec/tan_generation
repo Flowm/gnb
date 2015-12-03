@@ -4,7 +4,7 @@ Client:
 - Derive SALT from current time
 	- SALTMAX = 62^5
 	- SALT = encode_b62((TIME_NOW - TIME_2015-01-01) % SALTMAX)
-	- BASH: echo "obase=64; $(( (`date "+%s"` - `date -d "2015-01-01" "+%s"`) ))" | bc
+	- BASH: echo "obase=62; $(( (`date "+%s"` - `date -d "2015-01-01" "+%s"`) ))" | bc
 	- EXAMPLE: encode_b62((1449069990 - 1447196400) % 916132832)
 
 - Compute HASH and TAN

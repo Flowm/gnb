@@ -60,19 +60,24 @@ function bla()
 	echo "getNumberOfTransactions" . $db->getNumberOfTransactions() . "<br/>";
 	echo "getTotalAmountOfMoney" . $db->getTotalAmountOfMoney() . "<br/>";
 
-	$result = $db->insertTAN("AAAAAAAAAAAAAAB", 10000002);
+	$result = $db->insertTAN("AAAAAAAAAAAAAAE", 10000001);
 
-
-	$account_id = DB::i()->addAccountWithBalance(3, 555);
+	/*
+	$account_id = 10000001; //DB::i()->addAccountWithBalance(3, 555);
 	$account = new account(array('id'=>$account_id));
 	var_dump($account);
 
 	$tans = $account->generateTANs();
 
 	var_dump($tans);
+	*/
 
 	$result = $db->getAccountDetails(10000002);
 	$result = $db->getAccountOwnerFromID(10000002);
+
+	$result = $db->processTransaction(10000001, 10000002, 0.01, "bla", "AAAAAAAAAAAAAAC");
+
+	$result = $db->checkTanAndSetUsed(10000001, "AAAAAAAAAAAAAAD");
 
 	var_dump($result);
 }

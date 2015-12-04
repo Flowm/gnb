@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include <mysql.h>
 
@@ -27,7 +28,7 @@
 
 #define MAX_QUERY_LEN 1024
 #define MAX_TRANS_LEN 512
-#define MAX_TRANS_FIELDS 4
+#define MAX_TRANS_FIELDS 3
 #define MAX_TINFO_LEN 32
 
 struct transactstr {
@@ -46,8 +47,8 @@ struct transaction {
 	char ap_byid[MAX_TINFO_LEN];
 };
 
-int parse_csv(char*, FILE*);
-int process_transaction(char*, struct transactstr);
+int parse_csv(char*, char*, FILE*);
+int process_transaction(char*, char*, struct transactstr);
 
 static MYSQL* con;
 int gnb_mysql_do_transaction(struct transaction);

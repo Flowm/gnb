@@ -7,26 +7,30 @@ int main(int argc, char* argv[]) {
 	FILE* file;
 	int ret;
 
-	if (argc!=3)
+	if (argc!=4) {
+		printf("Missing transaction arguments\n");
 		return 1;
-
-	if (!(file = fopen(argv[2], "r")))
-		return 2;
-
-	if (gnb_mysql_init())
-		return 3;
+	}
 
 	char* src_acc = argv[1];
-	ret = parse_csv(src_acc, file);
-	fclose(file);
+	char* tan = argv[2];
+	if (!(file = fopen(argv[3], "r"))) {
+		printf("Error opening transaction file\n");
+		return 2;
+	}
 
-	//TODO: Delete file after processing?
-	//remove(file);
+	if (gnb_mysql_init()) {
+		printf("Error establishing database connection\n");
+		return 3;
+	}
+
+	ret = parse_csv(src_acc, tan, file);
+	fclose(file);
 
 	return ret;
 }
 
-int parse_csv(char* src_acc, FILE* fh) {
+int parse_csv(char* src_acc, char* tan, FILE* fh) {
 	int c;
 	int eof = 0;
 	int invalid = 0;
@@ -43,12 +47,12 @@ int parse_csv(char* src_acc, FILE* fh) {
 		if (c == '\r')
 			continue;
 		if (c == '\n' || eof) {
-			if (field != 4)
+			if (field != MAX_TRANS_FIELDS)
 				invalid = E_TRANS_FIELDSMIN;
 
 			if (!invalid) {
 				trans.buffer[pos++] = '\0';
-				process_transaction(src_acc, trans);
+				process_transaction(src_acc, tan, trans);
 			} else if (eof && field < 2) {
 				continue;
 			} else {
@@ -82,18 +86,23 @@ int parse_csv(char* src_acc, FILE* fh) {
 	return 0;
 }
 
-int process_transaction(char* src, struct transactstr transtr) {
+int process_transaction(char* src, char* tan, struct transactstr transtr) {
 	struct transaction t;
 	int ret;
 
-	t.src    = src;
-	t.dst    = &transtr.buffer[transtr.offset[0]];
-	t.sum    = &transtr.buffer[transtr.offset[1]];
-	t.desc   = &transtr.buffer[transtr.offset[2]];
-	t.tan    = &transtr.buffer[transtr.offset[3]];
+	t.src   = src;
+	t.dst   = &transtr.buffer[transtr.offset[0]];
+	t.sum   = &transtr.buffer[transtr.offset[1]];
+	t.desc  = &transtr.buffer[transtr.offset[2]];
+	t.tan   = tan;
 	t.ap_ok = 0;
 	printf("Processing: DST=%s, AMOUNT=%s, DESC=%s, TAN=%s\n", t.dst, t.sum, t.desc, t.tan);
 
+	// Check transaction
+	if (!strncmp(t.src, t.dst, 8)) {
+		printf("\t--> SRC and DST can not be the same\n");
+		return 1;
+	}
 	// Check numerical fields for validity
 	if (parse_number(t.src, 0) < 10000000) {
 		printf("\t--> SRC account invalid\n");
@@ -103,7 +112,8 @@ int process_transaction(char* src, struct transactstr transtr) {
 		printf("\t--> DST account invalid\n");
 		return 1;
 	}
-	long long sum = (parse_number(t.sum, 1));
+	long long sum = parse_number(t.sum, 1);
+	TDBG printf("SUM: %lli\n", sum);
 	if (sum < 0) {
 		printf("\t--> Amount invalid\n");
 		return 1;
@@ -162,9 +172,11 @@ int gnb_mysql_do_transaction(struct transaction t) {
 	// Mark TAN as used
 	snprintf(query, MAX_QUERY_LEN, "UPDATE gnbdb.tan "
 			"SET used_timestamp = '%s' "
-			"WHERE id = '%s' AND "
-				"account_id ='%s' AND "
-				"used_timestamp IS NULL", t.time, t.tan, t.src);
+			"WHERE id = '%s' "
+				"AND account_id = '%s' "
+				"AND ( used_timestamp IS NULL "
+					"OR used_timestamp = '%s' )",
+			t.time, t.tan, t.src, t.time);
 	MDBG printf("QUERY: %s\n", query);
 	if (gnb_mysql_do_query(query, &result, &numrows)) {
 		goto rollback;
@@ -269,7 +281,7 @@ int gnb_mysql_init() {
 
 long long parse_number(char* c, int decimal) {
 	//Check numerical field for validity
-	int num = 0;
+	long long num = 0;
 
 	while (*c) {
 		if (*c == '.') {

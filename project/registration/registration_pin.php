@@ -12,13 +12,6 @@ if (!isset($_SESSION['pin'])) {
     header("Location".getPageURL('home'));
 }*/
 
-//TODO: REMOVE THIS PART
-$pin = mt_rand(0,9);
-for ($i = 0; $i < 6; $i++) {
-    $pin .= mt_rand(0,9);
-}
-
-
 unset($_SESSION['banking']);
 unset($_SESSION['pin']);
 
@@ -37,7 +30,7 @@ unset($_SESSION['pin']);
     You also won't get a chance to display this PIN again, so be sure to copy it right now and save it.
 </p>
 <hr class="hr-thin">
-<h1 class="title2">Here is your PIN: <?= $pin?></h1>
+<h1 class="title2">Here is your PIN: <?= $random_pin?></h1>
 <p class="simple-text-big simple-text-centered">
     Remember to copy and save this PIN for future use, as it will never be displayed again!
 </p>

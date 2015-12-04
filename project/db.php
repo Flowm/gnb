@@ -28,16 +28,20 @@ final class DB {
 	private $DB_PASSWORD		= "6JEn7RhLAGaavQTx";
 	private $DB_NAME			= "gnbdb";
 
-	public $USER_TABLE_NAME		= "gnbdb.user";
-	public $USER_TABLE_KEY		= "id";
-	public $USER_TABLE_ROLE		= "role";
-	public $USER_TABLE_STATUS	= "status";
-	public $USER_TABLE_APPROVER	= "approved_by_user_id";
-	public $USER_TABLE_FIRSTNAME= "first_name";
-	public $USER_TABLE_LASTNAME	= "last_name";
-	public $USER_TABLE_EMAIL	= "email";
-	public $USER_TABLE_SALT		= "pw_salt";
-	public $USER_TABLE_HASH		= "pw_hash";
+	public $USER_TABLE_NAME			= "gnbdb.user";
+	public $USER_TABLE_KEY			= "id";
+	public $USER_TABLE_ROLE			= "role";
+	public $USER_TABLE_STATUS		= "status";
+	public $USER_TABLE_APPROVER		= "approved_by_user_id";
+	public $USER_TABLE_FIRSTNAME	= "first_name";
+	public $USER_TABLE_LASTNAME		= "last_name";
+	public $USER_TABLE_EMAIL		= "email";
+	public $USER_TABLE_SALT			= "pw_salt";
+	public $USER_TABLE_HASH			= "pw_hash";
+	public $USER_TABLE_AUTHDEV		= "auth_device";
+	public $USER_TABLE_PIN			= "pin";
+	public $USER_TABLE_PW_RESET		= "pw_reset_hash";
+	public $USER_TABLE_PW_RESET_TS	= "pw_reset_hash_timestamp";
 
 	public $TAN_TABLE_NAME			= "gnbdb.tan";
 	public $TAN_TABLE_KEY			= "id";
@@ -59,11 +63,13 @@ final class DB {
 	public $ACCOUNT_TABLE_NAME		= "gnbdb.account";
 	public $ACCOUNT_TABLE_KEY		= "id";
 	public $ACCOUNT_TABLE_USER_ID	= "user_id";
+	public $ACCOUNT_TABLE_TAN_TIME	= "last_tan_time";
 
 	public $ACCOUNTOVERVIEW_TABLE_NAME		= "gnbdb.account_overview";
 	public $ACCOUNTOVERVIEW_TABLE_KEY		= "id";
 	public $ACCOUNTOVERVIEW_TABLE_USER_ID	= "user_id";
 	public $ACCOUNTOVERVIEW_TABLE_BALANCE	= "balance";
+	public $ACCOUNTOVERVIEW_TABLE_TAN_TIME	= "last_tan_time";
 
 	public $FAKE_APPROVER_USER_ID = 1;
 	private $MAGIC = 'SUITUP';
@@ -142,10 +148,24 @@ final class DB {
 			'rejected'		=> 2,
 			0				=> 'unapproved',
 			1				=> 'approved',
-			2				=> 'rejected'
+			2				=> 'rejected',
 		);
 
 		return $TRANSACTION_STATUS[$key];
+	}
+
+	function mapAuthenticationDevice($key)
+	{
+		$AUTHENTICATION_DEVICE = array(
+			'none'			=> 0,
+			'TANs'			=> 1,
+			'SCS'			=> 2,
+			0				=> 'none',
+			1				=> 'TANs',
+			2				=> 'SCS',
+		);
+
+		return $AUTHENTICATION_DEVICE[$key];
 	}
 
 	/************************************************
@@ -252,9 +272,17 @@ final class DB {
 	 * USER FUNCTIONS
 	 ************************************************/
 
-	function addUser($first_name, $last_name, $email, $password, $role_filter)
+	function addUser(
+		$first_name,
+		$last_name,
+		$email,
+		$password,
+		$role_filter,
+		$pin,
+		$authentication_device='none')
 	{
 	    $role = $this->mapUserRole($role_filter);
+	    $auth_device = $this->mapAuthenticationDevice($authentication_device);
 
 		$salt = $this->genRandString(8);
 		$password_hash = $this->getPasswordHash($password, $salt);
@@ -266,7 +294,9 @@ final class DB {
 					$this->USER_TABLE_EMAIL,
 					$this->USER_TABLE_ROLE,
 					$this->USER_TABLE_SALT,
-					$this->USER_TABLE_HASH
+					$this->USER_TABLE_HASH,
+					$this->USER_TABLE_AUTHDEV,
+					$this->USER_TABLE_PIN
 				)
 				VALUES
 				(
@@ -275,7 +305,9 @@ final class DB {
 					:email,
 					:role,
 					:salt,
-					:password_hash
+					:password_hash,
+					:auth_device,
+					:pin
 				)";
 
 		$stmt = $this->pdo->prepare($SQL);
@@ -285,6 +317,8 @@ final class DB {
 		$stmt->bindValue(':role', $role, PDO::PARAM_INT);
 		$stmt->bindValue(':salt', $salt, PDO::PARAM_STR);
 		$stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
+		$stmt->bindValue(':auth_device', $auth_device, PDO::PARAM_INT);
+		$stmt->bindValue(':pin', $pin, PDO::PARAM_STR);
 		$stmt->execute();
 
 		$result = $this->pdo->lastInsertId();
@@ -296,14 +330,14 @@ final class DB {
 		}
 	}
 
-	function addClient($first_name, $last_name, $email, $password)
+	function addClient($first_name, $last_name, $email, $password, $pin, $auth_device)
 	{
-		return $this->addUser($first_name, $last_name, $email, $password, 'client');
+		return $this->addUser($first_name, $last_name, $email, $password, 'client', $pin, $auth_device);
 	}
 
-	function addEmployee($first_name, $last_name, $email, $password)
+	function addEmployee($first_name, $last_name, $email, $password, $pin)
 	{
-		return $this->addUser($first_name, $last_name, $email, $password, 'employee');
+		return $this->addUser($first_name, $last_name, $email, $password, 'employee', $pin);
 	}
 
 	function getUser($user_ID, $role_filter = "")
@@ -322,10 +356,13 @@ final class DB {
 					$this->USER_TABLE_STATUS,
 					$this->USER_TABLE_ROLE,
 					$this->USER_TABLE_APPROVER
+					$this->USER_TABLE_AUTHDEV,
+					$this->USER_TABLE_PIN
 				FROM $this->USER_TABLE_NAME
 				WHERE
 					$this->USER_TABLE_KEY = :user_ID
-					$where";
+					$where
+				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':user_ID', $user_ID, PDO::PARAM_INT);
@@ -371,6 +408,8 @@ final class DB {
 					$this->USER_TABLE_STATUS,
 					$this->USER_TABLE_ROLE,
 					$this->USER_TABLE_APPROVER
+					$this->USER_TABLE_AUTHDEV,
+					$this->USER_TABLE_PIN
 				FROM $this->USER_TABLE_NAME
 				WHERE
 					(
@@ -378,7 +417,8 @@ final class DB {
 						OR
 						$this->USER_TABLE_LASTNAME LIKE :name
 					)
-					$where";
+					$where
+				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':name', $name, PDO::PARAM_STR);
@@ -416,7 +456,8 @@ final class DB {
 				FROM $this->USER_TABLE_NAME
 				WHERE
 					$this->USER_TABLE_STATUS = :status
-					$where";
+					$where
+				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':status', $status, PDO::PARAM_INT);
@@ -455,7 +496,8 @@ final class DB {
 				WHERE
 					$this->USER_TABLE_KEY        = :user_id
 					AND $this->USER_TABLE_ROLE   = :role
-					AND $this->USER_TABLE_STATUS != :new_status";
+					AND $this->USER_TABLE_STATUS != :new_status
+				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':new_status', $new_status, PDO::PARAM_INT);
@@ -531,10 +573,12 @@ final class DB {
 	{
 		$SQL = "SELECT 
 					$this->ACCOUNTOVERVIEW_TABLE_KEY,
-					$this->ACCOUNTOVERVIEW_TABLE_BALANCE
+					$this->ACCOUNTOVERVIEW_TABLE_BALANCE,
+					$this->ACCOUNTOVERVIEW_TABLE_TAN_TIME
 				FROM $this->ACCOUNTOVERVIEW_TABLE_NAME
 				WHERE
-					$this->ACCOUNTOVERVIEW_TABLE_KEY = :account_ID";
+					$this->ACCOUNTOVERVIEW_TABLE_KEY = :account_ID
+				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':account_ID', $account_ID, PDO::PARAM_INT);
@@ -553,10 +597,12 @@ final class DB {
 	{
 		$SQL = "SELECT
 					$this->ACCOUNTOVERVIEW_TABLE_KEY,
-					$this->ACCOUNTOVERVIEW_TABLE_BALANCE
+					$this->ACCOUNTOVERVIEW_TABLE_BALANCE,
+					$this->ACCOUNTOVERVIEW_TABLE_TAN_TIME
 				FROM $this->ACCOUNTOVERVIEW_TABLE_NAME
 				WHERE
-					$this->ACCOUNTOVERVIEW_TABLE_USER_ID = :user_id";
+					$this->ACCOUNTOVERVIEW_TABLE_USER_ID = :user_id
+				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
@@ -581,7 +627,8 @@ final class DB {
 					$this->USER_TABLE_NAME u
 				WHERE 
 					u.$this->USER_TABLE_KEY = b.$this->ACCOUNT_TABLE_USER_ID 
-					AND b.$this->ACCOUNT_TABLE_KEY = :account_id";
+					AND b.$this->ACCOUNT_TABLE_KEY = :account_id
+				";
 		
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':account_id', $account_id, PDO::PARAM_INT);
@@ -602,7 +649,8 @@ final class DB {
 				INTO $this->ACCOUNT_TABLE_NAME
 					( $this->ACCOUNT_TABLE_USER_ID )
 				VALUES
-					( :user_id )";
+					( :user_id )
+				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
@@ -777,7 +825,8 @@ final class DB {
 		{
 			$where = "WHERE
 						$this->TRANSACTION_TABLE_TO 		= :account_ID
-						OR $this->TRANSACTION_TABLE_FROM 	= :account_ID";
+						OR $this->TRANSACTION_TABLE_FROM 	= :account_ID
+					";
 		}
 
 		$SQL = "SELECT *
@@ -800,7 +849,8 @@ final class DB {
 	    $SQL = "SELECT *
 				FROM $this->TRANSACTION_TABLE_NAME
 				WHERE
-					$this->TRANSACTION_TABLE_STATUS	= :status";
+					$this->TRANSACTION_TABLE_STATUS	= :status
+				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':status', $status, PDO::PARAM_INT);
@@ -969,7 +1019,8 @@ final class DB {
 					$this->TRANSACTION_TABLE_STATUS	= :status
 				WHERE
 					$this->TRANSACTION_TABLE_KEY	= :transaction_id
-					AND $this->TRANSACTION_TABLE_STATUS = :old_status";
+					AND $this->TRANSACTION_TABLE_STATUS = :old_status
+				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':processor_id', $processor_id, PDO::PARAM_INT);
@@ -1009,10 +1060,19 @@ final class DB {
 	{
 		$col = 'count';
 
+		$unapproved = $this->mapUserStatus('unapproved');
+		$rejected = $this->mapUserStatus('rejected');
+		$client = $this->mapUserRole('client');
+
 		$SQL = "SELECT
 					count($this->USER_TABLE_KEY) as $col
 				FROM
-					$this->USER_TABLE_NAME";
+					$this->USER_TABLE_NAME
+				WHERE
+					$this->USER_TABLE_STATUS != $unapproved
+					AND $this->USER_TABLE_STATUS != $rejected
+					AND $this->USER_TABLE_ROLE = $client
+				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->execute();
@@ -1033,7 +1093,8 @@ final class DB {
 		$SQL = "SELECT
 					count($this->ACCOUNT_TABLE_KEY) as $col
 				FROM
-					$this->ACCOUNT_TABLE_NAME";
+					$this->ACCOUNT_TABLE_NAME
+				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->execute();
@@ -1051,10 +1112,15 @@ final class DB {
 	{
 		$col = 'count';
 
+		$approved = $this->mapTransactionStatus('approved');
+
 		$SQL = "SELECT
 					count($this->TRANSACTION_TABLE_KEY) as $col
 				FROM
-					$this->TRANSACTION_TABLE_NAME";
+					$this->TRANSACTION_TABLE_NAME
+				WHERE
+					$this->TRANSACTION_TABLE_STATUS = $approved
+				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->execute();
@@ -1077,7 +1143,8 @@ final class DB {
 				FROM
 					$this->ACCOUNTOVERVIEW_TABLE_NAME
 				WHERE
-					$this->ACCOUNTOVERVIEW_TABLE_USER_ID != '$this->FAKE_APPROVER_USER_ID'";
+					$this->ACCOUNTOVERVIEW_TABLE_USER_ID != $this->FAKE_APPROVER_USER_ID
+				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->execute();

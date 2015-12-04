@@ -68,13 +68,25 @@ function drawSinglerecordTable($data,$record_name = 'Record',$headers=array()){
 	
 	echo '<table>' ;
 	foreach( $data as $title => $value){
-		echo 	'<tr">'  
-			.	'<td><b>'
-			.	(array_key_exists($title,$headers) ? $headers[$title] :$title) 
-			.	' </b></td>'
-			.	'<td> '.$value.'</td>'
-			. 	'</tr>' ;
-			
+		$str = "";
+		$str = $str . '<tr>';
+		$str = $str . '<td><b>';
+
+		if (sizeof($headers) != 0) {
+			if (array_key_exists($title,$headers)) {
+				$str = $str . $headers[$title];
+			} else {
+				continue;
+			}
+		} else {
+			$str = $str . $title;
+		}
+
+		$str = $str . ' </b></td>';
+		$str = $str . '<td> '.$value.'</td>';
+		$str = $str . '</tr>' ;
+
+		echo $str;
 	}
 	echo "</table>" ;
 }

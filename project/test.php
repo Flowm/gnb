@@ -14,7 +14,7 @@ function bla()
 
 	$result = $db->loginUser("barney.stinson@gnb.com", "ThisIsGonnaBeLegendarySoSuitUp");
 
-	$result = $db->addEmployee("Firstname", "Lastname", "alexanderlill@yahoo.de", "asdasdasd");
+	$result = $db->addEmployee("Firstname", "Lastname", "alexanderlill@yahoo.de", "asdasdasd", "111111");
 
 	$result = $db->getUser($result);
 
@@ -78,6 +78,8 @@ function bla()
 	$result = $db->processTransaction(10000001, 10000002, 0.01, "bla", "AAAAAAAAAAAAAAC");
 
 	$result = $db->checkTanAndSetUsed(10000001, "AAAAAAAAAAAAAAD");
+
+	$result = $db->mapAuthenticationDevice(0);
 
 	var_dump($result);
 }

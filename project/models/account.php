@@ -8,15 +8,20 @@ require_once getPageAbsolute("transaction");
 class account {
     public $id;
     public $balance;
+    public $last_tan_time;
     public $transactions;
 
     public function __construct($data) {
-        if (isset($data['id'])) {
-            $this->id = $data['id'];
+        if (isset($data[DB::i()->ACCOUNTOVERVIEW_TABLE_KEY])) {
+            $this->id = $data[DB::i()->ACCOUNTOVERVIEW_TABLE_KEY];
         }
-        if (isset($data['balance'])) {
-            $this->balance = $data['balance'];
+        if (isset($data[DB::i()->ACCOUNTOVERVIEW_TABLE_BALANCE])) {
+            $this->balance = $data[DB::i()->ACCOUNTOVERVIEW_TABLE_BALANCE];
         }
+        if (isset($data[DB::i()->ACCOUNTOVERVIEW_TABLE_TAN_TIME])) {
+            $this->last_tan_time = $data[DB::i()->ACCOUNTOVERVIEW_TABLE_TAN_TIME];
+        }
+
         $this->transactions = array();
     }
 

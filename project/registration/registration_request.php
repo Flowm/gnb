@@ -74,21 +74,21 @@ if (!checkPasswordStrength($password)) {
     exit();
 }
 
-//TODO: WE STILL NEED TO SAVE THIS TO DB SOMEHOW
-$random_pin = null;
+$random_pin = "";
+for ($i = 0; $i < 6; $i++) {
+    $random_pin .= mt_rand(0,9);
+}
+$auth_device = null;
+
 //Checking the required banking option
 if ($banking == 'email') {
+    $auth_device = "TANs";
     //We will need to send TANs to the user once he has been approved. Need a flag on the db
-}
-else if ($banking == 'app') {
+} else if ($banking == 'app') {
+    $auth_device = "SCS";
     //We need to show a unique PIN to the client and allow him to download the SMC.
-    $random_pin = mt_rand(0,9);
-    for ($i = 0; $i < 6; $i++) {
-        $random_pin .= mt_rand(0,9);
-    }
-}
-else {
-    //We received a forged request, with an invalid role
+} else {
+    //We received a forged request, with invalid banking type
     $error = $error."6";
     header("Location:".getPageURL('registration').$error);
     exit();
@@ -97,12 +97,10 @@ else {
 $result = true;
 //Checking the role
 if ($type == 'client') {
-    $result = DB::i()->addClient($firstname, $lastname, $email, $password);
-}
-else if ($type == 'employee') {
-    $result = DB::i()->addEmployee($firstname, $lastname, $email, $password);
-}
-else {
+    $result = DB::i()->addClient($firstname, $lastname, $email, $password, $random_pin, $auth_device);
+} else if ($type == 'employee') {
+    $result = DB::i()->addEmployee($firstname, $lastname, $email, $password, $random_pin);
+} else {
     //We received a forged request, with an invalid role
     $error = $error."5";
     header("Location:".getPageURL('registration').$error);

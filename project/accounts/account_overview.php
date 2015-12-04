@@ -37,8 +37,8 @@ echo '<br>';
 
 $account_info = DB::i()->getAccountDetails($account_id);
 $account_header	= array(
-	'id'			=> 'ID :',
-	'balance'		=> 'Balance :',
+	'id'			=> 'ID',
+	'balance'		=> 'Balance',
 ) ; 	
 drawSingleRecordTable($account_info,'Account',$account_header);
 

@@ -2,6 +2,8 @@
 
 require_once __DIR__."/../resource_mappings.php";
 
+session_start();
+
 //Worst case, an unauthenticated user is trying to access this page directly
 if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
 	include(getPageAbsolute('error'));
@@ -15,8 +17,6 @@ else if (!isset($frame)) {
 
 require_once getpageabsolute("db_functions");
 require_once getPageAbsolute("fpdf");
-
-session_start();
 
 if (empty($_SESSION["account_id"]))
 	die("Please choose an account");

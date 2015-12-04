@@ -36,6 +36,7 @@ unset($_SESSION['pin']);
     This PIN is bound to your account and cannot be changed! For security reasons, never tell your PIN to anybody!
     You also won't get a chance to display this PIN again, so be sure to copy it right now and save it.
 </p>
+<hr class="hr-thin">
 <h1 class="title2">Here is your PIN: <?= $pin?></h1>
 <p class="simple-text-big simple-text-centered">
     Remember to copy and save this PIN for future use, as it will never be displayed again!

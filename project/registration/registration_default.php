@@ -20,6 +20,3 @@ unset($_SESSION['banking']);
     Thank you for choosing the Goliath National Bank!
 </p>
 <hr class="hr-thin">
-<p class="simple-text-big simple-text-centered">
-    Here is your PIN: 000000
-</p>

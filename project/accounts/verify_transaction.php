@@ -13,6 +13,10 @@ else if (!isset($frame)) {
 	exit();
 }
 
+/* PHASE 3 STUFF, NEEDED FOR APP TANS */
+$base = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+/* END PHASE 3 STUFF */
+
 require_once getpageabsolute("db_functions");
 require_once getPageAbsolute("drawfunctions");
 

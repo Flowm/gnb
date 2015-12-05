@@ -137,8 +137,18 @@ class user {
     }
 
     public function unblock($approver_id) {
-        //TODO: IMPLEMENT
-        return true;
+        if ($this->role == '0') {
+            if (DB::i()->approveClient($this->id, $approver_id)) {
+                return true;
+            }
+        }
+        else if($this->role == '1') {
+            if (DB::i()->approveEmployee($this->id, $approver_id)) {
+                return true;
+            }
+        }
+        //TODO: SHOW ERROR MESSAGE?
+        return false;
     }
 
 	public static function approveRegistrations($requests, $employee_id) {
@@ -190,7 +200,7 @@ class user {
                 return false;
             }
             $user = new user($data);
-            $result = $user->unblock(null);
+            $result = $user->unblock($employee_id);
             if (!$result) {
                 //TODO: handle registration error
             }

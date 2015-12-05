@@ -442,10 +442,26 @@ final class DB {
 		return $this->getUsersByName($name, 'employee');
 	}
 
-	function getPendingRequests($role_filter = "")
+	function getUnapprovedUsers($role_filter = "")
 	{
 		$status = $this->mapUserStatus('unapproved');
+		return $this->getUsersByStatus($status, $role_filter);
+	}
 
+	function getRejectedUsers($role_filter = "")
+	{
+		$status = $this->mapUserStatus('rejected');
+		return $this->getUsersByStatus($status, $role_filter);
+	}
+
+	function getBlockedUsers($role_filter = "")
+	{
+		$status = $this->mapUserStatus('blocked');
+		return $this->getUsersByStatus($status, $role_filter);
+	}
+
+	function getUsersByStatus($status, $role_filter = "")
+	{
 		$where = "";
 		if ($role_filter != "") {
 			$role = $this->mapUserRole($role_filter);
@@ -471,16 +487,6 @@ final class DB {
 		return $result;
 	}
 
-	function getPendingClientRequests()
-	{
-		return $this->getPendingRequests('client');
-	}
-
-	function getPendingEmployeeRequests()
-	{
-		return $this->getPendingRequests('employee');
-	}
-
 	function changeUserStatus($user_id, $new_status, $processor_id, $role_filter)
 	{
 		if ($this->getEmployeeStatus($processor_id) != $this->mapUserStatus('approved')) {
@@ -489,10 +495,17 @@ final class DB {
 
 		$role = $this->mapUserRole($role_filter);
 
+		$setApprover = "";
+
+		if ($new_status == $this->mapUserStatus('approved') ||
+			$new_status == $this->mapUserStatus('rejected')) {
+			$setApprover = ", $this->USER_TABLE_APPROVER = :processor_id";
+		}
+
 		$SQL = "UPDATE $this->USER_TABLE_NAME
 				SET
-					$this->USER_TABLE_STATUS   = :new_status,
-					$this->USER_TABLE_APPROVER = :processor_id
+					$this->USER_TABLE_STATUS   = :new_status
+					$setApprover
 				WHERE
 					$this->USER_TABLE_KEY        = :user_id
 					AND $this->USER_TABLE_ROLE   = :role
@@ -501,7 +514,9 @@ final class DB {
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':new_status', $new_status, PDO::PARAM_INT);
-		$stmt->bindValue(':processor_id', $processor_id, PDO::PARAM_INT);
+		if ($setApprover != "") {
+			$stmt->bindValue(':processor_id', $processor_id, PDO::PARAM_INT);
+		}
 		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
 		$stmt->bindValue(':role', $role, PDO::PARAM_INT);
 		$result = $stmt->execute();

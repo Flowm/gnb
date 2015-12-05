@@ -33,7 +33,7 @@ if (isset($_POST['action']) && isset($_POST['users'])) {
     }
 }
 
-$data = DB::i()->getPendingRequests(); //TODO: NEED BLOCKED USERS
+$data = DB::i()->getBlockedUsers();
 $newUsers = array();
 if ($data != null) {
     foreach ($data as $u) {
@@ -43,7 +43,7 @@ if ($data != null) {
 
 //IN CASE WE HAVE NO PENDING REQUESTS
 if (count($newUsers) == 0) {
-    echo "<p>There currently are no new registration requests</p>";
+    echo "<p>There currently are no blocked users</p>";
     exit();
 }
 

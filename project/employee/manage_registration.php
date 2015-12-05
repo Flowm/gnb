@@ -35,7 +35,7 @@ if (isset($_POST['action']) && isset($_POST['users'])) {
     }
 }
 
-$data = DB::i()->getPendingRequests();
+$data = DB::i()->getUnapprovedUsers();
 $newUsers = array();
 if ($data != null) {
     foreach ($data as $u) {

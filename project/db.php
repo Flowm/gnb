@@ -355,7 +355,7 @@ final class DB {
 					$this->USER_TABLE_EMAIL,
 					$this->USER_TABLE_STATUS,
 					$this->USER_TABLE_ROLE,
-					$this->USER_TABLE_APPROVER
+					$this->USER_TABLE_APPROVER,
 					$this->USER_TABLE_AUTHDEV,
 					$this->USER_TABLE_PIN
 				FROM $this->USER_TABLE_NAME
@@ -954,7 +954,7 @@ final class DB {
 		}
 	}
 
-	function verifyTransaction($source, $destination, $amount, $description, $tan_code)
+	function verifyTransaction($source, $destination, $amount, $description, $tan_code, $auth_device='TANs')
 	{
 		$var_res = array (
 			"result"	=> false,
@@ -989,9 +989,9 @@ final class DB {
 			$var_res["message"]	= '[Funds] Insuffecient funds' ;
 			return $var_res ; 
 		}
-		
 
-		$tanValid = $this->verifyTANCode($source, $tan_code);
+        //In case the user uses a PIN, we cannot check the TAN on the db. TAN validity was already checked
+        $tanValid = ($auth_device == 'TANs') ? $this->verifyTANCode($source, $tan_code) : true;
 
 		if ($tanValid == false) {
 			$var_res["message"]	= '[TAN] Invalid or used TAN';

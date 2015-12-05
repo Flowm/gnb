@@ -14,13 +14,18 @@ else if (!isset($frame)) {
 }
 
 require_once getpageabsolute("db_functions");
+require_once getPageAbsolute("user");
 require_once getPageAbsolute("drawfunctions");
 
 if (empty($_SESSION["account_id"]))
 	die("Please choose an account");
 
 $account_id = $_SESSION["account_id"];
-$acc_info = DB::i()->getAccountDetails($account_id) ;
+$acc_info = DB::i()->getAccountDetails($account_id);
+//Need user info to check the authentication device
+$user_id = $_SESSION["user_id"];
+$user = new user(DB::i()->getUser($user_id));
+
 $account_header	= array(
 	'id'			=> 'ID',
 	'balance'		=> 'Balance',
@@ -31,6 +36,7 @@ $dest_code		= ( isset($_POST["dest_code"]) ? $_POST["dest_code"] : '' );
 $amount			= ( isset($_POST["amount"]) ? $_POST["amount"] : '' );
 $description	= ( isset($_POST["description"]) ? $_POST["description"] : '' );
 $tan_code		= ( isset($_POST["tan_code"]) ? $_POST["tan_code"] : '' );
+$pin            = ( isset($_POST["pin"]) ? $_POST["pin"] : '' );
 
 ?>
 
@@ -71,6 +77,19 @@ $tan_code		= ( isset($_POST["tan_code"]) ? $_POST["tan_code"] : '' );
                 <input type="text" id="tan_code" name="tan_code" value="<?=$tan_code?>" placeholder="TAN"><br>
             </div>
         </div>
+        <?php
+            //The user might also need to insert the PIN
+            if (DB::i()->mapAuthenticationDevice($user->auth_device) == 'SCS') {
+                echo '<div class="formRow">';
+                echo '<div class="formLeftColumn">';
+                echo '<label for="pin" class="simple-label">Your PIN</label>';
+                echo '</div>';
+                echo '<div class="formRightColumn">';
+                echo '<input type="text" id="pin" name="pin" placeholder="PIN"><br>';
+                echo '</div>';
+                echo '</div>';
+            }
+        ?>
 
         <?php
         $error = null;

@@ -21,6 +21,7 @@ require_once __DIR__."/../resource_mappings.php";
 require_once getpageabsolute("db_functions");
 require_once getPageAbsolute("mail");
 require_once getpageabsolute("user");
+require_once getPageAbsolute("util");
 
 global $pages;
 
@@ -74,19 +75,14 @@ if (!checkPasswordStrength($password)) {
     exit();
 }
 
-$random_pin = "";
-for ($i = 0; $i < 6; $i++) {
-    $random_pin .= mt_rand(0,9);
-}
+$random_pin = generateRandomPIN();
 $auth_device = null;
 
 //Checking the required banking option
 if ($banking == 'email') {
     $auth_device = "TANs";
-    //We will need to send TANs to the user once he has been approved. Need a flag on the db
 } else if ($banking == 'app') {
     $auth_device = "SCS";
-    //We need to show a unique PIN to the client and allow him to download the SMC.
 } else {
     //We received a forged request, with invalid banking type
     $error = $error."6";
@@ -113,7 +109,9 @@ if (!$result) {
 }
 
 $_SESSION['banking'] = $banking;
-$_SESSION['pin'] = $random_pin;
+if ($auth_device == "SCS") {
+    $_SESSION['pin'] = $random_pin;
+}
 
 $gnbmailer = new GNBMailer();
 $gnbmailer->sendMail_Registration($email, "$firstname $lastname");

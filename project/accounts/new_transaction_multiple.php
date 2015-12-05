@@ -16,10 +16,21 @@ else if (!isset($frame)) {
 if (empty($_SESSION["account_id"]))
 	die("Please choose an account");
 
+require_once getPageAbsolute("user");
+
 $account_id = $_SESSION["account_id"];
+//Need user details in order to check the PIN
+$user_id = $_SESSION["user_id"];
+$user = new user(DB::i()->getUser($user_id));
+$auth_type = DB::i()->mapAuthenticationDevice($user->auth_device);
+
 if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
 	$file = $_FILES["transactionsCSV"];
 	$tan = $_POST["tan"];
+    $pin = (isset($_POST["pin"]) ? $_POST["pin"] : '' );
+    if ($auth_type == 'SCS' && $pin != $user->pin) {
+        echo "<div class='error'>Fileupload failed! Invalid PIN</div><br>";
+    }
 	$tan = preg_replace("([^a-zA-Z0-9+\/])", '', $tan);
 	$name = session_id();
 	$target_file = getPageAbsolute("uploads") . $name;
@@ -41,7 +52,7 @@ if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
 ?>
 <p class="simple-text">
 	To perform multiple transactions in one request you can upload a batch transaction file.
-<br />
+    <br />
 	Format the file according to be following rules:
 	<ul>
 		<li>Each transaction in a separate line</li>
@@ -66,12 +77,25 @@ if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
 		</div>
 		<div class="formRow">
 			<div class="formLeftColumn">
-				<label for="tan" class="simple-label">TAN </label>
+				<label for="tan" class="simple-label">TAN code </label>
 			</div>
 			<div class="formRightColumn">
 				<input type="text" name="tan" id="tan" placeholder="TAN"><br>
 			</div>
 		</div>
+        <?php
+        //The user might also need to insert the PIN
+        if ($auth_type == 'SCS') {
+            echo '<div class="formRow">';
+            echo '<div class="formLeftColumn">';
+            echo '<label for="pin" class="simple-label">Your PIN</label>';
+            echo '</div>';
+            echo '<div class="formRightColumn">';
+            echo '<input type="text" id="pin" name="pin" value="$pin" placeholder="PIN"><br>';
+            echo '</div>';
+            echo '</div>';
+        }
+        ?>
 		<div class="button-container">
 			<button type="button" onclick="uploadFile()" class="simpleButton">Upload</button>
 		</div>

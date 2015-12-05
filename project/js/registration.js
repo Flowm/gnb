@@ -44,6 +44,19 @@ function checkPassword(pass, repeat, errorText) {
     return result;
 }
 
+function toggleBankingMethod(bankingMethod) {
+    if (bankingMethod == undefined) {
+        return;
+    }
+    bankingMethodDiv = document.getElementById('bankingMethod');
+    if (bankingMethod) {
+        bankingMethodDiv.style.display = 'block';
+    }
+    else {
+        bankingMethodDiv.style.display = 'none';
+    }
+}
+
 function checkContents() {
     var errorText = document.getElementById('error');
     var type1 = document.getElementById('type1');

@@ -30,6 +30,7 @@ if (isset($_POST["frame"])) {
 $client_frame_keys = array('manage_clients','client_details','client_transaction_details');
 $transfer_frame_keys = array('manage_transfer','transfer_details');
 $registration_frame_keys = array('manage_registration');
+$blocked_frame_keys = array('manage_blocked');
 
 ?>
 
@@ -69,6 +70,18 @@ $registration_frame_keys = array('manage_registration');
                     <a class="menu-button-inner">New registration requests</a>
                     <?php
                     if ($frameKey != null && in_array($frameKey, $registration_frame_keys)) {
+                        echo "<span class='menu-selected-arrow'></span>";
+                    }
+                    ?>
+                </li>
+                <li class="menu-button <?php
+                if ($frameKey != null && in_array($frameKey, $blocked_frame_keys)) {
+                    echo "menu-button-active";
+                }
+                ?>" onclick="goToEmployeeArea('manage_blocked')">
+                    <a class="menu-button-inner">Blocked users</a>
+                    <?php
+                    if ($frameKey != null && in_array($frameKey, $blocked_frame_keys)) {
                         echo "<span class='menu-selected-arrow'></span>";
                     }
                     ?>

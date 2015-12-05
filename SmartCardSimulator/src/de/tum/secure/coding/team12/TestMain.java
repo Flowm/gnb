@@ -10,7 +10,7 @@ public class TestMain {
         String pin = "123456";
         String iban = "10000001";
         String amount = "100";
-        for (int i=0; i<10; i++) {
+        /*for (int i=0; i<10; i++) {
             String result = CustomTanGenerator.generateTAN(pin+iban+amount);
             try {
                 Thread.sleep(1000);
@@ -18,6 +18,8 @@ public class TestMain {
                 e.printStackTrace();
             }
             System.out.println(result);
-        }
+        }*/
+        String result = CustomTanGenerator.generateTAN(pin+iban+amount);
+        System.out.println(result);
     }
 }

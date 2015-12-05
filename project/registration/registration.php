@@ -34,9 +34,11 @@ $logo_svg = getMedia('logo_svg');
                     <span class="simple-text-big">What are you?</span>
                 </div>
                 <div class="formRightColumn">
-                    <input type="radio" id="type1" name="type" value="client" checked>
+                    <input type="radio" id="type1" name="type" value="client" checked
+                           onchange="toggleBankingMethod(true)">
                     <label for="type1"><span></span>Client</label>
-                    <input type="radio" id="type2" name="type" value="employee">
+                    <input type="radio" id="type2" name="type" value="employee"
+                           onchange="toggleBankingMethod(false)">
                     <label for="type2"><span></span>Employee</label><br>
                 </div>
             </div>
@@ -82,37 +84,40 @@ $logo_svg = getMedia('logo_svg');
             </div>
 
             <!-- PHASE 3 CODE -->
-            <hr class="hr-thin">
-            <div class="simple-container">
-                <p class="simple-text simple-text-centered">
-                    In order to perform money transfers in our bank, you will need your own TANs. You can either receive
-                    these TANs directly via an encrypted email, or become one of our futuristic clients and
-                    use our awesome app which makes bank transfers legendary easy.
-                </p>
-            </div>
-            <div class="formRow">
-                <span class="simple-text-big">Choose your preferred online banking method*: </span>
-            </div>
-            <div class="formRow">
-                <div class="formSingleColumn">
-                    <input type="radio" id="banking1" name="banking" value="email" checked>
-                    <label for="banking1"><span></span>Send me the TANs via encrypted email</label>
+            <div id="bankingMethod">
+                <hr class="hr-thin">
+                <div class="simple-container" id="bankingMethod">
+
+                    <p class="simple-text simple-text-centered">
+                        In order to perform money transfers in our bank, you will need your own TANs. You can either receive
+                        these TANs directly via an encrypted email, or become one of our futuristic clients and
+                        use our awesome app which makes bank transfers legendary easy.
+                    </p>
+                </div>
+                <div class="formRow">
+                    <span class="simple-text-big">Choose your preferred online banking method*: </span>
+                </div>
+                <div class="formRow">
+                    <div class="formSingleColumn">
+                        <input type="radio" id="banking1" name="banking" value="email" checked>
+                        <label for="banking1"><span></span>Send me the TANs via encrypted email</label>
+                    </div>
+                </div>
+                <div class="formRow">
+                    <div class="formSingleColumn">
+                        <input type="radio" id="banking2" name="banking" value="app">
+                        <label for="banking2"><span></span>I want to use your awesome app</label><br>
+                    </div>
+                </div>
+                <div class="formRow">
+                    <p class="simple-text simple-text-italic simple-text-centered">
+                        *Once made, this choice will be <b>IRREVERSIBLE</b>.
+                    </p>
                 </div>
             </div>
-            <div class="formRow">
-                <div class="formSingleColumn">
-                    <input type="radio" id="banking2" name="banking" value="app">
-                    <label for="banking2"><span></span>I want to use your awesome app</label><br>
-                </div>
-            </div>
-            <div class="formRow">
-                <p class="simple-text simple-text-italic simple-text-centered">
-                    *Once made, this choice will be <b>IRREVERSIBLE</b>.
-                </p>
-            </div>
-            <hr class="hr-thin">
             <!-- END PHASE 3 CODE -->
 
+            <hr class="hr-thin">
             <div class="formRow">
             <span id="error" class="error">
                 <?php

@@ -1,5 +1,5 @@
 <?php
-	
+
 	define("SANITIZE_INT", 0);
 	define("SANITIZE_DOUBLE", 1);
 	define("SANITIZE_TEXT_BASIC", 2);
@@ -83,5 +83,42 @@
 	
 	#print_r($allowed_types[$input_t]) ;
 
+
+function base64ToBase10($base64Str) {
+	$alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+	$result = 0;
+	foreach(str_split($base64Str) as $letter) {
+		$result = ($result*64) + strpos($alphabet,$letter);
+	}
+	return $result;
+}
+
+function verifyAppGeneratedTAN($tan, $pin, $iban, $amount) {
+    $salt = substr($tan,-5);
+
+    $timestamp = base64ToBase10($salt);
+
+    $data = $pin . $iban . $amount . $salt;
+    $hash = hash('sha256',$data, true);
+
+    $hash = base64_encode($hash);
+
+    $result = substr($hash,0,10) . $salt;
+    if ($result == $tan) {
+        return $timestamp;
+    }
+    else {
+        return null;
+    }
+}
+
+function generateRandomPIN() {
+    $random_pin = "";
+    for ($i = 0; $i < 6; $i++) {
+        $random_pin .= mt_rand(0,9);
+    }
+    return $random_pin;
+}
 
 ?>

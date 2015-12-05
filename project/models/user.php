@@ -16,6 +16,8 @@ class user {
     public $approved_by;
     public $password;
     public $accounts;
+    public $auth_device;
+    public $pin;
 
     public function __construct($data) {
         if (isset($data['id'])) {
@@ -38,6 +40,12 @@ class user {
         }
         if (isset($data['role'])) {
             $this->role = $data['role'];
+        }
+        if (isset($data[DB::i()->USER_TABLE_PIN])) {
+            $this->pin = $data[DB::i()->USER_TABLE_PIN];
+        }
+        if (isset($data[DB::i()->USER_TABLE_AUTHDEV])) {
+            $this->auth_device = $data[DB::i()->USER_TABLE_AUTHDEV];
         }
         $this->accounts = array();
         if (isset($data['accounts'])) {
@@ -124,6 +132,15 @@ class user {
         return false;
     }
 
+    public function block($timestamp) {
+        //TODO: IMPLEMENT
+    }
+
+    public function unblock($approver_id) {
+        //TODO: IMPLEMENT
+        return true;
+    }
+
 	public static function approveRegistrations($requests, $employee_id) {
 		$requests = explode(";",$requests);
 		foreach ($requests as $request) {
@@ -155,6 +172,25 @@ class user {
             }
             $user = new user($data);
             $result = $user->reject($employee_id);
+            if (!$result) {
+                //TODO: handle registration error
+            }
+        }
+        return true;
+    }
+
+    public static function unblockUsers($requests, $employee_id) {
+        $requests = explode(";",$requests);
+        foreach ($requests as $request) {
+            $exploded = explode(":",$request);
+            $id = $exploded[0];
+            $role = $exploded[1];
+            $data = DB::i()->getUser($id,$role);
+            if (!$data) {
+                return false;
+            }
+            $user = new user($data);
+            $result = $user->unblock(null);
             if (!$result) {
                 //TODO: handle registration error
             }

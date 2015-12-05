@@ -19,6 +19,8 @@ if ($role != "client") {
     exit();
 }
 
+require_once getPageAbsolute("user");
+
 
 $BARNEY_QUOTES = array("In my body, where the shame gland should be, there is
                     a second awesome gland. True story.",
@@ -51,3 +53,17 @@ else {
     <p class="simple-text-big"><?php echo $quote_of_the_day ?></p><br><br>
     <p class="simple-text-big">Big party today, so suit up!</p>
 </div>
+
+<?php
+//If the client uses TANs sent by email, we need to show him the password to decrypt the PDF
+$user = new user(DB::i()->getUser($_SESSION["user_id"]));
+if (DB::i()->mapAuthenticationDevice($user->auth_device) == 'TANs') {
+    echo '<br><hr class="hr-thin"><br>';
+    echo '<div class="simple-container-no-bounds simple-text-centered">';
+    echo '<p class="simple-text-big">Below you can see the password '.
+        'needed to decrypt the PDF you received via email:<br></p>';
+    echo '<h1 class="title2">'.$user->pin.'</h1>'; //TODO: NEED TO SHOW THE HASH! AS SOON AS IT'S WORKING
+    echo '</div>';
+}
+
+?>

@@ -4,16 +4,19 @@ require_once __DIR__."/../resource_mappings.php";
 
 // Worst case, an unauthenticated user is trying to access this page directly.
 // This page is not available to direct access.
-/*if (!isset($_SESSION['banking']) || $_SESSION['banking'] != 'app') {
+if (!isset($_SESSION['banking']) || $_SESSION['banking'] != 'app') {
     header("Location:".getPageURL('home'));
     exit();
 }
 if (!isset($_SESSION['pin'])) {
     header("Location".getPageURL('home'));
-}*/
+    exit();
+}
 
+$random_pin = $_SESSION['pin'];
 unset($_SESSION['banking']);
 unset($_SESSION['pin']);
+
 
 ?>
 
@@ -30,10 +33,12 @@ unset($_SESSION['pin']);
     You also won't get a chance to display this PIN again, so be sure to copy it right now and save it.
 </p>
 <hr class="hr-thin">
-<h1 class="title2">Here is your PIN: <?= $random_pin?></h1>
+<h1 class="title1">Here is your PIN: <?= $random_pin?></h1>
 <p class="simple-text-big simple-text-centered">
     Remember to copy and save this PIN for future use, as it will never be displayed again!
 </p>
-<p>Here you can download the </p>
+<p class="simple-text-big simple-text-centered">On the link below you can download the GNB Authenticator<br>
+    <a href="<?= getPageURL('scs') ?>">Download SmartCardSimulator here!</a>
+</p>
 
 

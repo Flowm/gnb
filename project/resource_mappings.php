@@ -33,6 +33,8 @@ $pages["transaction"] = "models/transaction.php";
 $pages["awesome"] = "awesome_data.php";
 $pages["error"] = "errorPage.php";
 $pages["gnb_style"] = "style/gnb.css";
+$pages["util"] = "genericfunctions.php";
+$pages["scs"] = "lib/scs/SmartCardSimulator.jar";
 
 $pages["drawfunctions"] = "drawfunctions.php";
 $pages["fpdf"] = "lib/fpdf/fpdf.php";
@@ -58,6 +60,7 @@ $frames["manage_clients"] = "employee/manage_clients.php";
 $frames["client_details"] = "employee/client_details.php";
 $frames["client_transaction_details"] = "employee/client_transaction_details.php";
 $frames["manage_registration"] = "employee/manage_registration.php";
+$frames["manage_blocked"] = "employee/manage_blocked.php";
 $frames["manage_transfer"] = "employee/manage_transfer.php";
 $frames["transfer_details"] = "employee/transfer_details.php";
 $frames["transaction_view"] = "accounts/transaction_view.php";

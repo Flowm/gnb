@@ -30,6 +30,7 @@ function goToMyAccounts(frame, account) {
     return performPostRequest("employee.php",params);
 }
 
+//Registration
 function approveRegistration() {
     return handleRegistrations('approveRegistration');
 }
@@ -54,6 +55,25 @@ function handleRegistrations(action) {
     var params = {section:"employee_area", frame:"manage_registration", action:action, users:ids};
     return performPostRequest("employee.php", params);
 }
+
+//Unblocking
+function unblockUsers() {
+    var selected = document.getElementsByName("action_check");
+    var ids = "";
+    var added = false;
+    for (var i=0; i<selected.length; i++) {
+        if (selected[i].checked) {
+            if (added) {
+                ids += ";";
+            }
+            ids += selected[i].id;
+            added = true;
+        }
+    }
+    var params = {section:"employee_area", frame:"manage_blocked", action:"unblock", users:ids};
+    return performPostRequest("employee.php", params);
+}
+
 
 //THE FOLLOWING FUNCTIONS ARE NEEDED INSIDE THE manage_clients.php FILE
 function clearSearchField() {

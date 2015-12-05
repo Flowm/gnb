@@ -5,11 +5,17 @@
 
 require_once __DIR__."/db.php";
 
+function dump($name, $function)
+{
+	echo "$name ";
+	echo var_dump($function) . "<br/>";
+}
+
 
 function bla()
 {
 	$db = DB::i();
-
+/*
 	$result = $db->recordIsInTable('1', 'id', 'user');
 
 	$result = $db->loginUser("barney.stinson@gnb.com", "ThisIsGonnaBeLegendarySoSuitUp");
@@ -20,17 +26,17 @@ function bla()
 
 	$result = $db->getEmployee(3);
 
-	$result = $db->getUsersByName("barney");
+	dump("getUsersByName", $db->getUsersByName("barney"));
 
 	$result = $db->getClientsByName("bin");
 
-	$result = $db->getPendingRequests();
+	dump("getUnapprovedUsers", $db->getUnapprovedUsers());
 
-	$result = $db->getPendingClientRequests();
+	dump("getRejectedUsers", $db->getRejectedUsers());
 
-	$result = $db->getPendingEmployeeRequests();
+	dump("getBlockedUsers", $db->getBlockedUsers());
 
-	$result = $db->getEmployeeStatus(2);
+	dump("getEmployeeStatus", $db->getEmployeeStatus(2));
 
 	$result = $db->getAccountDetails(10000002);
 
@@ -62,7 +68,7 @@ function bla()
 
 	$result = $db->insertTAN("AAAAAAAAAAAAAAE", 10000001);
 
-	/*
+	
 	$account_id = 10000001; //DB::i()->addAccountWithBalance(3, 555);
 	$account = new account(array('id'=>$account_id));
 	var_dump($account);
@@ -70,7 +76,7 @@ function bla()
 	$tans = $account->generateTANs();
 
 	var_dump($tans);
-	*/
+	
 
 	$result = $db->getAccountDetails(10000002);
 	$result = $db->getAccountOwnerFromID(10000002);
@@ -80,8 +86,66 @@ function bla()
 	$result = $db->checkTanAndSetUsed(10000001, "AAAAAAAAAAAAAAD");
 
 	$result = $db->mapAuthenticationDevice(0);
+*/
 
-	var_dump($result);
+	//dump("addFailedLoginAttempt", $db->addFailedLoginAttempt(1));
+	//dump("getNumberOfFailedLoginAttempts", $db->getNumberOfFailedLoginAttempts(1));
+
+/*
+	dump("approveUser", $db->approveUser(1, 2));
+	dump("getBlockedUsers", $db->getBlockedUsers());
+	dump("handleSuccessfulLogin", $db->handleSuccessfulLogin(1));
+
+	dump("getNumberOfFailedLoginAttempts", $db->getNumberOfFailedLoginAttempts(1));
+
+	dump("handleFailedLogin", $db->handleFailedLogin(1));
+	dump("getNumberOfFailedLoginAttempts", $db->getNumberOfFailedLoginAttempts(1));
+	dump("getBlockedUsers", $db->getBlockedUsers());
+
+	dump("handleFailedLogin", $db->handleFailedLogin(1));
+	dump("getNumberOfFailedLoginAttempts", $db->getNumberOfFailedLoginAttempts(1));
+	dump("getBlockedUsers", $db->getBlockedUsers());
+
+	dump("handleFailedLogin", $db->handleFailedLogin(1));
+	dump("getNumberOfFailedLoginAttempts", $db->getNumberOfFailedLoginAttempts(1));
+	dump("getBlockedUsers", $db->getBlockedUsers());
+
+	dump("handleFailedLogin", $db->handleFailedLogin(1));
+	dump("getNumberOfFailedLoginAttempts", $db->getNumberOfFailedLoginAttempts(1));
+	dump("getBlockedUsers", $db->getBlockedUsers());
+
+	dump("handleFailedLogin", $db->handleFailedLogin(1));
+	dump("getNumberOfFailedLoginAttempts", $db->getNumberOfFailedLoginAttempts(1));
+	dump("getBlockedUsers", $db->getBlockedUsers());
+
+	dump("handleFailedLogin", $db->handleFailedLogin(1));
+	dump("getNumberOfFailedLoginAttempts", $db->getNumberOfFailedLoginAttempts(1));
+	dump("getBlockedUsers", $db->getBlockedUsers());
+*/
+
+	dump("getBlockedUsers", $db->getBlockedUsers());
+	dump("approveUser", $db->approveUser(1, 2));
+	dump("getBlockedUsers", $db->getBlockedUsers());
+
+	dump("loginUser", $db->loginUser("barney.stinson@gnb.com", "ThisIsGonnaBeLegendarySoSuitUp"));
+/*
+	dump("loginUser", $db->loginUser("barney.stinson@gnb.com", "asd"));
+	dump("getBlockedUsers", $db->getBlockedUsers());
+
+	dump("loginUser", $db->loginUser("barney.stinson@gnb.com", "asd"));
+	dump("getBlockedUsers", $db->getBlockedUsers());
+
+	dump("loginUser", $db->loginUser("barney.stinson@gnb.com", "asd"));
+	dump("getBlockedUsers", $db->getBlockedUsers());
+
+	dump("loginUser", $db->loginUser("barney.stinson@gnb.com", "asd"));
+	dump("getBlockedUsers", $db->getBlockedUsers());
+
+	dump("loginUser", $db->loginUser("barney.stinson@gnb.com", "asd"));
+	dump("getBlockedUsers", $db->getBlockedUsers());
+*/
+
+
 }
 
 bla();

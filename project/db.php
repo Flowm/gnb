@@ -71,9 +71,15 @@ final class DB {
 	public $ACCOUNTOVERVIEW_TABLE_BALANCE	= "balance";
 	public $ACCOUNTOVERVIEW_TABLE_TAN_TIME	= "last_tan_time";
 
+	public $FAILEDLOGIN_TABLE_NAME	= "failed_login";
+	public $FAILEDLOGIN_TABLE_KEY	= "id";
+	public $FAILEDLOGIN_USER_ID		= "user_id";
+	public $FAILEDLOGIN_LOGIN_TS	= "login_timestamp";
+
 	public $FAKE_APPROVER_USER_ID = 1;
 	private $MAGIC = 'SUITUP';
 	private $WELCOMECREDIT_DESCRIPTION = 'GNB Welcome Credit';
+	private $MAX_FAILED_LOGIN_ATTEMPTS = 5;
 
     /**
      * Call this method to get singleton
@@ -193,11 +199,13 @@ final class DB {
 		}
 	}
 
-	function executeSetStatement($statement) {
+	function executeSetStatement($statement)
+	{
 		$this->pdo->exec($statement);
 	}
 
-	function getEmployeeStatus($employee_ID) {
+	function getEmployeeStatus($employee_ID)
+	{
 		$employee = $this->getEmployee($employee_ID);
 
 		if ($employee == false) {
@@ -208,9 +216,12 @@ final class DB {
 	}
 
 
-	function loginUser($mail, $password) {
+	function loginUser($mail, $password)
+	{
 
-		$SQL = "SELECT $this->USER_TABLE_SALT
+		$SQL = "SELECT
+					$this->USER_TABLE_KEY,
+					$this->USER_TABLE_SALT
 				FROM $this->USER_TABLE_NAME
 				WHERE
 					$this->USER_TABLE_EMAIL=:mail
@@ -226,6 +237,7 @@ final class DB {
 			return false;
 		}
 
+		$user_id = $result[0][$this->USER_TABLE_KEY];
 		$salt = $result[0][$this->USER_TABLE_SALT];
 		$password_hash = $this->getPasswordHash($password, $salt);
 
@@ -250,18 +262,103 @@ final class DB {
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 		if (sizeof($result) != 1) {
+			$this->handleFailedLogin($user_id);
 			return false;
 		} else {
+			$this->handleSuccessfulLogin($user_id);
 			return $this->getUser($result[0][$this->USER_TABLE_KEY]);
 		}
 	}
 
-	function genRandString($length) {
+	function genRandString($length)
+	{
 		return substr(bin2hex(openssl_random_pseudo_bytes(round($length/2))), 0, $length);
 	}
 
-	function getPasswordHash($password, $salt) {
+	function getPasswordHash($password, $salt)
+	{
 		return hash('sha512', $this->MAGIC . $password . $salt);
+	}
+
+	function handleFailedLogin($user_id)
+	{
+		if (!$this->addFailedLoginAttempt($user_id)) {
+			die("COULD NOT ADD FAILED LOGIN ATTEMPT");
+		} else {
+			
+			$fails = $this->getNumberOfFailedLoginAttempts($user_id);
+			if ($fails >= $this->MAX_FAILED_LOGIN_ATTEMPTS) {
+				$this->blockUser($user_id, $this->FAKE_APPROVER_USER_ID);
+				return false;
+			} else {
+				return true;
+			}
+
+		}
+	}
+
+	function handleSuccessfulLogin($user_id)
+	{
+		$SQL = "DELETE FROM $this->FAILEDLOGIN_TABLE_NAME
+				WHERE
+					$this->FAILEDLOGIN_USER_ID = :user_id
+				";
+
+		$stmt = $this->pdo->prepare($SQL);
+		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+		$result = $stmt->execute();
+
+		return $result;
+	}
+
+	function addFailedLoginAttempt($user_id)
+	{
+		$SQL = "INSERT INTO $this->FAILEDLOGIN_TABLE_NAME
+				(
+					$this->FAILEDLOGIN_USER_ID,
+					$this->FAILEDLOGIN_LOGIN_TS
+				)
+				VALUES
+				(
+					:user_id,
+					now()
+				)";
+
+		$stmt = $this->pdo->prepare($SQL);
+		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+		$stmt->execute();
+
+		$result = $this->pdo->lastInsertId();
+
+		if ($result == 0) {
+			return false;
+		} else {
+			return true;
+		}
+				
+	}
+
+	function getNumberOfFailedLoginAttempts($user_id)
+	{
+		$col = "count";
+
+		$SQL = "SELECT count(*) AS $col
+				FROM $this->FAILEDLOGIN_TABLE_NAME
+				WHERE
+					$this->FAILEDLOGIN_USER_ID = :user_id
+				";
+
+		$stmt = $this->pdo->prepare($SQL);
+		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+		$stmt->execute();
+
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		if (sizeof($result) == 1) {
+			return $result[0][$col];
+		} else {
+			return false;
+		}
 	}
 
 	/************************************************
@@ -487,13 +584,17 @@ final class DB {
 		return $result;
 	}
 
-	function changeUserStatus($user_id, $new_status, $processor_id, $role_filter)
+	function changeUserStatus($user_id, $new_status, $processor_id, $role_filter = "")
 	{
 		if ($this->getEmployeeStatus($processor_id) != $this->mapUserStatus('approved')) {
 			return false;
 		}
 
-		$role = $this->mapUserRole($role_filter);
+		$where = "";
+		if ($role_filter != "") {
+			$role = $this->mapUserRole($role_filter);
+			$where = "AND $this->USER_TABLE_ROLE   = :role";
+		}
 
 		$setApprover = "";
 
@@ -508,8 +609,8 @@ final class DB {
 					$setApprover
 				WHERE
 					$this->USER_TABLE_KEY        = :user_id
-					AND $this->USER_TABLE_ROLE   = :role
 					AND $this->USER_TABLE_STATUS != :new_status
+					$where
 				";
 
 		$stmt = $this->pdo->prepare($SQL);
@@ -518,7 +619,9 @@ final class DB {
 			$stmt->bindValue(':processor_id', $processor_id, PDO::PARAM_INT);
 		}
 		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
-		$stmt->bindValue(':role', $role, PDO::PARAM_INT);
+		if ($where != "") {
+			$stmt->bindValue(':role', $role, PDO::PARAM_INT);
+		}
 		$result = $stmt->execute();
 
 		if ($result == true && $stmt->rowCount() == 1) {
@@ -558,19 +661,19 @@ final class DB {
 		return $this->blockUser($client_id, $blocker_id, 'client');
 	}
 
-	function approveUser($user_id, $approver_id, $role_filter)
+	function approveUser($user_id, $approver_id, $role_filter = "")
 	{
 		$new_status = $this->mapUserStatus('approved');
 		return $this->changeUserStatus($user_id, $new_status, $approver_id, $role_filter);
 	}
 
-	function rejectUser($user_id, $rejector_id, $role_filter)
+	function rejectUser($user_id, $rejector_id, $role_filter = "")
 	{
 		$new_status = $this->mapUserStatus('rejected');
 		return $this->changeUserStatus($user_id, $new_status, $rejector_id, $role_filter);
 	}
 
-	function blockUser($user_id, $blocker_id, $role_filter)
+	function blockUser($user_id, $blocker_id, $role_filter = "")
 	{
 		$new_status = $this->mapUserStatus('blocked');
 		return $this->changeUserStatus($user_id, $new_status, $blocker_id, $role_filter);
@@ -681,7 +784,7 @@ final class DB {
 	}
 
 	function addAccountWithBalance($user_id, $balance)
-	{	//TODO: Start and end transaction around this stuff?
+	{
 		$new_account_id = $this->addAccount($user_id);
 
 		if ($new_account_id == false) {
@@ -708,6 +811,11 @@ final class DB {
 		}
 
 		return $new_account_id;
+	}
+
+	function setAccountBalance($account_id, $balance)
+	{
+		return false; //TODO: IMPLEMENT
 	}
 
 	/************************************************

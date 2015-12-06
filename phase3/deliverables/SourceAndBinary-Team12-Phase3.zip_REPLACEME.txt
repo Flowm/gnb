@@ -1,0 +1,2 @@
+containing all PHP, MySQL sources and the
+C/C++ binary for batch processing, NOT the C/C++ source code

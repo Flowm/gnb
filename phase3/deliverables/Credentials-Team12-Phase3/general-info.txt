@@ -1,0 +1,117 @@
+- the username and password of the OS user
+
+	samurai
+	r8QD4bbgvByQiuqX
+
+- the username and password of the MySQL database
+
+	samurai
+	6JEn7RhLAGaavQTx
+
+- with the username and passwords of all the existing users.
+
+	Structure:
+		<mail>
+		<password>
+		<PIN>
+		<banking method>
+		<account number>
+
+	Robin Scherbatsky
+		robin@robinsparkles.com
+		SandcastlesInTheSand
+		906090
+		TANs
+		10000002
+
+	Marshall Eriksen
+		marshall@theeriksens.com
+		ILikeOlives
+		198001
+		SCS
+		10000003
+
+- the username and password of the admin/employee user for your web-application
+
+	Structure:
+		<mail>
+		<password>
+
+	Barney Stinson
+		barney.stinson@gnb.com
+		ThisIsGonnaBeLegendarySoSuitUp
+
+	Ted Mosby
+		ted.mosby@gnb.com
+		WhoSaysThat
+
+- the URL to access your web application
+
+	https://localhost/gnb
+
+- the location and structure of the folder(s) where you have the source files of your web
+application.
+
+	/config
+		Includes the apache and php configuration as well as the files necessary for the database setup.
+
+	/phase2
+		Material from Phase 2
+
+	/phase3
+		Material from Phase 3
+
+	/project
+		Code for the web application
+
+		/accounts
+			Code concerning the account pages
+
+		/client
+			Code concerning the client pages
+
+		/employee
+			Code concerning the employee pages
+
+		/holder
+			Directory for temporary files that are generated and downloaded
+
+		/js
+			Directory containing all the JavaScript code
+
+		/lib
+			Directory containing third party libraries and non-PHP applications
+
+			/ctransact
+				Source code for the batch file parser
+
+			/fpdf
+				PDF library
+
+			/phpmailer
+				Mail library
+
+			/scs
+				Compiled Smart Card Simulator
+
+		/media
+			Directory containing all the resources (Images and Icons)
+
+		/models
+			Directory containing the object-models Account, Transaction and User
+
+		/registration
+			Code concerning the registration pages
+
+		/style
+			Directory containing all CSS files
+
+		/templates
+			Directory containing all the Mail templates
+
+		/uploads
+			Directory for temporary files that are uploaded for batch transactions
+
+- the name and location of any third party libraries that you have used in phase 3
+
+	/project/lib

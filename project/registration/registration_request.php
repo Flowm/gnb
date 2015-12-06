@@ -39,13 +39,13 @@ if (!isset($_POST['type'])
 }
 
 //Getting form stuff
-$type = $_POST['type'];
-$email = $_POST['email'];
-$firstname = $_POST['firstname'];
-$lastname = $_POST['lastname'];
-$password = $_POST['password'];
-$passwordRepeat = $_POST['password_repeat'];
-$banking = $_POST['banking'];
+$type 			= santize_input($_POST['type'],SANITIZE_STRING_VAR);
+$email 			= santize_input($_POST['email'],SANITIZE_STRING_EMAIL);
+$firstname 		= santize_input($_POST['firstname'],SANITIZE_STRING_NAME);
+$lastname 		= santize_input($_POST['lastname']SANITIZE_STRING_NAME );
+$password 		= santize_input($_POST['password']);
+$passwordRepeat = santize_input($_POST['password_repeat']);
+$banking 		= santize_input($_POST['banking']);
 
 // Checking all of the conditions on server side as well.
 if ($type == ''

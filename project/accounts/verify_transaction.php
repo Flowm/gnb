@@ -40,7 +40,7 @@ $auth_type = DB::i()->mapAuthenticationDevice($user->auth_device);
 # Process Transaction 
 if ( isset($_SESSION["process"]) && $_SESSION["process"] == true
     && isset($_POST["confirmed"]) && $_POST["confirmed"] == "yes") {
-	$trans_res	 = DB::i()->processTransaction($account_id, $dest_code, $amount, $description, $tan_code) ;
+	$trans_res	 = DB::i()->processTransaction($account_id, $dest_code, $amount, $description, $tan_code, $auth_type);
 	if ($trans_res == false){
 		die ("Unkonwn Transaction error, please connect our bros for help!");
 	}

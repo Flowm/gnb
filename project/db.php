@@ -682,7 +682,7 @@ final class DB {
 		return $this->changeUserStatus($user_id, $new_status, $blocker_id, $role_filter);
 	}
 
-	function setPasswordResetHash($user_id, $password_reset_hash)
+	function setPasswordResetHash($mail, $password_reset_hash)
 	{
 		$SQL = "UPDATE
 					$this->USER_TABLE_NAME
@@ -690,12 +690,12 @@ final class DB {
 					$this->USER_TABLE_PW_RESET = :password_reset_hash,
 					$this->USER_TABLE_PW_RESET_TS = now()
 				WHERE
-					$this->USER_TABLE_KEY = :user_id
+					$this->USER_TABLE_EMAIL = :mail
 				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':password_reset_hash', $password_reset_hash, PDO::PARAM_STR);
-		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+		$stmt->bindValue(':mail', $mail, PDO::PARAM_STR);
 		$result = $stmt->execute();
 
 		if ($result == true && $stmt->rowCount() == 1) {
@@ -705,7 +705,7 @@ final class DB {
 		}
 	}
 
-	function resetPassword($user_id, $password, $reset_hash)
+	function resetPassword($mail, $password, $reset_hash)
 	{
 		$salt = $this->genRandString(8);
 		$password_hash = $this->getPasswordHash($password, $salt);
@@ -718,7 +718,7 @@ final class DB {
 					$this->USER_TABLE_PW_RESET = NULL,
 					$this->USER_TABLE_PW_RESET_TS = NULL
 				WHERE
-					$this->USER_TABLE_KEY = :user_id
+					$this->USER_TABLE_EMAIL = :mail
 					AND $this->USER_TABLE_PW_RESET = :reset_hash
 					AND now() <= date_add(pw_reset_hash_timestamp, INTERVAL $this->PW_RESET_HASH_TIMEOUT);
 				";
@@ -726,7 +726,7 @@ final class DB {
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':salt', $salt, PDO::PARAM_STR);
 		$stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
-		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+		$stmt->bindValue(':mail', $mail, PDO::PARAM_STR);
 		$stmt->bindValue(':reset_hash', $reset_hash, PDO::PARAM_STR);
 
 		$result = $stmt->execute();
@@ -1073,7 +1073,8 @@ final class DB {
 		if ($source == $destination) {
 			return false;
 		}
-
+		var_dump($tan);
+		var_dump($auth_device);
 		if ($amount <= 0) {
 			return false;
 		}
@@ -1141,7 +1142,7 @@ final class DB {
 						$status
 					)
 				";
-
+		var_dump($SQL);
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':source', $source, PDO::PARAM_INT);
 		$stmt->bindValue(':destination', $destination, PDO::PARAM_INT);
@@ -1151,7 +1152,7 @@ final class DB {
 		$stmt->execute();
 
 		$result = $this->pdo->lastInsertId();
-		
+		var_dump($result);
 		if ($result != 0) {
 			$this->pdo->commit();
 			return $result;

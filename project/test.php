@@ -150,9 +150,9 @@ function bla()
 
 	//dump("setLastTANTime", $db->setLastTANTime(10000003, 678));
 
-	//dump("setPasswordResetHash", $db->setPasswordResetHash(3, "HASHHASHHASH"));
-	//dump("resetPassword", $db->resetPassword(3, "asdasdasd", "HASHHASHHASHaaaaaaaaa"));
-	dump("resetPassword", $db->resetPassword(3, "asdasdasd", "HASHHASHHASH"));
+	//dump("setPasswordResetHash", $db->setPasswordResetHash("barney.stinson@gnb.com", "HASHHASHHASH"));
+	//dump("resetPassword", $db->resetPassword("barney.stinson@gnb.com", "asdasdasd", "HASHHASHHASHaaaaaaaaa"));
+	//dump("resetPassword", $db->resetPassword("barney.stinson@gnb.com", "ThisIsGonnaBeLegendarySoSuitUp", "HASHHASHHASH"));
 
 
 }

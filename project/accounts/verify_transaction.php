@@ -30,9 +30,15 @@ $description	= ( isset($_POST["description"]) ? $_POST["description"] : '' );
 $tan_code		= ( isset($_POST["tan_code"]) ? $_POST["tan_code"] : '' );
 $pin            = ( isset($_POST["pin"]) ? $_POST["pin"] : '' );
 
+//Need user details in order to check the PIN
+$user_id = $_SESSION["user_id"];
+$user = new user(DB::i()->getUser($user_id));
+$account = new account(DB::i()->getAccountDetails($account_id));
+$auth_type = DB::i()->mapAuthenticationDevice($user->auth_device);
+
 # Process Transaction 
 if ( isset($_POST["process"]) && $_POST["process"] == 'yes'){
-	$trans_res	 = DB::i()->processTransaction($account_id, $dest_code, $amount, $description, $tan_code) ;
+	$trans_res	 = DB::i()->processTransaction($account_id, $dest_code, $amount, $description, $tan_code, $auth_type) ;
 	if ($trans_res == false){
 		die ("Unkonwn Transaction error, please connect our bros for help!");
 	}
@@ -46,12 +52,6 @@ if ( isset($_POST["process"]) && $_POST["process"] == 'yes'){
 # Otherwise confirm transction parameters 
 else 
 {
-    //Need user details in order to check the PIN
-    $user_id = $_SESSION["user_id"];
-    $user = new user(DB::i()->getUser($user_id));
-    $account = new account(DB::i()->getAccountDetails($account_id));
-    $auth_type = DB::i()->mapAuthenticationDevice($user->auth_device);
-
 	# verify all input is there 
 	if (empty($account_id))
 		die("Account ID not found");

@@ -46,8 +46,12 @@ function main() {
 	print "ACC_ROBIN: $account_id_robin<br>";
 	print "ACC_MARSHALL: $account_id_marshall<br>";
 
+	$smartcardtan = DB::i()->insertTAN(DB::i()->SCS_DEFAULT_TAN, $account_id_barney);
+	print "SMARTCARDTAN: $smartcardtan<br>";
+
     $account_robin = new account(array("id" => $account_id_robin));
 	$tans_robin = $account_robin->generateTANs(100);
+	print "TANSROBIN: " . sizeof($tans_robin) . "<br>";
 }
 
 ?>

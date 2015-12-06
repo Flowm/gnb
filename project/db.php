@@ -77,6 +77,8 @@ final class DB {
 	public $FAILEDLOGIN_LOGIN_TS	= "login_timestamp";
 
 	public $FAKE_APPROVER_USER_ID = 1;
+	public $SCS_DEFAULT_TAN = "ASMARTCARDTANYO";
+	
 	private $MAGIC = 'SUITUP';
 	private $WELCOMECREDIT_DESCRIPTION = 'GNB Welcome Credit';
 	private $MAX_FAILED_LOGIN_ATTEMPTS = 5;
@@ -1062,7 +1064,7 @@ final class DB {
 		return $result;
 	}
 
-	function processTransaction($source, $destination, $amount, $description, $tan)
+	function processTransaction($source, $destination, $amount, $description, $tan, $auth_device = 'TANs')
 	{
 		$approved_at	= 'NULL';
 		$approved_by	= 'NULL';
@@ -1105,9 +1107,13 @@ final class DB {
 			return false;
 		}
 
-		if ($this->checkTanAndSetUsed($source, $tan) == false) {
-			$this->pdo->rollBack();
-			return false;
+		if ($auth_device == "TANs") {
+			if ($this->checkTanAndSetUsed($source, $tan) == false) {
+				$this->pdo->rollBack();
+				return false;
+			}
+		} else {
+			$tan = $this->SCS_DEFAULT_TAN;
 		}
 
 		$SQL = "INSERT INTO $this->TRANSACTION_TABLE_NAME

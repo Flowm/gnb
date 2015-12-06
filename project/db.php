@@ -84,26 +84,26 @@ final class DB {
 	private $MAX_FAILED_LOGIN_ATTEMPTS = 5;
 	private $PW_RESET_HASH_TIMEOUT = "1 DAY";
 
-    /**
-     * Call this method to get singleton
-     *
-     * @return DB
-     */
-    public static function i()
-    {
-        static $inst = null;
-        if ($inst === null) {
-            $inst = new DB();
-        }
-        return $inst;
-    }
+	/**
+	 * Call this method to get singleton
+	 *
+	 * @return DB
+	 */
+	public static function i()
+	{
+		static $inst = null;
+		if ($inst === null) {
+			$inst = new DB();
+		}
+		return $inst;
+	}
 
-    /**
-     * Private ctor so nobody else can instance it
-     *
-     */
-    private function __construct()
-    {
+	/**
+	 * Private ctor so nobody else can instance it
+	 *
+	 */
+	private function __construct()
+	{
 		try {
 			$this->pdo = new PDO('mysql:host=' . $this->DB_HOST . ';dbname=' . $this->DB_NAME . ';charset=utf8',
 				$this->DB_USERNAME, $this->DB_PASSWORD);
@@ -112,7 +112,7 @@ final class DB {
 				var_dump($ex);
 			}
 		}
-    }
+	}
 
 	function debug($message)
 	{
@@ -381,8 +381,8 @@ final class DB {
 		$pin,
 		$authentication_device='none')
 	{
-	    $role = $this->mapUserRole($role_filter);
-	    $auth_device = $this->mapAuthenticationDevice($authentication_device);
+		$role = $this->mapUserRole($role_filter);
+		$auth_device = $this->mapAuthenticationDevice($authentication_device);
 
 		$salt = $this->genRandString(8);
 		$password_hash = $this->getPasswordHash($password, $salt);
@@ -611,7 +611,7 @@ final class DB {
 					$this->USER_TABLE_STATUS   = :new_status
 					$setApprover
 				WHERE
-					$this->USER_TABLE_KEY        = :user_id
+					$this->USER_TABLE_KEY		= :user_id
 					AND $this->USER_TABLE_STATUS != :new_status
 					$where
 				";
@@ -955,9 +955,9 @@ final class DB {
 
 		if (sizeof($result) == 1) {
 			return $result;
-	    } else {
-	        return false;
-	    }
+		} else {
+			return false;
+		}
 	}
 
 	function setLastTANTime($account_id, $last_tan_time)
@@ -1049,7 +1049,7 @@ final class DB {
 	{
 		$status = $this->mapTransactionStatus('unapproved');
 
-	    $SQL = "SELECT *
+		$SQL = "SELECT *
 				FROM $this->TRANSACTION_TABLE_NAME
 				WHERE
 					$this->TRANSACTION_TABLE_STATUS	= :status
@@ -1073,8 +1073,7 @@ final class DB {
 		if ($source == $destination) {
 			return false;
 		}
-		var_dump($tan);
-		var_dump($auth_device);
+		
 		if ($amount <= 0) {
 			return false;
 		}
@@ -1142,7 +1141,7 @@ final class DB {
 						$status
 					)
 				";
-		var_dump($SQL);
+		
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':source', $source, PDO::PARAM_INT);
 		$stmt->bindValue(':destination', $destination, PDO::PARAM_INT);
@@ -1152,7 +1151,7 @@ final class DB {
 		$stmt->execute();
 
 		$result = $this->pdo->lastInsertId();
-		var_dump($result);
+		
 		if ($result != 0) {
 			$this->pdo->commit();
 			return $result;
@@ -1198,14 +1197,14 @@ final class DB {
 			return $var_res ; 
 		}
 
-        //In case the user uses a PIN, we cannot check the TAN on the db. TAN validity was already checked
-        $tanValid = ($auth_device == 'TANs') ? $this->verifyTANCode($source, $tan_code) : true;
+		//In case the user uses a PIN, we cannot check the TAN on the db. TAN validity was already checked
+		$tanValid = ($auth_device == 'TANs') ? $this->verifyTANCode($source, $tan_code) : true;
 
 		if ($tanValid == false) {
 			$var_res["message"]	= '[TAN] Invalid or used TAN';
 			return $var_res ; 
 		}
-	 
+	
 		$var_res["result"] = true;
 		$var_res["message"]	= '[Success] Passed all tests' ;
 
@@ -1216,9 +1215,9 @@ final class DB {
 	{
 		$old_status = $this->mapTransactionStatus('unapproved');
 
-	    if ($this->getEmployeeStatus($processor_id) != $this->mapUserStatus('approved')) {
-	    	return false;
-	    }
+		if ($this->getEmployeeStatus($processor_id) != $this->mapUserStatus('approved')) {
+			return false;
+		}
 
 		$SQL = "UPDATE $this->TRANSACTION_TABLE_NAME
 				SET

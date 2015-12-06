@@ -206,7 +206,7 @@ class user {
 	private function generateTanPDF($tans,$pass='iDontKnowAndIDontCare') {
 		
 		$fullname 		= $this->firstname.' '.$this->lastname ;
-		$logo			= getMediaPath('logo_png') ;
+		$logo			= getMediaAbsolute('logo_png') ;
 		$tanpdfdir 		= getPageAbsolute('holder') ; 
 		$tanpdffilename	= $this->id.'_'.$this->firstname.'.pdf';
 		$tanpdffile		= $tanpdfdir.$tanpdffilename ;

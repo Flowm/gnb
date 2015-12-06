@@ -73,6 +73,16 @@ function santize_input($input, $check_type = SANITIZE_STRING_DESC)
 		}else{
 			$sanitization['message']	= 'Bad string(email) value, '.$error_msg_gen ;	
 		}							
+	} elseif ( $check_type == SANITIZE_STRING_VAR ) {
+		$sanitized_input	= filter_var($sanitized_input, FILTER_SANITIZE_EMAIL);
+		$sanitized_input 	= preg_replace( '/[^a-zA-Z0-9_]/', '', $sanitized_input );
+		if ( $sanitized_input !== false and !empty($sanitized_input)){
+			$sanitization['result']		= true ; 
+			$sanitization['input']		= $sanitized_input ; 
+			$sanitization['message']	= 'Email sanitizated succesfully' ; 
+		}else{
+			$sanitization['message']	= 'Bad string(variable) value, '.$error_msg_gen ;	
+		}							
 	} elseif ($check_type == SANITIZE_STRING_DESC) {
 		$sanitized_input	= filter_var($sanitized_input, FILTER_SANITIZE_STRING);
 		if ( $sanitized_input !== false and !empty($sanitized_input)){
@@ -128,5 +138,11 @@ function generateRandomPIN() {
     }
     return $random_pin;
 }
+
+# Checking Sanitization function 
+#$data		= 'asdaslkdjaksAS_DAS_DAS djaslkd j0932 40932 -' ;
+#$check		= SANITIZE_STRING_VAR ;
+#$display	= santize_input($data,$check) ;
+#echo '<h2>'.$display.'</h2>' ; 
 
 ?>

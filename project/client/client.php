@@ -3,6 +3,7 @@
 require_once __DIR__."/../resource_mappings.php";
 require_once getpageabsolute("db_functions");
 require_once getpageabsolute("user");
+require_once getpageabsolute("utilityfunctions");
 
 session_start();
 
@@ -23,7 +24,7 @@ $page = getPageAbsolute('client'); //static
 $sectionKey = 'client_overview';
 $section = getSectionAbsolute('client_home'); //static default
 if (isset($_POST["section"])) {
-    $sectionKey = $_POST["section"];
+    $sectionKey = santize_input($_POST["section"],SANITIZE_STRING_VAR);
     $section = getSectionAbsolute($sectionKey);
 }
 

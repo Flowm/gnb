@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("utilityfunctions");
 
 //Worst case, an unauthenticated user is trying to access this page directly
 if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
@@ -62,8 +63,8 @@ if (DB::i()->mapAuthenticationDevice($user->auth_device) == 'TANs') {
     echo '<div class="simple-container-no-bounds simple-text-centered">';
     echo '<p class="simple-text-big">Below you can see the password '.
         'needed to decrypt the PDF you received via email:<br></p>';
-    echo '<h1 class="title2">'.$user->pin.'</h1>'; //TODO: NEED TO SHOW THE HASH! AS SOON AS IT'S WORKING
-    echo '</div>';
+    echo '<h1 class="title2">'.$user->getPDFHash().'</h1>';
+	echo '</div>';
 }
 
 ?>

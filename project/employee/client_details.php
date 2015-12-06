@@ -60,6 +60,7 @@ if ($selected != null) {
 $currency = '€';
 $role = DB::i()->mapUserRole($user->role);
 $status = DB::i()->mapUserStatus($user->status);
+$banking = DB::i()->mapAuthenticationDevice($user->auth_device);
 
 //VIEW STARTS FROM HERE
 ?>
@@ -91,6 +92,10 @@ $status = DB::i()->mapUserStatus($user->status);
     echo "<tr>
             <td><b>Status:</b></td>
             <td> $status </td>
+        </tr>";
+    echo "<tr>
+            <td><b>Banking:</b></td>
+            <td> $banking </td>
         </tr>";
     ?>
 </table>

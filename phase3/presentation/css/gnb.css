@@ -1,0 +1,26 @@
+html.intro body {
+	background:url("../pictures/sky-white.jpg");
+	background-position:center;
+	background-size: 100%;
+}
+
+html.intro .left {
+	text-align: right !important;
+}
+
+html.intro .right {
+	text-align: left !important;
+}
+
+html.vulns body {
+	background:url("../pictures/doom-1.jpeg");
+	background-position:center;
+	background-size: 100%;
+}
+
+img.logo {
+  width: 400px;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+}

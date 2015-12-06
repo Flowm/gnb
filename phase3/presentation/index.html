@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/black.css" id="theme">
+        <!--link rel="stylesheet" href="css/theme/white.css" id="theme"-->
+        <link rel="stylesheet" href="css/gnb.css">
+        <link rel="stylesheet" media="print" href="css/print/pdf.css" />
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+
+                <section data-state="intro">
+                    <img src="pictures/gnb_logo.svg" class="logo">
+                    <h1>Secure Coding</h1>
+                    <h2>Team 12 - Phase 3</h2>
+
+                    <h3>Members</h3>
+                    <table>
+                        <tr>
+                            <td class="left">Alexander Lill</td>
+                            <td class="right">Lorenzo Donini</td>
+                        </tr>
+                        <tr>
+                            <td class="left">Florian Mauracher</td>
+                            <td class="right">Mahmoud Naser</td>
+                        </tr>
+                    </table>
+                </section>
+
+
+                <section data-state="use-cases">
+
+                    Second slide: enumeration of use-cases that were fixed / work / do not work. At least
+                    the following use-cases should be there:
+                    a) All use-cases of phase 1 (see Phase 1 Deliverables document)
+                    b) Password recovery
+                    c) Encrypted TAN generation and delivery via e-mail to customer
+                    d) Download of SCS after registration
+                    e) Transfer using SCS
+                    
+                </section>
+
+
+                <section data-state="vulns">
+                    
+                    Core of presentation: at this point in the presentation you must talk about:
+
+                    Vulnerabilities (possible exploits of the vulnerabilities) and how you fixed them.
+                    Feel free to go into technical details, but keep it short, clear and entertaining.
+                    Report possible changes in OWASP and CVSS values (e.g. from high to medium,
+                    etc.) including reasoning for these changes in the values.
+
+                </section>
+
+
+                <section>
+
+                    <h1>
+                        Thanks for your attention!
+                    </h1>
+
+                </section>
+
+
+                <!-- FOLLOWING SECTIONS DONT NEED TO BE PRESENTED! -->
+
+
+                <section>
+
+                    Fix slides: For each vulnerability discovered in Phase 2 by your team or the team that tested your
+                    application, you should summarize the fix that you implemented:
+                     Path(s) of file(s) which was modified for the fix
+                     Line number(s) which were modified in each file
+                     NOTE: You can use a diff utility but you should only report the changes relevant for one particular
+                    fix per vulnerability (not just a diff of all changes to phase 1).
+                     Textual description of your countermeasures and the reason why they fix the problem.
+
+                </section>
+
+
+                <section>
+
+                    Use-case slides: will serve as a user manual describing all the use-cases that work using the same
+                    format as in the Phase 1 Deliverables document for each use-case.
+                     Mention the format of the batch file and any other data formats needed to use the application!
+                     Each use case must have a video (screencast) associate with it that demonstrates the main-flow
+                    of the use-case. A user must be able to use the app by simply looking at the video.
+                     The video must have the same name as the use-case and a resolution of 1280x1024.
+                     The format of the video must be MP4, the video codec must be H.264 and the audio codec must
+                    be AAC. The file must be located in the Videos-TeamX-Phase3 folder.
+                     The quality of the video must be good enough to be able to read the text shown on the
+                    screen.
+                     In case passwords are typed in please add video annotations for the viewer to know the
+                    password.
+
+                </section>
+
+
+                <section>
+
+
+                    <section>
+                        <h1>Time-Tracking</h1>
+                    </section>
+
+
+                    <!-- ATTENTION!!! "info / student / task at hour granularity" -->
+
+
+                    <section>
+                        <h1>Alexander Lill</h1>
+
+                        <table>
+                            <tr>
+                                <th>Task</th>
+                                <th>Time</th>
+                            </tr>
+                            <tr>
+                                <td>ALL the things</td>
+                                <td>42h</td>
+                            </tr>
+                        </table>
+
+                    </section>
+
+
+                    <section>
+                        <h1>Lorenzo Donini</h1>
+
+                        <table>
+                            <tr>
+                                <th>Task</th>
+                                <th>Time</th>
+                            </tr>
+                            <tr>
+                                <td>ALL the things</td>
+                                <td>42h</td>
+                            </tr>
+                        </table>
+
+                    </section>
+
+
+                    <section>
+                        <h1>Florian Mauracher</h1>
+
+                        <table>
+                            <tr>
+                                <th>Task</th>
+                                <th>Time</th>
+                            </tr>
+                            <tr>
+                                <td>ALL the things</td>
+                                <td>42h</td>
+                            </tr>
+                        </table>
+
+                    </section>
+
+
+                    <section>
+                        <h1>Mahmoud Naser</h1>
+
+                        <table>
+                            <tr>
+                                <th>Task</th>
+                                <th>Time</th>
+                            </tr>
+                            <tr>
+                                <td>ALL the things</td>
+                                <td>42h</td>
+                            </tr>
+                        </table>
+                    </section>
+
+
+                </section>
+
+
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+
+            // Full list of configuration options available at:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+                // Optional reveal.js plugins
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true },
+                    { src: 'plugin/notes/notes.js', async: true }
+                ]
+            });
+        </script>
+
+    </body>
+</html>

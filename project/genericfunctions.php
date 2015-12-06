@@ -2,88 +2,82 @@
 
 	define("SANITIZE_INT", 0);
 	define("SANITIZE_DOUBLE", 1);
-	define("SANITIZE_TEXT_BASIC", 2);
-	define("SANITIZE_TEXT_EXTENDED", 3);
-	define("SANITIZE_TEXT_EMAIL", 3);
-	define("SANITIZE_TEXT_NAME", 3);
+	define("SANITIZE_STRING_NAME", 2);
+	define("SANITIZE_STRING_EMAIL", 3);
+	define("SANITIZE_STRING_DESC", 4);
 	
-	$allowed_types	= 	array(
-		'integer'		=> array('integer','double'),
-		'double'		=> array('integer','double'),
-		'string'		=> array('integer','double','string'),
-	) ;
-	
-	function santize_input($input, $check_type = SANITIZE_TEXT_EXTENDED)
+	function santize_input($input, $check_type = SANITIZE_STRING_DESC)
 	{
-		global	$allowed_types ;
-
-		echo '<h2>'.'Sanitising Input'.'</h2>' ;
-		$input_type			= gettype($input) ;
-		$sanitized_input	= $input ;
-		$sanitized_input	= htmlspecialchars($sanitized_input) ;
+		$sanitized_input	= htmlspecialchars($input) ;
 		
-		echo '<h2>'.'Input Sanitised'.'</h2>' ;
-		print_r($allowed_types[$input_type]) ;
-		
-		echo '<h2>'.'Checking Input Type'.'</h2>' ;
-		# If input type not good then return false 
-		if ( ! in_array($input_type,$allowed_types[$input_type]) ){ return false ; }
-		echo '<h2>'.'Input Type Checked'.'</h2>' ;
+		$sanitization	= array (
+			'result'	=> false, 
+			'input'		=> '',
+			'message'	=> 'Generic Sanitization failed',
+		) ;
 		
 		if ( $check_type == SANITIZE_INT ){
-			# removing all non digits
-			echo '<h2>'.'Integer Test'.'</h2>' ;
-			$sanitized_input 	= preg_replace( '/[^0-9]/', '', $sanitized_input );
-			$sanitized_input 	= intval($sanitized_input );
+			$sanitized_input	= filter_var($sanitized_input, FILTER_SANITIZE_NUMBER_INT);
+			if ( $sanitized_input !== false ){
+				$sanitization['result']		= true ; 
+				$sanitization['input']		= $sanitized_input ; 
+				$sanitization['message']	= 'Integer sanitizated succesfully' ; 
+			}
 			
 		} elseif ( $check_type == SANITIZE_DOUBLE ) {
-			echo '<h2>'.'Double Test'.'</h2>' ;
-			# removing all non digits and '.'
-			$sanitized_input 	= preg_replace( '/[^0-9\.]/', '', $sanitized_input );	
-			$sanitized_input 	= doubleval($sanitized_input );
+			$sanitized_input	= filter_var($sanitized_input, FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION );
+			# Removing multiple '.' in the number 
+			# check if double has a decimal point
 			
-		} elseif ( $check_type == SANITIZE_TEXT_BASIC ) {
-			echo '<h2>'.'Text Basic'.'</h2>' ;
-			# replacing any non all non alphanumerics and '-'
-			$sanitized_input 	= preg_replace( '/[^-a-zA-Z0-9\-]/', '', $sanitized_input );				
-		
-		} elseif ($check_type == SANITIZE_TEXT_EXTENDED) {
-			echo '<h2>'.'Text Extended'.'</h2>' ;
-			# nothing to do here 
-			$sanitized_input	= $sanitized_input ;
+			$first_dec	= strpos($sanitized_input,'.') ;
+			$last_dec	= strrpos($sanitized_input,'.') ;
+			$str_length	= strlen($sanitized_input) ;
 			
-		} elseif ( $check_type == SANITIZE_TEXT_EMAIL ) {
-			echo '<h2>'.'Text Email'.'</h2>' ;
-			# replacing any non all non alphanumerics and '-'
-			$sanitized_input 	= preg_replace( '/[^A-z0-9_\-\+\.\s]/', '', $sanitized_input );				
+			# check if double has more than 1 decimal point and remove if needed
+			if (  $first_dec !== false ){
+				if ( $first_dec != $last_dec ){
+					$first_part			= substr($sanitized_input,0,$first_dec+1) ; 
+					$last_part			= substr($sanitized_input,$first_dec+2) ;
+					$last_part			= str_replace('.','',$last_part) ;
+					$sanitized_input	= $first_part.$last_part ;
+				}
+			}
 			
-		} elseif ($check_type == SANITIZE_TEXT_NAME) {
-			echo '<h2>'.'Text Name'.'</h2>' ;
-			# nothing to do here 
-			$sanitized_input 	= preg_replace( '/[^-a-zA-Z0-9\-]/', '', $sanitized_input );
-			
+			if ( $sanitized_input !== false ){
+				$sanitization['result']		= true ; 
+				$sanitization['input']		= $sanitized_input ; 
+				$sanitization['message']	= 'Double sanitizated succesfully' ; 
+			}
+		} elseif ( $check_type == SANITIZE_STRING_NAME ) {
+			$sanitized_input	= filter_var($sanitized_input, FILTER_SANITIZE_STRING);
+			$sanitized_input 	= preg_replace( '/[^-a-zA-Z0-9\-]/', '', $sanitized_input );		if ( $sanitized_input !== false ){
+				$sanitization['result']		= true ; 
+				$sanitization['input']		= $sanitized_input ; 
+				$sanitization['message']	= 'Name sanitizated succesfully' ; 
+			}
+		} elseif ( $check_type == SANITIZE_STRING_EMAIL ) {
+			$sanitized_input	= filter_var($sanitized_input, FILTER_SANITIZE_EMAIL);
+			$sanitized_input 	= preg_replace( '/[^A-z0-9_\-\+\.\s]/', '', $sanitized_input );
+			if ( $sanitized_input !== false ){
+				$sanitization['result']		= true ; 
+				$sanitization['input']		= $sanitized_input ; 
+				$sanitization['message']	= 'Email sanitizated succesfully' ; 
+			}							
+		} elseif ($check_type == SANITIZE_STRING_DESC) {
+			$sanitized_input	= filter_var($sanitized_input, FILTER_SANITIZE_STRING);
+			if ( $sanitized_input !== false ){
+				$sanitization['result']		= true ; 
+				$sanitization['input']		= $sanitized_input ; 
+				$sanitization['message']	= 'String sanitizated succesfully' ; 
+			}										
 		} else {
-			# Undefined Type return error 	
-			echo '<h2>'.'Undefined Test'.'</h2>' ;
-			return false  ; 
+			$sanitization['result']		= true ; 
+			$sanitization['input']		= $sanitized_input ; 
+			$sanitization['message']	= 'String sanitizated succesfully' ; 
 		}
-		return $sanitized_input ;
+		return $sanitization  ;
 	}
-	# testing 
-	#$input 		= 'tedfg2..stx,,123'   ; 
-	#$input_t 	= gettype($input)   ; 
-	#$check		= SANITIZE_DOUBLE ;
-	# 
-	#$title	= santize_input($input,$check )  ; 
-	#$data_1 	= $input; 
-	#$data_2 	= $title; 
-	#
-	#echo '<h2>Before:'.$data_1.'</h2>' ;
-	#echo '<h2>After:'.$data_2.'</h2>' ;
 	
-	#print_r($allowed_types[$input_t]) ;
-
-
 function base64ToBase10($base64Str) {
 	$alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 

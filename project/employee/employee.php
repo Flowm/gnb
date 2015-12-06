@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("utilityfunctions");
 
 session_start();
 
@@ -21,7 +22,7 @@ $page = getPageAbsolute('employee'); //static
 $sectionKey = 'employee_overview';
 $section = getSectionAbsolute('employee_home'); //static default
 if (isset($_POST["section"])) {
-    $sectionKey = $_POST["section"];
+    $sectionKey = santize_input($_POST["section"],SANITIZE_STRING_VAR);
     $section = getSectionAbsolute($sectionKey);
 }
 

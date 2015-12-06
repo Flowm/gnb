@@ -24,7 +24,8 @@ require_once getPageAbsolute('db_functions');
 
 $transaction = null;
 if (isset($_POST['transfer_id'])) {
-    $search = DB::i()->getTransaction($_POST['transfer_id']);
+	$transfer_id	 = santize_input($_POST['transfer_id',SANITIZE_INT) ; 
+    $search = DB::i()->getTransaction($transfer_id);
     if ($search) {
         $transaction = new transaction($search);
     }

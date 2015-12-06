@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("utilityfunctions");
 
 //Worst case, an unauthenticated user is trying to access this page directly
 if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
@@ -24,8 +25,8 @@ require_once getpageabsolute("db_functions");
 
 //Handling approval/rejections first
 if (isset($_POST['action']) && isset($_POST['transactions'])) {
-    $action = $_POST['action'];
-    $requests = $_POST['transactions'];
+    $action = santize_input($_POST['action'],SANITIZE_STRING_VAR);
+    $requests = santize_input($_POST['transactions']);
     $approver_id = $_SESSION['user_id'];
 
     if ($action == 'approveTransfer') {

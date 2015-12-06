@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("utilityfunctions");
 
 //Worst case, an unauthenticated user is trying to access this page directly
 if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
@@ -27,7 +28,8 @@ if (empty($_SESSION["user_id"]))
 
 $user = null;
 if (isset($_POST['client_id'])) {
-    $search = DB::i()->getUser($_POST['client_id']);
+	$client_id	= santize_input($_POST['client_id'],SANITIZE_INT) ;
+    $search = DB::i()->getUser($client_id);
     $user = new user($search);
 }
 
@@ -44,8 +46,9 @@ $selected = (count($accounts) > 0) ? $accounts[0] : null;
 
 //Get the currently selected account
 if (isset($_POST["account_id"])) {
+	$account_id	= santize_input($_POST["account_id"],SANITIZE_INT) ;
     foreach($accounts as $acc) {
-        if ( $_POST["account_id"] == $acc->id ) {
+        if ( $account_id == $acc->id ) {
             $selected = $acc;
             break;
         }

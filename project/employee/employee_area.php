@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("utilityfunctions");
 
 //Worst case, an unauthenticated user is trying to access this page directly
 if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
@@ -22,7 +23,7 @@ if ($role != "employee") {
 $frameKey = 'manage_clients';
 $frame = getFrameAbsolute('manage_clients'); //static default
 if (isset($_POST["frame"])) {
-    $frameKey = $_POST['frame'];
+    $frameKey = santize_input($_POST['frame'],SANITIZE_STRING_VAR);
     $frame = getFrameAbsolute($frameKey);
 }
 

@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("utilityfunctions");
 
 //Worst case, an unauthenticated user is trying to access this page directly
 if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
@@ -24,7 +25,7 @@ require_once getpageabsolute("db_functions");
 $frameKey = 'account_overview';
 $frame = getFrameAbsolute('account_home'); //static default
 if (isset($_POST["frame"])) {
-    $frameKey = $_POST["frame"];
+    $frameKey = santize_input($_POST["frame"],SANITIZE_STRING_VAR) ;
     $frame = getFrameAbsolute($frameKey);
 }
 
@@ -33,9 +34,10 @@ if (empty($_SESSION["user_id"]))
 $accounts_info = DB::i()->getAccountsForUser($_SESSION["user_id"]);
 
 if (isset($_POST["account"])) {
+	$account	= santize_input($_POST["account"],SANITIZE_INT) ;
 	foreach($accounts_info as $acc) {
-		if ( $_POST["account"] == $acc["id"] ) {
-			$_SESSION["account_id"] = $_POST["account"];
+		if ( $account == $acc["id"] ) {
+			$_SESSION["account_id"] = $account;
 			break;
 		}
 	}

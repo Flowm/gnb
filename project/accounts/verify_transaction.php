@@ -24,10 +24,12 @@ if (empty($_SESSION["account_id"]))
 
 $account_id 	= $_SESSION["account_id"];
 $role			= $_SESSION["role"] ; 
-$dest_code		= ( isset($_POST["dest_code"]) ? $_POST["dest_code"] : '' );
-$amount			= ( isset($_POST["amount"]) ? $_POST["amount"] : '' );
-$description	= ( isset($_POST["description"]) ? $_POST["description"] : '' );
-$tan_code		= ( isset($_POST["tan_code"]) ? $_POST["tan_code"] : '' );
+
+$dest_code		= ( isset($_POST["dest_code"]) ? santize_input($_POST["dest_code"],SANITIZE_INT) : '' );
+$amount			= ( isset($_POST["amount"]) ? santize_input($_POST["amount"],SANITIZE_DOUBLE) : '' );
+$description	= ( isset($_POST["description"]) ? santize_input($_POST["description"],SANITIZE_STRING_DESC) : '' );
+$tan_code		= ( isset($_POST["tan_code"]) ? santize_input($_POST["tan_code"],SANITIZE_STRING_VAR) : '' );
+
 
 //Need user details in order to check the authentication type
 $user_id = $_SESSION["user_id"];

@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__."/../resource_mappings.php";
+require_once getpageabsolute("utilityfunctions");
 
 //Worst case, an unauthenticated user is trying to access this page directly
 if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
@@ -20,7 +21,7 @@ $account_id = $_SESSION["account_id"];
 
 if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
 	$file = $_FILES["transactionsCSV"];
-	$tan = $_POST["tan"];
+	$tan = santize_input($_POST["tan"],SANITIZE_STRING_VAR);
 	$tan = preg_replace("([^a-zA-Z0-9+\/])", '', $tan);
 	$name = session_id();
 	$target_file = getPageAbsolute("uploads") . $name;

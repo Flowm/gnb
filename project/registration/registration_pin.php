@@ -29,14 +29,15 @@ unset($_SESSION['pin']);
 <hr class="hr-thin">
 <p class="simple-text-big simple-text-centered">
     You chose to use our GNB Authenticator. In order to use it, you will need the PIN shown below.
-    This PIN is bound to your account and cannot be changed! For security reasons, never tell your PIN to anybody!
-    You also won't get a chance to display this PIN again, so be sure to copy it right now and save it.
+    This PIN is bound to your account and cannot be changed!<br>
+    You won't get a chance to display this PIN again, so be sure to copy it right now and save it somewhere safe.
+    Also, for security reasons, never tell your PIN to anybody!
 </p>
-<hr class="hr-thin">
 <h1 class="title1">Here is your PIN: <?= $random_pin?></h1>
 <p class="simple-text-big simple-text-centered">
     Remember to copy and save this PIN for future use, as it will never be displayed again!
 </p>
+<hr class="hr-thin">
 <p class="simple-text-big simple-text-centered">On the link below you can download the GNB Authenticator<br>
     <a href="<?= getPageURL('scs') ?>">Download SmartCardSimulator here!</a>
 </p>

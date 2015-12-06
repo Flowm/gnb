@@ -144,6 +144,7 @@ $logo_svg = getMedia('logo_svg'); //GNB logo
         ?>
     </div>
     <div class="simple-container">
+        <hr class="hr-thin">
         <h1 class="title4 simple-text-centered">
             This is gonna be LEGENDARY!!!
         </h1>

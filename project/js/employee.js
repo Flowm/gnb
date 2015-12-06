@@ -39,6 +39,14 @@ function rejectRegistration() {
     return handleRegistrations('rejectRegistration');
 }
 
+function getBalance(element) {
+    var balanceField = document.getElementById(element.id + ':balance');
+    if (balanceField.value == 'undefined' || balanceField.value == '') {
+        return 10;
+    }
+    return balanceField.value;
+}
+
 function handleRegistrations(action) {
     var selected = document.getElementsByName("action_check");
     var ids = "";
@@ -48,7 +56,8 @@ function handleRegistrations(action) {
             if (added) {
                 ids += ";";
             }
-            ids += selected[i].id;
+            var balance = getBalance(selected[i]);
+            ids += selected[i].id + ':' + balance;
             added = true;
         }
     }

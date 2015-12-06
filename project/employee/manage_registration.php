@@ -61,6 +61,7 @@ if (count($newUsers) == 0) {
         <th class="th-default">Last Name</th>
         <th class="th-default">Email</th>
         <th class="th-default">Role</th>
+        <th class="th-default">Initial Balance</th>
     </tr>
     </thead>
     <tbody>
@@ -74,8 +75,12 @@ if (count($newUsers) == 0) {
             <td class='td-default'>$user->firstname</td>
             <td class='td-default'>$user->lastname</td>
             <td class='td-default'>$user->email</td>";
-        echo "<td class='td-default'>$role</td> <!-- We want an icon here -->
-        </tr>";
+        echo "<td class='td-default'>$role</td> <!-- We want an icon here -->";
+        if ($role == 'client') {
+            echo "<td class='td-default'><input type='number' name='balance' value='10' min='1'
+                placeholder='Balance' class='small-input' id='$user->id:$role:balance'></td>";
+        }
+        echo "</tr>";
     }
     ?>
     </tbody>

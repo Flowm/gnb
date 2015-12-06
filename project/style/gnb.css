@@ -506,12 +506,16 @@ tr.thead-row-default {
     color: black;
     font-weight: 400;
     height: 40px;
+    overflow:hidden;
+    white-space:nowrap;
 }
 
 tr.tbody-row-default {
     background-color: white;
     height: 40px;
     font-size: 14px;
+    overflow:hidden;
+    white-space:nowrap;
 }
 
 th.th-default {
@@ -636,6 +640,25 @@ input[type=text], input[type=email], input[type=password], input[type=number] {
 }
 
 input[type=text]:focus, input[type=email]:focus, input[type=password]:focus, input[type=number]:focus {
+    border: solid 1px #707070;
+    box-shadow: 0 0 3px 1px #969696;
+    outline: 0;
+}
+
+input.small-input {
+    !important;
+    margin: 0 auto;
+    width: 110px;
+    font-size: 14px;
+    line-height: 16px;
+    border-radius: 2px;
+    padding: 6px;
+    border: solid 1px #dcdcdc;
+    transition: box-shadow 0.3s, border 0.3s;
+}
+
+input.small-input:focus {
+    !important;
     border: solid 1px #707070;
     box-shadow: 0 0 3px 1px #969696;
     outline: 0;

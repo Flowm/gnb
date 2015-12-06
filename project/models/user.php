@@ -72,10 +72,12 @@ class user {
 	
 	 
 
-	public function approve($approver_id) {
+	public function approve($approver_id, $balance) {
 		if ($this->role == '0') {
 			if (DB::i()->approveClient($this->id, $approver_id)) {
-				$balance = rand(100,1000);
+                if ($balance == 0) {
+                    $balance = rand(100,1000);
+                }
 				$account_id = DB::i()->addAccountWithBalance($this->id, $balance);
 				$account = new account(array('id'=>$account_id));     
 				
@@ -155,14 +157,24 @@ class user {
 		$requests = explode(";",$requests);
 		foreach ($requests as $request) {
 			$exploded = explode(":",$request);
+            $var_num = count($exploded);
+            if ($var_num < 2) {
+                //TODO: HANDLE ERROR
+                continue;
+            }
 			$id = $exploded[0];
 			$role = $exploded[1];
+            $balance = ($var_num == 3) ? $exploded[2] : null;
+            if ($balance <= 0) {
+                //TODO: HANDLE ERROR
+                continue;
+            }
 			$data = DB::i()->getUser($id,$role);
 			if (!$data) {
 				return false;
 			}
 			$user = new user($data);
-			$result = $user->approve($employee_id);
+			$result = $user->approve($employee_id, $balance);
 			if (!$result) {
 				//TODO: handle registration error
 			}
@@ -174,6 +186,11 @@ class user {
         $requests = explode(";",$requests);
         foreach ($requests as $request) {
             $exploded = explode(":",$request);
+            $var_num = count($exploded);
+            if ($var_num < 2) {
+                //TODO: HANDLE ERROR
+                continue;
+            }
             $id = $exploded[0];
             $role = $exploded[1];
             $data = DB::i()->getUser($id,$role);

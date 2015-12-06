@@ -16,21 +16,11 @@ else if (!isset($frame)) {
 if (empty($_SESSION["account_id"]))
 	die("Please choose an account");
 
-require_once getPageAbsolute("user");
-
 $account_id = $_SESSION["account_id"];
-//Need user details in order to check the PIN
-$user_id = $_SESSION["user_id"];
-$user = new user(DB::i()->getUser($user_id));
-$auth_type = DB::i()->mapAuthenticationDevice($user->auth_device);
 
 if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
 	$file = $_FILES["transactionsCSV"];
 	$tan = $_POST["tan"];
-    $pin = (isset($_POST["pin"]) ? $_POST["pin"] : '' );
-    if ($auth_type == 'SCS' && $pin != $user->pin) {
-        echo "<div class='error'>Fileupload failed! Invalid PIN</div><br>";
-    }
 	$tan = preg_replace("([^a-zA-Z0-9+\/])", '', $tan);
 	$name = session_id();
 	$target_file = getPageAbsolute("uploads") . $name;
@@ -83,19 +73,6 @@ if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
 				<input type="text" name="tan" id="tan" placeholder="TAN"><br>
 			</div>
 		</div>
-        <?php
-        //The user might also need to insert the PIN
-        if ($auth_type == 'SCS') {
-            echo '<div class="formRow">';
-            echo '<div class="formLeftColumn">';
-            echo '<label for="pin" class="simple-label">Your PIN</label>';
-            echo '</div>';
-            echo '<div class="formRightColumn">';
-            echo '<input type="text" id="pin" name="pin" value="$pin" placeholder="PIN"><br>';
-            echo '</div>';
-            echo '</div>';
-        }
-        ?>
 		<div class="button-container">
 			<button type="button" onclick="uploadFile()" class="simpleButton">Upload</button>
 		</div>

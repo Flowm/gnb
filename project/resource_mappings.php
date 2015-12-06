@@ -37,11 +37,13 @@ $pages["util"] = "genericfunctions.php";
 $pages["scs"] = "lib/scs/SmartCardSimulator.jar";
 
 $pages["drawfunctions"] = "drawfunctions.php";
+$pages["utilityfunctions"] = "genericfunctions.php";
 $pages["fpdf"] = "lib/fpdf/fpdf.php";
 $pages["fpdf_protection"] = "lib/fpdf/fpdf_protection.php";
 $pages["phpmailer"] = "lib/phpmailer/PHPMailerAutoload.php";
 $pages["ctransact"] = "lib/ctransact/ctransact";
 $pages["uploads"] = "uploads/";
+$pages["holder"] = "holder/";
 
 //SECTIONS (each section is triggered by a button)
 $sections = array();
@@ -72,6 +74,7 @@ $frames["transaction_history"] = "accounts/transaction_history.php";
 $frames["verify_transaction"] = "accounts/verify_transaction.php";
 
 $media = array();
+$media["logo_png"] = "media/gnb_logo.png";
 $media["logo_svg"] = "media/gnb_logo.svg";
 $media["logo_icn"] = "media/gnb_icon.png";
 $media["ceo_img"] = "media/gnb_bs_img1.jpg";
@@ -124,6 +127,12 @@ function getMedia($name) {
     global $media;
 
     return getResource(BASE_URL, $media, $name);
+}
+
+function getMediaAbsolute($name) {
+    global $media;
+
+    return getResource(BASE_DIR, $media, $name);
 }
 
 ?>

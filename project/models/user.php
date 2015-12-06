@@ -72,12 +72,10 @@ class user {
 	
 	 
 
-	public function approve($approver_id, $balance) {
+	public function approve($approver_id) {
 		if ($this->role == '0') {
 			if (DB::i()->approveClient($this->id, $approver_id)) {
-                if ($balance == 0) {
-                    $balance = rand(100,1000);
-                }
+				$balance = rand(100,1000);
 				$account_id = DB::i()->addAccountWithBalance($this->id, $balance);
 				$account = new account(array('id'=>$account_id));     
 				
@@ -91,12 +89,7 @@ class user {
 				if ( $user_uses_tan ){
 					
 					$tans 		= $account->generateTANs(); 
-					#Enter user PIN 
-					#$pass		= 
-					$user_pass	= '909090' ;
-					$pdf_pass	= hash('sha512', 'HaveYouMetTed' . $user_pass . '6');
-					
-					$tanpdffile	= $this->generateTanPDF($tans,$pdf_pass) ;
+					$tanpdffile	= $this->generateTanPDF($tans,$this->getPDFHash()) ;
 					
 					return $gnbmailer->sendMail_Approval($this->email, $name, $balance, $tanpdffile);
 					
@@ -157,24 +150,14 @@ class user {
 		$requests = explode(";",$requests);
 		foreach ($requests as $request) {
 			$exploded = explode(":",$request);
-            $var_num = count($exploded);
-            if ($var_num < 2) {
-                //TODO: HANDLE ERROR
-                continue;
-            }
 			$id = $exploded[0];
 			$role = $exploded[1];
-            $balance = ($var_num == 3) ? $exploded[2] : null;
-            if ($balance <= 0) {
-                //TODO: HANDLE ERROR
-                continue;
-            }
 			$data = DB::i()->getUser($id,$role);
 			if (!$data) {
 				return false;
 			}
 			$user = new user($data);
-			$result = $user->approve($employee_id, $balance);
+			$result = $user->approve($employee_id);
 			if (!$result) {
 				//TODO: handle registration error
 			}
@@ -186,11 +169,6 @@ class user {
         $requests = explode(";",$requests);
         foreach ($requests as $request) {
             $exploded = explode(":",$request);
-            $var_num = count($exploded);
-            if ($var_num < 2) {
-                //TODO: HANDLE ERROR
-                continue;
-            }
             $id = $exploded[0];
             $role = $exploded[1];
             $data = DB::i()->getUser($id,$role);
@@ -227,7 +205,11 @@ class user {
 	
 	private function generateTanPDF($tans,$pass='iDontKnowAndIDontCare') {
 		
-		$fullname 	= $this->firstname.' '.$this->lastname ;
+		$fullname 		= $this->firstname.' '.$this->lastname ;
+		$logo			= getMediaPath('logo_png') ;
+		$tanpdfdir 		= getPageAbsolute('holder') ; 
+		$tanpdffilename	= $this->id.'_'.$this->firstname.'.pdf';
+		$tanpdffile		= $tanpdfdir.$tanpdffilename ;
 		
 		$pdf	= new FPDF_Protection();
 		$pdf->SetProtection(array('print'),$pass);
@@ -239,7 +221,7 @@ class user {
 		$pdf->SetFont('Arial','',20); 	//Set Font to Arial/Helvetica 20 pt font
 		$pdf->SetTextColor(0,0,0); 		//Set Text Color to Black;
 		
-		$pdf->Image('/var/www/gnb/project/media/gnb_logo.png',10,10,-300);
+		$pdf->Image($logo,10,10,-300);
 		$pdf->Ln() ; 
 		$pdf->Cell(0,30,"TAN Codes for $fullname ",0,1,'C');   
 		
@@ -247,10 +229,16 @@ class user {
 			$pdf->Cell(100,7,$tan_code, 1,2,'C' );
 		}
 	
-		$tanpdffilename	= $this->id.'_'.$this->firstname.'.pdf';
-		$tanpdfdir 		= "/var/www/gnb/project/holder/"; 
-		$tanpdffile		= $tanpdfdir.$tanpdffilename ;
 		$pdf->Output($tanpdffile,'F');
 		return $tanpdffile ; 
+	}
+	
+	public function getPDFHash(){
+		
+		$length		= 30 ; 
+		$temp_hash	= hash('sha256', 'HaveYouMetTed' . $this->pin );
+		$temp_hash	= substr($temp_hash,0,$length) ;
+		
+		return $temp_hash ; 
 	}
 }

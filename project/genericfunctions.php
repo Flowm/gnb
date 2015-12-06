@@ -4,7 +4,8 @@ define("SANITIZE_INT", 0);
 define("SANITIZE_DOUBLE", 1);
 define("SANITIZE_STRING_NAME", 2);
 define("SANITIZE_STRING_EMAIL", 3);
-define("SANITIZE_STRING_DESC", 4);
+define("SANITIZE_STRING_VAR", 4);
+define("SANITIZE_STRING_DESC", 5);
 
 function santize_input($input, $check_type = SANITIZE_STRING_DESC)
 {

@@ -80,6 +80,7 @@ final class DB {
 	private $MAGIC = 'SUITUP';
 	private $WELCOMECREDIT_DESCRIPTION = 'GNB Welcome Credit';
 	private $MAX_FAILED_LOGIN_ATTEMPTS = 5;
+	private $PW_RESET_HASH_TIMEOUT = "1 DAY";
 
     /**
      * Call this method to get singleton
@@ -679,6 +680,62 @@ final class DB {
 		return $this->changeUserStatus($user_id, $new_status, $blocker_id, $role_filter);
 	}
 
+	function setPasswordResetHash($user_id, $password_reset_hash)
+	{
+		$SQL = "UPDATE
+					$this->USER_TABLE_NAME
+				SET
+					$this->USER_TABLE_PW_RESET = :password_reset_hash,
+					$this->USER_TABLE_PW_RESET_TS = now()
+				WHERE
+					$this->USER_TABLE_KEY = :user_id
+				";
+
+		$stmt = $this->pdo->prepare($SQL);
+		$stmt->bindValue(':password_reset_hash', $password_reset_hash, PDO::PARAM_STR);
+		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+		$result = $stmt->execute();
+
+		if ($result == true && $stmt->rowCount() == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	function resetPassword($user_id, $password, $reset_hash)
+	{
+		$salt = $this->genRandString(8);
+		$password_hash = $this->getPasswordHash($password, $salt);
+
+		$SQL = "UPDATE
+					$this->USER_TABLE_NAME
+				SET
+					$this->USER_TABLE_SALT = :salt,
+					$this->USER_TABLE_HASH = :password_hash,
+					$this->USER_TABLE_PW_RESET = NULL,
+					$this->USER_TABLE_PW_RESET_TS = NULL
+				WHERE
+					$this->USER_TABLE_KEY = :user_id
+					AND $this->USER_TABLE_PW_RESET = :reset_hash
+					AND now() <= date_add(pw_reset_hash_timestamp, INTERVAL $this->PW_RESET_HASH_TIMEOUT);
+				";
+
+		$stmt = $this->pdo->prepare($SQL);
+		$stmt->bindValue(':salt', $salt, PDO::PARAM_STR);
+		$stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
+		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+		$stmt->bindValue(':reset_hash', $reset_hash, PDO::PARAM_STR);
+
+		$result = $stmt->execute();
+
+		if ($result == true && $stmt->rowCount() == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/************************************************
 	 * /USER FUNCTIONS
 	 ************************************************/
@@ -763,8 +820,7 @@ final class DB {
 
 	function addAccount($user_id)
 	{
-		$SQL = "INSERT
-				INTO $this->ACCOUNT_TABLE_NAME
+		$SQL = "INSERT INTO $this->ACCOUNT_TABLE_NAME
 					( $this->ACCOUNT_TABLE_USER_ID )
 				VALUES
 					( :user_id )

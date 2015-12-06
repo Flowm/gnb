@@ -148,7 +148,11 @@ function bla()
 	dump("getBlockedUsers", $db->getBlockedUsers());
 */
 
-	dump("setLastTANTime", $db->setLastTANTime(10000003, 678));
+	//dump("setLastTANTime", $db->setLastTANTime(10000003, 678));
+
+	//dump("setPasswordResetHash", $db->setPasswordResetHash(3, "HASHHASHHASH"));
+	//dump("resetPassword", $db->resetPassword(3, "asdasdasd", "HASHHASHHASHaaaaaaaaa"));
+	dump("resetPassword", $db->resetPassword(3, "asdasdasd", "HASHHASHHASH"));
 
 
 }

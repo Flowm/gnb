@@ -81,7 +81,7 @@ else
             }
             else {
                 $account->last_tan_time = $timestamp;
-                //DB::i()->setLastTANTime($account_id, $timestamp); TODO: IMPLEMENT THIS!!!
+                DB::i()->setLastTANTime($account_id, $timestamp);
             }
         }
     }

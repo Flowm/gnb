@@ -902,6 +902,28 @@ final class DB {
 	    }
 	}
 
+	function setLastTANTime($account_id, $last_tan_time)
+	{
+		$SQL = "UPDATE
+					$this->ACCOUNT_TABLE_NAME
+				SET
+					$this->ACCOUNT_TABLE_TAN_TIME = :last_tan_time
+				WHERE
+					$this->ACCOUNT_TABLE_KEY = :account_id
+				";
+
+		$stmt = $this->pdo->prepare($SQL);
+		$stmt->bindValue(':last_tan_time', $last_tan_time, PDO::PARAM_INT);
+		$stmt->bindValue(':account_id', $account_id, PDO::PARAM_INT);
+		$result = $stmt->execute();
+
+		if ($result == true && ($stmt->rowCount() == 1 OR $stmt->rowCount() == 0)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/************************************************
 	 * /TAN FUNCTIONS
 	 ************************************************/

@@ -123,11 +123,14 @@ function bla()
 	dump("getBlockedUsers", $db->getBlockedUsers());
 */
 
+/*
 	dump("getBlockedUsers", $db->getBlockedUsers());
 	dump("approveUser", $db->approveUser(1, 2));
 	dump("getBlockedUsers", $db->getBlockedUsers());
 
 	dump("loginUser", $db->loginUser("barney.stinson@gnb.com", "ThisIsGonnaBeLegendarySoSuitUp"));
+*/
+
 /*
 	dump("loginUser", $db->loginUser("barney.stinson@gnb.com", "asd"));
 	dump("getBlockedUsers", $db->getBlockedUsers());
@@ -144,6 +147,8 @@ function bla()
 	dump("loginUser", $db->loginUser("barney.stinson@gnb.com", "asd"));
 	dump("getBlockedUsers", $db->getBlockedUsers());
 */
+
+	dump("setLastTANTime", $db->setLastTANTime(10000003, 678));
 
 
 }

@@ -6,17 +6,17 @@
 require_once "resource_mappings.php";
 require_once getpageabsolute("db_functions");
 require_once getpageabsolute("user");
-
+require_once getPageAbsolute("util");
 session_start();
 
 $username = null;
 $pw = null;
 $error = '?error=0';
 if (isset($_POST["username"])) {
-    $username = $_POST["username"];
+    $username = santize_input($_POST["username"],SANITIZE_STRING_EMAIL);
 }
 if (isset($_POST["password"])) {
-    $pw = $_POST["password"];
+    $pw = santize_input($_POST["password"]);
 }
 
 if ($username == null || $pw == null) {

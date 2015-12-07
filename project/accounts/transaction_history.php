@@ -22,8 +22,8 @@ if (empty($_SESSION["account_id"]))
 $account_id = $_SESSION["account_id"];
 $user_id = $_SESSION["user_id"];
 
-$download_link		= '../accounts/download_transactions.php' ;
-$download_icon		= '../media/download_pdf.svg' ; 
+$download_link		= getPageURL('tran_pdf') ;
+$download_icon		= getMedia('pdf_download') ; 
 $download_img_tag	= '<img src="'.$download_icon.'" alt="Download PDF"
 					. width=16 height=16>' ; 
 $pdf_download_link 	= '<a href="'.$download_link.'">'
@@ -31,16 +31,14 @@ $pdf_download_link 	= '<a href="'.$download_link.'">'
 					. '</a>' ; 
 
 # showing transactions
-$transaction_data 	= DB::i()->getAccountTransactions($account_id) ; 
-$skip_headers		= array( 'id','approved_by_user_id','approved_at','destination_account_id','tan_id') ; 
-$header_decode 		= array(
-	'status'				=> 'Status',
-	'source_account_id'		=> 'Source/Dest',
-	'creation_timestamp'	=> 'Date/Time',
-	'amount'				=> 'Amount',
-	'description'			=> 'Description'
-);
-	
+$transaction_data 	= DB::i()->getAccountTransactionsWithNames($account_id) ; 
+
+
+$headers		= array ('Status', 'Src/Dst #', 'Owner'
+					,'Date/Time','Amount','Description') ;
+
+#var_dump($transaction_data);
+#exit() ; 
 	
 # getting number of headings ( data columns ) and columns
 $num_of_col			= count($transaction_data[0]) ;
@@ -67,32 +65,36 @@ echo 	'<tfoot>'
 # drawing column titles
 echo 	'<tr class="thead-row-default">' ;
 echo	'<th></th>';
-foreach( $transaction_data[0] as $title => $value){
-	if ( in_array($title,$skip_headers) ) { continue ; }
-	echo  	'<th>'
-		.	(array_key_exists($title,$header_decode) ? $header_decode[$title] :$title)
-		.'	</th>' ; }
+foreach( $headers as $hdr ){
+	echo  	'<th>'.$hdr.'</th>' ; 
+}
 echo		'</tr>' ;
 
 # printing available data
 for ( $i = 0 ; $i < $num_of_rec ; $i++ ){
 	echo 	'<tr class="tbody-row-default">' ;
-	$transaction = new transaction($transaction_data[$i]);
-    $src_dest = null;
-    $arrow_class = null;
-    $arrow_pending = null;
-    $desc = wordwrap($transaction->description, 18, "<br>\n", true);
-    $t_status = DB::i()->mapTransactionStatus($transaction->status);
-
-    if ($transaction->src == $account_id) {
-        $src_dest = $transaction->dst;
-        $arrow_class = 'outgoing-transfer-arrow';
-        $arrow_pending = 'outgoing-pending-arrow';
+	
+    $src_dest 		= null;
+    $src_dest_name 	= null;
+    $arrow_class 	= null;
+    $arrow_pending 	= null;
+    $desc 			= $transaction_data[$i]["description"] ;
+    $t_status 		= DB::i()->mapTransactionStatus($transaction_data[$i]["status"]);
+	$creation_date	= $transaction_data[$i]["ts"] ;
+	$amount			= $transaction_data[$i]["amount"] ;
+    
+    if ($transaction_data[$i]["src_acc"] == $account_id) {
+		
+		$src_dest_name	= $transaction_data[$i]["dst_fname"].' '.$transaction_data[$i]["dst_lname"] ;
+        $src_dest 		= $transaction_data[$i]["dst_acc"] ;
+        $arrow_class 	= 'outgoing-transfer-arrow';
+        $arrow_pending 	= 'outgoing-pending-arrow'; 
     }
-    else if ($transaction->dst == $account_id) {
-        $src_dest = $transaction->src;
-        $arrow_class = 'ingoing-transfer-arrow';
-        $arrow_pending = 'ingoing-pending-arrow';
+    else if ($transaction_data[$i]["dst_acc"] == $account_id) {
+		$src_dest_name	= $transaction_data[$i]["src_fname"].' '.$transaction_data[$i]["src_lname"] ;
+        $src_dest 		= $transaction_data[$i]["src_acc"] ;
+        $arrow_class 	= 'ingoing-transfer-arrow';
+        $arrow_pending 	= 'ingoing-pending-arrow';
     }
     if ($t_status == 'approved') {
         echo "<td class='td-default'><span class='$arrow_class'></span></td>";
@@ -103,9 +105,10 @@ for ( $i = 0 ; $i < $num_of_rec ; $i++ ){
 
     echo "<td class='td-default'>$t_status</td>";
     echo "<td class='td-default'>$src_dest</td>";
-    echo "<td class='td-default'>$transaction->creation_date</td>";
-    echo "<td class='td-default'>$transaction->amount</td>";
-    echo "<td class='td-default'>".wordwrap( $transaction->description, 18, "<br>\n",true )."</td>";
+    echo "<td class='td-default'>$src_dest_name</td>";
+    echo "<td class='td-default'>$creation_date</td>";
+    echo "<td class='td-default'>$amount</td>";
+    echo "<td class='td-default'>".wordwrap( $desc, 18, "<br>\n",true )."</td>";
 
 	echo	'</tr>' ;
 }

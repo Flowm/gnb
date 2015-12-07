@@ -1041,7 +1041,68 @@ final class DB {
 
 		return $result;
 	}
+	
+	function getAccountTransactionsWithNames($account_ID, $filter = "ALL")
+	{
+		$where = "";
+			# only get transfers to said account
+		if ( $filter == 'TO' )
+		{
+			$where = "t.$this->TRANSACTION_TABLE_TO = :account_ID";
+		}
+		# only get transfers from said account
+		elseif ( $filter == 'FROM' )
+		{
+			$where = "t.$this->TRANSACTION_TABLE_FROM = :account_ID";
+		}
+		# get all transfers for said account
+		else
+		{
+			$where = "
+						t.$this->TRANSACTION_TABLE_TO 		= :account_ID
+						OR t.$this->TRANSACTION_TABLE_FROM 	= :account_ID
+					";
+		}
 
+		$SQL = "SELECT
+					t.$this->TRANSACTION_TABLE_KEY			as tran_id,
+					t.$this->TRANSACTION_TABLE_FROM			as src_acc,
+					t.$this->TRANSACTION_TABLE_TO			as dst_acc,
+					t.$this->TRANSACTION_TABLE_AMOUNT		as amount,
+					t.$this->TRANSACTION_TABLE_DESC	,
+					t.$this->TRANSACTION_TABLE_C_TS			as ts,
+					t.$this->TRANSACTION_TABLE_STATUS		as status,
+					
+					src_u.$this->USER_TABLE_FIRSTNAME	as src_fname,
+					src_u.$this->USER_TABLE_LASTNAME 	as src_lname,
+					
+					dst_u.$this->USER_TABLE_FIRSTNAME	as dst_fname,
+					dst_u.$this->USER_TABLE_LASTNAME 	as dst_lname
+				FROM 
+					$this->TRANSACTION_TABLE_NAME	t
+						JOIN $this->ACCOUNT_TABLE_NAME	src_a
+						ON t.$this->TRANSACTION_TABLE_FROM 		= src_a.$this->ACCOUNT_TABLE_KEY
+						JOIN $this->ACCOUNT_TABLE_NAME	dst_a
+						ON t.$this->TRANSACTION_TABLE_TO 		= dst_a.$this->ACCOUNT_TABLE_KEY
+						JOIN $this->USER_TABLE_NAME	src_u
+						ON src_a.$this->ACCOUNT_TABLE_USER_ID 	= src_u.$this->USER_TABLE_KEY
+						JOIN $this->USER_TABLE_NAME	dst_u
+						ON dst_a.$this->ACCOUNT_TABLE_USER_ID 	= dst_u.$this->USER_TABLE_KEY
+				WHERE
+					
+					$where";
+		
+		$stmt = $this->pdo->prepare($SQL);
+		$stmt->bindValue(':account_ID', $account_ID, PDO::PARAM_INT);
+		#var_dump($SQL);
+		$stmt->execute();
+
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		return $result;
+	}
+	
+	
 	function getPendingTransactions()
 	{
 		$status = $this->mapTransactionStatus('unapproved');

@@ -10,10 +10,10 @@ if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
 	exit();
 }
 //The user is logged in, but tries to access another page directly
-else if (!isset($frame)) {
-	header("Location:".getPageURL('home'));
-	exit();
-}
+#else if (!isset($frame)) {
+#	header("Location:".getPageURL('home'));
+#	exit();
+#}
 
 require_once getpageabsolute("db_functions");
 require_once getPageAbsolute("fpdf");
@@ -22,7 +22,7 @@ if (empty($_SESSION["account_id"]))
 	die("Please choose an account");
 
 $account_id = $_SESSION["account_id"];
-$transaction_data 	= DB::i()->getAccountTransactions($account_id) ; 
+$transaction_data 	= DB::i()->getAccountTransactionsWithNames($account_id) ; 
 $headers			= array_keys($transaction_data[0]) ; 
 
 $pdf = new FPDF();
@@ -36,7 +36,7 @@ $pdf->SetFont('Arial','',20); 	//Set Font to Arial/Helvetica 20 pt font
 $pdf->SetTextColor(0,0,0); 		//Set Text Color to Black;
 $pdf->Cell(0,30,"GNB Transaction record for Account #$account_id",0,1,'C');   
 
-$pdf->Image('../media/gnb_logo.png',10,10,-300);
+$pdf->Image(getMediaAbsolute('logo_png'),10,10,-300);
 
 # Add transaction info 
 $pdf->SetFont('Arial','B',10);
@@ -46,7 +46,7 @@ $num_of_rec		= count($transaction_data) ;
 $record_name 	= 'Transaction(s)' ;
 $summary 		= $num_of_rec.' '.$record_name.' available' ; 
 
-$header_width	= array (12, 35, 35, 15, 35, 35, 35,15, 30, 30 ) ;
+$header_width	= array (12, 25, 25, 15, 40, 30, 10 ,20, 20, 20, 20 ) ;
 
 # drawing headers and summary
 $pdf->Cell(array_sum($header_width),7,$summary, 1); #,0, 'C', true) ;

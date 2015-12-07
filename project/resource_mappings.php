@@ -18,37 +18,46 @@ define ('BASE_URL', $base_url ."/");
 
 //PAGES (main pages of the client application)
 $pages = array();
-$pages["index"] = "index.php";
-$pages["home"] = "index.php";
-$pages["login"] = "login.php";
-$pages["logout"] = "logout.php";
+$pages["index"] 			= "index.php";
+$pages["home"] 				= "index.php";
+$pages["login"] 			= "login.php";
+$pages["logout"] 			= "logout.php";
+$pages["db_functions"] 		= "db.php";
+$pages["mail"] 				= "gnbmailer.php";
+$pages["awesome"] 			= "awesome_data.php";
+$pages["error"] 			= "errorPage.php";
+$pages["util"] 				= "genericfunctions.php";
+$pages["drawfunctions"] 	= "drawfunctions.php";
+$pages["utilityfunctions"] 	= "genericfunctions.php";
+
+$pages["uploads"] 		= "uploads/";
+$pages["holder"] 		= "holder/";
+
 $pages["forgotpw"] 		= "pwreset/forgotpw.php";
 $pages["forgotpw_r"] 	= "pwreset/forgotpw_request.php";
 $pages["resetpw"] 		= "pwreset/resetpw.php";
 $pages["resetpw_r"] 	= "pwreset/resetpw_request.php";
 $pages["pw_hdr"] 		= "pwreset/pwreset_header.php";
-$pages["registration"] = "registration/registration.php";
-$pages["employee"] = "employee/employee.php";
-$pages["client"] = "client/client.php";
-$pages["db_functions"] = "db.php";
-$pages["mail"] = "gnbmailer.php";
-$pages["user"] = "models/user.php";
-$pages["account"] = "models/account.php";
-$pages["transaction"] = "models/transaction.php";
-$pages["awesome"] = "awesome_data.php";
-$pages["error"] = "errorPage.php";
-$pages["gnb_style"] = "style/gnb.css";
-$pages["util"] = "genericfunctions.php";
-$pages["scs"] = "lib/scs/SmartCardSimulator.jar";
 
-$pages["drawfunctions"] = "drawfunctions.php";
-$pages["utilityfunctions"] = "genericfunctions.php";
-$pages["fpdf"] = "lib/fpdf/fpdf.php";
-$pages["fpdf_protection"] = "lib/fpdf/fpdf_protection.php";
-$pages["phpmailer"] = "lib/phpmailer/PHPMailerAutoload.php";
-$pages["ctransact"] = "lib/ctransact/ctransact";
-$pages["uploads"] = "uploads/";
-$pages["holder"] = "holder/";
+$pages["registration"] 	= "registration/registration.php";
+
+$pages["user"] 			= "models/user.php";
+$pages["account"] 		= "models/account.php";
+$pages["transaction"] 	= "models/transaction.php";
+
+$pages["employee"] 		= "employee/employee.php";
+
+$pages["client"] 		= "client/client.php";
+
+$pages["tran_pdf"] 		= "accounts/download_transactions.php";
+
+$pages["gnb_style"] 	= "style/gnb.css";
+
+$pages["scs"] 				= "lib/scs/SmartCardSimulator.jar";
+$pages["fpdf"] 				= "lib/fpdf/fpdf.php";
+$pages["fpdf_protection"] 	= "lib/fpdf/fpdf_protection.php";
+$pages["phpmailer"] 		= "lib/phpmailer/PHPMailerAutoload.php";
+$pages["ctransact"] 		= "lib/ctransact/ctransact";
 
 //SECTIONS (each section is triggered by a button)
 $sections = array();
@@ -79,10 +88,11 @@ $frames["transaction_history"] = "accounts/transaction_history.php";
 $frames["verify_transaction"] = "accounts/verify_transaction.php";
 
 $media = array();
-$media["logo_png"] = "media/gnb_logo.png";
-$media["logo_svg"] = "media/gnb_logo.svg";
-$media["logo_icn"] = "media/gnb_icon.png";
-$media["ceo_img"] = "media/gnb_bs_img1.jpg";
+$media["logo_png"] 		= "media/gnb_logo.png";
+$media["logo_svg"] 		= "media/gnb_logo.svg";
+$media["logo_icn"] 		= "media/gnb_icon.png";
+$media["ceo_img"] 		= "media/gnb_bs_img1.jpg";
+$media["pdf_download"] 	= "media/download_pdf.svg";
 
 
 function getResource($prefix, $resources, $target) {

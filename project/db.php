@@ -871,11 +871,6 @@ final class DB {
 		return $new_account_id;
 	}
 
-	function setAccountBalance($account_id, $balance)
-	{
-		return false; //TODO: IMPLEMENT
-	}
-
 	/************************************************
 	 * /ACCOUNT FUNCTIONS
 	 ************************************************/

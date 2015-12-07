@@ -12,6 +12,20 @@ html.intro .right {
 	text-align: left !important;
 }
 
+table.time-table {
+	width: 600px;
+	font-size: 16px;
+}
+
+table.fix-table {
+    width: 900px;
+    font-size: 24px;
+}
+
+p.fix-description {
+    font-size: 30px;
+}
+
 html.vulns body {
 	background:url("../pictures/doom-1.jpeg");
 	background-position:center;

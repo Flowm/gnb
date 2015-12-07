@@ -87,15 +87,19 @@ else
         }
     }
     if ($error_message != null) {
-        echo	'<h3>'.$error_message.'</h3>' ;
-        echo 	'<form method="post" action="'.getPageURL($role).'">'
-            .	'<input type="hidden" name="dest_code" value="'.$dest_code.'">'
-            .	'<input type="hidden" name="amount" value="'.$amount.'">'
-            .	'<input type="hidden" name="description" value="'.$description.'">'
-            .	'<input type="hidden" name="tan_code" value="'.$tan_code.'">'
-            .	'<input type="hidden" name="account_id" value="'.$account_id.'">'
-            .	'<input type="submit" class="simpleButton" value="Go Back">'
-            .	'</form>' ;
+        ?>
+        <h3><?= $error_message ?></h3>
+        <form method="post" action="<?php getPageURL($role) ?>">
+            <input type="hidden" name="dest_code" value="<?= $dest_code ?>">
+            <input type="hidden" name="amount" value="<?= $amount ?>">
+            <input type="hidden" name="description" value="<?= $description ?>">
+            <input type="hidden" name="tan_code" value="<?= $tan_code ?>">
+            <input type="hidden" name="account_id" value="<?= $account_id ?>">
+            <input type="hidden" name="section" value="my_accounts">
+            <input type="hidden" name="frame" value="new_transaction">
+            <input type="submit" class="simpleButton" value="Go Back">
+            </form>
+        <?php
         return;
     }
 

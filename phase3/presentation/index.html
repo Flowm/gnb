@@ -69,13 +69,200 @@
 
                 <section>
 
-                    Fix slides: For each vulnerability discovered in Phase 2 by your team or the team that tested your
-                    application, you should summarize the fix that you implemented:
-                     Path(s) of file(s) which was modified for the fix
-                     Line number(s) which were modified in each file
-                     NOTE: You can use a diff utility but you should only report the changes relevant for one particular
-                    fix per vulnerability (not just a diff of all changes to phase 1).
-                     Textual description of your countermeasures and the reason why they fix the problem.
+                    <section>
+                        Fix slides: For each vulnerability discovered in Phase 2 by your team or the team that tested your
+                        application, you should summarize the fix that you implemented:
+                         Path(s) of file(s) which was modified for the fix
+                         Line number(s) which were modified in each file
+                         NOTE: You can use a diff utility but you should only report the changes relevant for one particular
+                        fix per vulnerability (not just a diff of all changes to phase 1).
+                         Textual description of your countermeasures and the reason why they fix the problem.
+                    </section>
+
+                    <section>
+                        <h2>OTG-AUTHN-003 <br> Weak lockout mechanism</h2>
+                        <table class="fix-table">
+                            <tr>
+                                <th colspan="2">Changed files</th>
+                            </tr>
+                            <tr>
+                                <td>??</td>
+                                <td>??</td>
+                            </tr>
+                            <tr>
+                                <td>/gnb/project/employee/manage_blocked.php</td>
+                                <td>New file</td>
+                            </tr>
+                            <tr>
+                                <td>/gnb/project/js/employee.js</td>
+                                <td>+lines 69-84</td>
+                            </tr>
+                            <tr>
+                                <td>/gnb/project/models/user.php</td>
+                                <td>+lines 141-154</td>
+                            </tr>
+                        </table>
+                        <p class="fix-description">
+                            A lockout mechanism was implemented: after failing a login 5 times in a row
+                            (status is kept on database), a user account automatically gets blocked.
+                            A new section in the employee area was added in order to allow employees
+                            to unblock user accounts which have been blocked.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>OTG-AUTHN-007 <br> Weak password policy</h2>
+                        <table class="fix-table">
+                            <tr>
+                                <th colspan="2">Changed files</th>
+                            </tr>
+                            <tr>
+                                <td>/gnb/project/js/registration.js</td>
+                                <td>+lines 21-45</td>
+                            </tr>
+                            <tr>
+                                <td>/gnb/project/registration/registration_request.php</td>
+                                <td>+lines 3-15</td>
+                            </tr>
+                        </table>
+                        <p class="fix-description">
+                            In order to prevent weak passwords, the user is now forced to enter a password
+                            between 8 and 20 characters long, containing at least 1 number and 1 letter. Any special
+                            character is allowed. The password strength check is performed both on client side and
+                            server side during the registration process.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>OTG-INPVAL-001 <br> Reflected Cross Site Scripting</h2>
+                        <table class="fix-table">
+                            <tr>
+                                <th colspan="2">Changed files</th>
+                            </tr>
+                            <tr>
+                                <td>?</td>
+                                <td>?</td>
+                            </tr>
+                        </table>
+                        <p class="fix-description">
+                            Reflected XSS worked on the verify_transaction.php page by printing
+                            the description inserted by the user on the previous page. By performing input
+                            sanitization on every request parameter, this attack is not longer possible.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>OTG-INPVAL-002 <br> Stored Cross Site Scripting</h2>
+                        <table class="fix-table">
+                            <tr>
+                                <th colspan="2">Changed files</th>
+                            </tr>
+                            <tr>
+                                <td>?</td>
+                                <td>?</td>
+                            </tr>
+                        </table>
+                        <p class="fix-description">
+                            Similarly to the reflected XSS, the site was vulnerable because of lack of input
+                            sanitization. All user inputs get now properly sanitized, removing html characters.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>OTG-INPVAL-005 <br> SQL injection</h2>
+                        <table class="fix-table">
+                            <tr>
+                                <th colspan="2">Changed files</th>
+                            </tr>
+                            <tr>
+                                <td>?</td>
+                                <td>?</td>
+                            </tr>
+                        </table>
+                        <p class="fix-description">
+                            ?
+                        </p>
+                    </section>
+                    <section>
+                        <h2>OTG-INPVAL-013 <br> Command injection</h2>
+                        <table class="fix-table">
+                            <tr>
+                                <th colspan="2">Changed files</th>
+                            </tr>
+                            <tr>
+                                <td>/gnb/project/accounts/new_transaction_multiple.php</td>
+                                <td>-lines 20-27<br>+lines 21-30</td>
+                            </tr>
+                        </table>
+                        <p class="fix-description">
+                            Since command injection was possible by injecting commands into filenames,
+                            this is no longer possible as each uploaded file gets automatically renamed.
+                            Even though the c parser receives additional parameters,
+                            these are passed directly by the application and cannot be injected by an attacker.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>OTG-INPVAL-015 <br> Incubated vulnerabilities</h2>
+                        <table class="fix-table">
+                            <tr>
+                                <th>Changed files</th>
+                            </tr>
+                            <tr>
+                                <td>See fix slides OTG-INPVAL 001, 002, 005</td>
+                            </tr>
+                        </table>
+                        <p class="fix-description">
+                            By having fixed the SQL injection and stored XSS vulnerabilities,
+                            this vulnerability was automatically fixed. Please refer to the fix
+                            slides concerning OTG-INPVAL 001, 002, 005.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>OTG-BUSLOGIC-001 <br> Business logic data validation</h2>
+                        <table class="fix-table">
+                            <tr>
+                                <th colspan="2">Changed files</th>
+                            </tr>
+                            <tr>
+                                <td>?</td>
+                                <td>?</td>
+                            </tr>
+                        </table>
+                        <p class="fix-description">
+                            In order to prevent a user incrementing his balance by sending money to his own account,
+                            we added a check before performing a transaction.
+                            A user is not allowed to use his own account as a destination anymore.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>OTG-BUSLOGIC-007 <br> Defenses Against Application Mis-use</h2>
+                        <table class="fix-table">
+                            <tr>
+                                <th colspan="2">Changed files</th>
+                            </tr>
+                            <tr>
+                                <td>?</td>
+                                <td>?</td>
+                            </tr>
+                        </table>
+                        <p class="fix-description">
+                            Since the described vulnerability was the same as the one presented in OTG-BUSLOGIC-001,
+                            please refer to the fix made in that section.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>OTG-BUSLOGIC-009 <br> Upload of malicious files</h2>
+                        <table class="fix-table">
+                            <tr>
+                                <th colspan="2">Changed files</th>
+                            </tr>
+                            <tr>
+                                <td>/gnb/project/accounts/new_transaction_multiple.php</td>
+                                <td>-lines 20-27<br>+lines 21-30</td>
+                            </tr>
+                        </table>
+                        <p class="fix-description">
+                            Each uploaded file now gets automatically renamed.
+                            Furthermore, after a batch transaction process finished,
+                            the uploaded file gets removed from the uploads folder.
+                        </p>
+                    </section>
 
                 </section>
 
@@ -129,14 +316,82 @@
                     <section>
                         <h1>Lorenzo Donini</h1>
 
-                        <table>
+                        <table class="time-table">
                             <tr>
                                 <th>Task</th>
                                 <th>Time</th>
                             </tr>
                             <tr>
-                                <td>ALL the things</td>
-                                <td>42h</td>
+                                <td>Group meeting</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>Fix: resource mappings</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>Fix: session</td>
+                                <td>0.5h</td>
+                            </tr>
+                            <tr>
+                                <td>Fix: password</td>
+                                <td>0.5h</td>
+                            </tr>
+                            <tr>
+                                <td>Fix: lockout mechanism</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>PHP bugfixing</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>Registration: new business logic</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>Registration: new GUI</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>Registration: testing</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>Java SCS: GUI</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>Java SCS: Business logic</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>Java SCS: TAN generation</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>Java SCS: Testing</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>Transactions: single transactions logic</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>Transactions: batch transactions logic</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>Initialization of client balance</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>Presentation</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>TOTAL</td>
+                                <td>17h</td>
                             </tr>
                         </table>
 

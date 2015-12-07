@@ -5,7 +5,7 @@ require_once 'db.php';
 $db = DB::i();
 $debug = true;
 
-$TESTPREFIX = 'MYMAGICSTRING';
+$TESTPREFIX = 'Mahm';
 
 $USER1_FIRSTNAME	= $TESTPREFIX . ' FN1';
 $USER1_LASTNAME		= $TESTPREFIX . ' LN1';
@@ -43,41 +43,41 @@ removeTestAccounts();
 removeTestUsers();
 
 
-
-
-
-test('Adding test users', addTestUsers(), true);
-test('Checking users', checkForTestUsers(), true);
-// Check if duplicate users are prohibited
-test('Checking user requests', checkTestUserRequests(), 3);
-
-test('Approving test users', approveTestUsers(), true);
-test('Checking approved users', checkForApprovedTestUsers(), true);
-test('Checking user requests', checkTestUserRequests(), 0);
-
-test('Adding test accounts', addTestAccounts(), true);
-test('Checking accounts', checkForTestAccounts(), true);
-
-addTestTANs();
-test('Adding TANs', checkForTestTANs(), true);
-// Check if duplicate TANs are prohibited
-
-addTestTransactions();
-test('Checking transactions', checkForTestTransactions(), true);
-
-approveTransactions();
-
-test('Checking overview functions', checkOverviewFunctions(), true);
-
-//TODO: Test rollback @ processTransaction
-
-
-
-removeTestTransactions();
-removeTestTANs();
-removeTestAccounts();
-removeTestUsers();
-
+#
+#
+#
+#test('Adding test users', addTestUsers(), true);
+#test('Checking users', checkForTestUsers(), true);
+#// Check if duplicate users are prohibited
+#test('Checking user requests', checkTestUserRequests(), 3);
+#
+#test('Approving test users', approveTestUsers(), true);
+#test('Checking approved users', checkForApprovedTestUsers(), true);
+#test('Checking user requests', checkTestUserRequests(), 0);
+#
+#test('Adding test accounts', addTestAccounts(), true);
+#test('Checking accounts', checkForTestAccounts(), true);
+#
+#addTestTANs();
+#test('Adding TANs', checkForTestTANs(), true);
+#// Check if duplicate TANs are prohibited
+#
+#addTestTransactions();
+#test('Checking transactions', checkForTestTransactions(), true);
+#
+#approveTransactions();
+#
+#test('Checking overview functions', checkOverviewFunctions(), true);
+#
+#//TODO: Test rollback @ processTransaction
+#
+#
+#
+#removeTestTransactions();
+#removeTestTANs();
+#removeTestAccounts();
+#removeTestUsers();
+#
 
 
 

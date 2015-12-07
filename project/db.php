@@ -705,7 +705,7 @@ final class DB {
 		}
 	}
 
-	function resetPassword($mail, $password, $reset_hash)
+	function resetPassword($mail, $password, $reset_hash, $pin)
 	{
 		$salt = $this->genRandString(8);
 		$password_hash = $this->getPasswordHash($password, $salt);
@@ -720,6 +720,7 @@ final class DB {
 				WHERE
 					$this->USER_TABLE_EMAIL = :mail
 					AND $this->USER_TABLE_PW_RESET = :reset_hash
+					AND $this->USER_TABLE_PIN = :pin
 					AND now() <= date_add(pw_reset_hash_timestamp, INTERVAL $this->PW_RESET_HASH_TIMEOUT);
 				";
 
@@ -728,6 +729,7 @@ final class DB {
 		$stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
 		$stmt->bindValue(':mail', $mail, PDO::PARAM_STR);
 		$stmt->bindValue(':reset_hash', $reset_hash, PDO::PARAM_STR);
+		$stmt->bindValue(':pin', $pin, PDO::PARAM_STR);
 
 		$result = $stmt->execute();
 

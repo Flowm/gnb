@@ -1,19 +1,5 @@
 <?php
 
-function checkPasswordStrength($pass) {
-    if (strlen($pass) < 8 || strlen($pass) > 20) {
-        return false;
-    }
-
-    if (!preg_match("#[0-9]+#",$pass)) {
-        return false;
-    }
-    if (!preg_match("#[a-zA-Z]+#", $pass)) {
-        return false;
-    }
-    return true;
-}
-
 /*Just process the received form, store the data inside the DB,
 maybe return an error if the data already existed and finally return to the index */
 
@@ -43,8 +29,8 @@ $type 			= santize_input($_POST['type'],SANITIZE_STRING_VAR);
 $email 			= santize_input($_POST['email'],SANITIZE_STRING_EMAIL);
 $firstname 		= santize_input($_POST['firstname'],SANITIZE_STRING_NAME);
 $lastname 		= santize_input($_POST['lastname'], SANITIZE_STRING_NAME );
-$password 		= santize_input($_POST['password']);
-$passwordRepeat = santize_input($_POST['password_repeat']);
+$password 		= $_POST['password'];
+$passwordRepeat = $_POST['password_repeat'];
 $banking 		= santize_input($_POST['banking']);
 
 // Checking all of the conditions on server side as well.

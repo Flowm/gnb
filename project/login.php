@@ -21,7 +21,8 @@ session_unset();
 
 $error_types = array(0=>'Invalid login credentials!',1=>'The account is currently blocked');
 
-$logo_svg = getMedia('logo_svg');
+$logo_svg 		= getMedia('logo_svg');
+$forgotpwr_link	= getPageURL('forgotpw');
 
 ?>
 
@@ -71,7 +72,7 @@ $logo_svg = getMedia('logo_svg');
                 <button type="submit" class="simpleButton">Suit up!</button>
             </div>
         </form>
-        <form method="post" action="forgotpassword.php">
+        <form method="post" action="<?=$forgotpwr_link?>">
 			<div class="button-container">
 				<button type="submit" class="simpleButton">Forgot your brocode?</button>
             </div>

@@ -79,7 +79,7 @@ function santize_input($input, $check_type = SANITIZE_STRING_DESC)
 		if ( $sanitized_input !== false and !empty($sanitized_input)){
 			$sanitization['result']		= true ; 
 			$sanitization['input']		= $sanitized_input ; 
-			$sanitization['message']	= 'Email sanitizated succesfully' ; 
+			$sanitization['message']	= 'Var sanitizated succesfully' ; 
 		}else{
 			$sanitization['message']	= 'Bad string(variable) value, '.$error_msg_gen ;	
 		}							
@@ -137,6 +137,20 @@ function generateRandomPIN() {
         $random_pin .= mt_rand(0,9);
     }
     return $random_pin;
+}
+
+function checkPasswordStrength($pass) {
+    if (strlen($pass) < 8 || strlen($pass) > 20) {
+        return false;
+    }
+
+    if (!preg_match("#[0-9]+#",$pass)) {
+        return false;
+    }
+    if (!preg_match("#[a-zA-Z]+#", $pass)) {
+        return false;
+    }
+    return true;
 }
 
 # Checking Sanitization function 

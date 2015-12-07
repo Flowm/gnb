@@ -3,7 +3,7 @@ Hello <?php echo $cust_name; ?>!
 You seem to have forgotten your brocode.
 
 Please click on the link below in order to change your password.
-<?php echo $reset_link; ?>
+<?php echo $cust_resetlink; ?>
 
 Sincerley Barney Stinson
 CEO of GNB

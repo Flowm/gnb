@@ -71,7 +71,14 @@ class GNBMailer {
 		if (!empty($tans_pdf)){
 			unlink($tans_pdf) ;
 		}
+	}
+	
+	public function sendMail_PasswordReset($cust_addr,$cust_name, $cust_resetlink) {
+		$subject = "GNB Password Reset";
+		$body_txt = $this->getTemplate_PasswordReset($cust_name,$cust_resetlink);
+		$body_html = $this->getHTMLMail($body_txt);
 		
+		$this->sendMail($cust_addr, $cust_name, $subject, $body_txt, $body_html );
 	}
 
 	// PRIVATE
@@ -85,6 +92,13 @@ class GNBMailer {
 	private function getTemplate_Approval($cust_name, $cust_balance ) {
 		ob_start();
 		include "templates/mail_approval.template";
+		$template = ob_get_clean();
+		return $template;
+	}
+
+	private function getTemplate_PasswordReset($cust_name,$cust_resetlink) {
+		ob_start();
+		include "templates/mail_pwrecovery.template";
 		$template = ob_get_clean();
 		return $template;
 	}

@@ -71,6 +71,11 @@ $logo_svg = getMedia('logo_svg');
                 <button type="submit" class="simpleButton">Suit up!</button>
             </div>
         </form>
+        <form method="post" action="forgotpassword.php">
+			<div class="button-container">
+				<button type="submit" class="simpleButton">Forgot your brocode?</button>
+            </div>
+        </form>
     </div>
 </div>
 </body>

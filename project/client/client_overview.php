@@ -66,5 +66,14 @@ if (DB::i()->mapAuthenticationDevice($user->auth_device) == 'TANs') {
     echo '<h1 class="title2">'.$user->getPDFHash().'</h1>';
 	echo '</div>';
 }
+elseif (DB::i()->mapAuthenticationDevice($user->auth_device) == 'SCS') {
+    echo '<br><hr class="hr-thin"><br>';
+    echo '<div class="simple-container-no-bounds simple-text-centered">';
+    echo '<p class="simple-text-big">On the link below you can download the GNB Authenticator, '.
+        'which you will need in order to perfrom transactions from your account. '.
+        'Java Runtime Environment 1.7 is required in order to run it</p>';
+    echo '<a href="'.getPageURL('scs').'">Download SmartCardSimulator here!</a>';
+    echo '</div>';
+}
 
 ?>

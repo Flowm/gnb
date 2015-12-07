@@ -38,7 +38,8 @@ unset($_SESSION['pin']);
     Remember to copy and save this PIN for future use, as it will never be displayed again!
 </p>
 <hr class="hr-thin">
-<p class="simple-text-big simple-text-centered">On the link below you can download the GNB Authenticator<br>
+<p class="simple-text-big simple-text-centered">On the link below you can download the GNB Authenticator.
+    Java Runtime Environment 1.7 is required in order to run it.<br>
     <a href="<?= getPageURL('scs') ?>">Download SmartCardSimulator here!</a>
 </p>
 

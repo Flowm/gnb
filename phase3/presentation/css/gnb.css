@@ -38,6 +38,15 @@ table.fix-table {
     font-size: 24px;
 }
 
+table.usecase-table {
+    width: 900px;
+    font-size: 23px;
+}
+
+span.working {
+	color: lime;
+}
+
 p.fix-description {
     font-size: 30px;
 }

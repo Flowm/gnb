@@ -7,93 +7,90 @@ require_once getPageAbsolute("account");
 require_once getPageAbsolute("fpdf_protection");
 
 class user {
-    public $id;
-    public $email;
-    public $firstname;
-    public $lastname;
-    public $status;
-    public $role;
-    public $approved_by;
-    public $password;
-    public $accounts;
-    public $auth_device;
-    public $pin;
+	public $id;
+	public $email;
+	public $firstname;
+	public $lastname;
+	public $status;
+	public $role;
+	public $approved_by;
+	public $password;
+	public $accounts;
+	public $auth_device;
+	public $pin;
 
-    public function __construct($data) {
-        if (isset($data['id'])) {
-            $this->id = $data['id'];
-        }
-        if (isset($data['email'])) {
-            $this->email = $data['email'];
-        }
-        if (isset($data['first_name'])) {
-            $this->firstname = $data['first_name'];
-        }
-        if (isset($data['last_name'])) {
-            $this->lastname = $data['last_name'];
-        }
-        if (isset($data['pw_hash'])) {
-            $this->password = $data['pw_hash'];
-        }
-        if (isset($data['status'])) {
-            $this->status = $data['status'];
-        }
-        if (isset($data['role'])) {
-            $this->role = $data['role'];
-        }
-        if (isset($data[DB::i()->USER_TABLE_PIN])) {
-            $this->pin = $data[DB::i()->USER_TABLE_PIN];
-        }
-        if (isset($data[DB::i()->USER_TABLE_AUTHDEV])) {
-            $this->auth_device = $data[DB::i()->USER_TABLE_AUTHDEV];
-        }
-        $this->accounts = array();
-        if (isset($data['accounts'])) {
-            //SET ACCOUNTS
-        }
-    }
+	public function __construct($data) {
+		if (isset($data['id'])) {
+			$this->id = $data['id'];
+		}
+		if (isset($data['email'])) {
+			$this->email = $data['email'];
+		}
+		if (isset($data['first_name'])) {
+			$this->firstname = $data['first_name'];
+		}
+		if (isset($data['last_name'])) {
+			$this->lastname = $data['last_name'];
+		}
+		if (isset($data['pw_hash'])) {
+			$this->password = $data['pw_hash'];
+		}
+		if (isset($data['status'])) {
+			$this->status = $data['status'];
+		}
+		if (isset($data['role'])) {
+			$this->role = $data['role'];
+		}
+		if (isset($data[DB::i()->USER_TABLE_PIN])) {
+			$this->pin = $data[DB::i()->USER_TABLE_PIN];
+		}
+		if (isset($data[DB::i()->USER_TABLE_AUTHDEV])) {
+			$this->auth_device = $data[DB::i()->USER_TABLE_AUTHDEV];
+		}
+		$this->accounts = array();
+		if (isset($data['accounts'])) {
+			//SET ACCOUNTS
+		}
+	}
 
-    public function setAccounts($data) {
-        for ($i=0; $i<count($data); $i++) {
-            $element = $data[$i];
-            $account = new account($element);
-            array_push($this->accounts, $account);
-        }
-    }
+	public function setAccounts($data) {
+		for ($i=0; $i<count($data); $i++) {
+			$element = $data[$i];
+			$account = new account($element);
+			array_push($this->accounts, $account);
+		}
+	}
 
-    public function getBasicInfo() {
-        return array('id'=>$this->id,
-            'email'=>$this->email,
-            'firstname'=>$this->firstname,
-            'lastname'=>$this->lastname,	
-            'status'=>$this->status,
-            'role'=>$this->role);
-    }
+	public function getBasicInfo() {
+		return array('id'=>$this->id,
+			'email'=>$this->email,
+			'firstname'=>$this->firstname,
+			'lastname'=>$this->lastname,	
+			'status'=>$this->status,
+			'role'=>$this->role);
+	}
 	
 	 
 
-	public function approve($approver_id) {
+	public function approve($approver_id, $balance) {
 		if ($this->role == '0') {
 			if (DB::i()->approveClient($this->id, $approver_id)) {
-				$balance = rand(100,1000);
+				if ($balance == 0) {
+					$balance = rand(100,1000);
+				}
 				$account_id = DB::i()->addAccountWithBalance($this->id, $balance);
-				$account = new account(array('id'=>$account_id));     
+				$account = new account(array('id'=>$account_id));	 
 				
 				$name = "$this->firstname $this->lastname";
 				$gnbmailer = new GNBMailer();
-				
-				# Check if User uses TANs or SCS
-				$user_uses_tan	= true ; 
 
-				# if User uses TANs generate and attach PDF
-				if ( $user_uses_tan ){
+				$banking_method = DB::i()->mapAuthenticationDevice($this->auth_device);
+				if ( $banking_method == "TANs" ){
 					
-					$tans 		= $account->generateTANs(); 
+					$tans 		= $account->generateTANs(100); 
 					$tanpdffile	= $this->generateTanPDF($tans,$this->getPDFHash()) ;
 					
 					return $gnbmailer->sendMail_Approval($this->email, $name, $balance, $tanpdffile);
-					
-				# if User uses SCS dont sent PDF 
 				} else {
 					return $gnbmailer->sendMail_Approval($this->email, $name, $balance );
 				}
@@ -110,43 +107,95 @@ class user {
 		return false;
 	}
 
-    public function reject($denier_id) {
-        if ($this->role == '0') {
-            if (DB::i()->rejectClient($this->id, $denier_id)) {
-                //DO SOMETHING IN CASE OF REJECTION?!
-                return true;
+	public function reject($denier_id) {
+		if ($this->role == '0') {
+			if (DB::i()->rejectClient($this->id, $denier_id)) {
+				//DO SOMETHING IN CASE OF REJECTION?!
+				return true;
 			}
-        }
-        else if($this->role == '1') {
-            if (DB::i()->rejectEmployee($this->id, $denier_id)) {
-                //DO SOMETHING IN CASE OF REJECTION?!
-                return true;
+		}
+		else if($this->role == '1') {
+			if (DB::i()->rejectEmployee($this->id, $denier_id)) {
+				//DO SOMETHING IN CASE OF REJECTION?!
+				return true;
 			}
 		}
 		//TODO: SHOW ERROR MESSAGE?
-        return false;
-    }
+		return false;
+	}
 
-    public function block($timestamp) {
-        //TODO: IMPLEMENT
-    }
+	public function block($timestamp) {
+		//TODO: IMPLEMENT
+	}
 
-    public function unblock($approver_id) {
-        if ($this->role == '0') {
-            if (DB::i()->approveClient($this->id, $approver_id)) {
-                return true;
-            }
-        }
-        else if($this->role == '1') {
-            if (DB::i()->approveEmployee($this->id, $approver_id)) {
-                return true;
-            }
-        }
-        //TODO: SHOW ERROR MESSAGE?
-        return false;
-    }
+	public function unblock($approver_id) {
+		if ($this->role == '0') {
+			if (DB::i()->approveClient($this->id, $approver_id)) {
+				return true;
+			}
+		}
+		else if($this->role == '1') {
+			if (DB::i()->approveEmployee($this->id, $approver_id)) {
+				return true;
+			}
+		}
+		//TODO: SHOW ERROR MESSAGE?
+		return false;
+	}
 
 	public static function approveRegistrations($requests, $employee_id) {
+		$requests = explode(";",$requests);
+		foreach ($requests as $request) {
+			$exploded = explode(":",$request);
+			$var_num = count($exploded);
+			if ($var_num < 2) {
+				//TODO: Handle error
+				continue;
+			}
+			$id = $exploded[0];
+			$role = $exploded[1];
+			$balance = ($var_num == 3) ? $exploded[2] : 0;
+			if ($balance <= 0) {
+				$balance = 0;
+			}
+			$data = DB::i()->getUser($id,$role);
+			if (!$data) {
+				return false;
+			}
+			$user = new user($data);
+			$result = $user->approve($employee_id, $balance);
+			if (!$result) {
+				//TODO: handle registration error
+			}
+		}
+		return true;
+	}
+
+	public static function rejectRegistrations($requests, $employee_id) {
+		$requests = explode(";",$requests);
+		foreach ($requests as $request) {
+			$exploded = explode(":",$request);
+			$var_num = count($exploded);
+			if ($var_num < 2) {
+				//TODO: Handle error
+				continue;
+			}
+			$id = $exploded[0];
+			$role = $exploded[1];
+			$data = DB::i()->getUser($id,$role);
+			if (!$data) {
+				return false;
+			}
+			$user = new user($data);
+			$result = $user->reject($employee_id);
+			if (!$result) {
+				//TODO: handle registration error
+			}
+		}
+		return true;
+	}
+
+	public static function unblockUsers($requests, $employee_id) {
 		$requests = explode(";",$requests);
 		foreach ($requests as $request) {
 			$exploded = explode(":",$request);
@@ -157,51 +206,13 @@ class user {
 				return false;
 			}
 			$user = new user($data);
-			$result = $user->approve($employee_id);
+			$result = $user->unblock($employee_id);
 			if (!$result) {
 				//TODO: handle registration error
 			}
 		}
-        return true;
+		return true;
 	}
-
-    public static function rejectRegistrations($requests, $employee_id) {
-        $requests = explode(";",$requests);
-        foreach ($requests as $request) {
-            $exploded = explode(":",$request);
-            $id = $exploded[0];
-            $role = $exploded[1];
-            $data = DB::i()->getUser($id,$role);
-            if (!$data) {
-                return false;
-            }
-            $user = new user($data);
-            $result = $user->reject($employee_id);
-            if (!$result) {
-                //TODO: handle registration error
-            }
-        }
-        return true;
-    }
-
-    public static function unblockUsers($requests, $employee_id) {
-        $requests = explode(";",$requests);
-        foreach ($requests as $request) {
-            $exploded = explode(":",$request);
-            $id = $exploded[0];
-            $role = $exploded[1];
-            $data = DB::i()->getUser($id,$role);
-            if (!$data) {
-                return false;
-            }
-            $user = new user($data);
-            $result = $user->unblock($employee_id);
-            if (!$result) {
-                //TODO: handle registration error
-            }
-        }
-        return true;
-    }
 	
 	private function generateTanPDF($tans,$pass='iDontKnowAndIDontCare') {
 		

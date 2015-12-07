@@ -29,12 +29,14 @@ if (isset($_POST["frame"])) {
     $frame = getFrameAbsolute($frameKey);
 }
 
-if (empty($_SESSION["user_id"]))
+if (empty($_SESSION["user_id"])) {
 	die("User missing");
+}
+
 $accounts_info = DB::i()->getAccountsForUser($_SESSION["user_id"]);
 
-if (isset($_POST["account"])) {
-	$account	= santize_input($_POST["account"],SANITIZE_INT) ;
+if (isset($_POST["account"]) && !empty($_POST["account"])) {
+	$account	= santize_input($_POST["account"],SANITIZE_INT);
 	foreach($accounts_info as $acc) {
 		if ( $account == $acc["id"] ) {
 			$_SESSION["account_id"] = $account;

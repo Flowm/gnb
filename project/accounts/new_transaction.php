@@ -35,7 +35,7 @@ drawSingleRecordTable($acc_info,'Account ',$account_header) ;
 $dest_code		= ( isset($_POST["dest_code"]) ? santize_input($_POST["dest_code"],SANITIZE_INT) : '' );
 $amount			= ( isset($_POST["amount"]) ? santize_input($_POST["amount"],SANITIZE_DOUBLE) : '' );
 $description	= ( isset($_POST["description"]) ? santize_input($_POST["description"],SANITIZE_STRING_DESC) : '' );
-$tan_code		= ( isset($_POST["tan_code"]) ? santize_input($_POST["tan_code"],SANITIZE_STRING_VAR) : '' );
+$tan_code		= ( isset($_POST["tan_code"]) ? santize_input($_POST["tan_code"],SANITIZE_STRING_DESC) : '' );
 
 ?>
 

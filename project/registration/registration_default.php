@@ -16,8 +16,19 @@ unset($_SESSION['banking']);
 <h1 class="title3">Welcome to the Goliath National Bank!</h1>
 <p class="simple-text-big simple-text-centered">
     Your request has been received and will be processed shortly.
-    <br>
+    A confirmation email will be sent to you, once your registration has been approved.<br>
     Thank you for choosing the Goliath National Bank!
+</p>
+<hr class="hr-thin">
+<p class="simple-text-big simple-text-centered">
+    You will need the following PIN in order to change your password if you forget it.<br>
+    This PIN is bound to your account and cannot be changed!<br>
+    You won't get a chance to display this PIN again, so be sure to copy it right now and save it somewhere safe.
+    Also, for security reasons, never tell your PIN to anybody!
+</p>
+<h1 class="title1">Here is your PIN: <?= $random_pin?></h1>
+<p class="simple-text-big simple-text-centered">
+    Remember to copy and save this PIN for future use, as it will never be displayed again!
 </p>
 <hr class="hr-thin">
 <p class="simple-text-big simple-text-centered">

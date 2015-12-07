@@ -132,6 +132,75 @@
                         </p>
                     </section>
                     <section>
+                        <h2>OTG-AUTHZ-002 <br> Bypassing authorization schema</h2>
+                        <table class="fix-table">
+                            <tr>
+                                <th colspan="2">Changed files</th>
+                            </tr>
+                            <tr class="smallText">
+                                <td>/gnb/project/employee:<br>
+                                    client_details.php,
+                                    client_transaction_details.php,
+                                    employee_area.php,
+                                    employee_overview.php,
+                                    manage_clients.php,
+                                    manage_registration.php,
+                                    manage_transfer.php,
+                                    transfer_details.php,
+                                    search_client.php
+                                    </td>
+                                <td>+lines 5-21</td>
+                            </tr>
+                            <tr class="smallText">
+                                <td>/gnb/project/accounts:<br>
+                                    account_overview.php,
+                                    download_transactions.php,
+                                    my_accounts.php,
+                                    new_transaction.php,
+                                    new_transaction_multiple.php,
+                                    transaction_history.php,
+                                    transaction_view.php,
+                                    verify_transaction.php
+                                </td>
+                                <td>+lines 5-16</td>
+                            </tr>
+                            <tr class="smallText">
+                                <td>/gnb/project/client/client_overview.php
+                                </td>
+                                <td>+lines 6-21</td>
+                            </tr>
+                            <tr class="smallText">
+                                <td>/gnb/project/registration:<br>
+                                    registration_default.php,
+                                    registration_pin.php,
+                                    registration_request.php
+                                </td>
+                                <td>+lines 5-14</td>
+                            </tr>
+                        </table>
+                        <p class="fix-description">
+                            Pages, sections and frames are no longer directly accessible, since checks
+                            are performed at the beginning of each php file: only users with the correct
+                            permissions are allowed to access specific pages.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>OTG-AUTHZ-004 <br> Insecure Direct Object References</h2>
+                        <table class="fix-table">
+                            <tr>
+                                <th colspan="2">Changed files</th>
+                            </tr>
+                            <tr>
+                                <td>?</td>
+                                <td>?</td>
+                            </tr>
+                        </table>
+                        <p class="fix-description">
+                            Please refer to OTG-CRYPST-003 for this fix, since the vulnerability was based
+                            on the usage of an unencrypted communication channel.
+                        </p>
+                    </section>
+                    <section>
                         <h2>OTG-INPVAL-001 <br> Reflected Cross Site Scripting</h2>
                         <table class="fix-table">
                             <tr>
@@ -195,6 +264,24 @@
                             this is no longer possible as each uploaded file gets automatically renamed.
                             Even though the c parser receives additional parameters,
                             these are passed directly by the application and cannot be injected by an attacker.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>OTG-INPVAL-014 <br> Buffer overflow</h2>
+                        <table class="fix-table">
+                            <tr>
+                                <th colspan="2">Changed files</th>
+                            </tr>
+                            <tr>
+                                <td>?</td>
+                                <td>?</td>
+                            </tr>
+                        </table>
+                        <p class="fix-description">
+                            The application was never vulnerable to buffer overflow,
+                            but only to integer overflow. This was due to a comparison between a long long value and
+                            an integer value inside the c parser. By changing the integer to a long long value,
+                            this is no longer possible.
                         </p>
                     </section>
                     <section>
@@ -316,7 +403,7 @@
                     <section>
                         <h1>Lorenzo Donini</h1>
 
-                        <table class="time-table">
+                        <table class="time-table-left">
                             <tr>
                                 <th>Task</th>
                                 <th>Time</th>
@@ -342,7 +429,11 @@
                                 <td>1h</td>
                             </tr>
                             <tr>
-                                <td>PHP bugfixing</td>
+                                <td>Features/Use-cases testing</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr>
+                                <td>Features/Use-cases bugfixing</td>
                                 <td>1h</td>
                             </tr>
                             <tr>
@@ -354,9 +445,11 @@
                                 <td>1h</td>
                             </tr>
                             <tr>
-                                <td>Registration: testing</td>
+                                <td>Registration: testing & fixing</td>
                                 <td>1h</td>
                             </tr>
+                        </table>
+                        <table class="time-table-right">
                             <tr>
                                 <td>Java SCS: GUI</td>
                                 <td>1h</td>
@@ -374,24 +467,28 @@
                                 <td>1h</td>
                             </tr>
                             <tr>
-                                <td>Transactions: single transactions logic</td>
+                                <td>Transactions: single transactions logic changed</td>
                                 <td>1h</td>
                             </tr>
                             <tr>
-                                <td>Transactions: batch transactions logic</td>
+                                <td>Transactions: batch transactions logic changed</td>
                                 <td>1h</td>
                             </tr>
                             <tr>
-                                <td>Initialization of client balance</td>
+                                <td>Initialization of client balance added</td>
                                 <td>1h</td>
                             </tr>
                             <tr>
-                                <td>Presentation</td>
+                                <td>Presentation: core slides</td>
                                 <td>1h</td>
                             </tr>
                             <tr>
+                                <td>Presentation: fix slides</td>
+                                <td>1h</td>
+                            </tr>
+                            <tr class="time-total">
                                 <td>TOTAL</td>
-                                <td>17h</td>
+                                <td>18h</td>
                             </tr>
                         </table>
 

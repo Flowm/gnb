@@ -221,6 +221,7 @@ final class DB {
 
 	function loginUser($mail, $password)
 	{
+		$sleeptime = rand(0, 10);
 
 		$SQL = "SELECT
 					$this->USER_TABLE_KEY,
@@ -237,7 +238,11 @@ final class DB {
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 		if (sizeof($result) != 1) {
+			$sleeptime += rand(30, 40);
+			usleep($sleeptime * 1000);
 			return false;
+		} else {
+			usleep($sleeptime * 1000);
 		}
 
 		$user_id = $result[0][$this->USER_TABLE_KEY];

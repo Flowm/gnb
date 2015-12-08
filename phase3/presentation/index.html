@@ -214,12 +214,12 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>??</td>
-                                <td>??</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
                             </tr>
                         </table>
                         <p class="fix-description">
-                            Nada nada nada.
+                            This vulnerbility was due to an error in setting up the github directory, this was remediated by editing the DocumentRoot value in the apache settings
                         </p>
                     </section>
 
@@ -231,46 +231,12 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>??</td>
-                                <td>??</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
                             </tr>
                         </table>
                         <p class="fix-description">
-                            Nada nada nada.
-                        </p>
-                    </section>
-
-                    <section>
-                        <h5>OTG-IDENT-002</h5>
-                        <h3>User Registration Process</h3>
-                        <table class="fix-table">
-                            <tr>
-                                <th colspan="2">Changed files</th>
-                            </tr>
-                            <tr>
-                                <td>??</td>
-                                <td>??</td>
-                            </tr>
-                        </table>
-                        <p class="fix-description">
-                            Nada nada nada.
-                        </p>
-                    </section>
-
-                    <section>
-                        <h5>OTG-IDENT-003</h5>
-                        <h3>Account Provisioning Process</h3>
-                        <table class="fix-table">
-                            <tr>
-                                <th colspan="2">Changed files</th>
-                            </tr>
-                            <tr>
-                                <td>??</td>
-                                <td>??</td>
-                            </tr>
-                        </table>
-                        <p class="fix-description">
-                            Nada nada nada.
+                            This check will no longer be needed as the HTTP option is no longer an option on the website, as the website is only available in HTTPS.
                         </p>
                     </section>
 
@@ -282,12 +248,12 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>??</td>
-                                <td>??</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
                             </tr>
                         </table>
                         <p class="fix-description">
-                            Nada nada nada.
+                            This has been fixed by the implemenation of HTTPS on the website, and credentials are no longer sent in clear text 
                         </p>
                     </section>
 
@@ -331,12 +297,16 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>??</td>
-                                <td>??</td>
+                                <td>/gnb/project/login.php</td>
+                                <td>+lines 19</td>
+                            </tr>
+							<tr>
+                                <td>/gnb/project/logout.php</td>
+                                <td>+lines 5</td>
                             </tr>
                         </table>
                         <p class="fix-description">
-                            Nada nada nada.
+                            The issue here was the constant SESSION_ID, this has now been fixed, and a new SESSION ID is generated.
                         </p>
                     </section>
 
@@ -461,8 +431,8 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>?</td>
-                                <td>?</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
                             </tr>
                         </table>
                         <p class="fix-description">
@@ -581,8 +551,8 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>?</td>
-                                <td>?</td>
+                                <td>/gnb/project/genericfunctions.php</td>
+                                <td>new file (+lines 10-103)</td>
                             </tr>
                         </table>
                         <p class="fix-description">
@@ -600,8 +570,8 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>?</td>
-                                <td>?</td>
+                                <td>/gnb/project/genericfunctions.php</td>
+                                <td>new file (+lines 10-103)</td>
                             </tr>
                         </table>
                         <p class="fix-description">
@@ -763,8 +733,8 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>?</td>
-                                <td>?</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
                             </tr>
                         </table>
                         <p class="fix-description">

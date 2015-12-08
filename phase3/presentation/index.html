@@ -172,16 +172,55 @@
                         etc.) including reasoning for these changes in the values.
 
                     </section>
-
-                </section>
-
-
-                <section>
-
-                    <h1>
-                        Thanks for your attention!
-                    </h1>
-
+					<section>
+						<h3>The HTTPS Migration</h3>
+						<p class="fix-description">
+							Moving the website from HTTP to HTTPS solved a large amount of issues that related to clear text data.
+						</p>
+					</section>
+					<section>
+						<h3>Moving the DocumentRoot of GitHUB</h3>
+						<p class="fix-description">
+							One of the major vulnerabilities was the fact that a few files were not proteceted, these files included sensitive infomration regarding the setup of our machine.
+							
+							Our solution was to change the github DocumentRoot to the folder that only contains the PHP code.
+						</p>
+					</section>
+					<section>
+						<h3>Timing Attack</h3>
+						<p class="fix-description">
+							One of the vulnerbilities was a timing attack, where the login page would reply within 50ms if the user was registered and within around 25mn if the user was not registered.
+							
+							While minor, this attack could be used to check whether a certain email is registered with gnb or not.
+							
+							To overcome this a random waiting period was introduced to all login attemps, making the response time less uniform and more random.
+						</p>
+					</section>
+					<section>
+						<h3>Unsanitized Input</h3>
+						<p class="fix-description">
+							Creating a unified sanitizing function was the solution to combating unsanitizaiton.
+						</p>
+					</section>
+					<section>
+						<h3>Integer overflow</h3>
+						<p class="fix-description">
+							This was due to a comparison between a long long value and an integer value inside the c parser. By changing the integer to a long long value,
+							this is no longer possible
+						</p>
+					</section>
+					<section>
+						<h3>Clickjacking</h3>
+						<p class="fix-description">
+							This has been rectified through the updated security policy and The X-FRAME-OPTIONS has been set to DENY.
+						</p>
+					</section>
+					
+					<section>
+						<h1>
+							Thanks for your attention!
+						</h1>
+					</section>
                 </section>
 
 

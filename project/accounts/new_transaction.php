@@ -14,6 +14,14 @@ else if (!isset($frame)) {
     exit();
 }
 
+$token = "";
+if (!isset($_SESSION['token'])) {
+    $token = md5(uniqid(rand(), TRUE));
+    $_SESSION['token'] = $token;
+} else {
+    $token = $_SESSION['token'];
+}
+
 require_once getpageabsolute("db_functions");
 require_once getPageAbsolute("user");
 require_once getPageAbsolute("drawfunctions");
@@ -43,6 +51,7 @@ $tan_code		= ( isset($_POST["tan_code"]) ? santize_input($_POST["tan_code"],SANI
 <h1 class="simple-text">This form is used to perform a single transaction</h1>
 <p class="simple-text">Note: All Transactions over 10,000 will require manual approval by an employee</p>
 <form method="post" id="transactionForm" onsubmit="verifyTransaction()">
+    <input type="hidden" name="token" value="<?=$token?>">
     <div class="transaction-container">
         <div class="formRow">
             <div class="formLeftColumn">

@@ -13,6 +13,13 @@ else if (!isset($frame)) {
 	exit();
 }
 
+$token = "";
+if ($_POST['token'] != $_SESSION['token']) {
+	die("CSRF detected!");
+} else {
+	$token = $_SESSION['token'];
+}
+
 require_once getpageabsolute("db_functions");
 require_once getPageAbsolute("user");
 require_once getPageAbsolute("util");
@@ -49,6 +56,7 @@ if ( isset($_SESSION["process"]) && $_SESSION["process"] == true
 		.	'<input type="hidden" name="frame" value="account_overview">'
 		.	'<input type="hidden" name="section" value="my_accounts">'
 		.	'<input type="submit" value="Back to Overview" class="simpleButton">'
+		.	'<input type="hidden" name="token" value="' . $token . '">'
 		.	'</form">' ;
     unset($_SESSION["process"]);
 }
@@ -97,6 +105,7 @@ else
             <input type="hidden" name="account_id" value="<?= $account_id ?>">
             <input type="hidden" name="section" value="my_accounts">
             <input type="hidden" name="frame" value="new_transaction">
+            <input type="hidden" name="token" value="<?php $token ?>">
             <input type="submit" class="simpleButton" value="Go Back">
             </form>
         <?php
@@ -134,6 +143,7 @@ else
 			.	'<input type="hidden" name="description" value="'.$description.'">'
 			.	'<input type="hidden" name="tan_code" value="'.$tan_code.'">'
 			.	'<input type="hidden" name="account_id" value="'.$account_id.'">'
+			.	'<input type="hidden" name="token" value="'.$token.'">'
             .   '<input type="hidden" name="confirmed" value="yes">'
 			.	'<input type="submit" value="Confirm" class="simpleButton">'
 			.	'</form>' ;
@@ -152,6 +162,7 @@ else
 			.	'<input type="hidden" name="description" value="'.$description.'">'
 			.	'<input type="hidden" name="tan_code" value="'.$tan_code.'">'
 			.	'<input type="hidden" name="account_id" value="'.$account_id.'">'
+			.	'<input type="hidden" name="token" value="'.$token.'">'
 			.	'<input type="submit" value="Go Back" class="simpleButton">'
 			.	'</form>' ;	
 	}

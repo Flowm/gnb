@@ -17,9 +17,25 @@ else if (!isset($frame)) {
 if (empty($_SESSION["account_id"]))
 	die("Please choose an account");
 
+$token = "";
+if (!isset($_SESSION['token'])) {
+    $token = md5(uniqid(rand(), TRUE));
+    $_SESSION['token'] = $token;
+} else {
+    $token = $_SESSION['token'];
+}
+
 $account_id = $_SESSION["account_id"];
 
 if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
+
+	$token = "";
+	if ($_POST['token'] != $_SESSION['token']) {
+		die("CSRF detected!");
+	} else {
+		$token = $_SESSION['token'];
+	}
+
 	$file = $_FILES["transactionsCSV"];
 	$tan = santize_input($_POST["tan"],SANITIZE_STRING_VAR);
 	$tan = preg_replace("([^a-zA-Z0-9+\/])", '', $tan);
@@ -57,6 +73,7 @@ if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
 <br />
 <p class="simple-text">Note: All Transactions over 10,000 will require manual approval by an employee</p>
 <form id="uploadForm" method="post" enctype="multipart/form-data" class="simple-text">
+	<input type="hidden" name="token" value="<?=$token?>">
 	<div class="transaction-container">
 		<div class="formRow">
 			<div class="formLeftColumn">

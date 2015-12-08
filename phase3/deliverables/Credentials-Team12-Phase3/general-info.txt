@@ -105,5 +105,9 @@ application.
 
 - the name and location of any third party libraries that you have used in phase 3
 
+    /gnb/SmartCardSimulator/lib
+        commons-codec-1.9 (Apache commons codec)
+
 	/project/lib
-	    apache-commons-codec-1.9
+	    /fpdf/fpdf_protection.php (See http://www.fpdf.org/en/script/script37.php for further documentation)
+

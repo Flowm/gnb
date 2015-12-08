@@ -47,19 +47,10 @@
 
 - the URL to access your web application
 
-	https://localhost/gnb
+	https://$IP_OF_VM/
 
 - the location and structure of the folder(s) where you have the source files of your web
 application.
-
-	/config
-		Includes the apache and php configuration as well as the files necessary for the database setup.
-
-	/phase2
-		Material from Phase 2
-
-	/phase3
-		Material from Phase 3
 
 	/project
 		Code for the web application

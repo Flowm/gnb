@@ -138,15 +138,13 @@
 
                 </section>
 
-                <section data-state="fixes">
+                <section data-state="vulns">
 
                     <section>
                         <h1>Vulnerabilities</h1>
-
-                        <h2>... and how we tried to fix them</h2>
                     </section>
 
-                    <section>
+                    <!--section>
                     
                         Core of presentation: at this point in the presentation you must talk about:
 
@@ -155,56 +153,58 @@
                         Report possible changes in OWASP and CVSS values (e.g. from high to medium,
                         etc.) including reasoning for these changes in the values.
 
-                    </section>
+                    </section-->
+
 					<section>
 						<h3>The HTTPS Migration</h3>
 						<p class="fix-description">
-							Moving the website from HTTP to HTTPS solved a large amount of issues that related to clear text data.
+							Moving the website from HTTP to HTTPS solved a large amount of issues that was related to clear text data.
 						</p>
 					</section>
 					<section>
-						<h3>Moving the DocumentRoot of GitHUB</h3>
+						<h3>Moving the webserver DocumentRoot</h3>
 						<p class="fix-description">
-							One of the major vulnerabilities was the fact that a few files were not proteceted, these files included sensitive infomration regarding the setup of our machine.
+							One of the major vulnerabilities was the fact that a few files were accessible through the webserver DocumentRoot. These files included sensitive infomration regarding the configuration of the system.
 							
-							Our solution was to change the github DocumentRoot to the folder that only contains the PHP code.
+							Our solution was to change the webserver DocumentRoot to the folder that only contains the PHP code and no sensitive information.
 						</p>
 					</section>
 					<section>
 						<h3>Timing Attack</h3>
 						<p class="fix-description">
-							One of the vulnerbilities was a timing attack, where the login page would reply within 50ms if the user was registered and within around 25mn if the user was not registered.
+							One of the vulnerbilities was a timing attack, where the login page would reply within 50ms if the mail address was valid and within around 25ms if the mail address was not valid.
 							
-							While minor, this attack could be used to check whether a certain email is registered with gnb or not.
+							While minor, this attack could be used to check whether a certain email is registered at our bank or not.
 							
-							To overcome this a random waiting period was introduced to all login attemps, making the response time less uniform and more random.
+							To overcome this a random customized waiting period was introduced to all login attemps, making the response time for both cases very similiar.
 						</p>
 					</section>
 					<section>
 						<h3>Unsanitized Input</h3>
 						<p class="fix-description">
-							Creating a unified sanitizing function was the solution to combating unsanitizaiton.
+							Creating a unified sanitizing function was the solution to combating unsanitiziaton.
 						</p>
 					</section>
 					<section>
 						<h3>Integer overflow</h3>
 						<p class="fix-description">
-							This was due to a comparison between a long long value and an integer value inside the c parser. By changing the integer to a long long value,
-							this is no longer possible
+							This was due to a comparison between a long long value and an integer value inside the C parser. By changing the integer to a long long value,
+							this was fixed.
 						</p>
 					</section>
 					<section>
 						<h3>Clickjacking</h3>
 						<p class="fix-description">
-							This has been rectified through the updated security policy and The X-FRAME-OPTIONS has been set to DENY.
+							This has been rectified through the updated security policy and the X-FRAME-OPTIONS which have been set to DENY.
 						</p>
 					</section>
 					
-					<section>
-						<h1>
-							Thanks for your attention!
-						</h1>
-					</section>
+                </section>
+
+                <section>
+                    <h1>
+                        Thanks for your attention!
+                    </h1>
                 </section>
 
 
@@ -276,7 +276,7 @@
                             </tr>
                         </table>
                         <p class="fix-description">
-                            This has been fixed by the implemenation of HTTPS on the website, and credentials are no longer sent in clear text. 
+                            This has been fixed by the implemenation of HTTPS on the website,<br>and credentials are no longer sent in clear text. 
                         </p>
                     </section>
 
@@ -299,10 +299,14 @@
                                 <td>/gnb/project/models/user.php</td>
                                 <td>+lines 141-154</td>
                             </tr>
+                            <tr>
+                                <td>/gnb/project/db.php</td>
+                                <td>+lines 287-366</td>
+                            </tr>
                         </table>
                         <p class="fix-description">
                             A lockout mechanism was implemented: after failing a login 5 times in a row
-                            (status is kept on database), a user account automatically gets blocked.
+                            (status is kept in database), a user account automatically gets blocked.
                             A new section in the employee area was added in order to allow employees
                             to unblock user accounts which have been blocked.
                         </p>
@@ -325,7 +329,7 @@
                             </tr>
                         </table>
                         <p class="fix-description">
-                            The issue here was the constant SESSION_ID, this has now been fixed, and a new SESSION ID is generated.
+                            The issue here was the constant SESSION_ID. This has now been fixed,<br>and a new SESSION ID is generated every time.
                         </p>
                     </section>
 
@@ -342,7 +346,7 @@
                             </tr>
                         </table>
                         <p class="fix-description">
-                            This was also remediated through the implementation of HTTPS, see OTG-AUTHN-001.
+                            This was also remediated through the implementation of HTTPS,<br>see OTG-AUTHN-001.
                         </p>
                     </section>
 
@@ -455,7 +459,7 @@
                             </tr>
                         </table>
                         <p class="fix-description">
-                            Please refer to OTG-CRYPST-003 for this fix, since the vulnerability was based
+                            Please refer to OTG-CRYPST-003 for this fix, since the vulnerability was<br> based
                             on the usage of an unencrypted communication channel.
                         </p>
                     </section>
@@ -473,7 +477,7 @@
                             </tr>
                         </table>
                         <p class="fix-description">
-                            This was also remediated through the implementation of HTTPS, see OTG-AUTHN-001. SESSION ID is no longer sent in clear text.
+                            This was also remediated through the implementation of HTTPS,<br>see OTG-AUTHN-001. SESSION ID is no longer sent in clear text.
                         </p>
                     </section>
 
@@ -490,7 +494,7 @@
                             </tr>
                         </table>
                         <p class="fix-description">
-                            This was also remediated through the implementation of HTTPS, see OTG-AUTHN-001. SESSION ID is no longer sent in clear text.
+                            This was also remediated through the implementation of HTTPS,<br>see OTG-AUTHN-001. SESSION ID is no longer sent in clear text.
                         </p>
                     </section>
 
@@ -511,7 +515,7 @@
                             </tr>
                         </table>
                         <p class="fix-description">
-                            This was fixed by the same fix in OTG-AUTHN-004. SESSION ID is now renewed each time.
+                            This was fixed by the same fix in OTG-AUTHN-004.<br>SESSION ID is now renewed each time.
                         </p>
                     </section>
 
@@ -528,7 +532,7 @@
                             </tr>
                         </table>
                         <p class="fix-description">
-                            This was also remediated through the implementation of HTTPS, see OTG-AUTHN-001. SESSION ID is no longer sent in clear text.
+                            This was also remediated through the implementation of HTTPS,<br>see OTG-AUTHN-001. SESSION ID is no longer sent in clear text.
                         </p>
                     </section>
 
@@ -540,12 +544,20 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>??</td>
-                                <td>??</td>
+                                <td>/gnb/project/accounts/new_transaction.php</td>
+                                <td>+lines 17-24, 54</td>
+                            </tr>
+                            <tr>
+                                <td>/gnb/project/accounts/new_transaction_multiple.php</td>
+                                <td>+lines 21-27, 66-73, 130</td>
+                            </tr>
+                            <tr>
+                                <td>/gnb/project/accounts/verify_transaction.php</td>
+                                <td>+lines 16-21, 59, 108, 146, 165</td>
                             </tr>
                         </table>
                         <p class="fix-description">
-                            Nada nada nada.
+                            This issue has been resolved by adding a randomly generated token to all the forms. This token is checked on receiving the values of the form to detect Cross Site Request Forgery.
                         </p>
                     </section>
 
@@ -610,13 +622,22 @@
                             <tr>
                                 <th colspan="2">Changed files</th>
                             </tr>
-                            <tr>
-                                <td>?</td>
-                                <td>?</td>
+                            <tr class="smallText">
+                                <td>/gnb/project/db.php</td>
+                                <td>new file (+lines 1-1092)</td>
                             </tr>
+                            <tr class="smallText">
+                                <td>/gnb/config/database/setup.php, /gnb/project/accounts/account_overview.php, /gnb/project/accounts/download_transactions.php, /gnb/project/accounts/my_accounts.php, /gnb/project/accounts/new_transaction.php, /gnb/project/accounts/transaction_history.php, /gnb/project/accounts/transaction_view.php, /gnb/project/accounts/verify_transaction.php, /gnb/project/authentication.php, /gnb/project/awesome_data.php, /gnb/project/employee/client_details.php, /gnb/project/employee/client_transaction_details.php, /gnb/project/employee/manage_registration.php, /gnb/project/employee/manage_transfer.php, /gnb/project/employee/search_client.php, /gnb/project/employee/transfer_details.php, /gnb/project/models/account.php, /gnb/project/models/transaction.php, /gnb/project/models/user.php, /gnb/project/registration/registration_request.php, /gnb/project/resource_mappings.php</td>
+                                <td>modified all lines with "DB::i()->"</td>
+                            </tr>
+                            <tr class="smallText">
+                                <td>/gnb/project/dbheader.php</td>
+                                <td>removed file</td>
+                            </tr>
+                             
                         </table>
                         <p class="fix-description">
-                            ?
+                            This issue has been resolved by using prepared statements instead of pure <code>mysql_*</code> commands. This was accomplished by using <code>PDO</code> and its functionality for building prepared statements. This validates the input for its data type and prevents SQL injections.
                         </p>
                     </section>
 

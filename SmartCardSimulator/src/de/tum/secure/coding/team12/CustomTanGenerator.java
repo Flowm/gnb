@@ -17,13 +17,14 @@ public class CustomTanGenerator {
 
     public static String generateTAN(String valueToHash) {
         //We first generate a random SALT
-        long now = System.currentTimeMillis();
+        long now = System.currentTimeMillis()/1000;
         long saltLong = now % SALT_MAX;
 
         //Going to convert the single values to Base64
         StringBuilder sb = new StringBuilder();
         encodeLongBase64(saltLong,(long)64,sb);
         String salt = sb.toString();
+        salt = ("00000" + salt).substring(salt.length());
 
         byte [] saltBase64 = salt.getBytes();
         byte [] content = valueToHash.getBytes();

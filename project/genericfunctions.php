@@ -112,13 +112,13 @@ function base64ToBase10($base64Str) {
 	return $result;
 }
 
-function verifyAppGeneratedTAN($tan, $pin, $iban, $amount) {
+function verifyAppGeneratedTANData($tan, $pin, $input) {
     $salt = substr($tan,-5);
 
     $timestamp = base64ToBase10($salt);
 
-    $data = $pin . $iban . $amount . $salt;
-    $hash = hash('sha256',$data, true);
+    $data = $pin . $input . $salt;
+    $hash = hash('sha256', $data, true);
 
     $hash = base64_encode($hash);
 
@@ -129,6 +129,10 @@ function verifyAppGeneratedTAN($tan, $pin, $iban, $amount) {
     else {
         return null;
     }
+}
+
+function verifyAppGeneratedTAN($tan, $pin, $iban, $amount) {
+    return verifyAppGeneratedTANData($tan, $pin, $iban . $amount);
 }
 
 function generateRandomPIN() {

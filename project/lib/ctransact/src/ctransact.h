@@ -41,18 +41,19 @@ struct transaction {
 	char* sum;
 	char* desc;
 	char* tan;
-	char time[MAX_TINFO_LEN];
+	char* time;
 	int  ap_ok;
 	char ap_time[MAX_TINFO_LEN];
 	char ap_byid[MAX_TINFO_LEN];
 };
 
-int parse_csv(char*, char*, FILE*);
-int process_transaction(char*, char*, struct transactstr);
+int parse_csv(char*, char*, char*, FILE*);
+int process_transaction(char*, char*, char*, struct transactstr);
 
 static MYSQL* con;
 int gnb_mysql_do_transaction(struct transaction);
 int gnb_mysql_do_query(char*, MYSQL_RES**, my_ulonglong*);
 int gnb_mysql_init();
+int gnb_mysql_gettime(char*);
 
 long long parse_number(char*, int);

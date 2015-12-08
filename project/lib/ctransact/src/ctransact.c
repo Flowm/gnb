@@ -6,6 +6,7 @@
 int main(int argc, char* argv[]) {
 	FILE* file;
 	int ret;
+	char time[MAX_TINFO_LEN];
 
 	if (argc!=4) {
 		printf("Missing transaction arguments\n");
@@ -24,13 +25,18 @@ int main(int argc, char* argv[]) {
 		return 3;
 	}
 
-	ret = parse_csv(src_acc, tan, file);
+	if (gnb_mysql_gettime(time)) {
+		printf("Error getting basic database information\n");
+		return 4;
+	}
+
+	ret = parse_csv(src_acc, tan, time, file);
 	fclose(file);
 
 	return ret;
 }
 
-int parse_csv(char* src_acc, char* tan, FILE* fh) {
+int parse_csv(char* src_acc, char* tan, char* time, FILE* fh) {
 	int c;
 	int eof = 0;
 	int invalid = 0;
@@ -52,7 +58,7 @@ int parse_csv(char* src_acc, char* tan, FILE* fh) {
 
 			if (!invalid) {
 				trans.buffer[pos++] = '\0';
-				process_transaction(src_acc, tan, trans);
+				process_transaction(src_acc, tan, time, trans);
 			} else if (eof && field < 2) {
 				continue;
 			} else {
@@ -86,7 +92,7 @@ int parse_csv(char* src_acc, char* tan, FILE* fh) {
 	return 0;
 }
 
-int process_transaction(char* src, char* tan, struct transactstr transtr) {
+int process_transaction(char* src, char* tan, char* time, struct transactstr transtr) {
 	struct transaction t;
 	int ret;
 
@@ -95,6 +101,7 @@ int process_transaction(char* src, char* tan, struct transactstr transtr) {
 	t.sum   = &transtr.buffer[transtr.offset[1]];
 	t.desc  = &transtr.buffer[transtr.offset[2]];
 	t.tan   = tan;
+	t.time  = time;
 	t.ap_ok = 0;
 	printf("Processing: DST=%s, AMOUNT=%s, DESC=%s, TAN=%s\n", t.dst, t.sum, t.desc, t.tan);
 
@@ -134,8 +141,8 @@ int process_transaction(char* src, char* tan, struct transactstr transtr) {
 int gnb_mysql_do_transaction(struct transaction t) {
 	MYSQL_RES* result;
 	my_ulonglong numrows;
-	MYSQL_ROW row;
 	char query[MAX_QUERY_LEN];
+	int scs = 0;
 
 	// START MySQL transaction
 	snprintf(query, MAX_QUERY_LEN, "START TRANSACTION");
@@ -144,21 +151,9 @@ int gnb_mysql_do_transaction(struct transaction t) {
 		goto rollback;
 	}
 
-	// Get time
-	snprintf(query, MAX_QUERY_LEN, "SELECT NOW()");
-	MDBG printf("QUERY: %s\n", query);
-	if (gnb_mysql_do_query(query, &result, &numrows)) {
-		goto rollback;
-	}
-	if (numrows != 1)
-		goto rollback;
-	row = mysql_fetch_row(result);
-	snprintf(t.time, MAX_TINFO_LEN, "%s", row[0]);
-	mysql_free_result(result);
-
 	// Check balance
 	snprintf(query, MAX_QUERY_LEN, "SELECT balance "
-		"FROM account_overview "
+		"FROM gnbdb.account_overview "
 		"WHERE id = '%s' "
 		"AND balance > %s", t.src, t.sum);
 	MDBG printf("QUERY: %s\n", query);
@@ -169,21 +164,50 @@ int gnb_mysql_do_transaction(struct transaction t) {
 		goto rollback;
 	mysql_free_result(result);
 
-	// Mark TAN as used
-	snprintf(query, MAX_QUERY_LEN, "UPDATE gnbdb.tan "
-			"SET used_timestamp = '%s' "
-			"WHERE id = '%s' "
-				"AND account_id = '%s' "
-				"AND ( used_timestamp IS NULL "
-					"OR used_timestamp = '%s' )",
-			t.time, t.tan, t.src, t.time);
+	// Check if user is using SCS
+	snprintf(query, MAX_QUERY_LEN, "SELECT * "
+		"FROM gnbdb.account "
+		"JOIN user ON account.user_id = user.id "
+		"WHERE user.auth_device = 2 "
+			"AND account.id = %s", t.src);
 	MDBG printf("QUERY: %s\n", query);
 	if (gnb_mysql_do_query(query, &result, &numrows)) {
 		goto rollback;
 	}
-	if (numrows != 1)
-		goto rollback;
+	if (numrows == 1)
+		scs = 1;
 	mysql_free_result(result);
+
+	// Check TAN and mark it as used for non scs transactions
+	if (!scs) {
+		snprintf(query, MAX_QUERY_LEN, "SELECT * "
+				"FROM gnbdb.tan "
+				"WHERE id = '%s' "
+					"AND account_id = '%s' "
+					"AND ( used_timestamp IS NULL "
+						"OR used_timestamp = '%s' )",
+				t.tan, t.src, t.time);
+		MDBG printf("QUERY: %s\n", query);
+		if (gnb_mysql_do_query(query, &result, &numrows)) {
+			goto rollback;
+		}
+		if (numrows != 1)
+			goto rollback;
+		mysql_free_result(result);
+
+		snprintf(query, MAX_QUERY_LEN, "UPDATE gnbdb.tan "
+				"SET used_timestamp = '%s' "
+				"WHERE id = '%s' "
+					"AND account_id = '%s' "
+					"AND ( used_timestamp IS NULL "
+						"OR used_timestamp = '%s' )",
+				t.time, t.tan, t.src, t.time);
+		MDBG printf("QUERY: %s\n", query);
+		if (gnb_mysql_do_query(query, &result, &numrows)) {
+			goto rollback;
+		}
+		mysql_free_result(result);
+	}
 
 	// Automatically approve transactions below 10000
 	if (t.ap_ok == 1) {
@@ -279,6 +303,25 @@ int gnb_mysql_init() {
 	return 0;
 }
 
+int gnb_mysql_gettime(char* time) {
+	// Get batch transaction timestamp
+	MYSQL_RES* result;
+	my_ulonglong numrows;
+	MYSQL_ROW row;
+	char query[MAX_QUERY_LEN];
+
+	snprintf(query, MAX_QUERY_LEN, "SELECT NOW()");
+	MDBG printf("QUERY: %s\n", query);
+	if (gnb_mysql_do_query(query, &result, &numrows))
+		return 1;
+	if (numrows != 1)
+		return 1;
+	row = mysql_fetch_row(result);
+	snprintf(time, MAX_TINFO_LEN, "%s", row[0]);
+	mysql_free_result(result);
+	return 0;
+}
+
 long long parse_number(char* c, int decimal) {
 	//Check numerical field for validity
 	long long num = 0;
@@ -298,3 +341,4 @@ long long parse_number(char* c, int decimal) {
 
 	return num;
 }
+

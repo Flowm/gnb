@@ -462,12 +462,12 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>??</td>
-                                <td>??</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
                             </tr>
                         </table>
                         <p class="fix-description">
-                            Nada nada nada.
+                            This was also remediated through the implementation of HTTPS, see OTG-AUTHN-001. SESSION ID is no longer sent in clear text.
                         </p>
                     </section>
 
@@ -479,12 +479,16 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>??</td>
-                                <td>??</td>
+                                <td>/gnb/project/login.php</td>
+                                <td>+lines 19</td>
+                            </tr>
+							<tr>
+                                <td>/gnb/project/logout.php</td>
+                                <td>+lines 5</td>
                             </tr>
                         </table>
                         <p class="fix-description">
-                            Nada nada nada.
+                            This was fixed by the same fix in OTG-AUTHN-004. SESSION ID is now renewed each time.
                         </p>
                     </section>
 
@@ -496,12 +500,12 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>??</td>
-                                <td>??</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
                             </tr>
                         </table>
                         <p class="fix-description">
-                            Nada nada nada.
+                            This was also remediated through the implementation of HTTPS, see OTG-AUTHN-001. SESSION ID is no longer sent in clear text.
                         </p>
                     </section>
 
@@ -530,12 +534,12 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>??</td>
-                                <td>??</td>
+                                <td>config/php5/apache2/php.ini</td>
+                                <td>line 1515</td>
                             </tr>
                         </table>
                         <p class="fix-description">
-                            Nada nada nada.
+                            This has been fixed by modifying the PHP settings file.
                         </p>
                     </section>
 
@@ -659,12 +663,12 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>??</td>
-                                <td>??</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
                             </tr>
                         </table>
                         <p class="fix-description">
-                            Nada nada nada.
+                           This was also remediated through the implementation of HTTPS, see OTG-AUTHN-001. SESSION ID is no longer sent in clear text. 
                         </p>
                     </section>
 
@@ -676,8 +680,8 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>?</td>
-                                <td>?</td>
+                                <td>/gnb/project/dp.php</td>
+                                <td>+lines 1234-1237</td>
                             </tr>
                         </table>
                         <p class="fix-description">
@@ -712,12 +716,12 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>??</td>
-                                <td>??</td>
+                                <td>/gnb/project/db.php</td>
+                                <td>+line 224,238-246</td>
                             </tr>
                         </table>
                         <p class="fix-description">
-                            Nada nada nada.
+                            This was fixed by adding a random waiting time to all login requests.
                         </p>
                     </section>
 
@@ -738,24 +742,6 @@
                             please refer to the fix made in that section.
                         </p>
                     </section>
-
-                    <section>
-                        <h5>OTG-BUSLOGIC-008</h5>
-                        <h3>Upload of Unexpected File Types</h3>
-                        <table class="fix-table">
-                            <tr>
-                                <th colspan="2">Changed files</th>
-                            </tr>
-                            <tr>
-                                <td>??</td>
-                                <td>??</td>
-                            </tr>
-                        </table>
-                        <p class="fix-description">
-                            Nada nada nada.
-                        </p>
-                    </section>
-
                     <section>
                         <h5>OTG-BUSLOGIC-009</h5>
                         <h3>Upload of malicious files</h3>
@@ -783,12 +769,12 @@
                                 <th colspan="2">Changed files</th>
                             </tr>
                             <tr>
-                                <td>??</td>
-                                <td>??</td>
+                                <td>/gnb/config/apache2/httpd.conf</td>
+                                <td>+lines 1-7</td>
                             </tr>
                         </table>
                         <p class="fix-description">
-                            Nada nada nada.
+                            This has been rectified through the updated security policy and The X-FRAME-OPTIONS has been set to DENY.
                         </p>
                     </section>
 

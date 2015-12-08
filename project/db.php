@@ -13,11 +13,7 @@ date_default_timezone_set("Europe/Berlin");
  * Singleton class
  */
 final class DB {
-
-	//TODO: Set error output to off etc.
-
-	//var $debugMode = false;
-	private $debugMode = true;
+	private $debugMode = false;
 
 	private $pdo;
 

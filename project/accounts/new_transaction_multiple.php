@@ -30,10 +30,12 @@ $account_id = $_SESSION["account_id"];
 if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
 
 	$token = "";
-	if ($_POST['token'] != $_SESSION['token']) {
-		die("CSRF detected!");
-	} else {
-		$token = $_SESSION['token'];
+	if (isset($_POST['token']) && isset($_SESSION['token'])) {
+	    if ($_POST['token'] != $_SESSION['token']) {
+	        die("CSRF detected!");
+	    } else {
+	        $token = $_SESSION['token'];
+	    }
 	}
 
 	$file = $_FILES["transactionsCSV"];

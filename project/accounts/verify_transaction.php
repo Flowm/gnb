@@ -15,9 +15,9 @@ else if (!isset($frame)) {
 
 $token = "";
 if ($_POST['token'] != $_SESSION['token']) {
-	die("CSRF detected!");
+    die("CSRF detected!");
 } else {
-	$token = $_SESSION['token'];
+    $token = $_SESSION['token'];
 }
 
 require_once getpageabsolute("db_functions");

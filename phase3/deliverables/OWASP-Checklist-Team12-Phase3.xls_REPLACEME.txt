@@ -1,9 +1,0 @@
-Custom version of the OWASP testing checklist
-https://docs.google.com/spreadsheets/d/1RZYzw7OXjjmiG0U1F8gYCV_SGrZY
-3guSncRwluwmiGM/edit?usp=sharing
-• Copy column E from OWASP checklist of the team that tested your application
-in phase 2
-• Fill out column F with the fixes that you performed in phase 3. Add notes with
-references to slides from the Presentation-TeamX-Phase3.pdf
-• See the description of tests in the OWASP Testing Guide
-https://www.owasp.org/index.php/OWASP_Testing_Project

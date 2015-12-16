@@ -1,0 +1,79 @@
+<link rel="stylesheet" href="styles/employee.css">
+<div class="employee">
+    <div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Users to approve</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in users">
+                        <td ng-bind="$index+1"></td>
+                        <td ng-bind="item.Name"></td>
+                        <td>
+                            <button type="button" class="btn btn-info" ng-click="reginfo(item.UserId)">Info</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Transactions to approve</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Sender account number</th>
+                        <th>Receiver account number</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in transactions">
+                        <td ng-bind="$index+1"></td>
+                        <td ng-bind="item.Txn_SndAccountNo"></td>
+                        <td ng-bind="item.Txn_RcvAccountNo"></td>
+                        <td ng-bind="item.Txn_amount"></td>
+                        <td ng-bind="item.Txn_date"></td>
+                        <td>
+                            <button type="button" class="btn btn-info" ng-click="txinfo(item.Txn_id)">Info</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Find user</h3>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-10">
+                    <input type="text" ng-model="selected"
+                           uib-typeahead="state as state.Name for state in states | filter:$viewValue | limitTo:8" class="form-control">
+                </div>
+                <div class="col-md-2">
+                <button type="button" class="btn btn-info pull-right" ng-click="reginfo(selected.UserId)">Info</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+<link href="styles/create.css" rel="stylesheet">
+<div class="create">
+    <div class="page-header">
+        <h2>New transaction</h2>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{username}}'s Info</h3>
+        </div>
+        <div class="panel-body">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Username</span>
+                <input class="form-control" id="userName" type="text" ng-model="user.Name"
+                       aria-describedby="basic-addon1" disabled>
+            </div>
+            <br/>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon2">Account number</span>
+                <input class="form-control" id="userAccountNumber" type="text" ng-model="user.Account_no"
+                       aria-describedby="basic-addon2" disabled>
+            </div>
+
+            <br/>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon2">PIN</span>
+                <input type="text" class="form-control" ng-model="user.pin" placeholder="Personal Pin"
+                       aria-describedby="basic-addon2" disabled>
+            </div>
+            
+            <br/>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">Current balance</span>
+                <input type="text" class="form-control" ng-model="user.Account_bal" placeholder="Username"
+                       aria-describedby="basic-addon3" disabled>
+            </div>
+            <br/>
+        </div>
+    </div>
+    <uib-accordion>
+        <uib-accordion-group is-open="status.open" class="panel panel-info">
+            <uib-accordion-heading class="panel-heading">
+                <span>File upload</span><i class="pull-right glyphicon"
+                              ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+            </uib-accordion-heading>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon7">TAN</span>
+                <input class="form-control" type="text" ng-model="user.filetan"
+                       aria-describedby="basic-addon7">
+            </div>
+            <br/>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon8">Description</span>
+                <input class="form-control" type="text" ng-model="user.batchdescription"
+                       aria-describedby="basic-addon8">
+            </div>
+            <br/>
+            <div>
+                <div class="pull-left">Select file:</div>
+                <input type="file" nv-file-select="" class="pull-left fileInput" uploader="uploader" />
+            </div>
+            <br/>
+            <br/>
+            <div>
+                Upload progress:
+                <div class="progress" style="">
+                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                </div>
+            </div>
+            <button type="button" class="pull-right btn btn-success" ng-click="uploader.uploadAll()">Upload</button>
+        </uib-accordion-group>
+    </uib-accordion>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Fill in form</h3>
+        </div>
+        <div class="panel-body">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">Reciever account number</span>
+                <input class="form-control" id="accountNumber" type="text" ng-model="accountNumber"
+                       aria-describedby="basic-addon3">
+            </div>
+            <br/>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon4">Money amount</span>
+                <input class="form-control" id="amount" type="text" ng-model="amount"
+                       aria-describedby="basic-addon4">
+            </div>
+            <br/>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon5">TAN</span>
+                <input class="form-control" id="TAN" type="text" ng-model="TAN"
+                       aria-describedby="basic-addon5">
+            </div>
+            <br/>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon9">Description (Optional. 40 characters max):</span>
+                <input class="form-control" id="txndescription" type="text" ng-model="txndescription"
+                       aria-describedby="basic-addon9">
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-success btn-lg btn-block" ng-click="create()">Submit</button>
+    <br/>
+</div>

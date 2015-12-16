@@ -1,0 +1,13 @@
+Custom version of the OWASP testing checklist
+https://docs.google.com/spreadsheets/d/1RZYzw7OXjjmiG0U1F8gYCV_SGrZY3guSncRwluwmiGM/edit?usp=sharing
+
+- Fill out columns G and H in the spreadsheet from previous URL
+- Testing columns (G and H) should be filled out with 2 possible color-coded
+values. Secure (green), Vulnerable (red), Not Tested (yellow), NA for Not
+Applicable (gray)
+    - Insert note/comment for each cell that is Secure (green) or Vulnerable (red) with
+    reference to the page in the WB testing report document where testing for this
+    vulnerability is performed (example notes are provided for a few cells of the
+    spreadsheet linked above)
+- See the description of tests in the OWASP Testing Guide
+https://www.owasp.org/index.php/OWASP_Testing_Project

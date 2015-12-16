@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/black.css" id="theme">
+        <!--link rel="stylesheet" href="css/theme/white.css" id="theme"-->
+        <link rel="stylesheet" href="css/gnb.css">
+        <link rel="stylesheet" media="print" href="css/print/pdf.css" />
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+
+                <section data-state="intro">
+                    <img src="pictures/gnb_logo.svg" class="logo">
+                    <h1>Secure Coding</h1>
+                    <h2>Team 12 - Phase 4</h2>
+
+                    <h3>Members</h3>
+                    <table>
+                        <tr>
+                            <td class="left">Alexander Lill</td>
+                            <td class="right">Lorenzo Donini</td>
+                        </tr>
+                        <tr>
+                            <td class="left">Florian Mauracher</td>
+                            <td class="right">Mahmoud Naser</td>
+                        </tr>
+                    </table>
+                </section>
+
+                <section data-state="vulns">
+                    <section>
+                        Enumeration of most important vulnerabilities in competitors app<br>
+                        <ul>
+                            <li>
+                                Mention which vulnerabilities were already found in Phase 2 and which only in Phase 4
+                            </li>
+                            <li>
+                                Mention name, impact and likelihood of each vulnerability
+                            </li>
+                            <li>
+                                Impact and likelihood are measured as: low, medium or high
+                            </li>
+                            <li>
+                                For each vulnerability give the CVSS 3.0 template and the score (next slide)
+                            </li>
+                            <li>
+                                Do not mention vulnerabilities that were not found
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section data-state="demo">
+                    <h1>Live-Demo!</h1>
+                    <p>
+                        At this point in the presentation you either give a live-demo or video-demo of the
+                        vulnerabilities or present them in more detail on the following slides
+                    </p>
+                    <p>
+                        NOTE: In the presentation you should talk mainly about the competitors app,
+                        not your own app
+                    </p>
+                </section>
+
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+
+            // Full list of configuration options available at:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+                // Optional reveal.js plugins
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true },
+                    { src: 'plugin/notes/notes.js', async: true }
+                ]
+            });
+        </script>
+
+    </body>
+</html>

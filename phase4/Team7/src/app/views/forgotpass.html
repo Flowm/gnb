@@ -1,0 +1,17 @@
+<link rel="stylesheet" href="styles/register.css">
+<div class="login-card">
+    <h1>Forgot Password</h1><br>
+    <p>Please insert your email. Click on the link that you will receive to reset your password.</p><br>
+
+    <div>
+        <input type="text" name="email" ng-model="email" placeholder="Email">
+
+        <input type="submit" name="save" class="login login-submit" value="Send" ng-click="forgotpass();">
+
+    </div>
+
+    <div class="login-help">
+        <a ui-sref="login">Login</a>
+    </div>
+    
+</div>

@@ -1,0 +1,69 @@
+html.intro body {
+	background:url("../pictures/sky-white.jpg");
+	background-position:center;
+	background-size: 100%;
+}
+
+html.intro .left {
+	text-align: right !important;
+}
+
+html.intro .right {
+	text-align: left !important;
+}
+
+table.time-table {
+	width: 600px;
+	font-size: 16px;
+}
+
+table.time-table-left {
+    float: left;
+    width: 400px;
+    font-size: 20px;
+}
+
+table.time-table-right {
+    float: right;
+    width: 400px;
+    font-size: 20px;
+}
+
+tr.time-total {
+    font-weight: bold;
+}
+
+table.fix-table {
+    width: 900px;
+    font-size: 24px;
+}
+
+table.usecase-table {
+    width: 900px;
+    font-size: 23px;
+}
+
+span.working {
+	color: lime;
+}
+
+p.fix-description {
+    font-size: 30px;
+}
+
+html.vulns body {
+	background:url("../pictures/doom-1.jpeg");
+	background-position:center;
+	background-size: 100%;
+}
+
+img.logo {
+  width: 400px;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+
+tr.smallText {
+    font-size: 16px;
+}

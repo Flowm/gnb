@@ -1,0 +1,19 @@
+<div class="main-content">
+    <div class="header">
+        <h3 class="text-muted">BankSystem</h3>
+        <ul class="nav nav-pills pull-right">
+            <li><a ui-sref="main.user" ng-show="!employee">Home</a></li>
+            <li><a href="Smart_Card_Simulator.jar" ng-show="scs">Download SCS</a></li>
+            <li><a ui-sref="main.employee" ng-show="employee">Home</a></li>
+            <li><a ui-sref="main.create" ng-hide="employee">New transaction</a></li>
+            <li><a ui-sref="main.changepass">Change password</a></li>
+            <li><a ng-click="logout()">Logout</a></li>
+        </ul>
+    </div>
+
+    <div ui-view></div>
+
+    <div class="footer">
+        <p>Made by Team7</p>
+    </div>
+</div>

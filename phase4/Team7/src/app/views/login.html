@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="styles/login.css">
+<div class="login-card">
+    <h1>Sign In</h1><br>
+
+    <form>
+        <input type="text" name="user" ng-model="email" placeholder="Email">
+        <input type="password" name="pass" ng-model="pass" placeholder="Password">
+        <input type="submit" name="Login" class="login login-submit" value="Login" ng-click="login()">
+    </form>
+    
+     <div class="login-help">
+        <a ui-sref="forgotpass">Forgot password?</a>
+    </div>
+
+    <div class="login-help">
+        <a ui-sref="register">Register</a>
+    </div>
+</div>

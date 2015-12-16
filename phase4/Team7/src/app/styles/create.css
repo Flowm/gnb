@@ -1,0 +1,22 @@
+.create {
+  padding: 0 20px 0 20px;
+  /* Default class applied to drop zones on over */
+}
+.create .my-drop-zone {
+  border: dotted 3px lightgray;
+}
+.create .nv-file-over {
+  border: dotted 3px red;
+}
+.create .another-file-over-class {
+  border: dotted 3px green;
+}
+.create .input-group .form-control {
+  float: none !important;
+}
+.create .page-header {
+  margin-top: 0px !important;
+}
+.create .fileInput {
+  margin-left: 20px;
+}

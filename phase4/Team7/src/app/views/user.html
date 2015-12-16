@@ -1,0 +1,73 @@
+<link href="styles/user.css" rel="stylesheet">
+<div class="user">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{username}}'s Info</h3>
+        </div>
+
+        <div class="panel-body">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Name</span>
+                <input type="text" class="form-control" ng-model="username" placeholder="Username"
+                       aria-describedby="basic-addon1" disabled>
+            </div>
+            <br/>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon2">Account number</span>
+                <input type="text" class="form-control" ng-model="accountNumber" placeholder="Username"
+                       aria-describedby="basic-addon2" disabled>
+            </div>
+            <br/>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon2">PIN</span>
+                <input type="text" class="form-control" ng-model="pin" placeholder="Personal Pin"
+                       aria-describedby="basic-addon2" disabled>
+            </div>
+            <br/>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">Current balance</span>
+                <input type="text" class="form-control" ng-model="amount" placeholder="Username"
+                       aria-describedby="basic-addon3" disabled>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{username}}'s transaction history</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Sender account</th>
+                    <th>Sender Name</th>
+                    <th>Receiver account</th>
+                    <th>Receiver Name</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in transactions">
+                    <td ng-bind="$index+1"></td>
+                    <td ng-bind="item.Txn_SndAccountNo"></td>
+                    <td ng-bind="item.Txn_SndName"></td>
+                    <td ng-bind="item.Txn_RcvAccountNo"></td>
+                    <td ng-bind="item.Txn_RcvName"></td>
+                    <td ng-bind="item.Txn_amount"></td>
+                    <td ng-bind="item.Txn_description"></td>
+                    <td ng-bind="item.Txn_date"></td>
+                    <td ng-bind="item.Txn_Status"></td>
+                </tr>
+                </tbody>
+            </table>
+            <a type="button" ng-href="{{historyLink}}" class="btn btn-default btn-lg btn-block">Download history</a>
+        </div>
+    </div>
+</div>

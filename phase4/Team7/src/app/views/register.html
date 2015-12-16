@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="styles/register.css">
+<div class="login-card">
+    <h1>Registration</h1><br>
+
+    <div>
+        <input type="text" name="name" ng-model="name" placeholder="Full Name">
+        <input type="text" name="email" ng-model="email" placeholder="E-mail">
+        <input type="password" name="pass" ng-model="pass" placeholder="Password">
+        <input type="password" name="repass" ng-model="repass" placeholder="Confirm Password">
+        <div class="checkbox">
+            <label>
+                <input ng-model="isEmployee" id="isEmployee" type="checkbox"> I confirm that I'm employee of this bank
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input ng-model="tanMethod" id="tanMethod" type="checkbox"> I would like to execute transactions through SCS instead of receiving a tan list
+            </label>
+        </div>
+        
+        <input type="submit" name="save" class="login login-submit" value="Register!" ng-click="register();">
+
+    </div>
+
+    <div class="login-help">
+        <a ui-sref="login">Login</a>
+    </div>
+</div>

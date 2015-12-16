@@ -1,0 +1,24 @@
+{
+  "name": "team7",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "latest",
+    "json3": "latest",
+    "es5-shim": "latest",
+    "bootstrap": "latest",
+    "angular-resource": "latest",
+    "angular-cookies": "latest",
+    "angular-sanitize": "latest",
+    "angular-animate": "latest",
+    "angular-touch": "latest",
+    "angular-route": "latest",
+    "angular-ui-router": "latest",
+    "angular-bootstrap": "latest",
+    "angular-file-upload": "latest"
+  },
+  "devDependencies": {
+    "angular-mocks": "latest",
+    "angular-scenario": "latest"
+  },
+  "appPath": "app"
+}

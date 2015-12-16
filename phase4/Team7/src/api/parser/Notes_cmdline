@@ -1,0 +1,26 @@
+1) Change the mysql server,username,password fields in the c program.
+2) There should not be any blank lines in the inputfile.
+
+INSTALL THE BELOW LIB FIRST FOR MYSQL
+--------------------------------------
+sudo apt-get install libmysqlclient-dev 
+
+TO COMPILE
+-------------------------------
+gcc parseupload.c -I/usr/include/mysql -lmysqlclient
+
+TO RUN
+--------------------------------
+./a.out txnuploadfile.txt 1000000001 fjshjfhsdfhkjsf
+
+[where '1000000001' is the sender account number. You need to call C using this syntax from PHP]
+[where fjshjfhsdfhkjsf is the TAN used for verifying transaction]
+
+
+file format:
+
+receiver_number,amount;
+receiver_number,amount;
+receiver_number,amount;
+
+

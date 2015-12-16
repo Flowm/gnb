@@ -1,0 +1,6 @@
+.user {
+  padding: 10px 20px 10px 20px;
+}
+.user .input-group .form-control {
+  float: none !important;
+}

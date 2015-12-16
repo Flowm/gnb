@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="styles/register.css">
+<div class="login-card">
+    <h1>Reset Password</h1><br>
+
+    <div>
+        <input type="password" name="newpass" ng-model="newpass" placeholder="New Password">
+        <input type="password" name="repass" ng-model="repass" placeholder="Confirm New Password">
+
+		<input id="key" type="hidden" name="key" ng-model="key">
+        
+        <input type="submit" name="save" class="login login-submit" value="Save" ng-click="resetpass();">
+
+    </div>
+
+    <div class="login-help">
+        <a ui-sref="login">Login</a>
+    </div>
+
+</div>

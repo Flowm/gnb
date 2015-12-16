@@ -1,0 +1,57 @@
+<link href="styles/userinfo.css" rel="stylesheet">
+<div class="userinfo">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Transaction info</h3>
+        </div>
+
+        <div class="panel-body">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Sender name</span>
+                <input type="text" class="form-control" ng-model="data.SndName"
+                       aria-describedby="basic-addon1" disabled>
+            </div>
+            <br/>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon2">Sender account number</span>
+                <input type="text" class="form-control" ng-model="data.SndAccountNo"
+                       aria-describedby="basic-addon2" disabled>
+            </div>
+            <br/>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon6">Reciever name</span>
+                <input type="text" class="form-control" ng-model="data.RcvName"
+                       aria-describedby="basic-addon6" disabled>
+            </div>
+            <br/>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon5">Reciever account number</span>
+                <input type="text" class="form-control" ng-model="data.RcvAccountNo"
+                       aria-describedby="basic-addon5" disabled>
+            </div>
+            <br/>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">Amount</span>
+                <input type="text" class="form-control" ng-model="data.Txn_amount"
+                       aria-describedby="basic-addon3" disabled>
+            </div>
+            <br/>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon7">Date</span>
+                <input type="text" class="form-control" ng-model="data.Txn_date"
+                       aria-describedby="basic-addon7" disabled>
+            </div>
+
+            <button type="button" class="btn btn-warning pull-right bb"
+                    ng-click="approveTransaction()">Approve
+            </button>
+            <button type="button" class="btn btn-danger pull-right bb"
+                    ng-click="rejectTransaction()">Reject
+            </button>
+        </div>
+    </div>
+</div>

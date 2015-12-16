@@ -1,0 +1,66 @@
+\chapter{Bugs}\label{chapter:bugs}
+\bugtable{1}{Transaction Batch format not documented}{%
+	\url{/tran.php}
+}{%
+	\na
+}{%
+	There is no reference on how to use the transaction batch file upload. Neither the required file extension nor the format of the file contents are mentioned on the page. It is only possible to access this information by browsing through the directories of the web application.		
+}{%
+	\na
+}
+
+\hrulefill \newline
+\bugtable{5}{Visible TAN Code}{%
+	\url{/tran.php}
+}{%
+	Referenced Vulnerabilities
+}{%
+	When inserting an invalid TAN using the batch file upload, the server will respond with an error message in which the expected valid TAN is sent back to client in clear text.
+}{%
+	Upload a transaction batch file with an invalid TAN code, and you will be able to find the required TAN code.
+}
+
+\hrulefill \newline
+\bugtable{7}{Predictable TAN Codes}{%
+	\url{/downloadTans.php}
+}{%
+	\na
+}{%
+	TAN codes appear to be randomly generated. However, when generating TAN codes, the user\_id and the number of the code are perpended to the string. So, if a user ID was of length 5 and the number of a code of length 2, the actual length of the code, which was randomly generated, would be 15-5-2=8. An attacker could register an arbitrary number of users to make the user ID counter go up inside the database (auto-increment is used). Once the counter is reasonably high, the TAN code complexity would be reduced drastically, making the application more susceptible to brute-force attacks.
+}{%
+	By writing a script that will continue to create users, and once users hit the limit, TAN codes will be predictable.
+}
+
+\hrulefill \newline
+\bugtable{8}{Limited batch file size}{%
+	\url{/downloadTans.php}
+}{%
+	\na
+}{%
+	The size limit of a batch transaction file is of 500 bytes. This size is only sufficient to cover 3 transactions at most, and this is a non-acceptable number for this application.
+}{%
+	\na
+}
+
+\hrulefill \newline
+\bugtable{18}{Redirection to incorrect PHP}{%
+	\url{/employee\_home.php}
+}{%
+	\na
+}{%
+	Clicking on `Home' while logged in as an employee will redirect the user to \url{http:/HOST/employee\_home} without the `.php', which results in a 404 error.
+}{%
+	Click on `Home' while logged in as an employee.
+}
+
+
+\hrulefill \newline
+\bugtable{27}{No more TAN codes generated after the first 100}{%
+	\url{/tran.php}
+}{%
+	\na
+}{%
+	Once a customer uses all 100 allocated TAN Codes, the application does not support generating more TAN codes for the customer, the TAN codes are only generated at the registration phase.
+}{%
+	Use all 100 allocated TAN Codes.
+}																		

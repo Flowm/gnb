@@ -1,0 +1,12 @@
+.userinfo {
+  padding: 0 20px 0 20px;
+}
+.userinfo .input-group .form-control {
+  float: none !important;
+}
+.userinfo .bb {
+  margin: 10px;
+}
+.userinfo .page-header {
+  margin-top: 0px !important;
+}

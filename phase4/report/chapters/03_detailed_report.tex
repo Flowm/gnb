@@ -75,8 +75,10 @@ describe identified vulnerabilities mentioning the following for each one
 	\item Instantiate the CVSS v3.0 template for this particular vulnerability.
 	\item Comparison with your own application: how and why is your app better/worse
 \end{itemize}
-NOTE: Each vulnerability should be described on a new page!\newline
 
+NOTR: Each vulnerability should be described on a new page!\newline
+
+\clearpage
 \section{Configuration and Deploy Management Testing}
 \simpleVulntitle{OTG-CONFIG-003}{Test File Extensions Handling for Sensitive Information}
 Sample tables
@@ -109,11 +111,39 @@ Sample tables
 	%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
 }
 
-
 \vulntitle{OTG-CONFIG-006}{Test HTTP Methods}
 \vulntitle{OTG-CONFIG-007}{Test HTTP Strict Transport Security}
+\vultable{\bs}{%
+	Although HTTPS is enabled on port 443, access to the page without using HTTPS is still possible, by simply accessing the server on port 80.
+}{%
+	We discovered this by simply trying to access the application on port 80: this way we had normal access to the application, although without any transport security.
+}{%
+	If any user accesses port 80 instead of port 443 (e.g. by mistake), his whole connection to the server will be unencrypted, which makes this vulnerability highly likely. Additionally an attacker might be able to redirect a victim to port 80, in order to intercept all the traffic. This requires some social engineering but is still feasible.\newline
+	Once having exploited this vulnerability, the likelihood of any attack which assumes lack of transport security becomes very high.
+}{%
+	The implications of lack of an encrypted connection were already analysed in phase 2. To review the implications briefly: all the data is sent in clear text from the client to the server and vice-versa, allowing man in the middle attacks. Confidentiality, integrity and authenticity are not fullfilled, allowing to hijack a session, view user data (including passwords) and modify it at will.
+}{%
+	Deactivate the default port 80, thus allowing only connections on port 443.
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{R}{U}{H}{H}{N}
+}
+\vultable{\gnb}{%
+	This vulnerability was fixed in phase 3 and the application is only allowing communication between the client and the server via HTTPS.
+}{%
+	We discovered this by simply testing to access both ports 80 and 443 on the webserver, which only allowed us to connect to the latter. A connection on port 80 was refused by the server. We also enforced this theory by checking it with nmap, getting the same result.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-CONFIG-008}{Test RIA cross domain policy}
 
+\clearpage
 \section{Identity Management Testing}
 \simpleVulntitle{OTG-IDENT-001}{Test Role Definitions}
 \vulntitle{OTG-IDENT-002}{Test User Registration Process}
@@ -121,6 +151,7 @@ Sample tables
 \vulntitle{OTG-IDENT-004}{Testing for Account Enumeration and Guessable User Account}
 \vulntitle{OTG-IDENT-005}{Testing for Weak or unenforced username policy}
 
+\clearpage
 \section{Authentication Testing}
 \simpleVulntitle{OTG-AUTHN-001}{Testing for Credentials Transported over an Encrypted Channel}
 \vulntitle{OTG-AUTHN-002}{Testing for default credentials}
@@ -133,12 +164,14 @@ Sample tables
 \vulntitle{OTG-AUTHN-009}{Testing for weak password change or reset functionalities}
 \vulntitle{OTG-AUTHN-010}{Testing for Weaker authentication in alternative channel}
 
+\clearpage
 \section{Authorization Testing}
 \simpleVulntitle{OTG-AUTHZ-001}{Testing Directory traversal/file include}
 \vulntitle{OTG-AUTHZ-002}{Testing for bypassing authorization schema}
 \vulntitle{OTG-AUTHZ-003}{Testing for Privilege Escalation}
 \vulntitle{OTG-AUTHZ-004}{Testing for Insecure Direct Object References}
 
+\clearpage
 \section{Session Management Testing}
 \simpleVulntitle{OTG-SESS-001}{Testing for Bypassing Session Management Schema}
 \vulntitle{OTG-SESS-002}{Testing for Cookies attributes}
@@ -149,6 +182,7 @@ Sample tables
 \vulntitle{OTG-SESS-007}{Test Session Timeout}
 \vulntitle{OTG-SESS-008}{Testing for Session puzzling}
 
+\clearpage
 \section{Data Validation Testing}
 \simpleVulntitle{OTG-INPVAL-001}{Testing for Reflected Cross Site Scripting}
 \simpleVulntitle{OTG-INPVAL-002}{Testing for Stored Cross Site Scripting}
@@ -172,15 +206,18 @@ Sample tables
 \vulntitle{OTG-INPVAL-015}{Testing for incubated vulnerabilities}
 \vulntitle{OTG-INPVAL-016}{Testing for HTTP Splitting/Smuggling}
 
+\clearpage
 \section{Error Handling}
 \simpleVulntitle{OTG-ERR-001}{Analysis of Error Codes}
 \vulntitle{OTG-ERR-002}{Analysis of Stack Traces}
 
+\clearpage
 \section{Cryptography}
 \simpleVulntitle{OTG-CRYPST-001}{Testing for Weak SSL/TSL Ciphers, Insufficient Transport Layer Protection}
 \vulntitle{OTG-CRYPST-002}{Testing for Padding Oracle}
 \vulntitle{OTG-CRYPST-003}{Testing for Sensitive information sent via unencrypted channels}
 
+\clearpage
 \section{Business Logic Testing}
 \simpleVulntitle{OTG-BUSLOGIC-001}{Test Business Logic Data Validation}
 \vulntitle{OTG-BUSLOGIC-002}{Test Ability to Forge Requests}
@@ -192,6 +229,7 @@ Sample tables
 \vulntitle{OTG-BUSLOGIC-008}{Test Upload of Unexpected File Types}
 \vulntitle{OTG-BUSLOGIC-009}{Test Upload of Malicious Files}
 
+\clearpage
 \section{Client Side Testing}
 \simpleVulntitle{OTG-CLIENT-001}{Testing for DOM based Cross Site Scripting}
 \vulntitle{OTG-CLIENT-002}{Testing for JavaScript Execution}

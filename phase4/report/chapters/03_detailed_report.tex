@@ -199,6 +199,39 @@ Sample tables
 \vulntitle{OTG-INPVAL-012-1}{Testing for Local File Inclusion}
 \vulntitle{OTG-INPVAL-012-2}{Testing for Remote File Inclusion}
 \vulntitle{OTG-INPVAL-013}{Testing for Command Injection}
+\vultable{\bs}{%
+	We observed that it is possible to perform command injection attacks, by exploiting the batch transaction functionality, 
+	as no input validation upon the values inserted by the user in the transaction description field is performed. \newline
+	Regardless of the type of used banking method (either SCS or pre-generated TANs), as long as a user inserts a valid TAN when performing a transaction, it will also be possible to inject commands to the target system through the description field.
+}{%
+	This was discovered while analyzing the \texttt{uploadFile} callback function in the index.php file (lines 95-154).\newline
+	Since the application doesn't sanitize user input (neither on client nor on server side), the \texttt{exec} function called from the server to execute the C parser can be exploited to execute arbitrary commands, by simply inserting them into the description field. These commands will simply be executed after the parser. Here is an example:\newline
+	\texttt{test"; ls -l; exit 1 \#} \newline
+	\textbf{Note:} since the output of the \texttt{exec} operation is only visible on client side if the return code was different than 0 (hence on transaction failure), we just need to force a return code (as shown in the example above).
+}{%
+	This kind of attack may require several brute-force attempts and has therefore medium likelihood, but once found out, the vulnerability is easy to exploit.
+}{%
+	The implications of this attack are high, since the attacker is able to execute arbitrary commands on the target system. It is important to stress though, that it is not possible to modify any file in the target web directory, due to insufficient privileges.
+}{%
+	It is highly recommended to sanitize the description value inserted by the user, or to make the user write the descriptions directly inside the batch file, avoiding thus command injections.
+}{%
+	\cvssBaseScorePretty{N}{L}{L}{N}{U}{L}{N}{H}
+}
+\vultable{\gnb}{%
+	Observation
+}{%
+Discovery
+}{%
+Likelihood
+}{%
+Implications
+}{%
+Recommendation
+}{%
+\naScore
+%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
+}
+
 \vulntitle{OTG-INPVAL-014}{Testing for Buffer overflow}
 \vulntitle{OTG-INPVAL-014-2}{Testing for Stack overflow}
 \vulntitle{OTG-INPVAL-014-3}{Testing for Heap overflow}

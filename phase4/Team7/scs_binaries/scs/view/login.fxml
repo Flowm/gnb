@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scs.controllers.LoginController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="353.0" minWidth="10.0" prefWidth="302.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="301.0" minWidth="10.0" prefWidth="298.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="177.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="78.0" minHeight="1.0" prefHeight="78.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="96.0" minHeight="0.0" prefHeight="69.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="200.0" minHeight="10.0" prefHeight="142.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Button fx:id="okButton" mnemonicParsing="false" onAction="#login" prefHeight="35.0" prefWidth="59.0" text="OK" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="TOP" />
+      <Label prefHeight="17.0" prefWidth="67.0" text="PIN" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+      <Label fx:id="message" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="419.0" textFill="#e40a0a" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+      <PasswordField fx:id="pinTextField" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="27.0" prefWidth="125.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+   </children>
+</GridPane>

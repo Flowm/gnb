@@ -79,19 +79,53 @@ describe identified vulnerabilities mentioning the following for each one
 NOTR: Each vulnerability should be described on a new page!\newline
 
 \clearpage
-\section{Configuration and Deploy Management Testing}
-\simpleVulntitle{OTG-CONFIG-003}{Test File Extensions Handling for Sensitive Information}
 Sample tables
 \vultable{\bs}{%
 	Observation
 }{%
-	Discovery
+Discovery
 }{%
-	Likelihood
+Likelihood
 }{%
-	Implications
+Implications
 }{%
-	Recommendation
+Recommendation
+}{%
+\naScore
+%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
+}
+\vultable{\gnb}{%
+	Observation
+}{%
+Discovery
+}{%
+Likelihood
+}{%
+Implications
+}{%
+Recommendation
+}{%
+\naScore
+%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
+}
+\clearpage
+
+\section{Configuration and Deploy Management Testing}
+\simpleVulntitle{OTG-CONFIG-003}{Test File Extensions Handling for Sensitive Information}
+\vultable{\bs}{%
+	We discovered that it is possible to access some files and directories which should not be accessible to the user/attacker. Specifically, we were able to get a hold of the private key used by the server for SSL encryption... tbc
+}{%
+	We managed to directly download the hostonly.key, as well as the hostonly.crt files from the following links:
+	\begin{itemize}
+		\item \texttt{http://[HOST]/app/HTTPS/hostonly.key}
+		\item \texttt{http://[HOST]/app/HTTPS/hostonly.crt}
+	\end{itemize}
+}{%
+	TODO: Likelihood
+}{%
+	TODO: Implications
+}{%
+	TODO: Recommendation
 }{%
 	\naScore
 	%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}

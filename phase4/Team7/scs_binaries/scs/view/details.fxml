@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scs.controllers.DetailsController">
+  <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="146.0" minWidth="3.0" prefWidth="69.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="297.0" minWidth="10.0" prefWidth="114.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="372.0" minWidth="10.0" prefWidth="292.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="117.0" minWidth="10.0" prefWidth="117.0" />
+  </columnConstraints>
+  <rowConstraints>
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Label fx:id="amountLabel" text="Amount" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+      <Label fx:id="accoutLabel" text="Account" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label fx:id="bfpLabel" text="Batch File Path" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <TextField fx:id="amountTextField" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="167.0" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+      <TextField fx:id="accountTextField" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <TextField fx:id="bfcTextField" disable="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+      <Button fx:id="openButton" disable="true" mnemonicParsing="false" onAction="#selectFile" text="Open" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+      <Button fx:id="generateTAN" mnemonicParsing="false" onAction="#generateTAN" text="Generate TAN" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+      <CheckBox fx:id="isBatch" mnemonicParsing="false" onAction="#checkBatch" text="Generate TAN for batch file" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
+      <Label fx:id="result" prefHeight="17.0" prefWidth="260.0" textFill="#e40a0a" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
+      <TextField fx:id="tan" alignment="CENTER" editable="false" prefHeight="27.0" prefWidth="232.0" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+   </children>
+</GridPane>

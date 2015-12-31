@@ -113,33 +113,36 @@ Recommendation
 \section{Configuration and Deploy Management Testing}
 \simpleVulntitle{OTG-CONFIG-003}{Test File Extensions Handling for Sensitive Information}
 \vultable{\bs}{%
-	We discovered that it is possible to access some files and directories which should not be accessible to the user/attacker. Specifically, we were able to get a hold of the private key used by the server for SSL encryption... tbc
+	We discovered that it is possible to access some files and directories which should not be accessible to the user/attacker. Specifically, we were able to get a hold of the private key used by the server for SSL encryption, the MySQL dump file and other data that should not be accessible from the network and, even less, to attackers.
 }{%
-	We managed to directly download the hostonly.key, as well as the hostonly.crt files from the following links:
+	We managed to directly download several files containing sensitive information directly, as well as access some unprotected content:
 	\begin{itemize}
 		\item \texttt{http://[HOST]/app/HTTPS/hostonly.key}
-		\item \texttt{http://[HOST]/app/HTTPS/hostonly.crt}
+		\item \texttt{http://[HOST]/adminer}
+		\item \texttt{http://[HOST]/dump.sql}
+		\item \texttt{http://[HOST]/Smart-Card-Simulator/src/scs/Main.java}, as well as all other Java sources.
 	\end{itemize}
+	Also many other README and temporary files are directly accessible.\newline
+}{%
+	Since directory listing is disabled inside the /api and /app subfolders of the application, most of the mentioned files can be accessed only via brute-force attacks, and even then it would prove very difficult to guess the name of the directory and filename correctly. During white-box testing, this was not an issue, but in reality, finding out this weakness would require many attempts and much time.\newline
+	Other names of files, however, contained in the root folder (directory listing here is not disabled), like dump.sql can be easily guessed.
+}{%
+	Although an attacker cannot directly compromise the integrity and availability of the server, it is possible to access some very important content of the application. In particular, getting a hold of \texttt{hostonly.key} allows to start MITM attacks on any victim, since the file contains the private key of the server used for SSL encryption.
+}{%
+	Relocate the .htaccess files (or the root of the web application) and place more strict rules for file/directory access, since these are too loose.
+}{%
+	\cvssBaseScorePretty{N}{H}{N}{N}{U}{H}{N}{N}
+}
+\vultable{\gnb}{%
+	TODO: Observation
+}{%
+	TODO: Discovery
 }{%
 	TODO: Likelihood
 }{%
 	TODO: Implications
 }{%
 	TODO: Recommendation
-}{%
-	\naScore
-	%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
-}
-\vultable{\gnb}{%
-	Observation
-}{%
-	Discovery
-}{%
-	Likelihood
-}{%
-	Implications
-}{%
-	Recommendation
 }{%
 	\naScore
 	%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}

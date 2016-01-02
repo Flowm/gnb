@@ -79,35 +79,38 @@ describe identified vulnerabilities mentioning the following for each one
 NOTR: Each vulnerability should be described on a new page!\newline
 
 \clearpage
-Sample tables
+%Sample tables
 \vultable{\bs}{%
-	Observation
+	Observation: which part of the application is vulnerable and why?
 }{%
-Discovery
+	Discovery: how was this vulnerability discovered? Which tools were used and which steps were performed?
 }{%
-Likelihood
+	Likelihood: what is the likelihood that this vulnerability is exploited? Which assumptions must hold and which skills must an attacker have?
 }{%
-Implications
+	Impact: what is the potential impact of an exploit of this vulnerability? What could happen?
 }{%
-Recommendation
+	Recommendation: how exactly would you fix this problem?
 }{%
 \naScore
+%\secure
 %\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
 }
 \vultable{\gnb}{%
-	Observation
+	Observation: which part of the application is vulnerable and why?
 }{%
-Discovery
+	Discovery: how was this vulnerability discovered? Which tools were used and which steps were performed?
 }{%
-Likelihood
+	Likelihood: what is the likelihood that this vulnerability is exploited? Which assumptions must hold and which skills must an attacker have?
 }{%
-Implications
+	Impact: what is the potential impact of an exploit of this vulnerability? What could happen?
 }{%
-Recommendation
+	Recommendation: how exactly would you fix this problem?
 }{%
 \naScore
+%\secure
 %\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
 }
+Comparison with your own application: how and why is your app better/worse
 \clearpage
 
 \section{Configuration and Deploy Management Testing}
@@ -183,42 +186,130 @@ Recommendation
 \clearpage
 \section{Identity Management Testing}
 \simpleVulntitle{OTG-IDENT-001}{Test Role Definitions}
-
 \vultable{\bs}{%
-	Observation
+	The role definitions are implemented as specified in their report for phase 2 and are secure.
 }{%
-Discovery
+	Manual testing and checking the contraints in the source code, e.g. \texttt{api/index.php}
 }{%
-Likelihood
+	\na
 }{%
-Implications
+	\na
 }{%
-Recommendation
+	\na
 }{%
-\naScore
-%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
+	\secure
 }
 \vultable{\gnb}{%
-	Observation
+	\same
 }{%
-Discovery
+	Manual testing and checking the contraints in the source code, e.g. \texttt{db.php}
 }{%
-Likelihood
+	\na
 }{%
-Implications
+	\na
 }{%
-Recommendation
+	\na
 }{%
-\naScore
-%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
+	\secure
 }
 
 
 
 \vulntitle{OTG-IDENT-002}{Test User Registration Process}
+\vultable{\bs}{%
+	The registration process is set up for anyone to register, the process then awaits human interaction for the approval stage, this will serve an extra step of verification. Mail addresses have to be unique and can not be used by multiple users.
+	
+	Identities are not verified nor checked at this stage due to application limitations.
+	
+	No CAPTCHA or similar tests available to test if users are robots or human.
+}{%
+	Manual testing and checking the source code if duplicate mail addresses are possible. Here the database prevents the entry of a duplicate mail address, while the front end shows "Registration successful. Waiting for approval. You will be notified to email." even if the mail address was already in the dabase and the new account not successfully created.
+}{%
+	High. It is easy to create a lot of new users as long as a syntactically valid mail address is provided.
+}{%
+	Medium. A lot of new users could lead to performance or availability problems in the database. These registered users can not be used on the website as long as they are not approved, though.
+}{%
+	The introduction of CAPTCHAs, any other check for human users or some invitation mechanism might solve this issue.
+}{%
+	TODO: Score
+}
+\vultable{\gnb}{%
+	\same
+}{%
+	Manual testing and checking the source code if duplicate mail addresses are possible. Here the database prevents the entry of a duplicate mail address and shows a message upon registration if the mail address was already used.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	TODO: Score
+}
+
 \vulntitle{OTG-IDENT-003}{Test Account Provisioning Process}
+\vultable{\bs}{%
+	Provisioning clients is an easy process with no effective mechanisms
+to verify or vet clients besides a manual approval process, provisioning employees is set up in a similar matter.
+Vulnerabilities with creating the client account have been discussed
+in the previous section \vulnref{OTG-IDENT-002}, the same applies to creating
+employee accounts, so a potential DOS attack is possible by creating
+robot accounts.
+}{%
+	This was found through following the given process for creating
+accounts.
+}{%
+	High. It is easy to create a lot of new users as long as a syntactically valid mail address is provided.
+}{%
+	Medium. A lot of new users could lead to performance or availability problems in the database. These registered users can not be used on the website as long as they are not approved, though.
+}{%
+	The introduction of CAPTCHAs, any other check for human users or some invitation mechanism might solve this issue.
+}{%
+	TODO: Score
+}
+\vultable{\gnb}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	TODO: Score
+}
+
 \vulntitle{OTG-IDENT-004}{Testing for Account Enumeration and Guessable User Account}
+
 \vulntitle{OTG-IDENT-005}{Testing for Weak or unenforced username policy}
+\vultable{\bs}{%
+	Username has to be in valid email address format.
+}{%
+	This was found through trial and error and checking the according files (e.g. \texttt{index.php}, line 483).
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	\same
+}{%
+	This was found through trial and error and checking the according files (e.g. \texttt{js/registration.js} line 81, \texttt{registration/registration\_request.php} line 29).
+}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	\secure
+}
 
 \clearpage
 \section{Authentication Testing}
@@ -230,6 +321,33 @@ Recommendation
 \vulntitle{OTG-AUTHN-006}{Testing for Browser cache weakness}
 \vulntitle{OTG-AUTHN-007}{Testing for Weak password policy}
 \vulntitle{OTG-AUTHN-008}{Testing for Weak security question/answer}
+\vultable{\bs}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+\vultable{\gnb}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-AUTHN-009}{Testing for weak password change or reset functionalities}
 \vulntitle{OTG-AUTHN-010}{Testing for Weaker authentication in alternative channel}
 

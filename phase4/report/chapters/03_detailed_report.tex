@@ -91,9 +91,9 @@ NOTR: Each vulnerability should be described on a new page!\newline
 }{%
 	Recommendation: how exactly would you fix this problem?
 }{%
-\naScore
-%\secure
-%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
+	\na
+	%\secure
+	%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
 }
 \vultable{\gnb}{%
 	Observation: which part of the application is vulnerable and why?
@@ -106,9 +106,9 @@ NOTR: Each vulnerability should be described on a new page!\newline
 }{%
 	Recommendation: how exactly would you fix this problem?
 }{%
-\naScore
-%\secure
-%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
+	\na
+	%\secure
+	%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
 }
 Comparison with your own application: how and why is your app better/worse
 \clearpage
@@ -282,6 +282,32 @@ accounts.
 }
 
 \vulntitle{OTG-IDENT-004}{Testing for Account Enumeration and Guessable User Account}
+\vultable{\bs}{%
+	The user account names are the users mail addresses and therefore not easily guessable. The \bs is vulnerable for Account Enumeration: Logins with an associated mail address and a wrong password lead to the message "Incorrect data. Wrong user or password. You have X tries more.", while a login with an unassociated mail address and any password leads to the message "Incorrect data. Wrong user or password".
+}{%
+	This was discovered manually in the source code (file \texttt{api/index.php} lines 178-180 and 214-245) and confirmed by manual testing.
+}{%
+	The use of this vulnerability is very likely as this is a very easy way to get to know valid user accounts.
+}{%
+	This vulnerability has a high impact as many more advanced attacks are possible as soon as valid mail addresses for the login are known.
+}{%
+	We recommend to always show the same error message, even though the user does not see how many tries he still has left.
+}{%
+	TODO: Score
+}
+\vultable{\gnb}{%
+	The \gnb application is always showing the same error message and is thus not vulnerable. We do also use the users mail address as user account names which makes them not easily guessable.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
 
 \vulntitle{OTG-IDENT-005}{Testing for Weak or unenforced username policy}
 \vultable{\bs}{%
@@ -322,7 +348,7 @@ accounts.
 \vulntitle{OTG-AUTHN-007}{Testing for Weak password policy}
 \vulntitle{OTG-AUTHN-008}{Testing for Weak security question/answer}
 \vultable{\bs}{%
-	\na
+	\notImp
 }{%
 	\na
 }{%
@@ -335,7 +361,7 @@ accounts.
 	\na
 }
 \vultable{\gnb}{%
-	\na
+	\notImp
 }{%
 	\na
 }{%
@@ -355,6 +381,33 @@ accounts.
 \section{Authorization Testing}
 \simpleVulntitle{OTG-AUTHZ-001}{Testing Directory traversal/file include}
 \vulntitle{OTG-AUTHZ-002}{Testing for bypassing authorization schema}
+\vultable{\bs}{%
+	No vulnerabilities in this area were found for the \bs application.
+}{%
+	This was observed by checking all necessary functions in the file \texttt{api/index.php} which does all the checks if a request is valid or not and some manual trial and error testing.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	No vulnerabilities in this area were found for the \gnb application.
+}{%
+	This was observed by checking all necessary functions in the according files and some manual trial and error testing.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-AUTHZ-003}{Testing for Privilege Escalation}
 \vulntitle{OTG-AUTHZ-004}{Testing for Insecure Direct Object References}
 
@@ -362,10 +415,112 @@ accounts.
 \section{Session Management Testing}
 \simpleVulntitle{OTG-SESS-001}{Testing for Bypassing Session Management Schema}
 \vulntitle{OTG-SESS-002}{Testing for Cookies attributes}
+
+\vultable{\bs}{%
+	We observed that the \bs application is not setting all possible cookie attributes, see \autoref{table:cookieattributes}.
+}{%
+	This was discovered using manual examination of the cookies and additionally by checking the source code for cookie settings.
+}{%
+	The likelihood is quite high for the exploitation of the missing "HTTP only" and "secure" attributes. The missing "secure" attribute could be related to \vulnref{OTG-CONFIG-007}.
+}{%
+	This could have a quite big impact as Cookies could be transferred over an insecure connection. Additionally cookies can be read using Javascript e.g. by XSS vulnerabilities.
+}{%
+	We recommend to set the missing cookie attributes accordingly.
+}{%
+	TODO: Score
+}
+
+\vultable{\gnb}{%
+	The \gnb application is setting all necessary and/or useful cookie attributes, see \autoref{table:cookieattributes}.
+}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
+\begin{table}
+\centering
+\begin{tabular}{| l | p{3cm} | p{3cm} |}
+Attribut & 		\bs & \gnb \\
+\toprule
+Session & 		yes	& yes \\
+\midrule
+Host only &		yes	& yes \\
+\midrule
+HTTP only &		no	& yes \\
+\midrule
+Secure &		no	& yes \\
+\midrule
+Expiry date &	\multicolumn{2}{|c|}{Not necessary because of "session" attribute} \\
+\bottomrule
+
+\end{tabular}
+\caption{Cookies attributes}
+\label{table:cookieattributes}
+\end{table}
+
 \vulntitle{OTG-SESS-003}{Testing for Session Fixation}
 \vulntitle{OTG-SESS-004}{Testing for Exposed Session Variables}
 \vulntitle{OTG-SESS-005}{Testing for Cross Site Request Forgery}
 \vulntitle{OTG-SESS-006}{Testing for logout functionality}
+\vultable{\bs}{%
+	We observed that the logout can be easily circumvented by just re-creating the old cookies with the same values before the logout. That means that we can easily undo the logout by just adding a cookie locally.
+}{%
+	We discovered this by manually looking through the source code and confirmed this by manual testing. \autoref{lst:logoutbug} shows the bug that makes this exploit possible. The variable \texttt{\$UserId} in line 15 is not defined in this context. leading to an SQL \texttt{UPDATE} statement with the following invalid \texttt{WHERE} clause: \texttt{where UserId='';}.
+}{%
+	It is very likely that this vulnerability will be exploited as cookies can be stolen quite easy (see \vulnref{OTG-SESS-002}) and this removes the timing aspect of stealing a given session. Logging out from the users session does not prevent any further attacks for this session.
+}{%
+	The potential impact of this vulnerability is high as this makes stealing a user's session much easier. An attacker only needs to get access to the users PHPSESSID or the not completely secure cookie.
+}{%
+	This issue can be easily resolved by using \texttt{\$user->UserId} instead if the undefined \texttt{\$UserId}.
+}{%
+	TODO: Score
+}
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=PHP, label={lst:logoutbug}, numbers=left, caption=Logout Bug]
+    $app->get('/logout', function() use ($app, $db, $queries) {
+        csrf_check();
+        $user = getCurrentUserInfo();
+        session_start();
+        if (isset($_COOKIE['PHPSESSID'])) {
+            setcookie('PHPSESSID', '', time() - 3600, '/');
+        }
+        if (isset($_COOKIE['XSRF-TOKEN'])) {
+            setcookie('XSRF-TOKEN', '', time() - 3600, '/');
+        }
+        session_unset();   // Remove the $_SESSION variable information.
+        session_destroy();// Remove the server-side session information.
+        $query = $queries["updateSessionId"]();
+        $statement = getStatement($query);
+        $statement->bind_param('si', $sessionId, $UserId);
+        $sessionId=NULL;
+        $statement->execute();
+        $statement->store_result();
+    });
+\end{lstlisting}
+\end{minipage}
+
+\vultable{\gnb}{%
+	No vulnerabilities in the logout mechanism have been found in the \gnb application.
+}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-SESS-007}{Test Session Timeout}
 \vulntitle{OTG-SESS-008}{Testing for Session puzzling}
 
@@ -425,6 +580,7 @@ Recommendation
 \vulntitle{OTG-INPVAL-014-4}{Testing for Format string}
 \vulntitle{OTG-INPVAL-015}{Testing for incubated vulnerabilities}
 \vulntitle{OTG-INPVAL-016}{Testing for HTTP Splitting/Smuggling}
+This vulnerability was not tested as we did not extend our testing to the Apache Web Server.
 
 \clearpage
 \section{Error Handling}

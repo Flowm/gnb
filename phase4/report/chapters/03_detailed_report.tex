@@ -283,7 +283,7 @@ accounts.
 
 \vulntitle{OTG-IDENT-004}{Testing for Account Enumeration and Guessable User Account}
 \vultable{\bs}{%
-	The user account names are the users mail addresses and therefore not easily guessable. The \bs is vulnerable for Account Enumeration: Logins with an associated mail address and a wrong password lead to the message "Incorrect data. Wrong user or password. You have X tries more.", while a login with an unassociated mail address and any password leads to the message "Incorrect data. Wrong user or password".
+	The user account names are the users mail addresses and therefore not easily guessable. The \bs{} is vulnerable for Account Enumeration: Logins with an associated mail address and a wrong password lead to the message "Incorrect data. Wrong user or password. You have X tries more.", while a login with an unassociated mail address and any password leads to the message "Incorrect data. Wrong user or password".
 }{%
 	This was discovered manually in the source code (file \texttt{api/index.php} lines 178-180 and 214-245) and confirmed by manual testing.
 }{%
@@ -382,7 +382,7 @@ accounts.
 \simpleVulntitle{OTG-AUTHZ-001}{Testing Directory traversal/file include}
 \vulntitle{OTG-AUTHZ-002}{Testing for bypassing authorization schema}
 \vultable{\bs}{%
-	No vulnerabilities in this area were found for the \bs application.
+	No vulnerabilities in this area were found for the \bs{} application.
 }{%
 	This was observed by checking all necessary functions in the file \texttt{api/index.php} which does all the checks if a request is valid or not and some manual trial and error testing.
 }{%
@@ -417,7 +417,7 @@ accounts.
 \vulntitle{OTG-SESS-002}{Testing for Cookies attributes}
 
 \vultable{\bs}{%
-	We observed that the \bs application is not setting all possible cookie attributes, see \autoref{table:cookieattributes}.
+	We observed that the \bs{} application is not setting all possible cookie attributes, see \autoref{table:cookieattributes}.
 }{%
 	This was discovered using manual examination of the cookies and additionally by checking the source code for cookie settings.
 }{%
@@ -447,7 +447,7 @@ accounts.
 \begin{table}
 \centering
 \begin{tabular}{| l | p{3cm} | p{3cm} |}
-Attribut & 		\bs & \gnb \\
+Attribut & 		\bs{} & \gnb \\
 \toprule
 Session & 		yes	& yes \\
 \midrule
@@ -528,7 +528,7 @@ Expiry date &	\multicolumn{2}{|c|}{Not necessary because of "session" attribute}
 \section{Data Validation Testing}
 \simpleVulntitle{OTG-INPVAL-001}{Testing for Reflected Cross Site Scripting}
 \vultable{\bs}{%
-	No Reflected Cross Site Scripting vulnerabilities have been found in the \bs application.
+	No Reflected Cross Site Scripting vulnerabilities have been found in the \bs{} application.
 }{%
 	This was discovered by checking the results of RIPS (which only showed false positives), the results of \url{http://devbug.co.uk} and manually testing a few functionalities.
 }{%
@@ -557,7 +557,7 @@ Expiry date &	\multicolumn{2}{|c|}{Not necessary because of "session" attribute}
 
 \vulntitle{OTG-INPVAL-002}{Testing for Stored Cross Site Scripting}
 \vultable{\bs}{%
-	No Stored Cross Site Scripting vulnerabilities have been found in the \bs application.
+	No Stored Cross Site Scripting vulnerabilities have been found in the \bs{} application.
 }{%
 	This was discovered by checking the results of RIPS (which only showed false positives), the results of \url{http://devbug.co.uk} and manually testing a few functionalities.
 }{%
@@ -595,7 +595,63 @@ Expiry date &	\multicolumn{2}{|c|}{Not necessary because of "session" attribute}
 \vulntitle{OTG-INPVAL-011}{IMAP/SMTP Injection}
 \vulntitle{OTG-INPVAL-012}{Testing for Code Injection}
 \vulntitle{OTG-INPVAL-012-1}{Testing for Local File Inclusion}
+\vultable{\bs}{%
+	No Local File Inclusion vulnerabilities have been found in the \bs{} application.
+}{%
+	This was discovered by checking the results of RIPS (which only showed false positives) and checking a few files manually.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
+\vultable{\gnb}{%
+	\same
+}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-INPVAL-012-2}{Testing for Remote File Inclusion}
+\vultable{\bs}{%
+	No Remote File Inclusion vulnerabilities have been found in the \bs{} application.
+}{%
+	This was discovered by checking the results of RIPS (which only showed false positives) and checking a few files manually.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
+\vultable{\gnb}{%
+	\same
+}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-INPVAL-013}{Testing for Command Injection}
 \vultable{\bs}{%
 	We observed that it is possible to perform command injection attacks, by exploiting the batch transaction functionality, 

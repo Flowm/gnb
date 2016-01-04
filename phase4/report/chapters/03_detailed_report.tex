@@ -527,7 +527,63 @@ Expiry date &	\multicolumn{2}{|c|}{Not necessary because of "session" attribute}
 \clearpage
 \section{Data Validation Testing}
 \simpleVulntitle{OTG-INPVAL-001}{Testing for Reflected Cross Site Scripting}
-\simpleVulntitle{OTG-INPVAL-002}{Testing for Stored Cross Site Scripting}
+\vultable{\bs}{%
+	No Reflected Cross Site Scripting vulnerabilities have been found in the \bs application.
+}{%
+	This was discovered by checking the results of RIPS (which only showed false positives), the results of \url{http://devbug.co.uk} and manually testing a few functionalities.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
+\vultable{\gnb}{%
+	\same
+}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
+\vulntitle{OTG-INPVAL-002}{Testing for Stored Cross Site Scripting}
+\vultable{\bs}{%
+	No Stored Cross Site Scripting vulnerabilities have been found in the \bs application.
+}{%
+	This was discovered by checking the results of RIPS (which only showed false positives), the results of \url{http://devbug.co.uk} and manually testing a few functionalities.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
+\vultable{\gnb}{%
+	\same
+}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-INPVAL-003}{Testing for HTTP Verb Tampering}
 \vulntitle{OTG-INPVAL-004}{Testing for HTTP Parameter pollution}
 \vulntitle{OTG-INPVAL-005}{Testing for SQL Injection}

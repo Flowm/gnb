@@ -16,8 +16,8 @@ if (isset($_SESSION["username"]) && isset($_SESSION["role"])) {
 }
 
 session_destroy();
-session_regenerate_id(true);
 session_unset();
+session_regenerate_id(true);
 
 $error_types = array(0=>'Invalid login credentials!',1=>'The account is currently blocked');
 

@@ -148,24 +148,22 @@ Comparison with your own application: how and why is your app better/worse
 	TODO: Recommendation
 }{%
 	\naScore
-	%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
 }
 
 \vulntitle{OTG-CONFIG-006}{Test HTTP Methods}
 \vulntitle{OTG-CONFIG-007}{Test HTTP Strict Transport Security}
 \vultable{\bs}{%
-	Although HTTPS is enabled on port 443, access to the page without using HTTPS is still possible, by simply accessing the server on port 80.
+	Although HTTPS is enabled on port 443, access to the page without using HTTPS is still possible, by simply accessing the server on port 80. However, since this was left on purpose by the developers for testing purposes, we decided not to treat this as a vulnerability (no CVSS score is given).
 }{%
-	We discovered this by simply trying to access the application on port 80: this way we had normal access to the application, although without any transport security.
+	This information was given to us directly by the Team that developed the Bank System application. We also proved this by simply trying to access the application on port 80: this way we had normal access to the application, although without any transport security.
 }{%
-	If any user accesses port 80 instead of port 443 (e.g. by mistake), his whole connection to the server will be unencrypted, which makes this vulnerability highly likely. Additionally an attacker might be able to redirect a victim to port 80, in order to intercept all the traffic. This requires some social engineering but is still feasible.\newline
-	Once having exploited this vulnerability, the likelihood of any attack which assumes lack of transport security becomes very high.
+	Since we are not considering this as a vulnerability, we won't analyze it in depth.
 }{%
-	The implications of lack of an encrypted connection were already analysed in phase 2. To review the implications briefly: all the data is sent in clear text from the client to the server and vice-versa, allowing man in the middle attacks. Confidentiality, integrity and authenticity are not fullfilled, allowing to hijack a session, view user data (including passwords) and modify it at will.
+	The implications of lack of an encrypted connection were already analysed in phase 2. Since we are not considering this as a vulnerability anyway, we won't analyze its implications.
 }{%
-	Deactivate the default port 80, thus allowing only connections on port 443.
+	Redirect any requests from port 80 to port 443. This is highly recommended before the application goes live.
 }{%
-	\cvssBaseScorePretty{N}{L}{N}{R}{U}{H}{H}{N}
+	\secure
 }
 \vultable{\gnb}{%
 	This vulnerability was fixed in phase 3 and the application is only allowing communication between the client and the server via HTTPS.
@@ -341,10 +339,71 @@ accounts.
 \section{Authentication Testing}
 \simpleVulntitle{OTG-AUTHN-001}{Testing for Credentials Transported over an Encrypted Channel}
 \vulntitle{OTG-AUTHN-002}{Testing for default credentials}
+\vultable{\bs}{%
+	The developers left a temporary administrator test account with weak credentials. It is likely that this was done specifically for testing purposes, but we decided to treat this as a vulnerability anyway, since this should be avoided when the application goes live.\newline
+	This flaw aside, no other accounts with weak credentials were found; also passwords are not automatically generated for users and the password policy is strict, not allowing weak passwords or empty fields for that matter.
+}{%
+	The default credentials left for testing purposes were:\newline
+	\texttt{user: test4@test.org pass: test}\newline
+	These were given to us directly by the developers. To prove our point, we also searched through the Rocktyou.txt password list (found at \texttt{https://wiki.skullsecurity.org/index.php?title=Passwords} and proved that 'test' is a very weak password.
+}{%
+	The likelihood of cracking the password is high. Brute-forcing the username may require some more effort, but since the application returns different error codes depending whether the inserted username or password were wrong, an attacker can easily try out any possible username.
+}{%
+	In this particular case the implications are severe, since a successful attack would grant an attacker admin rights, with consequent full access to the application.
+}{%
+	It is highly recommended to change the default credentials of the application admin before deploying the application.
+}{%
+	\cvssBaseScorePretty{N}{L}{L}{N}{U}{L}{N}{H}
+}
+
+\vultable{\gnb}{%
+	The same observations made for Bank System apply. Furthermore, no weak default credentials were left at all (not even for testing purposes).
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
+
 \vulntitle{OTG-AUTHN-003}{Testing for Weak lock out mechanism}
 \vulntitle{OTG-AUTHN-004}{Testing for bypassing authentication schema}
 \vulntitle{OTG-AUTHN-005}{Test remember password functionality}
 \vulntitle{OTG-AUTHN-006}{Testing for Browser cache weakness}
+\vultable{\bs}{%
+	We observed that no Browser cache weaknesses could be exploited for this web application. This statement only holds when HTTPS is enforced (see \vulnref{OTG-CONFIG-007}). It is important to stress though, that the Bank System application does not explicitly avoid cache weaknesses, as can be seen in any intercepted server response. This is not a problem, however, since the used Framework dynamically loads the sensitive information of the page using asynchronous Ajax requests, which are not cached by the browser.
+}{%
+	Browser history was tested manually, showing no issues.\newline 
+	The browser cache was tested using the CacheViewer2 addon for Firefox: this showed us that server responses are actually cached by the browser, but these are encrypted as long as HTTPS is used. Also, given that Bank System dynamically loads pages, we only managed to restore some pages from the cache.
+}{%
+	\na
+}{%
+	\na
+}{%
+	Although the application didn't show evident browser cache weaknesses, it is still recommended to set some additional cache-control: no-cache, no-store, must-revalidate.
+}{%
+	\secure
+}
+
+\vultable{\gnb}{%
+	The GNB application enforces cache invalidation, preventing the browser from storing any sensible information other that stylesheets and javascript files locally. Browser history also couldn't be exploited, since the application delivers the pages over HTTPS.
+}{%
+	Browser history was tested manually, showing no issues. Browser cache was tested using the CacheViewer2 addon for Firefox. We also analyzed some responses from the server, only to see that the application sets the following flags:\newline
+	\texttt{Cache-Control: private, must-revalidate}
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
 \vulntitle{OTG-AUTHN-007}{Testing for Weak password policy}
 \vulntitle{OTG-AUTHN-008}{Testing for Weak security question/answer}
 \vultable{\bs}{%

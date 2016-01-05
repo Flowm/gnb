@@ -17,8 +17,6 @@ final class DB {
 
 	private $pdo;
 
-	private $instance;
-
 	private $DB_HOST			= "localhost";
 	private $DB_USERNAME		= "samurai";
 	private $DB_PASSWORD		= "6JEn7RhLAGaavQTx";
@@ -722,7 +720,7 @@ final class DB {
 					$this->USER_TABLE_EMAIL = :mail
 					AND $this->USER_TABLE_PW_RESET = :reset_hash
 					AND $this->USER_TABLE_PIN = :pin
-					AND now() <= date_add(pw_reset_hash_timestamp, INTERVAL $this->PW_RESET_HASH_TIMEOUT);
+					AND now() <= date_add($this->USER_TABLE_PW_RESET_TS, INTERVAL $this->PW_RESET_HASH_TIMEOUT);
 				";
 
 		$stmt = $this->pdo->prepare($SQL);

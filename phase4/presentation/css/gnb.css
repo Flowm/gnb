@@ -57,6 +57,31 @@ html.vulns body {
 	background-size: 100%;
 }
 
+html.onedoesnotsimply body {
+  background:url("../pictures/one-does-not-simply.jpg");
+  background-position:center;
+  background-size: 100%;
+}
+
+html.fixallthebugs body {
+  background:url("../pictures/all-the-things.jpg");
+  background-position:center;
+  background-size: 100%;
+}
+
+p.caption {
+  font-size: 2.5em;
+  vertical-align: text-top;
+  white-space: nowrap;
+  text-align: center;
+  font-weight: 900;
+
+  color: black;
+  -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-color: black;
+}
+
 img.logo {
   width: 400px;
   border: 0 !important;

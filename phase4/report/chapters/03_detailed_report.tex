@@ -294,7 +294,7 @@ accounts.
 	TODO: Score
 }
 \vultable{\gnb}{%
-	The \gnb application is always showing the same error message and is thus not vulnerable. We do also use the users mail address as user account names which makes them not easily guessable.
+	The \gnb{} application is always showing the same error message and is thus not vulnerable. We do also use the users mail address as user account names which makes them not easily guessable.
 }{%
 	\na
 }{%
@@ -454,7 +454,7 @@ accounts.
 	\secure
 }
 \vultable{\gnb}{%
-	No vulnerabilities in this area were found for the \gnb application.
+	No vulnerabilities in this area were found for the \gnb{} application.
 }{%
 	This was observed by checking all necessary functions in the according files and some manual trial and error testing.
 }{%
@@ -490,7 +490,7 @@ accounts.
 }
 
 \vultable{\gnb}{%
-	The \gnb application is setting all necessary and/or useful cookie attributes, see \autoref{table:cookieattributes}.
+	The \gnb{} application is setting all necessary and/or useful cookie attributes, see \autoref{table:cookieattributes}.
 }{%
 	\same
 }{%
@@ -506,7 +506,7 @@ accounts.
 \begin{table}
 \centering
 \begin{tabular}{| l | p{3cm} | p{3cm} |}
-Attribut & 		\bs{} & \gnb \\
+Attribute & 	\bs{} & \gnb{} \\
 \toprule
 Session & 		yes	& yes \\
 \midrule
@@ -567,7 +567,7 @@ Expiry date &	\multicolumn{2}{|c|}{Not necessary because of "session" attribute}
 \end{minipage}
 
 \vultable{\gnb}{%
-	No vulnerabilities in the logout mechanism have been found in the \gnb application.
+	No vulnerabilities in the logout mechanism have been found in the \gnb{} application.
 }{%
 	\same
 }{%
@@ -762,6 +762,33 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 \section{Cryptography}
 \simpleVulntitle{OTG-CRYPST-001}{Testing for Weak SSL/TSL Ciphers, Insufficient Transport Layer Protection}
 \vulntitle{OTG-CRYPST-002}{Testing for Padding Oracle}
+\vultable{\bs}{%
+	\notImp
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+\vultable{\gnb}{%
+	\notImp
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-CRYPST-003}{Testing for Sensitive information sent via unencrypted channels}
 
 \clearpage
@@ -769,10 +796,64 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 \simpleVulntitle{OTG-BUSLOGIC-001}{Test Business Logic Data Validation}
 \vulntitle{OTG-BUSLOGIC-002}{Test Ability to Forge Requests}
 \vulntitle{OTG-BUSLOGIC-003}{Test Integrity Checks}
+\vultable{\bs}{%
+	\notImp
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+\vultable{\gnb}{%
+	\notImp
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-BUSLOGIC-004}{Test for Process Timing}
 \vulntitle{OTG-BUSLOGIC-005}{Test Number of Times a Function Can be Used Limits}
 \vulntitle{OTG-BUSLOGIC-006}{Testing for the Circumvention of Work Flows}
 \vulntitle{OTG-BUSLOGIC-007}{Test Defenses Against Application Mis-use}
+\vultable{\bs}{%
+	No mechanisms to prevent against application mis-use are in place except the lockout-functionality (see \vulnref{OTG-AUTHN-003}). No critical functionalities are disabled and no logs are kept.
+}{%
+	These observations were made after reading the source code and testing the accuracy of the observations with some manual testing.
+}{%
+	The likelihood of exploiting this vulnerability is high because all standard fuzzying tools are able to exploit this vulnerability, even making it possible for so-called "script-kiddies" to try their luck.
+}{%
+	Given the other observations about the \bs{} application the impact of this vulnerability is not really high as this will probably not lead to a security breach.
+}{%
+	We recommend to implement a simple way to detect malicious requests and prevent further requests for some time after a certain treshold is reached.
+}{%
+	TODO: Score
+}
+\vultable{\gnb}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	TODO: Score
+}
+
 \vulntitle{OTG-BUSLOGIC-008}{Test Upload of Unexpected File Types}
 \vulntitle{OTG-BUSLOGIC-009}{Test Upload of Malicious Files}
 
@@ -780,13 +861,122 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 \section{Client Side Testing}
 \simpleVulntitle{OTG-CLIENT-001}{Testing for DOM based Cross Site Scripting}
 \vulntitle{OTG-CLIENT-002}{Testing for JavaScript Execution}
+Please refer to \vulnref{OTG-INPVAL-001} and \vulnref{OTG-INPVAL-002}.
+
 \vulntitle{OTG-CLIENT-003}{Testing for HTML Injection}
 \vulntitle{OTG-CLIENT-004}{Testing for Client Side URL Redirect}
 \vulntitle{OTG-CLIENT-005}{Testing for CSS Injection}
 \vulntitle{OTG-CLIENT-006}{Testing for Client Side Resource Manipulation}
+\vultable{\bs}{%
+	No Client Side Resource Manipulation vulnerability was found in the \bs{} application.
+}{%
+	This was observed by manually looking through the source code as none of the used tools covered this area.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	No Client Side Resource Manipulation vulnerability was found in the \gnb{} application.
+}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	\same
+}{%
+	\secure
+}
+
 \vulntitle{OTG-CLIENT-007}{Test Cross Origin Resource Sharing}
 \vulntitle{OTG-CLIENT-008}{Testing for Cross Site Flashing}
 \vulntitle{OTG-CLIENT-009}{Testing for Clickjacking}
 \vulntitle{OTG-CLIENT-010}{Testing WebSockets}
+\vultable{\bs}{%
+	\notImp
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+\vultable{\gnb}{%
+	\notImp
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-CLIENT-011}{Test Web Messaging}
+\vultable{\bs}{%
+	\notImp
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+\vultable{\gnb}{%
+	\notImp
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-CLIENT-012}{Test Local Storage}
+\vultable{\bs}{%
+	\notImp
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+\vultable{\gnb}{%
+	\notImp
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}

@@ -175,6 +175,33 @@ Comparison with your own application: how and why is your app better/worse
 }
 
 \vulntitle{OTG-CONFIG-006}{Test HTTP Methods}
+\vultable{\bs}{%
+	We observed that the GET, POST, HEAD and OPTIONS methods are allowed over HTTPS. The methods PUT, DELETE and TRACE are not allowed, while other methods like COPY and MOVE are not implemented at all.
+}{%
+	This discovery was made by testing the available methods with the HTTPS client integrated in openssl. \newline (eg. \texttt{openssl s\_client -connect HOST:443})
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	We observed that the GET, POST, HEAD and OPTIONS methods are allowed over HTTPS. The methods PUT, DELETE and TRACE are not allowed, while other methods like COPY and MOVE are not implemented at all.
+}{%
+	This discovery was made by testing the available methods with the HTTPS client integrated in openssl. \newline (eg. \texttt{openssl s\_client -connect HOST:443})
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-CONFIG-007}{Test HTTP Strict Transport Security}
 \vultable{\bs}{%
 	Although HTTPS is enabled on port 443, access to the page without using HTTPS is still possible, by simply accessing the server on port 80. However, since this was left on purpose by the developers for testing purposes, we decided not to treat this as a vulnerability (no CVSS score is given).
@@ -362,6 +389,36 @@ accounts.
 \clearpage
 \section{Authentication Testing}
 \simpleVulntitle{OTG-AUTHN-001}{Testing for Credentials Transported over an Encrypted Channel}
+\vultable{\bs}{%
+	All request to the site are done over an encrypted HTTPS connection. No unencrypted messages were observed.
+	% HTTP still enabled
+}{%
+	After capturing the traffic during login with wireshark, it was verified that all requests made were encrypted.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+	%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
+}
+\vultable{\gnb}{%
+	All request to the site are done over an encrypted HTTPS connection. No unencrypted messages were observed.
+	% HTTP port disabled
+}{%
+	After capturing the traffic during login with wireshark, it was verified that all requests made were encrypted.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-AUTHN-002}{Testing for default credentials}
 \vultable{\bs}{%
 	The developers left a temporary administrator test account with weak credentials. It is likely that this was done specifically for testing purposes, but we decided to treat this as a vulnerability anyway, since this should be avoided when the application goes live.\newline
@@ -397,7 +454,76 @@ accounts.
 
 \vulntitle{OTG-AUTHN-003}{Testing for Weak lock out mechanism}
 \vulntitle{OTG-AUTHN-004}{Testing for bypassing authentication schema}
+\vultable{\bs}{%
+	No way to bypass the authentication schema was discovered. All internal
+	pages properly redirect to the login page.
+}{%
+	A controller is responsible for routing the requests, after looking at it's
+	source it could be verified, that no internal pages are accessible without
+	authentication.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	No way to bypass the authentication schema was discovered. All internal
+	pages properly redirect to the login page.
+}{%
+	After inspecting the code, all php sites only meant for an authenticated
+	user appear to check for a valid user session before further processing the
+	request.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
+
 \vulntitle{OTG-AUTHN-005}{Test remember password functionality}
+\vultable{\bs}{%
+	Password is only transmitted during the login phase, and stored in a secure
+	way server side.
+}{%
+	A strong hash function is used in combination with a salt to store the
+	password in the database: \newline
+	\texttt{hash('sha256', \$plainpassword.\$salt);}
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+}{%
+	Password is only transmitted during the login phase, and stored in a secure
+	way server side.
+}{%
+	A strong hash function is used in combination with a salt to store the
+	password in the database: \newline
+	\texttt{hash('sha512', \$this->MAGIC . \$password . \$salt);} \newline
+	MAGIC is an additional token hardcoded in the php code and \texttt{sha512}
+	offers additional entropy compared to \texttt{sha256}, so the \gnb
+	application is slightly more secure here.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-AUTHN-006}{Testing for Browser cache weakness}
 \vultable{\bs}{%
 	We observed that no Browser cache weaknesses could be exploited for this web application. This statement only holds when HTTPS is enforced (see \vulnref{OTG-CONFIG-007}). It is important to stress though, that the Bank System application does not explicitly avoid cache weaknesses, as can be seen in any intercepted server response. This is not a problem, however, since the used Framework dynamically loads the sensitive information of the page using asynchronous Ajax requests, which are not cached by the browser.
@@ -458,6 +584,52 @@ accounts.
 }
 
 \vulntitle{OTG-AUTHN-009}{Testing for weak password change or reset functionalities}
+\vultable{\bs}{%
+	\textbf{Password change:} \newline
+		A logged in user is able to change his password by supplying his
+		current password. This is considered safe. \newline
+	\textbf{Password reset:} \newline
+		A password reset can be requested by an unauthenticated user, by
+		supplying the email address of the account on the web page.
+		An email with a password reset link is sent to the specified address,
+		where the password can be reset without further authentication.
+		This enables an attacker with control over the email address to take
+		over the account.
+}{%
+	The change password functions were tested manually.
+}{%
+	Unlikely. Attacker needs control over the email account of the victim.
+}{%
+	High for a single account. The attacker gains full control over the victims account.
+}{%
+	Require an additional secret to reset the password and identify the user.
+	This could be a security question or the PIN. (As long as its clearly
+	stated that the user needs to store it safely)
+}{%
+	\cvssBaseScorePretty{N}{L}{L}{N}{U}{L}{L}{L}
+}
+\vultable{\gnb}{%
+	\textbf{Password change:} \newline
+		\notImp \newline
+	\textbf{Password reset:} \newline
+		A password reset can be requested by an unauthenticated user, by
+		supplying the email address of the account on the web page.
+		An email with a password reset link is sent to the specified address,
+		where the password can be reset by specifying the account PIN.
+		This second factor prevents an attacker with control over the email
+		address to take over the account.
+}{%
+	The password reset function was tested manually.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-AUTHN-010}{Testing for Weaker authentication in alternative channel}
 
 \clearpage
@@ -492,6 +664,39 @@ accounts.
 }
 
 \vulntitle{OTG-AUTHZ-003}{Testing for Privilege Escalation}
+\vultable{\bs}{%
+	No vectors for privilege escalation could be identified in the \bs{}
+	application.
+}{%
+	After inspecting the source of the controller responsible for routing the
+	requests, it appears that all pages requiring elevated permissions
+	correctly verify that these elevated permissions are present.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	No vectors for privilege escalation could be identified in the \gnb{}
+	application.
+}{%
+	After inspecting the code, all php sites only meant for users with elevated
+	permission appear to check for these permissions before further processing
+	the request.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-AUTHZ-004}{Testing for Insecure Direct Object References}
 
 \clearpage
@@ -549,6 +754,34 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 \end{table}
 
 \vulntitle{OTG-SESS-003}{Testing for Session Fixation}
+\vultable{\bs}{%
+	A new session is generated after the user successfully logs in.
+}{%
+	This was tested manually and verified by inspecting the code responsible.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	A new session is generated after the user successfully logs in.
+}{%
+	This was tested manually and verified by inspecting the code responsible.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
+
 \vulntitle{OTG-SESS-004}{Testing for Exposed Session Variables}
 \vulntitle{OTG-SESS-005}{Testing for Cross Site Request Forgery}
 \vulntitle{OTG-SESS-006}{Testing for logout functionality}

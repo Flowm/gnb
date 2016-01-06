@@ -587,7 +587,7 @@ Expiry date &	\multicolumn{2}{|c|}{Not necessary because of "session" attribute}
 \section{Data Validation Testing}
 \simpleVulntitle{OTG-INPVAL-001}{Testing for Reflected Cross Site Scripting}
 \vultable{\bs}{%
-	No Reflected Cross Site Scripting vulnerabilities have been found in the \bs{} application.
+	No Reflected Cross Site Scripting vulnerabilities have been found in the \bs{} application. There is only one place where user input is directly echoed onto a website, but this happens in the API (see \texttt{api/index.php} line 142) and is thus not visible.
 }{%
 	This was discovered by checking the results of RIPS (which only showed false positives), the results of \url{http://devbug.co.uk} and manually testing a few functionalities.
 }{%
@@ -601,9 +601,9 @@ Expiry date &	\multicolumn{2}{|c|}{Not necessary because of "session" attribute}
 }
 
 \vultable{\gnb}{%
-	\same
+	No Reflected Cross Site Scripting vulnerabilities have been found in the \bs{} application. There is no place where user input is directly shown on any site.
 }{%
-	\same
+	This was discovered by checking the results of RIPS (which only showed false positives), the results of \url{http://devbug.co.uk} and manually testing a few functionalities.
 }{%
 	\na
 }{%
@@ -619,6 +619,8 @@ Expiry date &	\multicolumn{2}{|c|}{Not necessary because of "session" attribute}
 	No Stored Cross Site Scripting vulnerabilities have been found in the \bs{} application.
 }{%
 	This was discovered by checking the results of RIPS (which only showed false positives), the results of \url{http://devbug.co.uk} and manually testing a few functionalities.
+	
+	The \bs{} application is using the AngularJS framework (see \url{https://angularjs.org}) which also includes input sanitization (see \url{https://docs.angularjs.org/api/ngSanitize/service}).
 }{%
 	\na
 }{%
@@ -630,9 +632,11 @@ Expiry date &	\multicolumn{2}{|c|}{Not necessary because of "session" attribute}
 }
 
 \vultable{\gnb}{%
-	\same
+	No Stored Cross Site Scripting vulnerabilities have been found in the \bs{} application.
 }{%
-	\same
+	This was discovered by checking the results of RIPS (which only showed false positives), the results of \url{http://devbug.co.uk} and manually testing a few functionalities.
+	
+	The \gnb{} application is not using any frameworks but instead implemented its own input sanitization (see \texttt{genericfunctions.php} lines 10-103.
 }{%
 	\na
 }{%

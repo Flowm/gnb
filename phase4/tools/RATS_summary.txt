@@ -1,0 +1,30 @@
+[TEAM 7]
+
+Most restuls are from the Vendors which are out of scope for this test 
+
+Severity: High
+Issue: fixed size global buffer
+Extra care should be taken to ensure that character arrays that are allocated on the stack are used safely. They are prime targets for buffer overflow attacks.
+
+    File: ./parser/parseupload.c
+    Lines: 42 61 63 325 
+	
+**	-> 	Special Note
+FP	->	False Positive 
+	
+**	Vendor files : A number of vulnerbilities were reported in the vendor files but were not invistigated in depth as they are out of the scope of this test. 
+		- Argument 1 to this function call should be checked to ensure that it does not come from an untrusted source without first verifying that it contains nothing dangerous.
+		- Arguments 1, 2, 4 and 5 of this function may be passed to an external program. (Usually sendmail). Under Windows, they will be passed to a remote email server. If these values are derived from user input, make sure they are properly formatted and contain no unexpected characters or extra data
+
+FP	Line 42 :   char inputrow[100];
+		This variable is not used in the file after teh declaration 
+
+FP	Line 61 :   char statement1[512];
+		This variable is always used with snprintf (statement1,512,...) in Lines 152, 192, 236, 270, 287, 333
+		
+		
+This Tool only detected a False positives in C and no vulnerbilities in the PHP code
+
+[TEAM GNB]
+
+TBC

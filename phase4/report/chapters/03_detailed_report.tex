@@ -6,61 +6,82 @@ TODO:\newline
 compare the 8 different tools used by your team. Which vulnerabilities can each
 tool find? Which vulnerabilities can they not find?\newline
 
-\subsection*{Tool 1}
+\subsection*{Web Testing Tools}
+
+\subsubsection*{devbug.co.uk}
+\begin{itemize}
+	\item \textbf{Used by}\\ Alexander Lill
+	\item \textbf{Used for}\\
+	DevBug is a basic PHP Static Code Analysis (SCA) tool written mostly in JavaScript. The idea behind DevBug is to make basic PHP Static Code Analysis accessible online, to raise security awareness and to integrate SCA into the development process. DevBug can be used to quickly test a page of PHP that you think may have some potential vulnerabilities, to run across a piece of code you have found on Google that you are unsure of or to directly write your own code in.
+	
+	This tool was used as an additional resource for Static Code Analysis reports.
+	
+	The website shows e.g. Cross-Site-Scripting and Command Injection vulnerabilities.
+	\item \textbf{Useful in}\\ \vulnref{OTG-INPVAL-001} and \vulnref{OTG-INPVAL-002}
+\end{itemize}
+
+\subsubsection*{Kiuwan}
+\begin{itemize}
+	\item \textbf{Used by}\\ Alexander Lill
+	\item \textbf{Used for}\\
+	Kiuwan (see \url{https://www.kiuwan.com}) is a software as a service (SaaS) static program analysis multi-technology software for software analytics, quality and security measurement and management.
+	
+	This tool was used as a main source for possible vulnerabilities using Static Code Analysis.
+	
+	The tool shows defects in the categories "Maintainability", "Security", "Efficiency","Portability" and "Reliability" (see \autoref{figure:kiuwan}) as well as estimates for the effort to fix those issues. It can be connected with e.g. Github and automatically analyzes the code after every commit and shows metrics.
+	\item \textbf{Useful in}\\ \vulnref{OTG-INPVAL-001} and \vulnref{OTG-INPVAL-002}
+\end{itemize}
+
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=0.5\textwidth]{figures/kiuwanResults}
+	\caption{Example graph from Kiuwan}
+	\label{figure:kiuwan}
+\end{figure}
+
+\subsubsection*{RIPS}
 \begin{itemize}
 	\item \textbf{Used by}\\ Name Surname
 	\item \textbf{Used for}\\ Sample Text - description of the tool
 	\item \textbf{Useful in}\\ \vulnref{OTG-AUTHN-004} and \vulnref{OTG-AUTHN-005}
 \end{itemize}
 
-\subsection*{Tool 2}
+\subsubsection*{RATS}
 \begin{itemize}
 	\item \textbf{Used by}\\ Name Surname
 	\item \textbf{Used for}\\ Sample Text - description of the tool
 	\item \textbf{Useful in}\\ \vulnref{OTG-AUTHN-004} and \vulnref{OTG-AUTHN-005}
 \end{itemize}
 
-\subsection*{Tool 3}
+\subsubsection*{Comparison}
+TODO: Comparison Text
+
+
+\subsection*{C and Java Testing Tools}
+
+\subsubsection*{IDA Pro}
 \begin{itemize}
 	\item \textbf{Used by}\\ Name Surname
 	\item \textbf{Used for}\\ Sample Text - description of the tool
 	\item \textbf{Useful in}\\ \vulnref{OTG-AUTHN-004} and \vulnref{OTG-AUTHN-005}
 \end{itemize}
 
-\subsection*{Tool 4}
+\subsubsection*{Radare2}
 \begin{itemize}
 	\item \textbf{Used by}\\ Name Surname
 	\item \textbf{Used for}\\ Sample Text - description of the tool
 	\item \textbf{Useful in}\\ \vulnref{OTG-AUTHN-004} and \vulnref{OTG-AUTHN-005}
 \end{itemize}
 
-\subsection*{Tool 5}
+\subsubsection*{JAVA Decompiler}
 \begin{itemize}
 	\item \textbf{Used by}\\ Name Surname
 	\item \textbf{Used for}\\ Sample Text - description of the tool
 	\item \textbf{Useful in}\\ \vulnref{OTG-AUTHN-004} and \vulnref{OTG-AUTHN-005}
 \end{itemize}
 
-\subsection*{Tool 6}
-\begin{itemize}
-	\item \textbf{Used by}\\ Name Surname
-	\item \textbf{Used for}\\ Sample Text - description of the tool
-	\item \textbf{Useful in}\\ \vulnref{OTG-AUTHN-004} and \vulnref{OTG-AUTHN-005}
-\end{itemize}
-
-\subsection*{Tool 7}
-\begin{itemize}
-	\item \textbf{Used by}\\ Name Surname
-	\item \textbf{Used for}\\ Sample Text - description of the tool
-	\item \textbf{Useful in}\\ \vulnref{OTG-AUTHN-004} and \vulnref{OTG-AUTHN-005}
-\end{itemize}
-
-\subsection*{Tool 8}
-\begin{itemize}
-	\item \textbf{Used by}\\ Name Surname
-	\item \textbf{Used for}\\ Sample Text - description of the tool
-	\item \textbf{Useful in}\\ \vulnref{OTG-AUTHN-004} and \vulnref{OTG-AUTHN-005}
-\end{itemize}
+\subsubsection*{Comparison}
+TODO: Comparison Text
 
 \clearpage
 
@@ -516,7 +537,7 @@ HTTP only &		no	& yes \\
 \midrule
 Secure &		no	& yes \\
 \midrule
-Expiry date &	\multicolumn{2}{|c|}{Not necessary because of "session" attribute} \\
+Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} \\
 \bottomrule
 
 \end{tabular}

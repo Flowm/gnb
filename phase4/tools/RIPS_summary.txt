@@ -1,0 +1,26 @@
+ [Team 7] 
+ 
+ 	In index.php
+  		- $tan and $desc are not sanitized on lines 105 and 106 in index.php and are taken direclty from $_POST 
+  		- File upload on Line allows for user upload file, the file content might be checked in the C parser later on but potential for File Manipulation exits
+
+
+
+  		Userinput reaches sensitive sink when function initconfig() is called.
+
+    22: include $config = array_replace_recursive($config, include $this->configDirectory . '/' . $filename); 
+        21: foreach(preg_grep('/\\.php$/', scandir($this->configDirectory)) as $filename)
+
+        requires:
+            15: ⇓ function initconfig()
+
+
+	Call triggers vulnerability in function initconfig()
+
+    41: ⇑ $this->initconfig ()
+
+    This needs more invistigation
+
+[GNB]
+
+

@@ -1,0 +1,157 @@
+# Vars
+## Static
+static char* sndaccount;
+static char* inpfile;
+static char* transactiontan;
+static FILE* fid;
+
+## Main (offset from esp+)
+0x028	tmp_var? loc.imp._Jv_RegisterClasses
+0x02c	ARGV[0]
+0x030	ARGV[1]	inpfile
+0x034	ARGV[2]	sndaccount
+0x038	ARGV[3]	transactiontan
+0x03c	ARGV[4]	tx_dec
+0x038	MYSQL_BIND params[8]
+0x040	MYSQL_BIND params[0].buffer
+0x058	MYSQL_BIND params[0].buffer_length
+0x06c	MYSQL_BIND params[0].buffer_type
+0x080	MYSQL_BIND params[1].buffer
+0x098	MYSQL_BIND params[1].buffer_length
+0x0ac	MYSQL_BIND params[1].buffer_type
+0x0c0	MYSQL_BIND params[2].buffer
+0x0d8	MYSQL_BIND params[2].buffer_length
+0x0ec	MYSQL_BIND params[2].buffer_type
+0x100	MYSQL_BIND params[3].buffer
+0x118	MYSQL_BIND params[3].buffer_length
+0x12c	MYSQL_BIND params[3].buffer_type
+0x140	MYSQL_BIND params[4].buffer
+0x16c	MYSQL_BIND params[4].buffer_type
+0x180	MYSQL_BIND params[5].buffer
+0x198	MYSQL_BIND params[5].buffer_length
+0x1ac	MYSQL_BIND params[5].buffer_type
+0x1c0	MYSQL_BIND params[6].buffer
+0x1d8	MYSQL_BIND params[6].buffer_length
+0x1ec	MYSQL_BIND params[6].buffer_type
+0x200	MYSQL_BIND params[7].buffer
+0x218	MYSQL_BIND params[7].buffer_length
+0x22c	MYSQL_BIND params[7].buffer_type
+
+0x2b8	double tx_sum
+0x2c0	double src_balance
+0x2c8	double dst_balance
+0x2d0	long tx_dst
+0x2d4	time_t seconds
+0x2dc	UNUSED?
+0x2eo	UNUSED?
+0x2e4   MYSQL * db_conn
+0x2e8	MYSQL_STMT * db_stmt
+0x2ec	char* db_host
+0x2f0	char* db_user
+0x2f4	char* db_passwd
+0x2f8	char* db_name
+0x2fc	struct tm lct
+0x303	char c
+0x304	char query[512]
+
+0x568	char* timestr[80]
+0x5b8	char* tx_state
+0x5bc	UNUSED?
+0x5c0	UNUSED?
+0x5c4	UNUSED?
+0x5c8	UNUSED?
+
+## Misc
+0x8049cd0	10000 ?
+
+0x03	MYSQL_TYPE_LONG
+0x05	MYSQL_TYPE_DOUBLE
+0xfe	MYSQL_TYPE_STRING
+
+
+# Strings
+"Transaction failed."
+"localhost"
+"root"
+"crazypassword"
+"Banking"
+"Not enough arguments for the program"
+"File does not exist"
+"Wrong symbols in line."
+"Cannot connect to database"
+"UPDATE ActiveTAN SET ActiveTAN_Status = 0 WHERE ActiveTAN_number = ? AND ActiveTAN_accountNo = ?"
+"Error while updating the TAN"
+"%ld,%lf;"
+"PENDING"
+"APPROVED"
+"SELECT Account_bal FROM Account WHERE Account_no= ? and Account_bal >= ?"
+"MySQL error."
+"Not enough balance in user account"
+"SELECT Account_bal FROM Account WHERE Account_no= ?"
+"Wrong receiver account number."
+"UPDATE Account SET Account_bal=? WHERE Account_no=?"
+"Money transfered: %lf euro to %ld account.\n"
+"Error with money transfer\n%s\n"
+"REJECTED"
+"%F  %X"
+"INSERT INTO Txn ( Txn_amount, Txn_TAN_used, Txn_date, Txn_SndAccountNo, Txn_RcvAccountNo, Txn_ApprovalStatus, Txn_Status, Txn_description) VALUES (?,?,?,?,?,?,?, ?)"
+"Error happend while inserting transaction details to the transaction table"
+"All transactions completed"
+
+
+# Functions
+close_free
+finish_with_error
+main
+
+
+# Imports
+imp.printf
+imp.free
+imp.fclose
+imp.time
+imp.rewind
+imp.mysql_stmt_init
+imp.mysql_stmt_fetch
+imp.fopen64
+imp.mysql_stmt_prepare
+imp.malloc
+imp.puts
+imp.mysql_stmt_store_result
+imp.mysql_stmt_close
+imp.exit
+imp.mysql_stmt_bind_result
+imp.feof
+imp.strftime
+imp.localtime
+imp.fscanf
+imp.__libc_start_main
+imp.snprintf
+imp.mysql_real_connect
+imp.strncpy
+imp.fgetc
+imp.mysql_close
+imp.mysql_init
+imp.mysql_stmt_free_result
+imp.mysql_stmt_execute
+imp.mysql_stmt_bind_param
+
+
+# Issues
+Whole program a single procedural function
+	- This makes maintenance harder as visible on multiple occasions throughout the programm
+	- Only 2 of 3 malloced strings freed on error, probably missed due to alter addition
+
+Error handling:
+	- Malloc return value not checked for errors
+	- MySQL connection not properly closed in case of error
+
+Buffer overflow:
+	- Fixed size for sndaccount, inpfile, transactiontan not enforced
+	- Using strncpy(dst, src, strlen(src)) instead of strncpy(dst, src, strlen(dst))
+	- Resulting in buffer overflow by specifying a parameter longer than 200 chars for the script
+
+Check:
+	- Handling of transfer sum
+		- Switching from float to int?
+	- Negative transaction not handled in backend?

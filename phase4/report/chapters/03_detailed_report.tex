@@ -62,26 +62,45 @@ TODO: Comparison Text
 
 \subsection*{C and Java Testing Tools}
 
-\subsubsection*{IDA Pro}
+\subsubsection*{Java Decompiler}
 \begin{itemize}
-	\item \textbf{Used by}\\ Name Surname
-	\item \textbf{Used for}\\ Sample Text - description of the tool
-	\item \textbf{Useful in}\\ \vulnref{OTG-AUTHN-004} and \vulnref{OTG-AUTHN-005}
+	\item \textbf{Used by}\\ Lorenzo Donini
+	\item \textbf{Used for}\\ The Java decompiler standalone application was used to obtain the Java source code of the SCS application developed by \bs, given the compiled \texttt{.jar} file. Once decompiled, all the classes were exported and analyzed with separate tools. The Java decompiler was obtained from \texttt{http://jd.benow.ca/}.
+	\item \textbf{Useful in}\\ No major vulnerabilities were found using this tool, but for a more in-depth description of how this tool was used, refer to \ref{chapter:reverse_engineering}.
+\end{itemize}
+
+\subsubsection*{FindBugs Intellij IDEA Plugin}
+\begin{itemize}
+	\item \textbf{Used by}\\ Lorenzo Donini
+	\item \textbf{Used for}\\ This plugin for the Intellij IDEA Java IDE (software by JetBrains) was used to statically analyze the already decompiled Java source code of the whole SCS application developed by \bs. The tool returns a list of explicit vulnerabilities, bugs, dodgy code and more, with details about each entry and suggestions on how to fix them.
+	\item \textbf{Useful in}\\ No major vulnerabilities were found using this tool, but for a more in-depth  description of how this tool was used, refer to \ref{chapter:reverse_engineering}.
+\end{itemize}
+
+\subsubsection*{IDA Pro - Free}
+\begin{itemize}
+	\item \textbf{Used by}\\ Lorenzo Donini, Florian Mauracher
+	\item \textbf{Used for}\\ IDA Pro was used in order to reverse engineer the C parser binaries of the \bs application. The tool allowed us to interactively disassemble the compiled code and reverse engineer the whole parser starting from the assembly x86 instructions.\newline
+	The main functionalities of IDA Pro that we used were the program-flow graph view, the strings view and the renaming of variables and locations with humand-readable logical names.
+	\item \textbf{Useful in}\\ This tool didn't provide any direct insight on potential vulnerabilities, but allowed to retrieve the source code from the C parser binaries, needed for a further analysis. For a more in-depth description of the reverse engineering process, refer to \ref{chapter:reverse_engineering}.
+\end{itemize}
+
+\subsubsection*{variable\_mapper.py}
+\begin{itemize}
+	\item \textbf{Used by}\\ Lorenzo Donini
+	\item \textbf{Used for}\\ We developed this script ourselves to aid us in the analysis of the assembly instructions of the C source code. 
+	This tool works in conjunction with the IDA Pro software, allowing us to automatically generate a table of variable mappings, given the assembly instructions from IDA Pro in which memory locations on the stack are declared. These locations are usually mapped to specific variables in the source code, and finding out the size of each variable/pointer on the stack can provide useful information for the whole reverse engineering process.\newline
+	This custom python script parses a txt file containing all declared stack variables and arguments, analyzes the size of each one by checking the memory location of consecutive variables and finally generates an Excel sheet in which these raw variables are mapped.\newline
+	The source txt file looks like this:\newline
+	\texttt{.text:08048AD1 var\_2E4         = dword ptr -2E4h \\
+		.text:08048AD1 var\_2E0         = dword ptr -2E0h \\
+		.text:08048AD1 var\_2D9         = byte ptr -2D9h \\
+		.text:08048AD1 var\_2D8         = dword ptr -2D8h}\newline
+	The script is located in our project repository under \texttt{/phase4/Team7/tools/variable\_mapper.py}, together with a README file and an Excel file \texttt{variables.xlsx} containing the generated variable mapping.
+	
+	\item \textbf{Useful in}\\ This tool was useful for speeding up the reverse engineering process of the C source code, since it allowed us to have a lookup table for all variables; it also helped us to figure out the types of each variable.
 \end{itemize}
 
 \subsubsection*{Radare2}
-\begin{itemize}
-	\item \textbf{Used by}\\ Name Surname
-	\item \textbf{Used for}\\ Sample Text - description of the tool
-	\item \textbf{Useful in}\\ \vulnref{OTG-AUTHN-004} and \vulnref{OTG-AUTHN-005}
-\end{itemize}
-
-\subsubsection*{JAVA Decompiler}
-\begin{itemize}
-	\item \textbf{Used by}\\ Name Surname
-	\item \textbf{Used for}\\ Sample Text - description of the tool
-	\item \textbf{Useful in}\\ \vulnref{OTG-AUTHN-004} and \vulnref{OTG-AUTHN-005}
-\end{itemize}
 
 \subsubsection*{Comparison}
 TODO: Comparison Text
@@ -149,10 +168,9 @@ Comparison with your own application: how and why is your app better/worse
 		\item \texttt{http://[HOST]/dump.sql}
 		\item \texttt{http://[HOST]/Smart-Card-Simulator/src/scs/Main.java}, as well as all other Java sources.
 	\end{itemize}
-	Also many other README and temporary files are directly accessible.\newline
+	Also many other README and temporary files are directly accessible.
 }{%
-	Since directory listing is disabled inside the /api and /app subfolders of the application, most of the mentioned files can be accessed only via brute-force attacks, and even then it would prove very difficult to guess the name of the directory and filename correctly. During white-box testing, this was not an issue, but in reality, finding out this weakness would require many attempts and much time.\newline
-	Other names of files, however, contained in the root folder (directory listing here is not disabled), like dump.sql can be easily guessed.
+	Since directory listing is disabled inside the /api and /app subfolders of the application, most of the mentioned files can be accessed only via brute-force attacks, and even then it would prove very difficult to guess the name of the directory and filename correctly. During white-box testing, this was not an issue, but in reality, finding out this weakness would require much time. Other names of files, however, contained in the root folder (directory listing here is not disabled), like dump.sql can be easily guessed.
 }{%
 	Although an attacker cannot directly compromise the integrity and availability of the server, it is possible to access some very important content of the application. In particular, getting a hold of \texttt{hostonly.key} allows to start MITM attacks on any victim, since the file contains the private key of the server used for SSL encryption.
 }{%
@@ -161,17 +179,18 @@ Comparison with your own application: how and why is your app better/worse
 	\cvssBaseScorePretty{N}{H}{N}{N}{U}{H}{N}{N}
 }
 \vultable{\gnb}{%
-	TODO: Observation
+	The Apache server is configured globally for the whole application, disabling directory listing but allowing direct access to all files inside the web folder. This folder mainly contains PHP, Javascript, HTML, CSS and media files (images). Among these, no sensitive information can be leaked. We found, however, that the upload folder contents are potentially accessible. So, if an attacker could brute-force the name of an uploaded file (which is entirely random) before it gets deleted by the server, he could read the contents.
 }{%
-	TODO: Discovery
+	We accurately analyzed the Apache configuration on the \gnb system and then tested different cases manually.
 }{%
-	TODO: Likelihood
+	For an attacker to be successful, he would not only have to guess the name of a file correctly, but also request it in the time window in which the file gets parsed by the C parser, before it is deleted. This time window is very slim, making the likelihood of this attack very low.
 }{%
-	TODO: Implications
+	Assuming such an attack is successful, an attacker could read the contents of a batch transaction file uploaded by a user. The confidentiality implications are not very high, considering the file doesn't contain any sensitive information such as passwords; however, since the \gnb application renames the files with the SessionID of the user who uploaded the file, having guessed the name of a file gives information about the SessionID of the user, allowing session hijacking.\newline
+	Given that only client sessions could be hijacked this way, the implications affect only confidentiality, and not integrity or availability, since no sensitive information is leaked whatsoever.
 }{%
-	TODO: Recommendation
+	Disable some file extensions for the web application in the Apache configuration, such as txt.
 }{%
-	\naScore
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{N}{N}
 }
 
 \vulntitle{OTG-CONFIG-006}{Test HTTP Methods}
@@ -783,6 +802,33 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 
 
 \vulntitle{OTG-SESS-004}{Testing for Exposed Session Variables}
+\vultable{\bs}{%
+	We discovered that the only session variable used during the lifetime of the application is the SessionID, which is always exchanged between client and server using a Cookie. Although this cookie is not secure, this information is always transferred over an encrypted channel, not allowing MITM attacks.
+}{%
+	We tried capturing packets with Wireshark, in order to prove that the session ID is not visible by simply inspecting the encrypted packets.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	Similar to the case of the \bs application, the only session variable is the SessionID, which is transferred between client and server over an encrypted channel, not allowing MITM attacks.
+}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-SESS-005}{Testing for Cross Site Request Forgery}
 \vulntitle{OTG-SESS-006}{Testing for logout functionality}
 \vultable{\bs}{%
@@ -839,6 +885,32 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 
 \vulntitle{OTG-SESS-007}{Test Session Timeout}
 \vulntitle{OTG-SESS-008}{Testing for Session puzzling}
+\vultable{\bs}{%
+	While analyzing the source code, we found out that the SessionID is generated entirely randomly, using the PHP APIs (this ca be seen inside the login callback function contained in \texttt{/api/index.php}). It is also used only for session tracking purposes, therefore no session puzzling vulnerability can occur.
+}{%
+	We manually analyzed the PHP source code of the target application.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	The \gnb application generates the SessionID entirely randomly and uses it for session tracking purposes as well as for replacing the names of the batch files. This, however, isn't a vulnerability, since the transaction batch files cannot be accessed through the network, once uploaded, and they are removed from the system as soon as the transaction has been executed.
+}{%
+	We manually analyzed the PHP source code of the target application.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
 
 \clearpage
 \section{Data Validation Testing}
@@ -906,13 +978,96 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 
 \vulntitle{OTG-INPVAL-003}{Testing for HTTP Verb Tampering}
 \vulntitle{OTG-INPVAL-004}{Testing for HTTP Parameter pollution}
+\vultable{\bs}{%
+	Since the web application server backend is PHP/Apache, when using duplicate parameters inside a GET or POST request, the server will always parse only the last occurrence (as explained in the OWASP guide).
+}{%
+	We tried to duplicate parameters inside multiple requests using the Burp Proxy and discovered that only the last of the duplicate parameters was parsed.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	The same observations made for the \bs application apply.
+}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-INPVAL-005}{Testing for SQL Injection}
 \vulntitle{OTG-INPVAL-006}{Testing for LDAP Injection}
 \vulntitle{OTG-INPVAL-007}{Testing for ORM Injection}
+\vultable{\bs}{%
+	The application doesn't use Object Relational Mapping, hence no tests were possible for this vulnerability
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
+\vultable{\gnb}{%
+	The application doesn't use Object Relational Mapping, hence no tests were possible for this vulnerability
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-INPVAL-008}{Testing for XML Injection}
 \vulntitle{OTG-INPVAL-009}{Testing for SSI Injection}
 \vulntitle{OTG-INPVAL-010}{Testing for XPath Injection}
 \vulntitle{OTG-INPVAL-011}{IMAP/SMTP Injection}
+\vultable{\bs}{%
+	The application uses PHPMailer to send mails through an external server, so tests were not possible for this vulnerability.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
+\vultable{\gnb}{%
+	The application uses PHPMailer to send mails through an external server, so tests were not possible for this vulnerability.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-INPVAL-012}{Testing for Code Injection}
 \vulntitle{OTG-INPVAL-012-1}{Testing for Local File Inclusion}
 \vultable{\bs}{%
@@ -981,30 +1136,36 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 	This was discovered while analyzing the \texttt{uploadFile} callback function in the index.php file (lines 95-154).\newline
 	Since the application doesn't sanitize user input (neither on client nor on server side), the \texttt{exec} function called from the server to execute the C parser can be exploited to execute arbitrary commands, by simply inserting them into the description field. These commands will simply be executed after the parser. Here is an example:\newline
 	\texttt{test"; ls -l; exit 1 \#} \newline
-	\textbf{Note:} since the output of the \texttt{exec} operation is only visible on client side if the return code was different than 0 (hence on transaction failure), we just need to force a return code (as shown in the example above).
+	\textbf{Note:} since the output of the \texttt{exec} operation is only visible on client side if the return code was different than 0, we just need to force a return code (as shown in the example above).
 }{%
 	This kind of attack may require several brute-force attempts and has therefore medium likelihood, but once found out, the vulnerability is easy to exploit.
 }{%
-	The implications of this attack are high, since the attacker is able to execute arbitrary commands on the target system. It is important to stress though, that it is not possible to modify any file in the target web directory, due to insufficient privileges.
+	The implications of this attack are high, since the attacker is able to execute arbitrary commands on the target system. It is possible to read all the source code of the application, including database credentials. It is important to stress though, that it is not possible to modify any existing files in the target web directory, due to insufficient privileges.
 }{%
-	It is highly recommended to sanitize the description value inserted by the user, or to make the user write the descriptions directly inside the batch file, avoiding thus command injections.
+	It is highly recommended to sanitize the description value inserted by the user, or to make the user write the descriptions directly inside the batch file.
 }{%
-	\cvssBaseScorePretty{N}{L}{L}{N}{U}{L}{N}{H}
+	\cvssBaseScorePretty{N}{L}{L}{N}{U}{H}{N}{H}
 }
 \vultable{\gnb}{%
-	Observation
+	The only point of the application where command injection was possible is the \texttt{exec} function called by the server when performing a multiple transaction (see \texttt{new\_transaction\_multiple.php}). After phase 3, no command injection is possible anymore, as the user input is first sanitized then verified.
 }{%
-Discovery
+	We analyzed the PHP source code to check for possible command injection attacks.
 }{%
-Likelihood
+	\na
 }{%
-Implications
+	\na
 }{%
-Recommendation
+	\na
 }{%
-\naScore
-%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
+	\secure
 }
+
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/bs_cmd_injection}
+	\caption{Command injection example for the \bs application}
+	\label{figure:bs_cmd_injection}
+\end{figure}
 
 \vulntitle{OTG-INPVAL-014}{Testing for Buffer overflow}
 \vulntitle{OTG-INPVAL-014-2}{Testing for Stack overflow}
@@ -1018,6 +1179,42 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 \section{Error Handling}
 \simpleVulntitle{OTG-ERR-001}{Analysis of Error Codes}
 \vulntitle{OTG-ERR-002}{Analysis of Stack Traces}
+\vultable{\bs}{%
+	The application uses REST calls between client and server, which can return stack traces whenever an error occurs in the Slim framework on the server. We managed to produce an example, as described in the discovery section below. These traces can only be seen in the REST response and not on the web interface.\newline
+	We didn't manage to produce any other stack traces otherwise, neither on the SCS nor on the \bs web application. We discovered, however, that it is possible to produce buffer overflows on the C parser, although only locally and not through the web interface. For more information about this vulnerability, please refer to \vulnref{OTG-INPVAL-014}.
+}{%
+	We performed a REST request to the following link \texttt{https://[HOST]/api/uploadFile},using the Advanced REST Client extension for Chrome. We only used the following as a request parameter:
+	\texttt{X-XSRF-TOKEN: a206758e13851eafa07536c79925bbf09b80e319ba9e03e28a02c0faf08aa5cb}. Since the request would require more/different parameters, the application on server side generates an error, which is then returned to the client side as a REST response.
+}{%
+	The likelihood of an attacker testing the single REST APIs provided by the application is high.
+}{%
+	These errors are never displayed on the client side directly, but can nevertheless be seen using a REST client, providing an attacker with information about the source code on the server, along with details on where each error code is generated (refer to the example in the picture).
+}{%
+	The Slim framework produces stack traces automatically, hence the only way to avoid generating these is to check inside the PHP code if the expected variables are set. This can simply be done by calling the \texttt{isset(\$\_GET['paramName'])} function.
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{N}{N}
+}
+\vultable{\gnb}{%
+	We did not manage to produce any stack traces, neither on the SCS application nor on the \gnb web application itself.
+}{%
+	We intensively tested the application in order to produce stack traces, with no results. The testing for this purpose was done manually.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/Slim_StackTrace}
+	\caption{Example of a Slim application error}
+	\label{figure:Slim_StackTrace}
+\end{figure}
+
 
 \clearpage
 \section{Cryptography}
@@ -1055,6 +1252,34 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 \clearpage
 \section{Business Logic Testing}
 \simpleVulntitle{OTG-BUSLOGIC-001}{Test Business Logic Data Validation}
+\vultable{\bs}{%
+	While testing the whole application, we discovered that only valid data is accepted, not allowing to exploit the application in any way by inserting invalid data. \newline
+}{%
+	We statically analyzed the PHP source code using RIPS, RATS and later on went through the code manually, in order to find additional vulnerabilities not detected by the previously mentioned tools. RIPS and RATS also produced some false positives, like the \texttt{\$tan} field inside the multiple transaction callback function (/api/index.php line 105): in this example the variable was marked as a vulnerability, although the data is validated by the application at a later moment in time.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	While testing the whole application, we discovered that only valid data is accepted, not allowing to exploit the application in any way by inserting invalid data. \newline
+	As described in \ref{chapter:reverse_engineering} (SCS analysis) however, after a specific point in time, user input will no longer be validated correctly, because of a timestamp overflow bug in the Java code. This cannot be considered a vulnerability, but will pose a problem for clients in the future (in 22 years time).
+}{%
+	We statically analyzed the PHP source code using RIPS, RATS and later on went through the code manually, in order to find additional vulnerabilities not detected by the previously mentioned tools.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-BUSLOGIC-002}{Test Ability to Forge Requests}
 \vulntitle{OTG-BUSLOGIC-003}{Test Integrity Checks}
 \vultable{\bs}{%
@@ -1086,6 +1311,33 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 
 \vulntitle{OTG-BUSLOGIC-004}{Test for Process Timing}
 \vulntitle{OTG-BUSLOGIC-005}{Test Number of Times a Function Can be Used Limits}
+\vultable{\bs}{%
+	While reviewing the project documentation and testing the single functionalities we did not find any possible application misuse/abuse cases that would allow a user to execute a function more than the allowable number of times.
+}{%
+	We performed manual tests on all application features.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	The same observations made for the \bs application hold.
+}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-BUSLOGIC-006}{Testing for the Circumvention of Work Flows}
 \vulntitle{OTG-BUSLOGIC-007}{Test Defenses Against Application Mis-use}
 \vultable{\bs}{%
@@ -1117,6 +1369,32 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 
 \vulntitle{OTG-BUSLOGIC-008}{Test Upload of Unexpected File Types}
 \vulntitle{OTG-BUSLOGIC-009}{Test Upload of Malicious Files}
+\vultable{\bs}{%
+	We discovered that it is possible to upload malicious files using the batch transaction functionality: these files won't be recognised by the target system as malwares, but these files cannot bring any harm to the application. This is because the uploaded files are automatically renamed and removed from the system after executing the C parser. Since the C parser reads the the uploaded files as simple text files, nothing bad can happen.
+}{%
+	We tried uploading test malwares found in the Internet, as well as custom PHP/bash scripts. Since the application only allows text extensions, so we had to rename them first, before uploading them. All files were accepted by the server, but the transactions simply failed as a result.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	The same observations made for the \bs application hold.
+}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
 
 \clearpage
 \section{Client Side Testing}
@@ -1125,7 +1403,69 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 Please refer to \vulnref{OTG-INPVAL-001} and \vulnref{OTG-INPVAL-002}.
 
 \vulntitle{OTG-CLIENT-003}{Testing for HTML Injection}
+\vultable{\bs}{%
+	We discovered that it is not possible to perform HTML injection attacks on the \bs application, although some user input isn't properly sanitized by the server (e.g. Description field in a transaction). This does not pose a threat, however, since the application is based on the AngularJS framework, which sanitizes the user input automatically on the client (see image below). Refer to \vulnref{OTG-INPVAL-002} for more details.
+}{%
+	We manually analyzed the client-side code of the \bs application, looking for \texttt{.innerHTML} and \texttt{document.write} potential vulnerabilities, not finding any.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	We didn't find any HTML injection vulnerability, since all user input is sanitized by the server for each GET/POST request.
+}{%
+	We manually analyzed the client-side and server-side code, looking for potential HTML injection vulnerabilities.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/bs_html_injection}
+	\caption{HTML injection attempt inside a description field}
+	\label{figure:bs_html_injection}
+\end{figure}
+
+
 \vulntitle{OTG-CLIENT-004}{Testing for Client Side URL Redirect}
+\vultable{\bs}{%
+	While analyzing the Javascript code, we did not find any URL redirection vulnerabilities. The Bank System application exploits the AngularJS framework and moves between pages using static strings, never using any unsanitized user input as a target URL. The backend also never performs redirection using a GET/POST parameter as the target URL.
+}{%
+	We accurately inspected all the client-side code and the PHP server-side code where URL redirections take place.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	While testing the Javascript code, we did not find any URL redirection vulnerabilities. Whenever a page is redirected using the \texttt{window.location} object, a static string is directly assigned to it, never using any unsanitized user input as a variable. The backend also never performs redirection using a GET/POST parameter as the target URL.
+}{%
+	We accurately inspected all the client-side code and the PHP server-side code where URL redirections take place. In the latter case, the \gnb application performs redirections only exploiting the \texttt{resource\_mappings.php} file and not redirecting directly to a URL contained in a parameter.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-CLIENT-005}{Testing for CSS Injection}
 \vulntitle{OTG-CLIENT-006}{Testing for Client Side Resource Manipulation}
 \vultable{\bs}{%
@@ -1157,6 +1497,33 @@ Please refer to \vulnref{OTG-INPVAL-001} and \vulnref{OTG-INPVAL-002}.
 
 \vulntitle{OTG-CLIENT-007}{Test Cross Origin Resource Sharing}
 \vulntitle{OTG-CLIENT-008}{Testing for Cross Site Flashing}
+\vultable{\bs}{%
+	This vulnerability doesn't apply for the tested applications, since Flash is not used.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+\vultable{\gnb}{%
+	This vulnerability doesn't apply for the tested applications, since Flash is not used.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-CLIENT-009}{Testing for Clickjacking}
 \vulntitle{OTG-CLIENT-010}{Testing WebSockets}
 \vultable{\bs}{%

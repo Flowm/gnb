@@ -886,7 +886,7 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 \vulntitle{OTG-SESS-007}{Test Session Timeout}
 \vulntitle{OTG-SESS-008}{Testing for Session puzzling}
 \vultable{\bs}{%
-	While analyzing the source code, we found out that the SessionID is generated entirely randomly, using the PHP APIs (this ca be seen inside the login callback function contained in \texttt{/api/index.php}). It is also used only for session tracking purposes, therefore no session puzzling vulnerability can occur.
+	While analyzing the source code, we found out that the SessionID is generated entirely randomly, using the PHP APIs (this can be seen inside the login callback function contained in \texttt{/api/index.php}). It is also used only for session tracking purposes, therefore no session puzzling vulnerability can occur.
 }{%
 	We manually analyzed the PHP source code of the target application.
 }{%
@@ -1007,6 +1007,34 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 
 \vulntitle{OTG-INPVAL-005}{Testing for SQL Injection}
 \vulntitle{OTG-INPVAL-006}{Testing for LDAP Injection}
+\vultable{\bs}{%
+	The application doesn't use LDAP, hence no tests were possible for this vulnerability
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
+\vultable{\gnb}{%
+	The application doesn't use LDAP, hence no tests were possible for this vulnerability
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-INPVAL-007}{Testing for ORM Injection}
 \vultable{\bs}{%
 	The application doesn't use Object Relational Mapping, hence no tests were possible for this vulnerability
@@ -1039,6 +1067,34 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 \vulntitle{OTG-INPVAL-008}{Testing for XML Injection}
 \vulntitle{OTG-INPVAL-009}{Testing for SSI Injection}
 \vulntitle{OTG-INPVAL-010}{Testing for XPath Injection}
+\vultable{\bs}{%
+	The application doesn't use XPath, hence no tests were possible for this vulnerability
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
+\vultable{\gnb}{%
+	The application doesn't use XPath, hence no tests were possible for this vulnerability
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-INPVAL-011}{IMAP/SMTP Injection}
 \vultable{\bs}{%
 	The application uses PHPMailer to send mails through an external server, so tests were not possible for this vulnerability.
@@ -1178,6 +1234,33 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 \clearpage
 \section{Error Handling}
 \simpleVulntitle{OTG-ERR-001}{Analysis of Error Codes}
+\vultable{\bs}{%
+	No vulnerabilities through Error Codes have been detected, although the one mentioned in \vulnref{OTG-IDENT-004} might be related because the error message is giving away that a valid mail address has been used. Please also refer to \vulnref{OTG-ERR-002} for error codes we found using the \texttt{api} functions, which also included slim stack traces.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	No Error Code vulnerabilities have been found in the \gnb{} application.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-ERR-002}{Analysis of Stack Traces}
 \vultable{\bs}{%
 	The application uses REST calls between client and server, which can return stack traces whenever an error occurs in the Slim framework on the server. We managed to produce an example, as described in the discovery section below. These traces can only be seen in the REST response and not on the web interface.\newline

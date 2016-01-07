@@ -2,13 +2,6 @@
 
 \section{Tool description}
 
-TODO:\newline
-compare the 8 different tools used by your team. Which vulnerabilities can each
-tool find? Which vulnerabilities can they not find?\newline
-Tools generally find a large number of false positives. You must check if the results given to you by tools
-are false positives or not. Write in the report what the percentage of false positives are for each tool and
-for each type of vulnerability that the tool finds.
-
 \subsection*{Web Testing Tools}
 
 \subsubsection*{SSL Testing Shell script}
@@ -16,8 +9,8 @@ for each type of vulnerability that the tool finds.
 	\item \textbf{Used by}\\ Mahmoud Naser
 	\item \textbf{Used for}\\
 	This tool was very useful in identifying SSL vulnerabilities and ciphers, it was a ready-to-use tool listed OWASP website, sample screen shots of the output are provided in figures \autoref{figure:bs_ssl_cipher}, \autoref{figure:bs_ssl_vuln}, \autoref{figure:gnb_ssl_cipher} and \autoref{figure:bs_ssl_vuln} 
-	\item \textbf{Useful in}\\ \vulnref{OOTG-CRYPST-001}.
-	It detected that both applications were vulnerable to POODLE and \bs was also vulnerable to Heartbleed.
+	\item \textbf{Useful in}\\ \vulnref{OTG-CRYPST-001}.
+	It detected that both applications were vulnerable to POODLE and \bs{} was also vulnerable to Heartbleed.
 \end{itemize}
 
 \subsubsection*{devbug.co.uk}
@@ -70,15 +63,15 @@ for each type of vulnerability that the tool finds.
 \subsubsection*{RIPS}
 \begin{itemize}
 	\item \textbf{Used by}\\ Mahmoud Naser
-	\item \textbf{Used for}\\ This tool was used to test PHP code on both \bs and \gnb
+	\item \textbf{Used for}\\ This tool was used to test PHP code on both \bs{} and \gnb
 
-	\item \textbf{Useful in}\\ 	While most errors found using this tool were false positives, it did point out a few variables that were not immediately sanitized in the code in index.php for \bs but after further inspection variables were sanitized and checked at a later stage.
+	\item \textbf{Useful in}\\ 	While most errors found using this tool were false positives, it did point out a few variables that were not immediately sanitized in the code in index.php for \bs{} but after further inspection variables were sanitized and checked at a later stage.
 \end{itemize}
 
 \subsubsection*{RATS}
 \begin{itemize}
 	\item \textbf{Used by}\\ Mahmoud Naser
-	\item \textbf{Used for}\\ This tool was used to test PHP code on both \bs and \gnb.
+	\item \textbf{Used for}\\ This tool was used to test PHP code on both \bs{} and \gnb{}.
 	\item \textbf{Useful in}\\ This tool while useful in detecting SQL injection, unsanitized inputs etc, it did not provide much insight due to the quality of the used code .
 \end{itemize}
 
@@ -94,14 +87,14 @@ for each type of vulnerability that the tool finds.
 \begin{itemize}
 	\item \textbf{Used by}\\ Lorenzo Donini
 	\item \textbf{Used for}\\ The Java decompiler standalone application was used to obtain the Java source code of the SCS application developed by \bs, given the compiled \texttt{.jar} file. Once decompiled, all the classes were exported and analyzed with separate tools. The Java decompiler was obtained from \texttt{http://jd.benow.ca/}.
-	\item \textbf{Useful in}\\ No major vulnerabilities were found using this tool, but for a more in-depth description of how this tool was used, refer to \ref{chapter:reverse_engineering}.
+	\item \textbf{Useful in}\\ No major vulnerabilities were found using this tool, but for a more in-depth description of how this tool was used, refer to \autoref{chapter:reverse_engineering}.
 \end{itemize}
 
 \subsubsection*{FindBugs Intellij IDEA Plugin}
 \begin{itemize}
 	\item \textbf{Used by}\\ Lorenzo Donini
 	\item \textbf{Used for}\\ This plugin for the Intellij IDEA Java IDE (software by JetBrains) was used to statically analyze the already decompiled Java source code of the whole SCS application developed by \bs. The tool returns a list of explicit vulnerabilities, bugs, dodgy code and more, with details about each entry and suggestions on how to fix them.
-	\item \textbf{Useful in}\\ No major vulnerabilities were found using this tool, but for a more in-depth  description of how this tool was used, refer to \ref{chapter:reverse_engineering}.
+	\item \textbf{Useful in}\\ No major vulnerabilities were found using this tool, but for a more in-depth  description of how this tool was used, refer to \autoref{chapter:reverse_engineering}.
 \end{itemize}
 
 \subsubsection*{IDA Pro - Free}
@@ -109,7 +102,7 @@ for each type of vulnerability that the tool finds.
 	\item \textbf{Used by}\\ Lorenzo Donini, Florian Mauracher
 	\item \textbf{Used for}\\ IDA Pro was used in order to reverse engineer the C parser binaries of the \bs{} application. The tool allowed us to interactively disassemble the compiled code and reverse engineer the whole parser starting from the assembly x86 instructions.\newline
 	The main functionalities of IDA Pro that we used were the program-flow graph view, the strings view and the renaming of variables and locations with humand-readable logical names.
-	\item \textbf{Useful in}\\ This tool didn't provide any direct insight on potential vulnerabilities, but allowed to retrieve the source code from the C parser binaries, needed for a further analysis. For a more in-depth description of the reverse engineering process, refer to \ref{chapter:reverse_engineering}.
+	\item \textbf{Useful in}\\ This tool didn't provide any direct insight on potential vulnerabilities, but allowed to retrieve the source code from the C parser binaries, needed for a further analysis. For a more in-depth description of the reverse engineering process, refer to \autoref{chapter:reverse_engineering}.
 \end{itemize}
 
 \subsubsection*{variable\_mapper.py}
@@ -133,55 +126,6 @@ for each type of vulnerability that the tool finds.
 \subsubsection*{Comparison}
 TODO: Comparison Text
 
-\clearpage
-
-TODO:\newline
-describe identified vulnerabilities mentioning the following for each one
-\begin{itemize}
-	\item Observation: which part of the application is vulnerable and why?
-	\item Discovery: how was this vulnerability discovered? Which tools were used and which steps were performed?
-	\item Likelihood: what is the likelihood that this vulnerability is exploited? Which assumptions must hold and which skills must an attacker have?
-	\item Impact: what is the potential impact of an exploit of this vulnerability? What could happen?
-	\item Recommendation: how exactly would you fix this problem?
-	\item Instantiate the CVSS v3.0 template for this particular vulnerability.
-	\item Comparison with your own application: how and why is your app better/worse
-\end{itemize}
-
-NOTR: Each vulnerability should be described on a new page!\newline
-
-\clearpage
-%Sample tables
-\vultable{\bs}{%
-	Observation: which part of the application is vulnerable and why?
-}{%
-	Discovery: how was this vulnerability discovered? Which tools were used and which steps were performed?
-}{%
-	Likelihood: what is the likelihood that this vulnerability is exploited? Which assumptions must hold and which skills must an attacker have?
-}{%
-	Impact: what is the potential impact of an exploit of this vulnerability? What could happen?
-}{%
-	Recommendation: how exactly would you fix this problem?
-}{%
-	\na
-	%\secure
-	%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
-}
-\vultable{\gnb}{%
-	Observation: which part of the application is vulnerable and why?
-}{%
-	Discovery: how was this vulnerability discovered? Which tools were used and which steps were performed?
-}{%
-	Likelihood: what is the likelihood that this vulnerability is exploited? Which assumptions must hold and which skills must an attacker have?
-}{%
-	Impact: what is the potential impact of an exploit of this vulnerability? What could happen?
-}{%
-	Recommendation: how exactly would you fix this problem?
-}{%
-	\na
-	%\secure
-	%\cvssBaseScorePretty{N}{H}{N}{R}{U}{H}{H}{N}
-}
-Comparison with your own application: how and why is your app better/worse
 \clearpage
 
 \section{Configuration and Deploy Management Testing}
@@ -810,7 +754,7 @@ Registration attempts were made with weak passwords, all attempts failed.
 	\na
 }
 \vultable{\gnb}{%
-	The same observation made for the \bs application applies.
+	The same observation made for the \bs{} application applies.
 }{%
 	\na
 }{%
@@ -934,7 +878,7 @@ No vulnerabilities were found for this application.
 	\secure
 }
 \vultable{\gnb}{%
-	The application performs thorough checks on every page on which application-specific functionalities are called (for example lines 7-22 inside the \texttt{/gnb/project/account/download\_transactions.php} file). These checks prevent users with to access data they're not allowed to access. We did not manage to find any insecure direct object reference this while analyzing the \gnb application.
+	The application performs thorough checks on every page on which application-specific functionalities are called (for example lines 7-22 inside the \texttt{/gnb/project/account/download\_transactions.php} file). These checks prevent users with to access data they're not allowed to access. We did not manage to find any insecure direct object reference this while analyzing the \gnb{} application.
 }{%
 	We used static PHP code analysis and also checked all server-side functionalities manually.
 }{%
@@ -1790,7 +1734,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	This application reported the following main vulnerabilities:
 	\begin{itemize}
-		\setlength\itemsep{0pt}  
+		\setlength\itemsep{0pt}
 		\item Vulnerable to \href{https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-0160 }{Heartbleed}
 		\item Vulnerable to \href{https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-0224 }{CCS}
 		\item Vulnerable to \href{https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-3566 }{POODLE}
@@ -1798,7 +1742,9 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 		\item Vulnerable to \href{https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2015-2808 }{RC4 \#2}
 	\end{itemize}
 }{%
+	\vspace{-2em}
 	\begin{description}
+		\setlength\itemsep{0pt}
 		\item[Heartbleed] Heartbleed while talked about it often when mentioning SSL, still requires some technical knowledge, which is readily available online with instructions and hence the likelihood is high.
 		\item[CCS]
 		In order to exploit CCS it requires the attacker to intercept and alter network traffic in real time. This reduces the risk and likelihood of this vulnerability.
@@ -1810,9 +1756,11 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	With the exception on Heartbleed which allows the attackers to read server memory, the rest of the attacks impact lies in eavesdropping on encrypted packets.
 }{%
-	\begin{itemize}  
+	%\vspace{-2em}
+	\begin{itemize}
+		\setlength\itemsep{0pt}
 		\item Install system security updates especially Apache and SSL
-		\item Disable SSLv3, Medium grade encryption, Triple DES and other weak ciphers
+		\item Disable SSLv3, Medium grade encryption, Triple DES etc.
 	\end{itemize}
 }{%
 	\cvssBaseScorePretty{N}{H}{N}{N}{C}{H}{N}{N}
@@ -1820,13 +1768,13 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 	\begin{figure}[h!tbp]
 		\centering
 		\includegraphics[width=\textwidth]{figures/t07_ssl_cipher.png}
-		\caption{SSL Ciphers used by \bs application}
+		\caption{SSL Ciphers used by \bs{} application}
 		\label{figure:bs_ssl_cipher}
 	\end{figure}
 	\begin{figure}[h!tbp]
 		\centering
 		\includegraphics[width=\textwidth]{figures/t07_ssl_vuln.png}
-		\caption{SSL Vulnerabilities used by \bs application}
+		\caption{SSL Vulnerabilities used by \bs{} application}
 		\label{figure:bs_ssl_vuln}
 	\end{figure}
 
@@ -1860,13 +1808,13 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 	\begin{figure}[h!tbp]
 		\centering
 		\includegraphics[width=\textwidth]{figures/t12_ssl_cipher.png}
-		\caption{SSL Ciphers used by \gnb application}
+		\caption{SSL Ciphers used by \gnb{} application}
 		\label{figure:gnb_ssl_cipher}
 	\end{figure}
 	\begin{figure}[h!tbp]
 		\centering
 		\includegraphics[width=\textwidth]{figures/t12_ssl_vuln.png}
-		\caption{SSL Vulnerabilities used by \gnb application}
+		\caption{SSL Vulnerabilities used by \gnb{} application}
 		\label{figure:gnb_ssl_vuln}
 	\end{figure}
 
@@ -1944,7 +1892,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }
 \vultable{\gnb}{%
 	While testing the whole application, we discovered that only valid data is accepted, not allowing to exploit the application in any way by inserting invalid data. \newline
-	As described in \ref{chapter:reverse_engineering} (SCS analysis) however, after a specific point in time, user input will no longer be validated correctly, because of a timestamp overflow bug in the Java code. This cannot be considered a vulnerability, but will pose a problem for clients in the future (in 22 years time).
+	As described in \autoref{chapter:reverse_engineering} (SCS analysis) however, after a specific point in time, user input will no longer be validated correctly, because of a timestamp overflow bug in the Java code. This cannot be considered a vulnerability, but will pose a problem for clients in the future (in 22 years time).
 }{%
 	We statically analyzed the PHP source code using RIPS, RATS and later on went through the code manually, in order to find additional vulnerabilities not detected by the previously mentioned tools. Also, RIPS and RATS mainly produced false positives.
 }{%
@@ -2407,7 +2355,7 @@ Please refer to \vulnref{OTG-INPVAL-001} and \vulnref{OTG-INPVAL-002}.
 \vultable{\bs}{%
 	This vulnerability was meant to be fixed as part of the Phase III requirements.
 }{%
-The \bs Application has no protection (X-Frame-Options header) against Click-Jacking attacks. This vulnerability was found using w3af.
+The \bs{} Application has no protection (X-Frame-Options header) against Click-Jacking attacks. This vulnerability was found using w3af.
 }{%
 This is a relatively easy attack, not much technical knowledge is needed.
 }{%

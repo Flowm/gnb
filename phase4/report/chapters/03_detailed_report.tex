@@ -56,7 +56,7 @@ for each type of vulnerability that the tool finds.
 	\item \textbf{Used by}\\ Alexander Lill, Lorenzo Donini
 	\item \textbf{Used for}\\
 	This tool provides a very useful interface to send a variety of HTTP requests and shows all the attributes of the responses and sent requests. It can be used to create specific requests including customized parameters as well as checking for resulting error codes / error messages and how long it took the web server to process the request.
-	\item \textbf{Useful in}\\ \vulnref{OTG-ERR-002}, \vulnref{OTG-ERR-001} and \vulnref{OTG-BUSLOGIC-004}
+	\item \textbf{Useful in}\\ \vulnref{OTG-ERR-002}, \vulnref{OTG-ERR-001}, \vulnref{OTG-SESS-005} and \vulnref{OTG-BUSLOGIC-004}
 \end{itemize}
 
 \subsubsection*{Cookie Inspector}
@@ -64,7 +64,7 @@ for each type of vulnerability that the tool finds.
 	\item \textbf{Used by}\\ Alexander Lill
 	\item \textbf{Used for}\\
 	This tool provides the possibility to read, write and modify cookies. It also enables to examine the cookies which shows all their attributes. It was used to examine the cookies attributes and create customized cookies for testing and exploitation.
-	\item \textbf{Useful in}\\ \vulnref{OTG-SESS-002} and \vulnref{OTG-SESS-006}
+	\item \textbf{Useful in}\\ \vulnref{OTG-SESS-002}, \vulnref{OTG-SESS-005} and \vulnref{OTG-SESS-006}
 \end{itemize}
 
 \subsubsection*{RIPS}
@@ -769,7 +769,7 @@ Registration attempts were made with weak passwords, all attempts failed.
 	This could be a security question or the PIN. (As long as its clearly
 	stated that the user needs to store it safely)
 }{%
-	\cvssBaseScorePretty{N}{L}{L}{N}{U}{L}{L}{L}
+	\cvssBaseScorePretty{N}{H}{L}{N}{U}{L}{L}{L}
 }
 \vultable{\gnb}{%
 	\textbf{Password change:} \newline
@@ -947,7 +947,7 @@ No vulnerabilities were found for this application.
 
 \clearpage
 \section{Session Management Testing}
-\simpleVulntitle{OOTG-SESS-001}{Testing for Bypassing Session Management Schema}
+\simpleVulntitle{OTG-SESS-001}{Testing for Bypassing Session Management Schema}
 \vultable{\bs}{%
 	This was done by checking the Session ID, Token Length, Session time-out mechanism and HTTPS
 }{%
@@ -1084,6 +1084,33 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 }
 
 \vulntitle{OTG-SESS-005}{Testing for Cross Site Request Forgery}
+\vultable{\bs}{%
+	We observed a serious vulnerability in the Cross Site Request Forgery mechanism of the \bs{} application. The application only compares the client-side XSRF token sent in the cookie with the client-side token sent in the header of the request. That means that this token is useless if the one in the cookie as well as the one in the header are changed simultaneously on the client. Tokens are not stored server-side.
+}{%
+	We checked the source code for measures against CSRF and found the not properly working mechanism (see \texttt{api/asset.php} lines 48-63). We confirmed this vulnerability with manual testing and the tools "Advanced REST Client" and "Cookie inspector".
+}{%
+	Medium. It is quite likely that this vulnerability is quite easy to exploit.
+}{%
+	Medium. Any request sent to the \bs{} application website can be easily forged via Cross Site Scripting (also notice that the cookies are not secured against JavaScript manipulation, \vulnref{OTG-SESS-002}), but neither transactions nor password change requests can be executed as either a TAN or the current password is needed for that.
+}{%
+	We recommend to store the token value on the server instead and check the sent token against this one.
+}{%
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{N}
+}
+\vultable{\gnb}{%
+	No Cross Site Request Forgery vulnerability was observed in the \gnb{} application.
+}{%
+	We checked the source code (e.g. see \texttt{accounts/new\_transaction.php} lines 17-23) for the CSRF algorithm and also observed a client-server session using the Chrome Developer Tools.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-SESS-006}{Testing for logout functionality}
 \vultable{\bs}{%
 	We observed that the logout can be easily circumvented by just re-creating the old cookies with the same values before the logout. That means that we can easily undo the logout by just adding a cookie locally.
@@ -1096,7 +1123,7 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 }{%
 	This issue can be easily resolved by using \texttt{\$user->UserId} instead if the undefined \texttt{\$UserId}.
 }{%
-	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{N}{N}
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{N}
 }
 
 \begin{minipage}{\linewidth}
@@ -1721,7 +1748,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 	We didn't manage to produce any other stack traces otherwise, neither on the SCS nor on the \bs{} web application. We discovered, however, that it is possible to produce buffer overflows on the C parser, although only locally and not through the web interface. For more information about this vulnerability, please refer to \vulnref{OTG-INPVAL-014}.
 }{%
 	We performed a REST request to the following link \texttt{https://[HOST]/api/uploadFile},using the Advanced REST Client extension for Chrome. We only used the following as a request parameter:
-	\texttt{X-XSRF-TOKEN: a206758e13851eafa07536c79925bbf09b80e319ba9e03e28a02c0faf08aa5cb}. Since the request would require more/different parameters, the application on server side generates an error, which is then returned to the client side as a REST response.
+	\texttt{X-XSRF-TOKEN: a206758...08aa5cb}. Since the request would require more/different parameters, the application on server side generates an error, which is then returned to the client side as a REST response.
 }{%
 	The likelihood of an attacker testing the single REST APIs provided by the application is high.
 }{%
@@ -1772,7 +1799,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 	\begin{description}
 		\item[Heartbleed] Heartbleed while talked about it often when mentioning SSL, still requires some technical knowledge, which is readily available online with instructions and hence the likelihood is high.
 		\item[CCS]
-		In order to exploit CCS requires the attacker to intercept and alter network traffic in real time. This reduces the risk and likelihood of this vulnerability.
+		In order to exploit CCS it requires the attacker to intercept and alter network traffic in real time. This reduces the risk and likelihood of this vulnerability.
 		\item[POODLE]
 		POODLE exploit tools are already in development, however this attack only works with SSL 3.0 which is being phased out at the moment.
 		\item[RC4]
@@ -2392,7 +2419,7 @@ Depending on the skill of the attacker has, but can potentially take control of 
 \cvssBaseScorePretty{N}{H}{N}{R}{C}{L}{L}{N}
 }
 \vultable{\gnb}{%
-	This vulnerability was fixed as part the phase 3 requirements.
+	This vulnerability was fixed as part of the phase 3 requirements.
 }{%
 \na
 }{%

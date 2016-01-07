@@ -1,9 +1,13 @@
 \chapter{Executive Summary}
 
-TODO:\newline
-executive summary (maximum 1 page). Must contain the most critical
-vulnerabilities and their associated consequences. the codes have been used up.\newline
-
 \section{\bs - Team 7}
+During our intensive testing of the \bs{} application we found a fair amount of vulnerabilities, hence it is not advisable to deploy this application on a production server yet.\newline
+For starters, the server configuration is incomplete and allows to access sensitive information on the server: the private key used by the server for initiating SSL connections can be downloaded directly by anybody, hence breaking completely the assumption of encrypted connections.
+Also, adminer and some directories can be accessed directly via a browser.\newline
+Stack traces can be intercepted, providing knowledge about the application and what technologies are involved. Furthermore, command injection is possible when performing multiple transactions, allowing an attacker to execute arbitrary code. More specifically, when exploiting command injection, it becomes perfectly feasible to view all the source code, as well as other sensitive information like the database access credentials. Gaining access to the database gives full control over the bank data.\newline
+Moreover, we found that the logout functionality of the application is insecure, since the session data on server side is not invalidated after a user logs out. This vulnerability, combined with the fact that the cookies stored on client side are not secure, can lead to to successful session hijacking attacks.\newline
+Besides these business logic flaws, the application is also vulnerable to the renowned Heartbleed and Poodle vulnerabilities.
+
 
 \section{\gnb - Team 12}
+We found a few minor vulnerabilities that were not decisive for the overall behaviour of the application, given the high complexity required for such attacks and given the fact that they do not allow attackers to gain full access over the application (e.g. weak user registration process and application mis-use). The only vulnerability which would compromise the connection between a user and the application is given by the Poodle vulnerability.

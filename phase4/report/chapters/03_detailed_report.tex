@@ -186,13 +186,13 @@ Comparison with your own application: how and why is your app better/worse
 	\end{itemize}
 	Also many other README and temporary files are directly accessible.
 }{%
-	Since directory listing is disabled inside the /api and /app subfolders of the application, most of the mentioned files can be accessed only via brute-force attacks, and even then it would prove very difficult to guess the name of the directory and filename correctly. During white-box testing, this was not an issue, but in reality, finding out this weakness would require much time. Other names of files, however, contained in the root folder (directory listing here is not disabled), like dump.sql can be easily guessed.
+	Since directory listing is disabled inside the /api and /app subfolders of the application, most of the mentioned files can be accessed only via brute-force attacks, and even then it would prove very difficult to guess the name of the directory and filename correctly. During white-box testing, this was not an issue, but in reality, finding out this weakness would require much time (low likelihood). Other names of files, however, contained in the root folder (directory listing here is not disabled), like dump.sql can be easily guessed.
 }{%
 	Although an attacker cannot directly compromise the integrity and availability of the server, it is possible to access some very important content of the application. In particular, getting a hold of \texttt{hostonly.key} allows to start MITM attacks on any victim, since the file contains the private key of the server used for SSL encryption.
 }{%
 	Relocate the .htaccess files (or the root of the web application) and place more strict rules for file/directory access, since these are too loose.
 }{%
-	\cvssBaseScorePretty{N}{H}{N}{N}{U}{H}{N}{N}
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{H}{N}{N}
 }
 \vultable{\gnb}{%
 	The Apache server is configured globally for the whole application, disabling directory listing but allowing direct access to all files inside the web folder. This folder mainly contains PHP, Javascript, HTML, CSS and media files (images). Among these, no sensitive information can be leaked. We found, however, that the upload folder contents are potentially accessible. So, if an attacker could brute-force the name of an uploaded file (which is entirely random) before it gets deleted by the server, he could read the contents.
@@ -784,6 +784,32 @@ Registration attempts were made with weak passwords, all attempts failed.
 }
 
 \vulntitle{OTG-AUTHN-010}{Testing for Weaker authentication in alternative channel}
+\vultable{\bs}{%
+	The application does not provide alternative channels for authentication. The separate Smart Card Simulator Java application does not communicate with the server directly and does not perform any authentication for the user, hence this vulnerability is not applicable.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+\vultable{\gnb}{%
+	The same observation made for the \bs application applies.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
 
 \clearpage
 \section{Authorization Testing}
@@ -882,6 +908,32 @@ No vulnerabilities were found for this application.
 }
 
 \vulntitle{OTG-AUTHZ-004}{Testing for Insecure Direct Object References}
+\vultable{\bs}{%
+	All calls which involve retrieving sensitive information from the server are done via REST APIs. We analyzed all callback functions (contained inside the \texttt{/api/index.php} file) and tested the APIs manually, providing unexpected parameters. Doing this we did not manage to find any insecure direct object reference, since the server always checks whether the user issuing a request is allowed to perform a certain operation, preventing a malicious attacker to bypass the authorization schema. 
+}{%
+	We used the Advanced REST Client extension for Chrome in order to test the available APIs (e.g. \texttt{/api/getHistory} and \texttt{/api/userinfodetails}).
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	The application performs thorough checks on every page on which application-specific functionalities are called (for example lines 7-22 inside the \texttt{/gnb/project/account/download\_transactions.php} file). These checks prevent users with to access data they're not allowed to access. We did not manage to find any insecure direct object reference this while analyzing the \gnb application.
+}{%
+	We used static PHP code analysis and also checked all server-side functionalities manually.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
 
 \clearpage
 \section{Session Management Testing}
@@ -1740,7 +1792,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 	While testing the whole application, we discovered that only valid data is accepted, not allowing to exploit the application in any way by inserting invalid data. \newline
 	As described in \ref{chapter:reverse_engineering} (SCS analysis) however, after a specific point in time, user input will no longer be validated correctly, because of a timestamp overflow bug in the Java code. This cannot be considered a vulnerability, but will pose a problem for clients in the future (in 22 years time).
 }{%
-	We statically analyzed the PHP source code using RIPS, RATS and later on went through the code manually, in order to find additional vulnerabilities not detected by the previously mentioned tools.
+	We statically analyzed the PHP source code using RIPS, RATS and later on went through the code manually, in order to find additional vulnerabilities not detected by the previously mentioned tools. Also, RIPS and RATS mainly produced false positives.
 }{%
 	\na
 }{%

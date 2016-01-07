@@ -8,21 +8,54 @@ special symbols or abbreviations used in the document.\newline
 
 %THEIR SECTION
 \section{\bs}
-\subsection{Vulnerability name} \label{over:their_test}
+\subsection{Directory listing and file extensions handling} \label{over:vuln_1}
 \begin{itemize}
-	\item Likelihood: \textit{low/medium/high}
-	\item Implication: \textit{low/medium/high}
-	\item Risk: \textit{low/medium/high}
-	\item Reference: OWASP \vulnref{OTG-AUTHN-004}
+	\item CVSS Score: \textit{7.5}
+	\item Likelihood: \textit{low}
+	\item Impact: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-CONFIG-003}
 \end{itemize}
-Sample description of the vulnerability.
+Some directories can be accessed by the browser directly, as well as some sensitive files, like the database dump file and the SSL private key. This is due to the loose Apache configuration policies.
+
+\subsection{Guessable user account} \label{over:vuln_2}
+\begin{itemize}
+	\item CVSS Score: \textit{?}
+	\item Likelihood: \textit{low}
+	\item Impact: \textit{low}
+	\item Risk: \textit{low}
+	\item Reference: OWASP \vulnref{OTG-IDENT-004}
+\end{itemize}
+The server returns different error codes after a login attempt, depending on whether the inserted username or the password were incorrect. This makes it easier to guess if a user account exists on the database or not.
+
+\subsection{Command injection} \label{over:vuln_3}
+\begin{itemize}
+	\item CVSS Score: \textit{9.6}
+	\item Likelihood: \textit{high}
+	\item Impact: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-INPVAL-013}
+\end{itemize}
+It is possible to exploit the batch transaction functionality by injecting arbitrary bash commands directly into the description field, which will then be executed by the application.
+This also allows to view all the source code of the application, including some sensitive informations (e.g. db password).
+
+\subsection{Insufficient transport layer protection} \label{over:vuln_4}
+\begin{itemize}
+	\item CVSS Score: \textit{?}
+	\item Likelihood: \textit{high}
+	\item Impact: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-CRYPST-001}
+\end{itemize}
+Due to a missing openssl update, the application is subject to the Heartbleed vulnerability. Also, because SSLv3 is not disabled, the application is subject to the Poodle bug.
 
 %OUR SECTION
 \section{\gnb}
 \subsection{Vulnerability name} \label{over:our_test}
 \begin{itemize}
+	\item CVSS Score: \textit{value}
 	\item Likelihood: \textit{low/medium/high}
-	\item Implication: \textit{low/medium/high}
+	\item Impact: \textit{low/medium/high}
 	\item Risk: \textit{low/medium/high}
 	\item Reference: OWASP \vulnref{OTG-INPVAL-005}
 \end{itemize}

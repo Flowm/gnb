@@ -42,6 +42,22 @@ for each type of vulnerability that the tool finds.
 	\label{figure:kiuwan}
 \end{figure}
 
+\subsubsection*{Advanced REST Client}
+\begin{itemize}
+	\item \textbf{Used by}\\ Alexander Lill, Lorenzo Donini
+	\item \textbf{Used for}\\
+	This tool provides a very useful interface to send a variety of HTTP requests and shows all the attributes of the responses and sent requests. It can be used to create specific requests including customized parameters as well as checking for resulting error codes / error messages and how long it took the web server to process the request.
+	\item \textbf{Useful in}\\ \vulnref{OTG-ERR-002}, \vulnref{OTG-ERR-001} and \vulnref{OTG-BUSLOGIC-004}
+\end{itemize}
+
+\subsubsection*{Cookie Inspector}
+\begin{itemize}
+	\item \textbf{Used by}\\ Alexander Lill
+	\item \textbf{Used for}\\
+	This tool provides the possibility to read, write and modify cookies. It also enables to examine the cookies which shows all their attributes. It was used to examine the cookies attributes and create customized cookies for testing and exploitation.
+	\item \textbf{Useful in}\\ \vulnref{OTG-SESS-002} and \vulnref{OTG-SESS-006}
+\end{itemize}
+
 \subsubsection*{RIPS}
 \begin{itemize}
 	\item \textbf{Used by}\\ Name Surname
@@ -79,7 +95,7 @@ TODO: Comparison Text
 \subsubsection*{IDA Pro - Free}
 \begin{itemize}
 	\item \textbf{Used by}\\ Lorenzo Donini, Florian Mauracher
-	\item \textbf{Used for}\\ IDA Pro was used in order to reverse engineer the C parser binaries of the \bs application. The tool allowed us to interactively disassemble the compiled code and reverse engineer the whole parser starting from the assembly x86 instructions.\newline
+	\item \textbf{Used for}\\ IDA Pro was used in order to reverse engineer the C parser binaries of the \bs{} application. The tool allowed us to interactively disassemble the compiled code and reverse engineer the whole parser starting from the assembly x86 instructions.\newline
 	The main functionalities of IDA Pro that we used were the program-flow graph view, the strings view and the renaming of variables and locations with humand-readable logical names.
 	\item \textbf{Useful in}\\ This tool didn't provide any direct insight on potential vulnerabilities, but allowed to retrieve the source code from the C parser binaries, needed for a further analysis. For a more in-depth description of the reverse engineering process, refer to \ref{chapter:reverse_engineering}.
 \end{itemize}
@@ -181,11 +197,11 @@ Comparison with your own application: how and why is your app better/worse
 \vultable{\gnb}{%
 	The Apache server is configured globally for the whole application, disabling directory listing but allowing direct access to all files inside the web folder. This folder mainly contains PHP, Javascript, HTML, CSS and media files (images). Among these, no sensitive information can be leaked. We found, however, that the upload folder contents are potentially accessible. So, if an attacker could brute-force the name of an uploaded file (which is entirely random) before it gets deleted by the server, he could read the contents.
 }{%
-	We accurately analyzed the Apache configuration on the \gnb system and then tested different cases manually.
+	We accurately analyzed the Apache configuration on the \gnb{} system and then tested different cases manually.
 }{%
 	For an attacker to be successful, he would not only have to guess the name of a file correctly, but also request it in the time window in which the file gets parsed by the C parser, before it is deleted. This time window is very slim, making the likelihood of this attack very low.
 }{%
-	Assuming such an attack is successful, an attacker could read the contents of a batch transaction file uploaded by a user. The confidentiality implications are not very high, considering the file doesn't contain any sensitive information such as passwords; however, since the \gnb application renames the files with the SessionID of the user who uploaded the file, having guessed the name of a file gives information about the SessionID of the user, allowing session hijacking.\newline
+	Assuming such an attack is successful, an attacker could read the contents of a batch transaction file uploaded by a user. The confidentiality implications are not very high, considering the file doesn't contain any sensitive information such as passwords; however, since the \gnb{} application renames the files with the SessionID of the user who uploaded the file, having guessed the name of a file gives information about the SessionID of the user, allowing session hijacking.\newline
 	Given that only client sessions could be hijacked this way, the implications affect only confidentiality, and not integrity or availability, since no sensitive information is leaked whatsoever.
 }{%
 	Disable some file extensions for the web application in the Apache configuration, such as txt.
@@ -533,7 +549,7 @@ accounts.
 	password in the database: \newline
 	\texttt{hash('sha512', \$this->MAGIC . \$password . \$salt);} \newline
 	MAGIC is an additional token hardcoded in the php code and \texttt{sha512}
-	offers additional entropy compared to \texttt{sha256}, so the \gnb
+	offers additional entropy compared to \texttt{sha256}, so the \gnb{}
 	application is slightly more secure here.
 }{%
 	\na
@@ -560,7 +576,7 @@ accounts.
 }
 
 \vultable{\gnb}{%
-	The GNB application enforces cache invalidation, preventing the browser from storing any sensible information other that stylesheets and javascript files locally. Browser history also couldn't be exploited, since the application delivers the pages over HTTPS.
+	The \gnb{} application enforces cache invalidation, preventing the browser from storing any sensible information other that stylesheets and javascript files locally. Browser history also couldn't be exploited, since the application delivers the pages over HTTPS.
 }{%
 	Browser history was tested manually, showing no issues. Browser cache was tested using the CacheViewer2 addon for Firefox. We also analyzed some responses from the server, only to see that the application sets the following flags:\newline
 	\texttt{Cache-Control: private, must-revalidate}
@@ -816,7 +832,7 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 	\secure
 }
 \vultable{\gnb}{%
-	Similar to the case of the \bs application, the only session variable is the SessionID, which is transferred between client and server over an encrypted channel, not allowing MITM attacks.
+	Similar to the case of the \bs{} application, the only session variable is the SessionID, which is transferred between client and server over an encrypted channel, not allowing MITM attacks.
 }{%
 	\same
 }{%
@@ -899,7 +915,7 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 	\secure
 }
 \vultable{\gnb}{%
-	The \gnb application generates the SessionID entirely randomly and uses it for session tracking purposes as well as for replacing the names of the batch files. This, however, isn't a vulnerability, since the transaction batch files cannot be accessed through the network, once uploaded, and they are removed from the system as soon as the transaction has been executed.
+	The \gnb{} application generates the SessionID entirely randomly and uses it for session tracking purposes as well as for replacing the names of the batch files. This, however, isn't a vulnerability, since the transaction batch files cannot be accessed through the network, once uploaded, and they are removed from the system as soon as the transaction has been executed.
 }{%
 	We manually analyzed the PHP source code of the target application.
 }{%
@@ -992,7 +1008,7 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 	\secure
 }
 \vultable{\gnb}{%
-	The same observations made for the \bs application apply.
+	The same observations made for the \bs{} application apply.
 }{%
 	\same
 }{%
@@ -1219,7 +1235,7 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 \begin{figure}[h!tbp]
 	\centering
 	\includegraphics[width=\textwidth]{figures/bs_cmd_injection}
-	\caption{Command injection example for the \bs application}
+	\caption{Command injection example for the \bs{} application}
 	\label{figure:bs_cmd_injection}
 \end{figure}
 
@@ -1264,7 +1280,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 \vulntitle{OTG-ERR-002}{Analysis of Stack Traces}
 \vultable{\bs}{%
 	The application uses REST calls between client and server, which can return stack traces whenever an error occurs in the Slim framework on the server. We managed to produce an example, as described in the discovery section below. These traces can only be seen in the REST response and not on the web interface.\newline
-	We didn't manage to produce any other stack traces otherwise, neither on the SCS nor on the \bs web application. We discovered, however, that it is possible to produce buffer overflows on the C parser, although only locally and not through the web interface. For more information about this vulnerability, please refer to \vulnref{OTG-INPVAL-014}.
+	We didn't manage to produce any other stack traces otherwise, neither on the SCS nor on the \bs{} web application. We discovered, however, that it is possible to produce buffer overflows on the C parser, although only locally and not through the web interface. For more information about this vulnerability, please refer to \vulnref{OTG-INPVAL-014}.
 }{%
 	We performed a REST request to the following link \texttt{https://[HOST]/api/uploadFile},using the Advanced REST Client extension for Chrome. We only used the following as a request parameter:
 	\texttt{X-XSRF-TOKEN: a206758e13851eafa07536c79925bbf09b80e319ba9e03e28a02c0faf08aa5cb}. Since the request would require more/different parameters, the application on server side generates an error, which is then returned to the client side as a REST response.
@@ -1278,7 +1294,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{N}{N}
 }
 \vultable{\gnb}{%
-	We did not manage to produce any stack traces, neither on the SCS application nor on the \gnb web application itself.
+	We did not manage to produce any stack traces, neither on the SCS application nor on the \gnb{} web application itself.
 }{%
 	We intensively tested the application in order to produce stack traces, with no results. The testing for this purpose was done manually.
 }{%
@@ -1463,7 +1479,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 	\secure
 }
 \vultable{\gnb}{%
-	The same observations made for the \bs application hold.
+	The same observations made for the \bs{} application hold.
 }{%
 	\same
 }{%
@@ -1521,7 +1537,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 	\secure
 }
 \vultable{\gnb}{%
-	The same observations made for the \bs application hold.
+	The same observations made for the \bs{} application hold.
 }{%
 	\same
 }{%
@@ -1542,9 +1558,9 @@ Please refer to \vulnref{OTG-INPVAL-001} and \vulnref{OTG-INPVAL-002}.
 
 \vulntitle{OTG-CLIENT-003}{Testing for HTML Injection}
 \vultable{\bs}{%
-	We discovered that it is not possible to perform HTML injection attacks on the \bs application, although some user input isn't properly sanitized by the server (e.g. Description field in a transaction). This does not pose a threat, however, since the application is based on the AngularJS framework, which sanitizes the user input automatically on the client (see image below). Refer to \vulnref{OTG-INPVAL-002} for more details.
+	We discovered that it is not possible to perform HTML injection attacks on the \bs{} application, although some user input isn't properly sanitized by the server (e.g. Description field in a transaction). This does not pose a threat, however, since the application is based on the AngularJS framework, which sanitizes the user input automatically on the client (see image below). Refer to \vulnref{OTG-INPVAL-002} for more details.
 }{%
-	We manually analyzed the client-side code of the \bs application, looking for \texttt{.innerHTML} and \texttt{document.write} potential vulnerabilities, not finding any.
+	We manually analyzed the client-side code of the \bs{} application, looking for \texttt{.innerHTML} and \texttt{document.write} potential vulnerabilities, not finding any.
 }{%
 	\na
 }{%
@@ -1593,7 +1609,7 @@ Please refer to \vulnref{OTG-INPVAL-001} and \vulnref{OTG-INPVAL-002}.
 \vultable{\gnb}{%
 	While testing the Javascript code, we did not find any URL redirection vulnerabilities. Whenever a page is redirected using the \texttt{window.location} object, a static string is directly assigned to it, never using any unsanitized user input as a variable. The backend also never performs redirection using a GET/POST parameter as the target URL.
 }{%
-	We accurately inspected all the client-side code and the PHP server-side code where URL redirections take place. In the latter case, the \gnb application performs redirections only exploiting the \texttt{resource\_mappings.php} file and not redirecting directly to a URL contained in a parameter.
+	We accurately inspected all the client-side code and the PHP server-side code where URL redirections take place. In the latter case, the \gnb{} application performs redirections only exploiting the \texttt{resource\_mappings.php} file and not redirecting directly to a URL contained in a parameter.
 }{%
 	\na
 }{%

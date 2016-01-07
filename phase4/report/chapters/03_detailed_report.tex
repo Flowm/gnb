@@ -265,7 +265,71 @@ Comparison with your own application: how and why is your app better/worse
 	\secure
 }
 
+
 \vulntitle{OTG-CONFIG-008}{Test RIA cross domain policy}
+\vultable{\bs}{%
+	Access to crossdomain.xml and clientaccesspolicy.xml was tested.
+}{%
+Access to crossdomain.xml and clientaccesspolicy.xml files were tested on all available directories as well as root directory and could not gain access to any of the following directories:
+
+\begin{itemize}
+	\setlength\itemsep{0pt}
+	\item .
+	\item app
+	\item font
+	\item pdfs
+	\item src
+	\item src/Api
+	\item src/Api/Model
+	\item tests
+	\item tests/Test
+	\item tests/Test/Functional
+	\item tests/Test/Unit
+	\item config
+	\item parser
+\end{itemize}	
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+\vultable{\gnb}{%
+	\same
+}{%
+Access to crossdomain.xml and clientaccesspolicy.xml files were tested on all available directories as well as root directory and could not gain access to any of the following directories:
+
+\begin{itemize}  
+	\setlength\itemsep{0pt}
+	\item .
+	\item ./project
+	\item ./project/holder
+	\item ./project/media
+	\item ./project/lib
+	\item ./project/templates
+	\item ./project/js
+	\item ./project/models
+	\item ./project/accounts
+	\item ./project/pwreset
+	\item ./project/uploads
+	\item ./project/client
+	\item ./project/style
+	\item ./project/registration
+	\item ./project/employee
+\end{itemize}	
+
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
 
 \clearpage
 \section{Identity Management Testing}
@@ -488,6 +552,34 @@ accounts.
 
 
 \vulntitle{OTG-AUTHN-003}{Testing for Weak lock out mechanism}
+\vultable{\bs}{%
+	The lockout mechanism was implemented in phase 3 on all systems as part of the requirements. 
+}{%
+Multiple incorrect logins were attempted, until the account was locked for 15 minutes after 6 incorrect attempts.
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+\vultable{\gnb}{%
+	\same
+}{%
+Multiple incorrect logins were attempted, until the account was locked after 5 incorrect attempts, the account can only be unlocked manually by an employee account.
+
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+
 \vulntitle{OTG-AUTHN-004}{Testing for bypassing authentication schema}
 \vultable{\bs}{%
 	No way to bypass the authentication schema was discovered. All internal
@@ -590,6 +682,32 @@ accounts.
 	\secure
 }
 \vulntitle{OTG-AUTHN-007}{Testing for Weak password policy}
+\vultable{\bs}{%
+	The weak password policy was rectified as a requirement in phase 3 on all systems. 
+}{%
+Registration attempts were made with weak passwords, all attempts failed.
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+\vultable{\gnb}{%
+	\same
+}{%
+	\same
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
 \vulntitle{OTG-AUTHN-008}{Testing for Weak security question/answer}
 \vultable{\bs}{%
 	\notImp
@@ -670,6 +788,37 @@ accounts.
 \clearpage
 \section{Authorization Testing}
 \simpleVulntitle{OTG-AUTHZ-001}{Testing Directory traversal/file include}
+\vultable{\bs}{%
+	This was done through blackbox testing using ZED proxy tool and a variation of the commands bellow :
+	
+	\begin{itemize}  
+		\item egrep -r \lq(include|require|fopen|readfile)\rq .
+		\item egrep -r \lq\$\_(POST|GET|FILE)\rq . 
+	\end{itemize}
+}{%
+No vulnerabilities were found for this application.
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+\vultable{\gnb}{%
+	This was fixed in phase 3 as part of the requirements.
+}{%
+\same
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
 \vulntitle{OTG-AUTHZ-002}{Testing for bypassing authorization schema}
 \vultable{\bs}{%
 	No vulnerabilities in this area were found for the \bs{} application.
@@ -736,7 +885,34 @@ accounts.
 
 \clearpage
 \section{Session Management Testing}
-\simpleVulntitle{OTG-SESS-001}{Testing for Bypassing Session Management Schema}
+\simpleVulntitle{OOTG-SESS-001}{Testing for Bypassing Session Management Schema}
+\vultable{\bs}{%
+	This was done by checking the Session ID, Token Length, Session time-out mechanism and HTTPS
+}{%
+No vulnerabilities was found for this application.
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+\vultable{\gnb}{%
+	This was fixed in phase 3 as part of the requirements.
+}{%
+\same
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+
 \vulntitle{OTG-SESS-002}{Testing for Cookies attributes}
 
 \vultable{\bs}{%
@@ -1022,6 +1198,33 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 }
 
 \vulntitle{OTG-INPVAL-005}{Testing for SQL Injection}
+\vultable{\bs}{%
+	This was done by using the python based testing tool located in the Samurai VM.
+}{%
+	No vulnerabilities was found for this application.
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+\vultable{\gnb}{%
+	This was fixed in phase 3 as part of the requirements.
+}{%
+\same
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+
 \vulntitle{OTG-INPVAL-006}{Testing for LDAP Injection}
 \vultable{\bs}{%
 	The application doesn't use LDAP, hence no tests were possible for this vulnerability
@@ -1081,7 +1284,60 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 }
 
 \vulntitle{OTG-INPVAL-008}{Testing for XML Injection}
+\vultable{\bs}{%
+	\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}
+\vultable{\gnb}{%
+	\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}
 \vulntitle{OTG-INPVAL-009}{Testing for SSI Injection}
+\vultable{\bs}{%
+	While SSI is enabled, input is sanitized and hence this is not a vulnerability on this system.
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+\vultable{\gnb}{%
+	\same
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+
 \vulntitle{OTG-INPVAL-010}{Testing for XPath Injection}
 \vultable{\bs}{%
 	The application doesn't use XPath, hence no tests were possible for this vulnerability
@@ -1141,9 +1397,37 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 }
 
 \vulntitle{OTG-INPVAL-012}{Testing for Code Injection}
+\vultable{\bs}{%
+	ASP Code is not used, and the eval() is not used, hence code injection vulnerability is not applicable. 
+	
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}
+\vultable{\gnb}{%
+	\same
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}
+
 \vulntitle{OTG-INPVAL-012-1}{Testing for Local File Inclusion}
 \vultable{\bs}{%
-	No Local File Inclusion vulnerabilities have been found in the \bs{} application.
+	No Local File inclusion vulnerabilities have been found in the \bs{} application.
 }{%
 	This was discovered by checking the results of RIPS (which only showed false positives) and checking a few files manually.
 }{%
@@ -1244,6 +1528,32 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 \vulntitle{OTG-INPVAL-014-3}{Testing for Heap overflow}
 \vulntitle{OTG-INPVAL-014-4}{Testing for Format string}
 \vulntitle{OTG-INPVAL-015}{Testing for incubated vulnerabilities}
+\vultable{\bs}{%
+	This has also been rectified as a part of the Phase III requirements. The code was inspected for input sensitization and Manual testing was done to confirm vulnerability was fixed.
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}
+\vultable{\gnb}{%
+	\same
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}
 \vulntitle{OTG-INPVAL-016}{Testing for HTTP Splitting/Smuggling}
 This vulnerability was not tested as we did not extend our testing to the Apache Web Server.
 
@@ -1318,6 +1628,68 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 \clearpage
 \section{Cryptography}
 \simpleVulntitle{OTG-CRYPST-001}{Testing for Weak SSL/TSL Ciphers, Insufficient Transport Layer Protection}
+\vultable{\bs}{%
+	This was tested using a script listed on the OWASP website \href{https://testssl.sh/}{TestSSL}, this ran a list of tests on SSL.
+}{%
+	This application reported the following main vulnerabilities:
+	\begin{itemize}
+		\setlength\itemsep{0pt}  
+		\item Vulnerable to \href{https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-0160 }{Heartbleed}
+		\item Vulnerable to \href{https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-0224 }{CCS}
+		\item Vulnerable to \href{https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-3566 }{POODLE}
+		\item Vulnerable to \href{https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2013-2566 }{RC4 \#1}
+		\item Vulnerable to \href{https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2015-2808 }{RC4 \#2}
+	\end{itemize}
+}{%
+	\begin{description}
+		\item[Heartbleed] Heartbleed while talked about it often when mentioning SSL, still requires some technical knowledge, which is readily available online with instructions and hence the likelihood is high.
+		\item[CCS]
+		In order to exploit CCS requires the attacker to intercept and alter network traffic in real time. This reduces the risk and likelihood of this vulnerability.
+		\item[POODLE]
+		POODLE exploit tools are already in development, however this attack only works with SSL 3.0 which is being phased out at the moment.
+		\item[RC4]
+		The RC4 algorithm has many single-byte biases, making it susceptible to statistical attacks, which require some technical knowledge and hence the likelihood is not high.
+	\end{description}
+}{%
+	With the exception on Heartbleed which allows the attackers to read server memory, the rest of the attacks impact lies in eavesdropping on encrypted packets.
+}{%
+	\begin{itemize}  
+		\item Install system security updates especially Apache and SSL
+		\item Disable SSLv3, Medium grade encryption, Triple DES and other weak ciphers
+	\end{itemize}
+}{%
+	\cvssBaseScorePretty{N}{H}{N}{N}{C}{H}{N}{N}
+}
+
+\vultable{\gnb}{%
+	\same
+}{%
+	This application reported the following main vulnerabilities:
+	\begin{itemize}
+		\setlength\itemsep{0pt}  
+		\item Vulnerable to \href{https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-3566 }{POODLE}
+		\item Vulnerable to \href{https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2013-2566 }{RC4 \#1}
+		\item Vulnerable to \href{https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2015-2808 }{RC4 \#2}
+	\end{itemize}
+}{%
+	\begin{description}
+		\item[POODLE]
+		POODLE exploit tools are already in development, however this attack only works with SSL 3.0 which is being phased out at the moment.
+		\item[RC4]
+		The RC4 algorithm has many single-byte biases, making it susceptible to statistical attacks, which require some technical knowledge and hence the likelihood is not high.
+	\end{description}
+}{%
+	Both attacks lead to eavesdropping on encrypted packets.
+}{%
+	To fix the vulnerabilities above the following is recommended:
+	\begin{itemize}
+		\item Disable SSLv3, Medium grade encryption, Triple DES and other weak ciphers
+	\end{itemize}
+}{%
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{N}{N}
+}
+
+
 \vulntitle{OTG-CRYPST-002}{Testing for Padding Oracle}
 \vultable{\bs}{%
 	\notImp
@@ -1553,6 +1925,32 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 \clearpage
 \section{Client Side Testing}
 \simpleVulntitle{OTG-CLIENT-001}{Testing for DOM based Cross Site Scripting}
+\vultable{\bs}{%
+	see \vulnref{OTG-INPVAL-001}
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+\vultable{\gnb}{%
+	\same
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
 \vulntitle{OTG-CLIENT-002}{Testing for JavaScript Execution}
 Please refer to \vulnref{OTG-INPVAL-001} and \vulnref{OTG-INPVAL-002}.
 
@@ -1621,6 +2019,32 @@ Please refer to \vulnref{OTG-INPVAL-001} and \vulnref{OTG-INPVAL-002}.
 }
 
 \vulntitle{OTG-CLIENT-005}{Testing for CSS Injection}
+\vultable{\bs}{%
+	This vulnerability is not available as no code is injectable in the CSS files or styles in HTML or PHP files.
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+\vultable{\gnb}{%
+	\same
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
 \vulntitle{OTG-CLIENT-006}{Testing for Client Side Resource Manipulation}
 \vultable{\bs}{%
 	No Client Side Resource Manipulation vulnerability was found in the \bs{} application.
@@ -1679,6 +2103,36 @@ Please refer to \vulnref{OTG-INPVAL-001} and \vulnref{OTG-INPVAL-002}.
 }
 
 \vulntitle{OTG-CLIENT-009}{Testing for Clickjacking}
+\vultable{\bs}{%
+	This vulnerability was meant to be fixed as part of the Phase III requirements.
+}{%
+The \bs Application has no protection (X-Frame-Options header) against Click-Jacking attacks. This vulnerability was found using w3af.
+}{%
+This is a relatively easy attack, not much technical knowledge is needed.
+}{%
+Depending on the skill of the attacker has, but can potentially take control of certain aspects of the victims computer such as camera and microphone.
+}{%
+\begin{itemize}
+	\item Sending the proper X-Frame-Options HTTP response headers that instruct the browser to not allow framing from other domains
+	\item Employing defensive code in the UI to ensure that the current frame is the most top level window
+\end{itemize}
+}{%
+\cvssBaseScorePretty{N}{H}{N}{R}{C}{L}{L}{N}
+}
+\vultable{\gnb}{%
+	This vulnerability was fixed as part the phase 3 requirements.
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+
 \vulntitle{OTG-CLIENT-010}{Testing WebSockets}
 \vultable{\bs}{%
 	\notImp

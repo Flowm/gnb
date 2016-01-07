@@ -930,7 +930,7 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 }
 
 \vultable{\gnb}{%
-	No Reflected Cross Site Scripting vulnerabilities have been found in the \bs{} application. There is no place where user input is directly shown on any site.
+	No Reflected Cross Site Scripting vulnerabilities have been found in the \bs{} application. The only vulnerable page (\texttt{accounts/verify\_transaction.php}) uses proper sanitization to prevent Reflected Cross Site Scripting.
 }{%
 	This was discovered by checking the results of RIPS (which only showed false positives), the results of \url{http://devbug.co.uk} and manually testing a few functionalities.
 }{%

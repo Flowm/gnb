@@ -357,11 +357,11 @@ accounts.
 }{%
 	The use of this vulnerability is very likely as this is a very easy way to get to know valid user accounts. Also see \vulnref{OTG-BUSLOGIC-004}.
 }{%
-	This vulnerability has a high impact as many more advanced attacks are possible as soon as valid mail addresses for the login are known.
+	This vulnerability has a low impact as the only information that can be obtained is the email of a user, which doesn't provide any information about the password or other sensitive information.
 }{%
 	We recommend to always show the same error message, even though the user does not see how many tries he still has left.
 }{%
-	TODO: Score
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{N}{N}
 }
 \vultable{\gnb}{%
 	The \gnb{} application is always showing the same error message and is thus not vulnerable. We do also use the users mail address as user account names which makes them not easily guessable.
@@ -842,7 +842,7 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 }{%
 	This issue can be easily resolved by using \texttt{\$user->UserId} instead if the undefined \texttt{\$UserId}.
 }{%
-	TODO: Score
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{N}{N}
 }
 
 \begin{minipage}{\linewidth}
@@ -1144,7 +1144,7 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 }{%
 	It is highly recommended to sanitize the description value inserted by the user, or to make the user write the descriptions directly inside the batch file.
 }{%
-	\cvssBaseScorePretty{N}{L}{L}{N}{U}{H}{N}{H}
+	\cvssBaseScorePretty{N}{L}{L}{N}{C}{H}{N}{H}
 }
 \vultable{\gnb}{%
 	The only point of the application where command injection was possible is the \texttt{exec} function called by the server when performing a multiple transaction (see \texttt{new\_transaction\_multiple.php}). After phase 3, no command injection is possible anymore, as the user input is first sanitized then verified.

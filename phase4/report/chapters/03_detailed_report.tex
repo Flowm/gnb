@@ -1128,6 +1128,39 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 }
 
 \vulntitle{OTG-SESS-007}{Test Session Timeout}
+\vultable{\bs}{%
+	A session timeout occurs after 20 minutes.
+}{%
+	The timeout found in the code was verified manually. After the timeout has
+	occured, all furhter requests are denied.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
+\vultable{\gnb}{%
+	A session timeout occurs after approximately 24 minutes.
+}{%
+	The timeout is implemented by configuring the
+	\texttt{session.gc\_maxlifetime} value.
+	This does not appear to be the most reliable approach according to the
+	documentation, but was confirmed working in practice.
+}{%
+	\na
+}{%
+	\na
+}{%
+	Implement a more reliable way for the session timeout.
+}{%
+	\secure
+}
+
+
 \vulntitle{OTG-SESS-008}{Testing for Session puzzling}
 \vultable{\bs}{%
 	While analyzing the source code, we found out that the SessionID is generated entirely randomly, using the PHP APIs (this can be seen inside the login callback function contained in \texttt{/api/index.php}). It is also used only for session tracking purposes, therefore no session puzzling vulnerability can occur.
@@ -1221,6 +1254,39 @@ Expiry date &	\multicolumn{2}{c|}{Not necessary because of "session" attribute} 
 }
 
 \vulntitle{OTG-INPVAL-003}{Testing for HTTP Verb Tampering}
+\vultable{\bs}{%
+	The available HTTP methods were already documented in
+	\vulnref{OTG-CONFIG-006}. As only the default methods are allowed no
+	further testing had to be performed.
+}{%
+	The testing was performed in \vulnref{OTG-CONFIG-006}.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
+\vultable{\gnb}{%
+	The available HTTP methods were already documented in
+	\vulnref{OTG-CONFIG-006}. As only the default methods are allowed no
+	further testing had to be performed.
+}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
+
 \vulntitle{OTG-INPVAL-004}{Testing for HTTP Parameter pollution}
 \vultable{\bs}{%
 	Since the web application server backend is PHP/Apache, when using duplicate parameters inside a GET or POST request, the server will always parse only the last occurrence (as explained in the OWASP guide).
@@ -1771,6 +1837,32 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }
 
 \vulntitle{OTG-CRYPST-003}{Testing for Sensitive information sent via unencrypted channels}
+\vultable{\bs}{%
+	All request to the site are done over an encrypted HTTPS connection. No unencrypted messages were observed.
+}{%
+	After capturing the traffic of normal application use with wireshark, it was verified that all requests made were encrypted.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	All request to the site are done over an encrypted HTTPS connection. No unencrypted messages were observed.
+}{%
+	After capturing the traffic of normal application use with wireshark, it was verified that all requests made were encrypted.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
 
 \clearpage
 \section{Business Logic Testing}
@@ -1946,6 +2038,39 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }
 
 \vulntitle{OTG-BUSLOGIC-008}{Test Upload of Unexpected File Types}
+\vultable{\bs}{%
+	Only files with the MIME-type \texttt{text/plain} are allowed. The file is
+	renamed on the server side to a random string with a \texttt{.txt} file
+	extension. The file is deleted directly after processing.
+}{%
+	We obtained the allowed file types by inspecting the code and manually
+	verifying the results by testing the file upload afterwards.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	The files are renamed on upload to the sessionid without extention. The c
+	parser ignores files with only invalid transaction details afterwards.
+	The file is deleted directly after processing.
+}{%
+	\same
+}{%
+	\na
+}{%
+	\na
+}{%
+	Additionally filter for mime type and/or file extention before accepting
+	the file upload.
+}{%
+	\secure
+}
+
 \vulntitle{OTG-BUSLOGIC-009}{Test Upload of Malicious Files}
 \vultable{\bs}{%
 	We discovered that it is possible to upload malicious files using the batch transaction functionality: these files won't be recognised by the target system as malwares, but these files cannot bring any harm to the application. This is because the uploaded files are automatically renamed and removed from the system after executing the C parser. Since the C parser reads the the uploaded files as simple text files, nothing bad can happen.
@@ -2126,6 +2251,33 @@ Please refer to \vulnref{OTG-INPVAL-001} and \vulnref{OTG-INPVAL-002}.
 }
 
 \vulntitle{OTG-CLIENT-007}{Test Cross Origin Resource Sharing}
+\vultable{\bs}{%
+	\notImp
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+\vultable{\gnb}{%
+	\notImp
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-CLIENT-008}{Testing for Cross Site Flashing}
 \vultable{\bs}{%
 	This vulnerability doesn't apply for the tested applications, since Flash is not used.

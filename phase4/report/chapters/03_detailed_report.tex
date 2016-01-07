@@ -11,6 +11,15 @@ for each type of vulnerability that the tool finds.
 
 \subsection*{Web Testing Tools}
 
+\subsubsection*{SSL Testing Shell script}
+\begin{itemize}
+	\item \textbf{Used by}\\ Mahmoud Naser
+	\item \textbf{Used for}\\
+	This tool was very useful in identifying SSL vulnerabilities and ciphers, it was a ready-to-use tool listed OWASP website, sample screen shots of the output are provided in figures \autoref{figure:bs_ssl_cipher}, \autoref{figure:bs_ssl_vuln}, \autoref{figure:gnb_ssl_cipher} and \autoref{figure:bs_ssl_vuln} 
+	\item \textbf{Useful in}\\ \vulnref{OOTG-CRYPST-001}.
+	It detected that both applications were vulnerable to POODLE and \bs was also vulnerable to Heartbleed.
+\end{itemize}
+
 \subsubsection*{devbug.co.uk}
 \begin{itemize}
 	\item \textbf{Used by}\\ Alexander Lill
@@ -60,16 +69,17 @@ for each type of vulnerability that the tool finds.
 
 \subsubsection*{RIPS}
 \begin{itemize}
-	\item \textbf{Used by}\\ Name Surname
-	\item \textbf{Used for}\\ Sample Text - description of the tool
-	\item \textbf{Useful in}\\ \vulnref{OTG-AUTHN-004} and \vulnref{OTG-AUTHN-005}
+	\item \textbf{Used by}\\ Mahmoud Naser
+	\item \textbf{Used for}\\ This tool was used to test PHP code on both \bs and \gnb
+
+	\item \textbf{Useful in}\\ 	While most errors found using this tool were false positives, it did point out a few variables that were not immediately sanitized in the code in index.php for \bs but after further inspection variables were sanitized and checked at a later stage.
 \end{itemize}
 
 \subsubsection*{RATS}
 \begin{itemize}
-	\item \textbf{Used by}\\ Name Surname
-	\item \textbf{Used for}\\ Sample Text - description of the tool
-	\item \textbf{Useful in}\\ \vulnref{OTG-AUTHN-004} and \vulnref{OTG-AUTHN-005}
+	\item \textbf{Used by}\\ Mahmoud Naser
+	\item \textbf{Used for}\\ This tool was used to test PHP code on both \bs and \gnb.
+	\item \textbf{Useful in}\\ This tool while useful in detecting SQL injection, unsanitized inputs etc, it did not provide much insight due to the quality of the used code .
 \end{itemize}
 
 \subsubsection*{Comparison}
@@ -1747,7 +1757,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 \section{Cryptography}
 \simpleVulntitle{OTG-CRYPST-001}{Testing for Weak SSL/TSL Ciphers, Insufficient Transport Layer Protection}
 \vultable{\bs}{%
-	This was tested using a script listed on the OWASP website \href{https://testssl.sh/}{TestSSL}, this ran a list of tests on SSL.
+	This was tested using a script listed on the OWASP website \href{https://testssl.sh/}{TestSSL}, this ran a list of tests on SSL, (see \autoref{figure:bs_ssl_cipher} and \autoref{figure:bs_ssl_vuln}).	
 }{%
 	This application reported the following main vulnerabilities:
 	\begin{itemize}
@@ -1778,9 +1788,21 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	\cvssBaseScorePretty{N}{H}{N}{N}{C}{H}{N}{N}
 }
+	\begin{figure}[h!tbp]
+		\centering
+		\includegraphics[width=\textwidth]{figures/t07_ssl_cipher.png}
+		\caption{SSL Ciphers used by \bs application}
+		\label{figure:bs_ssl_cipher}
+	\end{figure}
+	\begin{figure}[h!tbp]
+		\centering
+		\includegraphics[width=\textwidth]{figures/t07_ssl_vuln.png}
+		\caption{SSL Vulnerabilities used by \bs application}
+		\label{figure:bs_ssl_vuln}
+	\end{figure}
 
 \vultable{\gnb}{%
-	\same
+	\same, (see \autoref{figure:gnb_ssl_cipher} and \autoref{figure:gnb_ssl_vuln}).	
 }{%
 	This application reported the following main vulnerabilities:
 	\begin{itemize}
@@ -1806,7 +1828,18 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{N}{N}
 }
-
+	\begin{figure}[h!tbp]
+		\centering
+		\includegraphics[width=\textwidth]{figures/t12_ssl_cipher.png}
+		\caption{SSL Ciphers used by \gnb application}
+		\label{figure:gnb_ssl_cipher}
+	\end{figure}
+	\begin{figure}[h!tbp]
+		\centering
+		\includegraphics[width=\textwidth]{figures/t12_ssl_vuln.png}
+		\caption{SSL Vulnerabilities used by \gnb application}
+		\label{figure:gnb_ssl_vuln}
+	\end{figure}
 
 \vulntitle{OTG-CRYPST-002}{Testing for Padding Oracle}
 \vultable{\bs}{%
@@ -2009,6 +2042,41 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }
 
 \vulntitle{OTG-BUSLOGIC-006}{Testing for the Circumvention of Work Flows}
+\vultable{\bs}{%
+	The follow cases were tested based on the report submittid from team 7 in Phase II
+	\begin{itemize}
+		\item Customer ability to access employee portal.
+		\item Customer approving his own transaction.							
+		\item Customer accessing account before account being approved.
+		\item Customer bypassing approval for large transaction.	
+	\end{itemize}
+	
+	By inspecting the code, proper checks have been put in place that disallow circumvention in the above cases.
+	
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+\vultable{\gnb}{%
+}{%
+Vulnerabilities in this seciton were rectified as part of the requirements for phase III.
+}{%
+\na
+}{%
+\na
+}{%
+\na
+}{%
+\secure
+}
+
 \vulntitle{OTG-BUSLOGIC-007}{Test Defenses Against Application Mis-use}
 \vultable{\bs}{%
 	No mechanisms to prevent against application mis-use are in place except the lockout-functionality (see \vulnref{OTG-AUTHN-003}). No critical functionalities are disabled and no logs are kept.

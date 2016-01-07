@@ -355,7 +355,7 @@ accounts.
 }{%
 	This was discovered manually in the source code (file \texttt{api/index.php} lines 178-180 and 214-245) and confirmed by manual testing.
 }{%
-	The use of this vulnerability is very likely as this is a very easy way to get to know valid user accounts.
+	The use of this vulnerability is very likely as this is a very easy way to get to know valid user accounts. Also see \vulnref{OTG-BUSLOGIC-004}.
 }{%
 	This vulnerability has a high impact as many more advanced attacks are possible as soon as valid mail addresses for the login are known.
 }{%
@@ -1244,7 +1244,7 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }{%
 	\na
 }{%
-	\na
+	\secure
 }
 
 \vulntitle{OTG-CRYPST-003}{Testing for Sensitive information sent via unencrypted channels}
@@ -1281,6 +1281,33 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }
 
 \vulntitle{OTG-BUSLOGIC-002}{Test Ability to Forge Requests}
+\vultable{\bs}{%
+	No vulnerabilities in this area were found for the \bs{} application.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+\vultable{\gnb}{%
+	No vulnerabilities in this area were found for the \gnb{} application.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}
+
 \vulntitle{OTG-BUSLOGIC-003}{Test Integrity Checks}
 \vultable{\bs}{%
 	\notImp
@@ -1310,6 +1337,34 @@ This vulnerability was not tested as we did not extend our testing to the Apache
 }
 
 \vulntitle{OTG-BUSLOGIC-004}{Test for Process Timing}
+\vultable{\bs}{%
+	We observed that the \bs{} application has a process timing vulnerability in the login function. 
+	The login page would reply within 50ms if the mail address was valid and within around 20ms if the mail address was not valid.
+}{%
+	We observed that by looking at the source code for the login (see \texttt{api/index.php} lines 168-304) and confirming our observations by black box testing.
+}{%
+	It is quite likely that this vulnerability is used for finding valid mail addresses, although in this particular case another vulnerability (see \vulnref{OTG-IDENT-004}) is much easier to exploit for this attack.
+}{%
+	\na
+}{%
+	\na
+}{%
+	TODO: Score
+}
+\vultable{\gnb}{%
+	No Process Timing vulnerability was found in the \gnb{} application.
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\na
+}{%
+	\secure
+}
+
 \vulntitle{OTG-BUSLOGIC-005}{Test Number of Times a Function Can be Used Limits}
 \vultable{\bs}{%
 	While reviewing the project documentation and testing the single functionalities we did not find any possible application misuse/abuse cases that would allow a user to execute a function more than the allowable number of times.

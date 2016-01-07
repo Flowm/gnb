@@ -1,8 +1,5 @@
 \chapter{Reverse Enginering}\label{chapter:reverse_engineering}
 
-TODO: Extract any credentials and hidden secrets (keys) from the binary and JAR and write them in the report.
-
-
 In this chapter we will present the results obtained and the observations made while reverse engineering the code of the Bank System application.
 We will focus on the Smart Card Simulator Java application as well as the C batch transaction parser in order to analyze potential vulnerabilities, reverse engineer the TAN generation algorithm and ultimately make a direct comparison with the Goliath National Bank application.
 
@@ -66,3 +63,77 @@ This solution hence proves to be, in theory, secure against external attacks. No
 \end{itemize}
 The GNB Smart Card Simulator uses an approach that is very similar to the one we just analyzed for the Bank System application: the details of the transaction are hashed along with the Pin of the user and a 5 characters long timestamp (in base64). To avoid communicating with the server directly, the timestamp then replaces the last 5 characters of the resulting TAN, in order to allow the server to recompute the hash. Although it is harder to detect at first glimpse, since the timestamp has the same base64 format as the rest of the TAN, the used algorithm can still be guessed after careful observation. The principle, however, remains the same as the one previously described for the System Bank. The main difference is that no collision is possible in the GNB application, since strictly increasing timestamps are used instead of random nonces. Even in case of a hash collision, the resulting TAN would still be different than any other used before, hence unique.\newline
 The GNB application presents a serious limitation though: since the timestamp used is only 5 characters long and is second-based (for better precision), the maximum timespan that can be covered in total is of 64\^5 seconds \= 34 years. This means that, in our case, the generated timestamps will overflow in approximately 22 years. After that date, the server will not accept further TANs anymore, since the timestamp will be lower than previously inserted ones. This bug is very similar to the year 2038 bug and should be fixed (i.e. handled differently) for long-term support.
+
+\newpage
+\section{C Parser}
+\subsection{Reverse engineering}
+By using the radare2 reverse engineering framework we obtained a disassembly of
+all functions of the binary and a list of all symbols used in the binary.
+Based on this information and with the visual support of the control flow graph
+of the main function (see excerpt in \autoref{figure:re_cfg}) we created an
+equivalent program included in the deliverables.
+
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[trim={5cm 218cm 25cm 0},clip,height=\textheight]{figures/re_cfg}
+	\caption{First part of control flow graph}
+	\label{figure:re_cfg}
+\end{figure}
+
+\subsection{Extracted credentials}
+As expected the C code contained the credentials required for a connection to
+the database as it is required in order to perform the actual transactions.
+\begin{itemize}
+	\item \textbf{Database host} localhost
+	\item \textbf{Database user} root
+	\item \textbf{Database pass} crazypassword
+	\item \textbf{Database name} Banking
+\end{itemize}
+No further credentials or hidden keys were discovered. The SQL statements used
+in the binary can be viewed in the submitted reverse engineered c source code.
+
+\subsection{Remarks on the C parser}
+\subsubsection*{The whole program logic resides in the main function}
+\begin{itemize}
+	\item This leads to a single block of procedural instructions with
+		over 750 lines of assembler code in the disassembly and over 250
+		lines in the reverse engineered c code.
+	\item Functions of this size make maintenance and testing harder
+		and prohibit code reuse.
+	\item The increased maintenance difficulty is visible on multiple
+		occasions throughout the program. For example only 2 of 3
+		malloced strings are freed on error, probably missed as it seems
+		like the third string was added to a later date and the
+		function size makes it harder to figure out all data
+		dependencies.
+	\item Separating the different parts of the program in individual
+		functions with clearly defined interfaces is recommended.
+\end{itemize}
+
+\subsubsection*{Heap overflow}
+\begin{itemize}
+	\item The variables \texttt{sndaccount, inpfile and transactiontan}
+		are initialized with a pointer to 200 bytes of allocated heap
+		memory each. \newline
+		\texttt{sndaccount = malloc(200);}
+	\item This size limitation is not correctly enforced when copying data to
+		these areas. The size of the data copied is only limited to the size of
+		the string being copied instead of the size of the destination buffer.
+	\item \texttt{strncpy(dst, src, strlen(src))} is used instead of \newline
+		\texttt{strncpy(dst, src, 200)}
+	\item This results in a heap overflow by specifying a parameter longer than
+		200 chars to the script. The consequences of this overflow are
+		documented in \vulnref{OTG-INPVAL-014-3}.
+\end{itemize}
+
+\subsubsection*{Error handling}
+\begin{itemize}
+	\item On multiple occasions return values are not checked for
+		errors. For example none of the malloc calls check if the
+		memory allocation was successful.
+	\item The MySQL connection is not properly closed in case of error.
+		Although this happens shortly before the end of the program,
+		this might result in an increase amount of concurrent
+		connections to the database before the connections are cleaned
+		of automatically.
+\end{itemize}

@@ -54,7 +54,7 @@ static FILE* fid;
 0x303	char c
 0x304	char query[512]
 
-0x568	char* timestr[80]
+0x568	char timestr[80]
 0x5b8	char* tx_state
 0x5bc	UNUSED?
 0x5c0	UNUSED?

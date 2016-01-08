@@ -63,16 +63,17 @@
 \subsubsection*{RIPS}
 \begin{itemize}
 	\item \textbf{Used by}\\ Mahmoud Naser
-	\item \textbf{Used for}\\ This tool was used to test PHP code on both \bs{} and \gnb
+	\item \textbf{Used for}\\ This tool was used to test PHP code on both \bs{} and \gnb{}
 
 	\item \textbf{Useful in}\\ 	While most errors found using this tool were false positives, it did point out a few variables that were not immediately sanitized in the code in index.php for \bs{} but after further inspection variables were sanitized and checked at a later stage.
 \end{itemize}
 
 \subsubsection*{RATS}
 \begin{itemize}
-	\item \textbf{Used by}\\ Mahmoud Naser
-	\item \textbf{Used for}\\ This tool was used to test PHP code on both \bs{} and \gnb{}.
-	\item \textbf{Useful in}\\ This tool while useful in detecting SQL injection, unsanitized inputs etc, it did not provide much insight due to the quality of the used code .
+	\item \textbf{Used by}\\ Mahmoud Naser, Florian Mauracher
+	\item \textbf{Used for}\\ This tool was used to test PHP code on both \bs{} and \gnb{}. It was also used to test the reverse engineered parser of \bs{} and the parser source of \gnb{}.
+	\item \textbf{Useful in}\\ This tool while useful in detecting SQL injection, unsanitized inputs etc, it did not provide much insight due to the quality of the used code.
+		For the c code it provided hints to problematic function and variable usages, although these were later manually identified as false positives.
 \end{itemize}
 
 \subsubsection*{Comparison}
@@ -119,9 +120,40 @@ Both RIPS, RATS, devbug.co.uk and Kiuwan were used for grading the quality of th
 \end{itemize}
 
 \subsubsection*{Radare2}
+\begin{itemize}
+	\item \textbf{Used by}\\ Florian Mauracher
+	\item \textbf{Used for}\\ Radare2 was used as the primary tool for the reverse engineering of the parser binary of the \bs{} application.
+	\item \textbf{Useful in}\\ Like IDA Pro, this tool didn't provide any
+		direct insight on potential vulnerabilities, but allowed the analysis
+		of the binary, by providing a disassembly functionality with additional
+		functionality to analyze the program flow and the used data.
+\end{itemize}
 
 \subsubsection*{Comparison}
-TODO: Comparison Text
+%TODO: Mention Findbug Intellij?
+Due to the nature of Java Bytecode it is possible for the Java Decompiler to
+provide a decompilation of the jar file that is identical to the original
+program code.
+In comparison the two tools used to decompile the parser binary ("Ida Pro -
+Free" and "Radare2") could only assist in the manual decompilation process by
+providing a disassembly view and some further assistance to understand the
+supplied binary. \newline
+Ida Pro is a commercial product and probably the de facto standard for reverse
+engineering, unfortunately it's publicly available free version only offers a
+reduced feature size as it's several versions behind the current and is only
+available for Windows.
+While searching for possible alternatives to IDA we came across the Radare2. \\
+Radare 2 is an open source reverse engineering framework available for a
+multitude of different operating systems including Windows, Linux and OS X.
+It's initial usability seems to be worse than IDA, as it only offers a command
+line interface and all commands consist of stringed together single letters.
+(e.g.\ \texttt{pdf @ main} stands for "print disassembly function" at address
+of main). But as all functions are documented by just appending a ? we decided
+to give it a try.
+After getting used to the command structure it could be effectively used to
+create the decompiled source code for the parser binary as described in
+\autoref{chapter:re_rad}.
+
 
 \clearpage
 

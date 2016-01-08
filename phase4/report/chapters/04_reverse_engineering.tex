@@ -67,6 +67,12 @@ The GNB application presents a serious limitation though: since the timestamp us
 \newpage
 \section{C Parser}
 \subsection{Reverse engineering} \label{chapter:re_rad}
+As the C binary for the batch processing was not included in the
+SourceAndBinary archive submitted by the other team, we obtained the binary
+directly from the VM by logging in with the supplied credentials.
+The binary file we obtained was located at \texttt{/var/www/api/parser/a.out}
+on the VM and has a sha256 sum of
+\texttt{ab53c91c387118a4d21f54026829d60d05786a131455c90a96c5925535054a15}. \\
 By using the radare2 reverse engineering framework we obtained a disassembly of
 all functions of the binary and a list of all symbols used in the binary.
 Based on this information and with the visual support of the control flow graph

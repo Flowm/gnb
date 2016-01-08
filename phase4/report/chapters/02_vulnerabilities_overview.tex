@@ -96,15 +96,41 @@ Due to a missing openssl update, the application is subject to the Heartbleed vu
 
 %OUR SECTION
 \section{\gnb}
-\subsection{Vulnerability name} \label{over:our_test}
+\subsection{Insufficient transport layer protection} \label{over:vuln_10}
 \begin{itemize}
-	\item CVSS Score: \textit{value}
-	\item Likelihood: \textit{low/medium/high}
-	\item Impact: \textit{low/medium/high}
-	\item Risk: \textit{low/medium/high}
-	\item Reference: OWASP \vulnref{OTG-INPVAL-005}
+	\item CVSS Score: \textit{3.1}
+	\item Likelihood: \textit{high}
+	\item Impact: \textit{high}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-CRYPST-001}
 \end{itemize}
-	
-\section{Comparison}
+Because SSLv3 is not disabled, the application is subject to the Poodle bug.
 
+
+\subsection{Defenses Against Application Mis-use} \label{over:vuln_11}
+\begin{itemize}
+	\item CVSS Score: \textit{7.1}
+	\item Likelihood: \textit{high}
+	\item Impact: \textit{low}
+	\item Risk: \textit{low}
+	\item Reference: OWASP \vulnref{OTG-BUSLOGIC-007}
+\end{itemize}
+No mechanisms to prevent against application mis-use are in place except the lockout-functionality (see \vulnref{OTG-AUTHN-003}). No critical functionalities are disabled and no logs are kept.
+
+\subsection{File Extensions Handling for Sensitive Information} \label{over:vuln_12}
+\begin{itemize}
+	\item CVSS Score: \textit{3.1}
+	\item Likelihood: \textit{low}
+	\item Impact: \textit{low}
+	\item Risk: \textit{low}
+	\item Reference: OWASP \vulnref{OTG-CONFIG-003}
+\end{itemize}
+The Apache server is configured globally for the whole application, disabling directory listing but allowing direct access to all files inside the web folder. This folder mainly contains PHP, Javascript, HTML, CSS and media files (images). Among these, no sensitive information can be leaked. We found, however, that the upload folder contents are potentially accessible. So, if an attacker could brute-force the name of an uploaded file (which is entirely random) before it gets deleted by the server, he could read the contents.	
+
+\section{Comparison}
+The major threats on the \bs{} application come from its vulnerability to Command Injection and Heartbleed both of which have a high CVSS v3 score.
+
+While the \gnb{} applications major vulnerability was its susceptibility to the SSL Poodle attack.
+
+While both application are not production ready due to the vulnerabilities available,  the \gnb{} application has shown more promise and is far more resilient to attacks than the \bs{} application.
 

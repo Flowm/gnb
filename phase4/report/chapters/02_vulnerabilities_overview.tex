@@ -23,7 +23,47 @@ Some directories can be accessed by the browser directly, as well as some sensit
 \end{itemize}
 The server returns different error codes after a login attempt, depending on whether the inserted username or the password were incorrect. This makes it easier to guess if a user account exists on the database or not.
 
-\subsection{Command injection} \label{over:vuln_3}
+\subsection{Default admin credentials} \label{over:vuln_3}
+\begin{itemize}
+	\item CVSS Score: \textit{5.4}
+	\item Likelihood: \textit{high}
+	\item Impact: \textit{medium}
+	\item Risk: \textit{medium}
+	\item Reference: OWASP \vulnref{OTG-AUTHN-002}
+\end{itemize}
+The default admin credentials can be easily brute-forced by a malicious attacker, granting them employee rights inside the \bs{} application.
+
+\subsection{Insecure cookies} \label{over:vuln_4}
+\begin{itemize}
+	\item CVSS Score: \textit{5.4}
+	\item Likelihood: \textit{medium}
+	\item Impact: \textit{medium}
+	\item Risk: \textit{high}
+	\item Reference: OWASP \vulnref{OTG-SESS-002}
+\end{itemize}
+The application uses insecure cookies, which can be accessed by a malicious attacker. Since the application mainly relies on the session ID cookie for every operation, it is possible to hijack an existing session and access the client/employees accounts.
+
+\subsection{Cross Site Request Forgery} \label{over:vuln_5}
+\begin{itemize}
+	\item CVSS Score: \textit{4.2}
+	\item Likelihood: \textit{low}
+	\item Impact: \textit{low}
+	\item Risk: \textit{low}
+	\item Reference: OWASP \vulnref{OTG-SESS-005}
+\end{itemize}
+By setting a custom value inside the XSRF cookie and the value inside the GET request, it is possible to perform XSRF attacks. This is due to an incorrect comparison between the cookie and the GET parameter passed to the server.
+
+\subsection{Logout functionality} \label{over:vuln_6}
+\begin{itemize}
+	\item CVSS Score: \textit{4.2}
+	\item Likelihood: \textit{low}
+	\item Impact: \textit{medium}
+	\item Risk: \textit{medium}
+	\item Reference: OWASP \vulnref{OTG-SESS-006}
+\end{itemize}
+The adopted logout mechanism invalidates the cookie on the client side, but does not correctly invalidate the session on server side. If an attacker gained access to a session cookie before this was deleted, this could lead to a session hijacking scenario.
+
+\subsection{Command injection} \label{over:vuln_7}
 \begin{itemize}
 	\item CVSS Score: \textit{9.6}
 	\item Likelihood: \textit{high}
@@ -34,7 +74,17 @@ The server returns different error codes after a login attempt, depending on whe
 It is possible to exploit the batch transaction functionality by injecting arbitrary bash commands directly into the description field, which will then be executed by the application.
 This also allows to view all the source code of the application, including some sensitive informations (e.g. db password).
 
-\subsection{Insufficient transport layer protection} \label{over:vuln_4}
+\subsection{Heap overflow} \label{over:vuln_8}
+\begin{itemize}
+	\item CVSS Score: \textit{3.3}
+	\item Likelihood: \textit{low}
+	\item Impact: \textit{low}
+	\item Risk: \textit{low}
+	\item Reference: OWASP \vulnref{OTG-INPVAL-014-3}
+\end{itemize}
+This vulnerability affects the C parser, although it cannot be directly exploited via the web interface. Due to incorrect \texttt{strncpy} input, it is possible to produce heap overflows with the correct parameters, overriding thus some memory areas.
+
+\subsection{Insufficient transport layer protection} \label{over:vuln_9}
 \begin{itemize}
 	\item CVSS Score: \textit{6.8}
 	\item Likelihood: \textit{high}

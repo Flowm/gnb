@@ -56,8 +56,9 @@ int main(int argc, char* argv[]) {
 	}
 
 	// 0x08048bd5 - 0x08048ca5
-	strncpy(sndaccount, argv[1], strlen(argv[1]));
-	strncpy(inpfile, argv[2], strlen(argv[2]));
+	// HEAP OVERFLOW due to src length instead of dst length
+	strncpy(inpfile, argv[1], strlen(argv[1]));
+	strncpy(sndaccount, argv[2], strlen(argv[2]));
 	strncpy(transactiontan, argv[3], strlen(argv[3]));
 
 	// 0x08048caa - 0x08048cce
@@ -71,7 +72,7 @@ int main(int argc, char* argv[]) {
 	char c; // 0x303
 	while ((c = fgetc(fid)) != EOF) {
 		// 0x08048d2d - 0x08048d95 Filter invalid characters
-		if (c <= '0' || c >= '9') { // jle 0x2f + ! jle 0x39
+		if (c < '0' || c >= '9') { // jle 0x2f + ! jle 0x39
 			if (!(c == ' ' || c == '.' || c == ',' || c == ';' || c == '\n' || c == '\r')) {
 				puts("Wrong symbols in line.\n");
 				close_free();

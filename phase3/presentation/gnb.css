@@ -1,5 +1,5 @@
 html.intro body {
-	background:url("../pictures/sky-white.jpg");
+	background:url("pictures/sky-white.jpg");
 	background-position:center;
 	background-size: 100%;
 }
@@ -52,7 +52,7 @@ p.fix-description {
 }
 
 html.vulns body {
-	background:url("../pictures/doom-1.jpeg");
+	background:url("pictures/doom-1.jpeg");
 	background-position:center;
 	background-size: 100%;
 }

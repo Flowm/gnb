@@ -1,0 +1,148 @@
+html.intro body {
+	background:url("pictures/sky-white.jpg");
+	background-position:center;
+	background-size: 100%;
+}
+
+html.intro .left {
+	text-align: right !important;
+}
+
+html.intro .right {
+	text-align: left !important;
+}
+
+html.vulns .left {
+  text-align: right !important;
+}
+
+table.time-table {
+	width: 600px;
+	font-size: 16px;
+}
+
+table.time-table-left {
+    float: left;
+    width: 400px;
+    font-size: 20px;
+}
+
+table.time-table-right {
+    float: right;
+    width: 400px;
+    font-size: 20px;
+}
+
+tr.time-total {
+    font-weight: bold;
+}
+
+table.fix-table {
+    width: 900px;
+    font-size: 24px;
+}
+
+table.usecase-table {
+    width: 900px;
+    font-size: 23px;
+}
+
+span.working {
+	color: lime;
+}
+
+p.fix-description {
+    font-size: 30px;
+}
+
+html.vulns body {
+	background:url("pictures/doom-1.jpeg");
+	background-position:center;
+	background-size: 100%;
+}
+
+html.onedoesnotsimply body {
+  background:url("pictures/one-does-not-simply.jpg");
+  background-position:center;
+  background-size: 100%;
+}
+
+html.fixallthebugs body {
+  background:url("pictures/all-the-things.jpg");
+  background-position:center;
+  background-size: 100%;
+}
+
+p.caption {
+  font-size: 2.5em;
+  vertical-align: text-top;
+  white-space: nowrap;
+  text-align: center;
+  font-weight: 900;
+
+  color: black;
+  -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-color: black;
+}
+
+p.top-caption {
+    font-size: 2.5em;
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: top;
+    font-weight: 900;
+
+    color: black;
+    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: black;
+}
+
+p.bottom-caption {
+    font-size: 2.5em;
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: bottom;
+    font-weight: 900;
+
+    color: black;
+    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: black;
+    bottom: 0 !important;
+}
+
+.fragmented-section {
+    width: 100%;
+    height: 100%;
+    top: 0 !important;
+}
+
+.vuln-table-left {
+    float: left;
+    width: 48%;
+    font-size: 30px !important;
+}
+
+.vuln-table-right {
+    float:right;
+    width: 48%;
+    font-size: 30px !important;
+}
+
+.vuln-table-right p {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+img.logo {
+  width: 400px;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+
+tr.smallText {
+    font-size: 16px;
+}

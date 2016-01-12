@@ -1,0 +1,3 @@
+Non-password protected PDF files called <username>.pdf with the TAN numbers of existing
+users, which must have a transfer history and money in their accounts, where <username>
+indicates the username of the account to which the TANs belongs to.

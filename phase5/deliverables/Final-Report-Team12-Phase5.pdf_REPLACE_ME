@@ -1,0 +1,20 @@
+NOTE: In the report you MUST ONLY talk about your app
+
+1.First Page: Course title, Phase title, team number and team members (full names)
+
+2.Second Page: executive summary
+
+3.Third Page: table of contents
+
+4.Fourth Page: time tracking table (info / student / task at hour granularity)
+Tasks should be evenly distributed – project management part (this will be graded)
+
+5.Application Architecture: next few pages should describe the architecture of your solution including UML diagrams, interaction with other systems and dependencies on external libraries
+
+6.Security Measures: enumerate the security features your application uses and which attacks each feature defends against (specify which features you implemented and which you borrowed/use from other libraries)
+
+7.Fixes: For each vulnerability discovered in Phase 4 by your team or the team that tested your application, you should summarize the fix (security measure) that you implemented:
+- Path(s) of file(s) which were modified for the fix
+- Line number(s) which were modified in each file
+- NOTE: You can use a diff utility but you should only report the changes relevant for one particular fix per vulnerability (not just a diff of all changes to phase 3).
+- Textual description of your countermeasures and why it fixes the problem (i.e. the effect that the modifications have against attack).

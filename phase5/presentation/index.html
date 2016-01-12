@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../../lib/revealjs/css/reveal.css">
+        <link rel="stylesheet" href="../../lib/revealjs/css/theme/black.css" id="theme">
+        <!--link rel="stylesheet" href="css/theme/white.css" id="theme"-->
+        <link rel="stylesheet" href="gnb.css">
+        <link rel="stylesheet" media="print" href="../../lib/revealjs/css/print/pdf.css" />
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+
+                <section data-state="intro">
+                    <img src="pictures/gnb_logo.svg" class="logo">
+                    <h1>Secure Coding</h1>
+                    <h2>Team 12 - Phase 5</h2>
+
+                    <h3>Members</h3>
+                    <table>
+                        <tr>
+                            <td class="left">Alexander Lill</td>
+                            <td class="right">Lorenzo Donini</td>
+                        </tr>
+                        <tr>
+                            <td class="left">Florian Mauracher</td>
+                            <td class="right">Mahmoud Naser</td>
+                        </tr>
+                    </table>
+                </section>
+
+                <!--section data-state="fixallthebugs">
+                    <section class="fragmented-section">
+                        <div>
+                            <p class="top-caption">FIX ALL THE BUGS</p>
+                        </div>
+                    </section>
+                </section>
+
+                <section data-state="onedoesnotsimply">
+                    <section class="fragmented-section">
+                        <div>
+                            <p class="top-caption">ONE DOES NOT SIMPLY</br>FIX ALL THE BUGS</p>
+                        </div>
+                    </section>
+                </section-->
+
+                <section data-state="use-cases">
+
+                    <section>
+                        <h1>Use-Cases</br>and<br/>Vulnerabilities</h1>
+                    </section>
+
+                    <section>
+                    Second slide: enumeration of use-cases that were fixed / work / do not work.
+                    At least the following use-cases should be there:
+                    a) All use-cases and vulnerabilities of phase 1
+                    b) All use-cases and vulnerabilities of phase 3
+                    </section>
+
+                    <!--section>
+                        <h2>Use-Cases Phase 1</h2>
+
+                        <table class="usecase-table">
+                            <tr>
+                                <th>Usecase</th>
+                                <th>Status</th>
+                            </tr>
+                            <tr>
+                                <td>Customer / Employee registration (including sending e-mail with TANs)</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Customer / Employee login</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Customer / Employee logout</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Customer / Employee views bank account details of Customer</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Customer / Employee views transaction history of Customer</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Customer money transfer via HTML form (using TAN)</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Customer money transfer via uploading transaction batch file (using TAN)</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Employee approves transfers larger than 10.000 EUR</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Employee approves registration of Customer or of other employee</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Customer / Employee downloads transaction history of Customer as PDF</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Transaction verification page</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Search feature for user accounts</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Employee rejects transfers larger than 10.000 EUR</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Employee rejects registration of Customer or of other employee</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                        </table>
+
+                    </section>
+
+                    <section>
+                        <h2>Use-Cases Phase 3</h2>
+
+                        <table class="usecase-table">
+                            <tr>
+                                <th>Usecase</th>
+                                <th>Status</th>
+                            </tr>
+                            <tr>
+                                <td>Password recovery</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Encrypted TAN generation and delivery via e-mail to customer</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Download of SCS after registration</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Transfer using SCS (Single transaction)</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                            <tr>
+                                <td>Transfer using SCS (Batch transaction)</td>
+                                <td><span class="working">WORKING</span></td>
+                            </tr>
+                        </table>
+
+                    </section-->
+
+                </section>
+
+                <section data-state="features">
+                    Third slide: enumeration of security features of your solution. Verbally describe
+                    what attacks they defend against
+                </section>
+
+                <section data-state="lessons-learned">
+                    Remaining slides: lessons learned
+                    a) Summarize the things that you learned / liked during this project (especially
+                    if you think they will help you in real life if you work as a developer)
+                    b) These things can include: unexpected vulnerabilities, technical problems,
+                    project management issues or social issues
+                    c) Answer these 2 questions: Do you think your application is secure? Would
+                    you put your own money in the bank built by your team?
+                </section>
+
+                <section>
+                    <h1>
+                        Thanks for your attention!
+                    </h1>
+                </section>
+
+            </div>
+        </div>
+
+        <script src="../../lib/revealjs/lib/js/head.min.js"></script>
+        <script src="../../lib/revealjs/js/reveal.js"></script>
+
+        <script>
+
+            // Full list of configuration options available at:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+                // Optional reveal.js plugins
+                dependencies: [
+                    { src: '../../lib/revealjs/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: '../../lib/revealjs/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '../../lib/revealjs/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '../../lib/revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: '../../lib/revealjs/plugin/zoom-js/zoom.js', async: true },
+                    { src: '../../lib/revealjs/plugin/notes/notes.js', async: true }
+                ]
+            });
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,96 @@
+% Basic information for cover & title page
+\newcommand*{\getUniversity}{Technische Universität München}
+\newcommand*{\getFaculty}{Department of Informatics}
+\newcommand*{\getTitle}{Final Report}
+\newcommand*{\getAuthor}{%
+	Team 12\\
+	Alexander Lill\\
+	Lorenzo Donini\\
+	Florian Mauracher\\
+	Mahmoud Naser\\
+}
+\newcommand*{\getDoctype}{Secure Coding - Phase 5}
+\newcommand*{\bs}{Bank System}
+\newcommand*{\gnb}{Goliath National Bank}
+\newcommand*{\na}{N/A}
+\newcommand*{\naScore}{This vulnerability is not applicable in the application}
+\newcommand*{\notImp}{This functionality has not been implemented / is not applicable in this application}
+\newcommand*{\same}{See above}
+\newcommand*{\secure}{Secure}
+
+\newcommand*{\vulnref}[1]{%
+	\hyperref[vuln:#1]{#1}
+}
+
+\newcommand*{\bugref}[1]{%
+	\hyperref[bug:#1]{Bug #1}
+}
+
+\newcommand*{\simpleVulntitle}[2]{%
+	\subsection{#2 (#1)}\label{vuln:#1}
+}
+
+\newcommand*{\bugtable}[6]{%
+	\section{#2}\label{bug:#1}
+	\begin{table}[h!tpb]
+		\centering
+		\begin{tabularx}{\textwidth}{l | X}
+			\toprule
+			%& #2 \\
+			%\midrule
+			\textbf{Location} & #3 \\
+			\textbf{Vulnerabilities} & #4 \\
+			\textbf{Discription} & #5 \\
+			\textbf{How to trigger} & #6 \\
+			\bottomrule
+		\end{tabularx}
+	\end{table}
+}
+
+\newcommand*{\vulntitle}[2]{%
+	\clearpage
+	\simpleVulntitle{#1}{#2}
+}
+
+\newcommand{\vultable}[7]{%
+	\begin{table}[h!tpb]
+		\centering
+		\begin{tabularx}{\textwidth}{l | X}
+			\toprule
+			& \textbf{#1} \\
+			\midrule
+			\textbf{Observation} & #2 \\
+			\textbf{Discovery} & #3 \\
+			\textbf{Likelihood} & #4 \\
+			\textbf{Impact} & #5 \\
+			\textbf{Recommendation} & #6 \\
+			\textbf{CVSS} & #7 \\
+			\bottomrule
+		\end{tabularx}
+	\end{table}
+}
+
+\newcommand{\fixtable}[5] {%
+	\begin{table}[h!tpb]
+		\centering
+		\begin{tabularx}{\textwidth}{l | X}
+			\toprule
+			\textbf{Vulnerability description} & #1 \\
+			\textbf{CVSS Score} & #2 \\
+			\midrule
+			\textbf{Modified file(s)} & \texttt{#3} \\
+			\textbf{Modified line numbers} & #4 \\
+			\textbf{Countermeasures} & #5 \\
+			\bottomrule
+		\end{tabularx}
+	\end{table}
+}
+
+% CVSS calculation
+% Documentation see https://github.com/AlexanderLill/cvss3tex
+\input{settings/cvss3tex/cvss}
+
+% Remove this to calculate the scores
+%\renewcommand{\cvssBaseScorePretty}[8]{%
+%	mockScore
+%}

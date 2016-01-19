@@ -1,0 +1,45 @@
+\chapter{Fixes}\label{chapter:fixes}
+
+For each vulnerability discovered in Phase 4 by your team or the team that tested your
+application, you should summarize the fix (security measure) that you implemented:
+\begin{itemize}
+	\item Path(s) of file(s) which were modified for the fix
+	\item Line number(s) which were modified in each file 
+	\item NOTE: You can use a diff utility but you should only report the changes relevant for one particular fix per vulnerability (not just a diff of all changes to phase 3).
+	\item Textual description of your countermeasures and why it fixes the problem (i.e. the effect that the modifications have against attack).
+\end{itemize}
+
+Sample table
+\fixtable{%
+	%Description of the vulnerability
+}{%
+	%Cvss score
+}{%
+	%Modified files (paths)
+}{%
+	%Modified line numbers
+}{%
+	%Countermeasures (description)
+}
+
+\section{Configuration and Deploy Management Testing}
+\simpleVulntitle{OTG-CONFIG-001}{Test File Extensions Handling for Sensitive Information}
+
+\clearpage
+\section{Identity Management Testing}
+\simpleVulntitle{OTG-IDENT-002}{Test User Registration Process}
+\vulntitle{OTG-IDENT-003}{Test Account Provisioning Process}
+
+\clearpage
+\section{Error Handling}
+\simpleVulntitle{OTG-ERR-001}{Analysis of Error Codes}
+
+\clearpage
+\section{Cryptography}
+\simpleVulntitle{OTG-CRYPST-001}{Testing for Weak SSL/TSL Ciphers, Insufficient Transport Layer Protection}
+
+\clearpage
+\section{Business Logic Testing}
+\simpleVulntitle{OTG-BUSLOG-001}{Test Business Logic Data Validation}
+\vulntitle{OTG-BUSLOG-006}{Testing for the Circumvention of Work Flows}
+\vulntitle{OTG-BUSLOG-007}{Test Defenses Against Application Mis-use}

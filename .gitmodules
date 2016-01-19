@@ -7,3 +7,6 @@
 [submodule "phase4/report/settings/cvss3tex"]
 	path = phase4/report/settings/cvss3tex
 	url = https://github.com/AlexanderLill/cvss3tex.git
+[submodule "phase5/report/settings/cvss3tex"]
+	path = phase5/report/settings/cvss3tex
+	url = https://github.com/AlexanderLill/cvss3tex.git

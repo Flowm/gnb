@@ -13,10 +13,10 @@ $username = null;
 $pw = null;
 $error = '?error=0';
 if (isset($_POST["username"])) {
-    $username = santize_input($_POST["username"],SANITIZE_STRING_EMAIL);
+    $username = ($_POST["username"] != "") ? santize_input($_POST["username"],SANITIZE_STRING_EMAIL) : null;
 }
 if (isset($_POST["password"])) {
-    $pw = santize_input($_POST["password"]);
+    $pw = ($_POST["password"] != "") ?  santize_input($_POST["password"]) : null;
 }
 
 if ($username == null || $pw == null) {

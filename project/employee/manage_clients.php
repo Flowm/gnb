@@ -21,8 +21,6 @@ if ($role != "employee") {
 
 ?>
 
-
-
 <p class="simple-label">To obtain details about a client, please look him up here: </p><br>
 <form onsubmit="searchForClients(); return false;">
     <div class="simple-container-no-bounds simple-text-big">

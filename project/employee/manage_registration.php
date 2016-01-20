@@ -25,8 +25,8 @@ require_once getpageabsolute("db_functions");
 
 //Handling approval/rejections first
 if (isset($_POST['action']) && isset($_POST['users'])) {
-    $action = santize_input($_POST['action'],SANITIZE_STRING_VAR);
-    $requests = santize_input($_POST['users']) ;
+    $action = check_post_input('action',SANITIZE_STRING_VAR);
+    $requests = check_post_input('users');
     $approver_id = $_SESSION['user_id'];
 
     if ($action == "approveRegistration") {

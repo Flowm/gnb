@@ -62,7 +62,7 @@ int parse_csv(char* src_acc, char* tan, char* time, FILE* fh) {
 			} else if (eof && field < 2) {
 				continue;
 			} else {
-				printf("Ignoring invalid transaction in line %d, ERR: %d\n", line, invalid);
+				printf("Ignoring line %d due to format error.\n", line);
 			}
 
 			// Start parsing next line

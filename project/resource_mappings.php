@@ -30,8 +30,8 @@ $pages["util"] 				= "genericfunctions.php";
 $pages["drawfunctions"] 	= "drawfunctions.php";
 $pages["utilityfunctions"] 	= "genericfunctions.php";
 
-$pages["uploads"] 		= "uploads/";
-$pages["holder"] 		= "holder/";
+$pages["uploads"] 		= "tmp/uploads/";
+$pages["holder"] 		= "tmp/holder/";
 
 $pages["forgotpw"] 		= "pwreset/forgotpw.php";
 $pages["forgotpw_r"] 	= "pwreset/forgotpw_request.php";
@@ -53,7 +53,8 @@ $pages["tran_pdf"] 		= "accounts/download_transactions.php";
 
 $pages["gnb_style"] 	= "style/gnb.css";
 
-$pages["scs"] 				= "lib/scs/SmartCardSimulator.jar";
+$pages["scs"] 			= "resources/SmartCardSimulator.jar";
+
 $pages["fpdf"] 				= "lib/fpdf/fpdf.php";
 $pages["fpdf_protection"] 	= "lib/fpdf/fpdf_protection.php";
 $pages["phpmailer"] 		= "lib/phpmailer/PHPMailerAutoload.php";

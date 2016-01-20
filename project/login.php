@@ -57,17 +57,16 @@ $forgotpwr_link	= getPageURL('forgotpw');
                     <input type="password" name="password" id="pw_input" placeholder="Password"><br>
                 </div>
             </div>
-            <div class="formRow">
-                <span id="error" class="error">
-                <?php
-                if (isset($_GET) && isset($_GET["error"])) {
-                    $error = $_GET["error"];
-                    if (isset($error_types[$error])) {
-                        echo $error_types[$error];
-                    }
+            <?php
+            if (isset($_GET["error"])) {
+                $error = $_GET["error"];
+                if (isset($error_types[$error])) {
+                    echo '<div class="formRow"><span id="error" class="error">';
+                    echo $error_types[$error];
+                    echo '</span><br></div>';
                 }
-                ?></span><br>
-            </div>
+            }
+            ?>
             <div class="button-container">
                 <button type="submit" class="simpleButton">Suit up!</button>
             </div>
@@ -77,6 +76,10 @@ $forgotpwr_link	= getPageURL('forgotpw');
 				<button type="submit" class="simpleButton">Forgot your brocode?</button>
             </div>
         </form>
+    </div>
+    <div class="footerContainer">
+        <hr class="hr-thin">
+        <p class="simple-text simple-text-italic">This is not a real bank. All rights reserved.</p>
     </div>
 </div>
 </body>

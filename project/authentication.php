@@ -12,12 +12,8 @@ session_start();
 $username = null;
 $pw = null;
 $error = '?error=0';
-if (isset($_POST["username"])) {
-    $username = ($_POST["username"] != "") ? santize_input($_POST["username"],SANITIZE_STRING_EMAIL) : null;
-}
-if (isset($_POST["password"])) {
-    $pw = ($_POST["password"] != "") ?  santize_input($_POST["password"]) : null;
-}
+$username = check_post_input("username",SANITIZE_STRING_EMAIL);
+$pw = check_post_input("password");
 
 if ($username == null || $pw == null) {
     header("Location:".getPageURL('login').$error);

@@ -135,6 +135,10 @@ $logo_svg = getMedia('logo_svg');
             </div>
         </form>
     </div>
+    <div class="footerContainer">
+        <hr class="hr-thin">
+        <p class="simple-text simple-text-italic">This is not a real bank. All rights reserved.</p>
+    </div>
 </div>
 </body>
 </html>

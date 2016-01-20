@@ -7,6 +7,13 @@ define("SANITIZE_STRING_EMAIL", 3);
 define("SANITIZE_STRING_VAR", 4);
 define("SANITIZE_STRING_DESC", 5);
 
+function check_post_input($name, $check_type = SANITIZE_STRING_DESC) {
+	if (empty($_POST[$name])) {
+		return null;
+	}
+	return santize_input($_POST[$name],$check_type);
+}
+
 function santize_input($input, $check_type = SANITIZE_STRING_DESC)
 {
 	$sanitized_input	= htmlspecialchars($input) ;
@@ -96,9 +103,10 @@ function santize_input($input, $check_type = SANITIZE_STRING_DESC)
 		$sanitization['message']	= 'Unknown sanitization error, '.$error_msg_gen ; 
 	}
 	if ($sanitization['result']	== false ){
-		exit($sanitization['message']);
+		//print $sanitization['message'] somewhere?
+		return null;
 	}
-			 
+
 	return $sanitization['input']  ;
 }
 		

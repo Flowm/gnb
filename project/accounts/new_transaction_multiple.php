@@ -18,6 +18,12 @@ else if (!isset($frame)) {
 if (empty($_SESSION["account_id"]))
 	die("Please choose an account");
 
+$error_types = array(0=>'Invalid input!',
+	1=>'File upload failed!',
+	2=>'ERROR: Parsing of input file failed',
+	3=>'ERROR: Unknown file error',
+	4=>'ERROR: Invalid TAN');
+
 $token = "";
 if (!isset($_SESSION['token'])) {
     $token = md5(uniqid(rand(), TRUE));
@@ -40,20 +46,20 @@ function verifySCSTAN($tan, $pin, $file) {
 		while (($line = fgets($handle)) !== false) {
 			$elements = explode(",", $line);
 			if (isset($elements[0]) && isset($elements[1])) {
-				$filestr .= "$elements[0]" . "$elements[1]";
+				$filestr .= '$elements[0]' . '$elements[1]';
 			} else {
-				return "ERROR: Parsing of input file failed";
+				return 2;
 			}
 		}
 		fclose($handle);
 	} else {
-		return "ERROR: Unknown file error";
+		return 3;
 	}
 
 	// Check TAN
 	$timestamp = verifyAppGeneratedTANData($tan, $filestr, $pin);
 	if ($timestamp == null || $timestamp <= $account->last_tan_time) {
-		return "ERROR: Invalid TAN";
+		return 4;
 	} else {
 		DB::i()->setLastTANTime($account_id,$timestamp);
 	}
@@ -62,6 +68,7 @@ function verifySCSTAN($tan, $pin, $file) {
 
 $account_id = $_SESSION["account_id"];
 
+//Executed in case a transaction was started
 if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
 	$token = "";
 	if (isset($_POST['token']) && isset($_SESSION['token'])) {
@@ -72,46 +79,53 @@ if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
 	    }
 	}
 
-	$user_id = $_SESSION["user_id"];
-	$user = new user(DB::i()->getUser($user_id));
-	$auth_type = DB::i()->mapAuthenticationDevice($user->auth_device);
+	//If no TAN was entered by the user, we want a proper error message
+	$tan = check_post_input("tan",SANITIZE_STRING_DESC);
+	if ($tan != null) {
+		$tan = preg_replace("([^a-zA-Z0-9+\/])", '', $tan);
 
-	$file = $_FILES["transactionsCSV"];
-	$tan = santize_input($_POST["tan"],SANITIZE_STRING_DESC);
-	$tan = preg_replace("([^a-zA-Z0-9+\/])", '', $tan);
-	$name = session_id();
-	$target_file = getPageAbsolute("uploads") . $name;
-	$ctransact = getPageAbsolute("ctransact");
-	if (move_uploaded_file($file['tmp_name'], $target_file)) {
-		echo "<div class='success'>Fileupload successful! Starting batch processing...<br />";
+		$user_id = $_SESSION["user_id"];
+		$user = new user(DB::i()->getUser($user_id));
+		$auth_type = DB::i()->mapAuthenticationDevice($user->auth_device);
 
-		$cmdln = "";
-		if ($auth_type == "SCS") {
-			$msg = verifySCSTAN($tan, $user->pin, $target_file);
-			if ($msg == "SUCCESS") {
-				$cmdln = "$ctransact '$account_id' 'ASMARTCARDTANYO' '$target_file'";
+		$file = $_FILES["transactionsCSV"];
+		$name = session_id();
+		$target_file = getPageAbsolute("uploads") . $name;
+		$ctransact = getPageAbsolute("ctransact");
+		if (move_uploaded_file($file['tmp_name'], $target_file)) {
+			echo "<div class='success'>Fileupload successful! Starting batch processing...<br />";
+
+			$cmdln = "";
+			if ($auth_type == "SCS") {
+				$msg = verifySCSTAN($tan, $user->pin, $target_file);
+				if ($msg == "SUCCESS") {
+					$cmdln = "$ctransact '$account_id' 'ASMARTCARDTANYO' '$target_file'";
+				} else {
+					$error = $msg;
+				}
 			} else {
-				echo $msg;
+				// NON-SCS TANs get verified in the c parser
+				$cmdln = "$ctransact '$account_id' '$tan' '$target_file'";
 			}
+			if ($cmdln != "") {
+				exec($cmdln, $cmdout);
+				foreach ($cmdout as $line) {
+					echo $line . "<br />";
+				}
+			}
+			echo "</div><br />";
+			unlink($target_file);
 		} else {
-			// NON-SCS TANs get verified in the c parser
-			$cmdln = "$ctransact '$account_id' '$tan' '$target_file'";
+			$error = 2;
 		}
-		if ($cmdln != "") {
-			exec($cmdln, $cmdout);
-			foreach ($cmdout as $line) {
-				echo $line . "<br />";
-			}
-		}
-		echo "</div><br />";
-		unlink($target_file);
-	} else {
-		echo "<div class='error'>Fileupload failed!</div><br />";
+	}
+	else {
+		$error = 0;
 	}
 }
 
 ?>
-<p class="simple-text">
+<div class="simple-text">
 	To perform multiple transactions in one request you can upload a batch transaction file.
     <br />
 	Format the file according to be following rules:
@@ -120,10 +134,9 @@ if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
 		<li>Fields separated only by a comma</li>
 		<li>No quoting of whitespace required</li>
 		<li>The complete input between two commas gets treated as value</li>
-		<li>Example:</li>
-		<p class="simple-text-big">DST_ACCOUNT,AMOUNT,DESCRIPTION</p>
 	</ul>
-</p>
+	<p class="simple-text-big">Example:<br>DST_ACCOUNT,AMOUNT,DESCRIPTION</p>
+</div>
 <br />
 <p class="simple-text">Note: All Transactions over 10,000 will require manual approval by an employee</p>
 <form id="uploadForm" method="post" enctype="multipart/form-data" class="simple-text">
@@ -145,6 +158,13 @@ if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
 				<input type="text" name="tan" id="tan" placeholder="TAN"><br>
 			</div>
 		</div>
+		<?php
+		if (isset($error)) {
+			echo '<div class="formRow"><span id="error" class="error">';
+			echo $error_types[$error];
+			echo '</span><br></div>';
+		}
+		?>
 		<div class="button-container">
 			<button type="button" onclick="uploadFile()" class="simpleButton">Upload</button>
 		</div>

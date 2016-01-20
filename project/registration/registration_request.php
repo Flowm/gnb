@@ -12,35 +12,24 @@ require_once getPageAbsolute("util");
 global $pages;
 
 $error = "?error=";
-if (!isset($_POST['type'])
-    || !isset($_POST['email'])
-    || !isset($_POST['firstname'])
-    || !isset($_POST['lastname'])
-    || !isset($_POST['banking'])
-    || !isset($_POST['password'])
-    || !isset($_POST['password_repeat'])) {
-    $error = $error."0";
-    header("Location:".getPageURL('registration').$error);
-    exit();
-}
 
 //Getting form stuff
-$type 			= santize_input($_POST['type'],SANITIZE_STRING_VAR);
-$email 			= santize_input($_POST['email'],SANITIZE_STRING_EMAIL);
-$firstname 		= santize_input($_POST['firstname'],SANITIZE_STRING_NAME);
-$lastname 		= santize_input($_POST['lastname'], SANITIZE_STRING_NAME );
-$password 		= $_POST['password'];
-$passwordRepeat = $_POST['password_repeat'];
-$banking 		= santize_input($_POST['banking']);
+$type 			= check_post_input('type',SANITIZE_STRING_VAR);
+$email 			= check_post_input('email',SANITIZE_STRING_EMAIL);
+$firstname 		= check_post_input('firstname',SANITIZE_STRING_NAME);
+$lastname 		= check_post_input('lastname', SANITIZE_STRING_NAME );
+$password 		= (isset($_POST['password'])) ? $_POST['password'] : '';
+$passwordRepeat = (isset($_POST['password'])) ? $_POST['password_repeat'] : '';
+$banking 		= check_post_input('banking');
 
 // Checking all of the conditions on server side as well.
-if ($type == ''
-        || $email == ''
-        || $firstname == ''
-        || $lastname == ''
-        || $banking == ''
+if ($type == null
+        || $email == null
+        || $firstname == null
+        || $lastname == null
         || $password == ''
-        || $passwordRepeat == '') {
+        || $passwordRepeat == ''
+        || $banking == '') {
     $error = $error."0";
     header("Location:".getPageURL('registration').$error);
     exit();
@@ -62,7 +51,6 @@ if (!checkPasswordStrength($password)) {
 }
 
 $random_pin = generateRandomPIN();
-$auth_device = null;
 
 //Checking the required banking option
 if ($banking == 'email') {
@@ -136,6 +124,10 @@ $logo_svg = getMedia('logo_svg'); //GNB logo
         </h1>
         <p class="simple-text simple-text-centered">
             <a href="../index.php">Return to Home page</a></p>
+    </div>
+    <div class="footerContainer">
+        <hr class="hr-thin">
+        <p class="simple-text simple-text-italic">This is not a real bank. All rights reserved.</p>
     </div>
 </div>
 </body>

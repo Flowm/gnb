@@ -1,7 +1,6 @@
 <?php
 
 require_once __DIR__."/../resource_mappings.php";
-require_once getpageabsolute("utilityfunctions");
 
 //Worst case, an unauthenticated user is trying to access this page directly
 if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {
@@ -24,6 +23,7 @@ if (!isset($_SESSION['token'])) {
 
 require_once getpageabsolute("db_functions");
 require_once getPageAbsolute("user");
+require_once getpageabsolute("util");
 require_once getPageAbsolute("drawfunctions");
 
 if (empty($_SESSION["account_id"]))
@@ -38,13 +38,31 @@ $account_header	= array(
 ) ;
 drawSingleRecordTable($acc_info,'Account ',$account_header) ;
 
+$error_types = array(0=>'Invalid user input!');
 
+$dest_code = '';
+$amount = '';
+$description = '';
+$tan_code = '';
 
-$dest_code		= ( isset($_POST["dest_code"]) ? santize_input($_POST["dest_code"],SANITIZE_INT) : '' );
-$amount			= ( isset($_POST["amount"]) ? santize_input($_POST["amount"],SANITIZE_DOUBLE) : '' );
-$description	= ( isset($_POST["description"]) ? santize_input($_POST["description"],SANITIZE_STRING_DESC) : '' );
-$tan_code		= ( isset($_POST["tan_code"]) ? santize_input($_POST["tan_code"],SANITIZE_STRING_DESC) : '' );
-
+if (isset($_POST["error"]) && $_POST["error"] == "error") {
+    $dest_code = check_post_input("dest_code",SANITIZE_INT);
+    $amount = check_post_input("amount",SANITIZE_DOUBLE);
+    $description = check_post_input("description",SANITIZE_STRING_DESC);
+    $tan_code = check_post_input("tan_code",SANITIZE_STRING_DESC);
+    if ($dest_code == null) {
+        $dest_code = '';
+    }
+    if ($amount == null) {
+        $amount = '';
+    }
+    if ($description == null) {
+        $description = '';
+    }
+    if ($tan_code == null) {
+        $tan_code = '';
+    }
+}
 ?>
 
 <br><h1 class="title2">Transaction page</h1>
@@ -85,14 +103,11 @@ $tan_code		= ( isset($_POST["tan_code"]) ? santize_input($_POST["tan_code"],SANI
                 <input type="text" id="tan_code" name="tan_code" value="<?=$tan_code?>" placeholder="TAN"><br>
             </div>
         </div>
-
         <?php
-        $error = null;
-        if (isset($_GET) && isset($_GET["error"])) {
-            $error = $_GET["error"];
-            if ($error == "invalid") {
-                echo "<b><font color='red'>Invalid login credentials!</font></b><br>";
-            }
+        if (isset($error) && isset($error_types[$error])) {
+            echo '<div class="formRow"><span id="error" class="error">';
+            echo $error_types[$error];
+            echo '</span><br></div>';
         }
         ?>
         <input type="hidden" name="account_id" value="<?=$account_id?>">

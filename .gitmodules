@@ -10,3 +10,6 @@
 [submodule "phase5/report/settings/cvss3tex"]
 	path = phase5/report/settings/cvss3tex
 	url = https://github.com/AlexanderLill/cvss3tex.git
+[submodule "project/lib/securimage"]
+	path = project/lib/securimage
+	url = https://github.com/dapphp/securimage.git

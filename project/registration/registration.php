@@ -2,13 +2,16 @@
 
 require_once __DIR__."/../resource_mappings.php";
 
-$error_types = array(0=>'All fields are mandatory!',
+$error_types = array(
+	0=>'All fields are mandatory!',
     1=>'The repeated password does not match the original one!',
     2=>'Invalid email address format',
     3=>'The email you entered is already associated to an account',
     4=>'Your password must be between 8 and 20 characters long and must contain at least 1 number and 1 letter!',
     5=>'Invalid role entered',
-    6=>'Invalid banking option entered');
+    6=>'Invalid banking option entered',
+    7=>'Invalid CAPCHA code please try again',
+    );
 
 $logo_svg = getMedia('logo_svg');
 
@@ -82,6 +85,28 @@ $logo_svg = getMedia('logo_svg');
                     <input type="password" id="password_repeat" name="password_repeat" placeholder="Password repeat"><br>
                 </div>
             </div>
+            <div class="formRow">
+                <div class="formLeftColumn">
+                    <label for="capcha_text" class="simple-label">Enter the Capcha </label>
+                </div>
+                <div class="formRightColumn">
+                    <input type="text" id="captcha_code" name="captcha_code" placeholder=""><br>
+                </div>
+            </div>
+            <div class="formRow">
+                <div class="formLeftColumn">
+					<label for="capcha_image" class="simple-label">
+						<img id="captcha" src="<?=getPageURL("secimg_show")?>" alt="CAPTCHA Image" />
+                	
+						<a href="#" onclick="document.getElementById('captcha').src = '<?=getPageURL("secimg_show")?>' + '?' + Math.random(); return false">
+							<img src="<?=getMedia("capcha_reload")?>" height=17 width=17/>
+						</a>
+					</label>
+                </div>
+                
+                
+            </div>
+
 
             <!-- PHASE 3 CODE -->
             <div id="bankingMethod">

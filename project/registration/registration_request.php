@@ -8,6 +8,7 @@ require_once getpageabsolute("db_functions");
 require_once getPageAbsolute("mail");
 require_once getpageabsolute("user");
 require_once getPageAbsolute("util");
+require_once getpageabsolute("secimg");
 
 global $pages;
 
@@ -21,6 +22,7 @@ $lastname 		= check_post_input('lastname', SANITIZE_STRING_NAME );
 $password 		= (isset($_POST['password'])) ? $_POST['password'] : '';
 $passwordRepeat = (isset($_POST['password'])) ? $_POST['password_repeat'] : '';
 $banking 		= check_post_input('banking');
+$captcha_code	= check_post_input('captcha_code');
 
 // Checking all of the conditions on server side as well.
 if ($type == null
@@ -29,7 +31,8 @@ if ($type == null
         || $lastname == null
         || $password == ''
         || $passwordRepeat == ''
-        || $banking == '') {
+        || $banking == ''
+        || $captcha_code == '') {
     $error = $error."0";
     header("Location:".getPageURL('registration').$error);
     exit();
@@ -46,6 +49,13 @@ if (!filter_var($email,FILTER_VALIDATE_EMAIL)) {
 }
 if (!checkPasswordStrength($password)) {
     $error = $error."4";
+    header("Location:".getPageURL('registration').$error);
+    exit();
+}
+
+$securimage = new Securimage();
+if ($securimage->check($captcha_code) == false){
+    $error = $error."7";
     header("Location:".getPageURL('registration').$error);
     exit();
 }

@@ -144,7 +144,7 @@ class user {
 	}
 
 	public static function approveRegistrations($requests, $employee_id) {
-		$requests = explode(";",$requests);
+		$requests = array_filter(explode(";",$requests));
 		foreach ($requests as $request) {
 			$exploded = explode(":",$request);
 			$var_num = count($exploded);
@@ -172,7 +172,7 @@ class user {
 	}
 
 	public static function rejectRegistrations($requests, $employee_id) {
-		$requests = explode(";",$requests);
+		$requests = array_filter(explode(";",$requests));
 		foreach ($requests as $request) {
 			$exploded = explode(":",$request);
 			$var_num = count($exploded);
@@ -196,7 +196,7 @@ class user {
 	}
 
 	public static function unblockUsers($requests, $employee_id) {
-		$requests = explode(";",$requests);
+		$requests = array_filter(explode(";",$requests));
 		foreach ($requests as $request) {
 			$exploded = explode(":",$request);
 			$id = $exploded[0];

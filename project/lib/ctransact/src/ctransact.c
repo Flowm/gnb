@@ -62,7 +62,7 @@ int parse_csv(char* src_acc, char* tan, char* time, FILE* fh) {
 			} else if (eof && field < 2) {
 				continue;
 			} else {
-				printf("Ignoring line %d due to format error.\n", line);
+				printf("Processing: LINE=%d\n\t--> Ignored due to format error\n\n", line);
 			}
 
 			// Start parsing next line
@@ -107,22 +107,22 @@ int process_transaction(char* src, char* tan, char* time, struct transactstr tra
 
 	// Check transaction
 	if (!strncmp(t.src, t.dst, 8)) {
-		printf("\t--> SRC and DST can not be the same\n");
+		printf("\t--> SRC and DST can not be the same\n\n");
 		return 1;
 	}
 	// Check numerical fields for validity
 	if (parse_number(t.src, 0) < 10000000) {
-		printf("\t--> SRC account invalid\n");
+		printf("\t--> SRC account invalid\n\n");
 		return 1;
 	}
 	if (parse_number(t.dst, 0) < 10000000) {
-		printf("\t--> DST account invalid\n");
+		printf("\t--> DST account invalid\n\n");
 		return 1;
 	}
 	long long sum = parse_number(t.sum, 1);
 	TDBG printf("SUM: %lli\n", sum);
 	if (sum < 0) {
-		printf("\t--> Amount invalid\n");
+		printf("\t--> Amount invalid\n\n");
 		return 1;
 	} else if (sum < 10000) {
 		t.ap_ok = 1;
@@ -131,9 +131,9 @@ int process_transaction(char* src, char* tan, char* time, struct transactstr tra
 	// Execute transaction
 	ret = gnb_mysql_do_transaction(t);
 	if (!ret) {
-		printf("\t--> Success\n");
+		printf("\t--> Success\n\n");
 	} else {
-		printf("\t--> Fail\n");
+		printf("\t--> Fail\n\n");
 	}
 	return ret;
 }

@@ -58,7 +58,6 @@ $pages["fpdf"] 				= "lib/fpdf/fpdf.php";
 $pages["fpdf_protection"] 	= "lib/fpdf/fpdf_protection.php";
 $pages["phpmailer"] 		= "lib/phpmailer/PHPMailerAutoload.php";
 $pages["ctransact"] 		= "lib/ctransact/ctransact";
-$pages["capcha"] 			= "lib/capcha/CaptchasDotNet.php";
 $pages["secimg"] 			= "lib/securimage/securimage.php";
 $pages["secimg_show"] 		= "lib/securimage/securimage_show.php";
 

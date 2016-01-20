@@ -10,7 +10,7 @@ $error_types = array(
     4=>'Your password must be between 8 and 20 characters long and must contain at least 1 number and 1 letter!',
     5=>'Invalid role entered',
     6=>'Invalid banking option entered',
-    7=>'Invalid CAPCHA code please try again',
+    7=>'Invalid CAPTCHA code please try again',
     );
 
 $logo_svg = getMedia('logo_svg');

@@ -32,7 +32,7 @@ class GNBMailer {
 			echo "<p class='simpleTextBig simple-text-centered'>Operation failed:<br />" . $this->mail->ErrorInfo . "</p>";
 			return 1;
 		} else {
-			echo "<p class='simpleTextBig simple-text-centered'>Operation was successful</p>";
+			echo "<p class='simpleTextBig simple-text-centered'>Email was successfully sent</p>";
 			return 0;
 		}
 	}

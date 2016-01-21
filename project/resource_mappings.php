@@ -60,7 +60,8 @@ $pages["fpdf_protection"] 	= "lib/fpdf/fpdf_protection.php";
 $pages["phpmailer"] 		= "lib/phpmailer/PHPMailerAutoload.php";
 $pages["ctransact"] 		= "lib/ctransact/ctransact";
 $pages["secimg"] 			= "lib/securimage/securimage.php";
-$pages["secimg_show"] 		= "lib/securimage/securimage_show.php";
+$pages["secimg_show"] 		= "inc/secimg_show.php";
+$pages["secimg_show_lib"] 	= "lib/securimage/securimage_show.php";
 
 //SECTIONS (each section is triggered by a button)
 $sections = array();

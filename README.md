@@ -18,7 +18,7 @@ All steps after the dowload step assume your at the root directory of the projec
 ### Download project and dependencies
 * Install the required software
 
-        sudo apt-get install apache2 php5 libapache2-mod-php5 php5-mcrypt php5-mysql php5-gd mysql-server mysql-client libmysqlclient-dev
+        sudo apt-get install apache2 php5 libapache2-mod-php5 php5-mysql php5-gd mysql-server mysql-client libmysqlclient-dev
 
 * Clone the repository and only checkout the relevant files
 

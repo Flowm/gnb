@@ -51,6 +51,14 @@ span.working {
 	color: lime;
 }
 
+span.not-working {
+    color: red;
+}
+
+span.pending {
+    color: orange;
+}
+
 p.fix-description {
     font-size: 30px;
 }
@@ -134,6 +142,13 @@ p.bottom-caption {
 .vuln-table-right p {
     display: table-cell;
     vertical-align: middle;
+}
+
+table.fix-table-float-left {
+    width: 450px;
+    float: left;
+    margin: 10px;
+    font-size: 20px;
 }
 
 img.logo {

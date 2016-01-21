@@ -1210,6 +1210,10 @@ final class DB {
 		if ($source == $destination) {
 			return false;
 		}
+
+		if ($destination == "10000001") {
+			return false;
+		}
 		
 		if ($amount <= 0) {
 			return false;
@@ -1312,6 +1316,11 @@ final class DB {
 			return $var_res ; 
 		}
 
+		if ($destination == "10000001") {
+			$var_res["message"]	= '[Account] Destination is not valid';
+			return $var_res ; 
+		}
+
 		if ($amount <= 0) {
 			$var_res["message"]	= '[Amount] Amount can not be negative or zero';
 			return $var_res ; 
@@ -1332,7 +1341,7 @@ final class DB {
 		}
 
 		if ($amount > $sourceExists[$this->ACCOUNTOVERVIEW_TABLE_BALANCE]) {
-			$var_res["message"]	= '[Funds] Insuffecient funds' ;
+			$var_res["message"]	= '[Funds] Insufficient funds' ;
 			return $var_res ; 
 		}
 

@@ -144,6 +144,7 @@ else
 			<input type="submit" class="simpleButton" value="Go Back">
 		</form>
 		<?php
+		unset($error);
 		exit();
 	}
 }

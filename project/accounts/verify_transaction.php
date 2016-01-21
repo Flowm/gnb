@@ -130,7 +130,7 @@ else
 	//If we found any errors so far, we report them to the user and quit
 	if (isset($error)) {
 		?>
-		<h3><?= $error_types[$error] ?></h3>
+		<h3><?= $error ?></h3>
 		<form method="post" action="<?php getPageURL($role) ?>">
 			<input type="hidden" name="dest_code" value="<?= $dest_code ?>">
 			<input type="hidden" name="amount" value="<?= $amount ?>">

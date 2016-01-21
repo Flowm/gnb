@@ -1,4 +1,5 @@
 # Goliath National Bank - Group 12
+![GNB Logo](http://frcy.org/static/gnb.svg)
 
 ## Virtual machine
 Our submitted virtual machine has the following passwords configured:

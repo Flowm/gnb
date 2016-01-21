@@ -99,13 +99,22 @@ if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
 			if ($auth_type == "SCS") {
 				$msg = verifySCSTAN($tan, $user->pin, $target_file);
 				if ($msg == "SUCCESS") {
+					DB::i()->removeInvalidTanAttempts($user_id);
 					$cmdln = "$ctransact '$account_id' 'ASMARTCARDTANYO' '$target_file'";
 				} else {
+					DB::i()->handleInvalidTan($user_id);
 					$error = $msg;
 				}
 			} else {
 				// NON-SCS TANs get verified in the c parser
-				$cmdln = "$ctransact '$account_id' '$tan' '$target_file'";
+				if (DB::i()->verifyTANCode($account_id, $tan) == false) {
+					$cmdln = "";
+					$error = 4;
+					DB::i()->handleInvalidTan($user_id);
+				} else {
+					DB::i()->removeInvalidTanAttempts($user_id);
+					$cmdln = "$ctransact '$account_id' '$tan' '$target_file'";
+				}
 			}
 			if ($cmdln != "") {
 				exec($cmdln, $cmdout);

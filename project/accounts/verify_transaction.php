@@ -84,15 +84,15 @@ else
 	}
 	if ($amount == null) {
 		$amount = '';
-		$error = (isset($error)) ? 4 : 1;
+		$error = (isset($error)) ? $error_types[4] : $error_types[1];
 	}
 	if ($description == null) {
 		$description = '';
-		$error = (isset($error)) ? 4 : 2;
+		$error = (isset($error)) ? $error_types[4] : $error_types[2];
 	}
 	if ($tan_code == null) {
 		$tan_code = '';
-		$error = (isset($error)) ? 4 : 3;
+		$error = (isset($error)) ? $error_types[4] : $error_types[3];
 	}
 	if (empty($account_id)) {
 		die("Account ID not found");
@@ -103,7 +103,7 @@ else
     if ($auth_type == 'SCS') {
         $timestamp = verifyAppGeneratedTAN($tan_code,$user->pin,$dest_code,$amount);
         if ($timestamp == null || $timestamp <= $account->last_tan_time) {
-			$error = 5;
+			$error = $error_types[5];
 			DB::i()->handleInvalidTan($user_id);
         }
         else {
@@ -111,7 +111,7 @@ else
             DB::i()->setLastTANTime($account_id,$timestamp);
         }
     }
-	//If we found any errors so far, we should print them
+	//Only verifying transaction in case no errors popped up until now
 	if (!isset($error)) {
 		# Verify Operation
 		$transaction_res = DB::i()->verifyTransaction($account_id, $dest_code, $amount , $description , $tan_code, $user_id, $auth_type ) ;
@@ -124,11 +124,11 @@ else
 			$_SESSION["process"] = true;
 		}
 		else {
-			$error = 6;
+			$error = $transaction_res["message"];
 		}
 	}
 	//If we found any errors so far, we report them to the user and quit
-	if (isset($error) && isset($error_types[$error])) {
+	if (isset($error)) {
 		?>
 		<h3><?= $error_types[$error] ?></h3>
 		<form method="post" action="<?php getPageURL($role) ?>">

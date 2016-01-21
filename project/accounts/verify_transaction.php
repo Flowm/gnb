@@ -80,7 +80,7 @@ else
 	//Setting error codes in case the input sanitization returned an error
 	if ($dest_code == null) {
 		$dest_code = '';
-		$error = 0;
+		$error = $error_types[0];
 	}
 	if ($amount == null) {
 		$amount = '';

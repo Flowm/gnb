@@ -62,7 +62,7 @@ if ( isset($_SESSION["process"]) && $_SESSION["process"] == true
 	echo 	'<form method="post" action="'.getPageURL($role).'">'
 		.	'<input type="hidden" name="frame" value="account_overview">'
 		.	'<input type="hidden" name="section" value="my_accounts">'
-		.	'<input type="submit" value="Back to Overview" class="simpleButton">'
+		.	'<input type="submit" value="Awesome!" class="simpleButton">'
 		.	'<input type="hidden" name="token" value="' . $token . '">'
 		.	'</form">' ;
     unset($_SESSION["process"]);

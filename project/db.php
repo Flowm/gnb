@@ -65,10 +65,11 @@ final class DB {
 	public $ACCOUNTOVERVIEW_TABLE_BALANCE	= "balance";
 	public $ACCOUNTOVERVIEW_TABLE_TAN_TIME	= "last_tan_time";
 
-	public $FAILEDLOGIN_TABLE_NAME	= "failed_login";
-	public $FAILEDLOGIN_TABLE_KEY	= "id";
-	public $FAILEDLOGIN_USER_ID		= "user_id";
-	public $FAILEDLOGIN_LOGIN_TS	= "login_timestamp";
+	public $FAIL_TABLE_NAME		= "failed_attempt";
+	public $FAIL_TABLE_KEY		= "id";
+	public $FAIL_TYPE		= "type";
+	public $FAIL_USER_ID		= "user_id";
+	public $FAIL_TS			= "timestamp";
 
 	public $FAKE_APPROVER_USER_ID = 1;
 	public $SCS_DEFAULT_TAN = "ASMARTCARDTANYO";
@@ -76,6 +77,7 @@ final class DB {
 	private $MAGIC = 'SUITUP';
 	private $WELCOMECREDIT_DESCRIPTION = 'GNB Welcome Credit';
 	private $MAX_FAILED_LOGIN_ATTEMPTS = 5;
+	private $MAX_INVALID_TAN_ATTEMPTS = 5;
 	private $PW_RESET_HASH_TIMEOUT = "1 DAY";
 
 	/**
@@ -169,6 +171,18 @@ final class DB {
 		);
 
 		return $AUTHENTICATION_DEVICE[$key];
+	}
+
+	function mapFailType($key)
+	{
+		$FAIL_TYPES = array(
+			'login'		=> 0,
+			'tan'		=> 1,
+			0		=> 'login',
+			1		=> 'tan',
+		);
+
+		return $FAIL_TYPES[$key];
 	}
 
 	/************************************************
@@ -267,7 +281,7 @@ final class DB {
 			$this->handleFailedLogin($user_id);
 			return false;
 		} else {
-			$this->handleSuccessfulLogin($user_id);
+			$this->removeFailedLoginAttempts($user_id);
 			return $this->getUser($result[0][$this->USER_TABLE_KEY]);
 		}
 	}
@@ -299,34 +313,82 @@ final class DB {
 		}
 	}
 
-	function handleSuccessfulLogin($user_id)
+	function handleInvalidTan($user_id)
 	{
-		$SQL = "DELETE FROM $this->FAILEDLOGIN_TABLE_NAME
+		if (!$this->addInvalidTanAttempt($user_id)) {
+			die("COULD NOT ADD INVALID TAN ATTEMPT");
+		} else {
+			
+			$fails = $this->getNumberOfInvalidTanAttempts($user_id);
+			if ($fails >= $this->MAX_INVALID_TAN_ATTEMPTS) {
+				$this->blockUser($user_id, $this->FAKE_APPROVER_USER_ID);
+				echo "You have been logged out.";
+				require_once getPageAbsolute("logout");
+				return false;
+			} else {
+				return true;
+			}
+
+		}
+	}
+
+	function removeFailedLoginAttempts($user_id)
+	{
+		$fail_type = $this->mapFailType('login');
+		return $this->removeFails($user_id, $fail_type);
+	}
+
+	function removeInvalidTanAttempts($user_id)
+	{	
+		$fail_type = $this->mapFailType('tan');
+		return $this->removeFails($user_id, $fail_type);
+	}
+
+	function removeFails($user_id, $fail_type)
+	{
+		$SQL = "DELETE FROM $this->FAIL_TABLE_NAME
 				WHERE
-					$this->FAILEDLOGIN_USER_ID = :user_id
+					$this->FAIL_USER_ID = :user_id
+					AND $this->FAIL_TYPE = :fail_type
 				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+		$stmt->bindValue(':fail_type', $fail_type, PDO::PARAM_INT);
 		$result = $stmt->execute();
 
 		return $result;
 	}
 
 	function addFailedLoginAttempt($user_id)
+	{	
+		$fail_type = $this->mapFailType('login');
+		return $this->addFail($user_id, $fail_type);
+	}
+
+	function addInvalidTanAttempt($user_id)
 	{
-		$SQL = "INSERT INTO $this->FAILEDLOGIN_TABLE_NAME
+		$fail_type = $this->mapFailType('tan');
+		return $this->addFail($user_id, $fail_type);
+	}
+
+	function addFail($user_id, $fail_type)
+	{
+		$SQL = "INSERT INTO $this->FAIL_TABLE_NAME
 				(
-					$this->FAILEDLOGIN_USER_ID,
-					$this->FAILEDLOGIN_LOGIN_TS
+					$this->FAIL_TYPE,
+					$this->FAIL_USER_ID,
+					$this->FAIL_TS
 				)
 				VALUES
 				(
+					:fail_type,
 					:user_id,
 					now()
 				)";
 
 		$stmt = $this->pdo->prepare($SQL);
+		$stmt->bindValue(':fail_type', $fail_type, PDO::PARAM_INT);
 		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
 		$stmt->execute();
 
@@ -341,17 +403,31 @@ final class DB {
 	}
 
 	function getNumberOfFailedLoginAttempts($user_id)
+	{	
+		$fail_type = $this->mapFailType('login');
+		return $this->getNumberOfFails($user_id, $fail_type);
+	}
+
+	function getNumberOfInvalidTanAttempts($user_id)
+	{	
+		$fail_type = $this->mapFailType('tan');
+		return $this->getNumberOfFails($user_id, $fail_type);
+	}
+
+	function getNumberOfFails($user_id, $fail_type)
 	{
 		$col = "count";
 
 		$SQL = "SELECT count(*) AS $col
-				FROM $this->FAILEDLOGIN_TABLE_NAME
+				FROM $this->FAIL_TABLE_NAME
 				WHERE
-					$this->FAILEDLOGIN_USER_ID = :user_id
+					$this->FAIL_USER_ID = :user_id
+					AND $this->FAIL_TYPE = :fail_type
 				";
 
 		$stmt = $this->pdo->prepare($SQL);
 		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+		$stmt->bindValue(':fail_type', $fail_type, PDO::PARAM_INT);
 		$stmt->execute();
 
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -665,6 +741,9 @@ final class DB {
 
 	function approveUser($user_id, $approver_id, $role_filter = "")
 	{
+		$this->removeFailedLoginAttempts($user_id);
+		$this->removeInvalidTanAttempts($user_id);
+
 		$new_status = $this->mapUserStatus('approved');
 		return $this->changeUserStatus($user_id, $new_status, $approver_id, $role_filter);
 	}
@@ -863,7 +942,8 @@ final class DB {
 											$new_account_id,
 											$balance,
 											$this->WELCOMECREDIT_DESCRIPTION,
-											$tan);
+											$tan,
+											$user_id);
 
 		if ($balance >= 10000) {
 			$this->approvePendingTransaction($this->FAKE_APPROVER_USER_ID, $result);
@@ -1121,7 +1201,7 @@ final class DB {
 		return $result;
 	}
 
-	function processTransaction($source, $destination, $amount, $description, $tan, $auth_device = 'TANs')
+	function processTransaction($source, $destination, $amount, $description, $tan, $user_id, $auth_device = 'TANs')
 	{
 		$approved_at	= 'NULL';
 		$approved_by	= 'NULL';
@@ -1167,6 +1247,7 @@ final class DB {
 		if ($auth_device == "TANs") {
 			if ($this->checkTanAndSetUsed($source, $tan) == false) {
 				$this->pdo->rollBack();
+				$this->handleInvalidTan($user_id);
 				return false;
 			}
 		} else {
@@ -1211,6 +1292,7 @@ final class DB {
 		
 		if ($result != 0) {
 			$this->pdo->commit();
+			$this->removeInvalidTanAttempts($user_id);
 			return $result;
 		} else {
 			$this->pdo->rollBack();
@@ -1218,7 +1300,7 @@ final class DB {
 		}
 	}
 
-	function verifyTransaction($source, $destination, $amount, $description, $tan_code, $auth_device='TANs')
+	function verifyTransaction($source, $destination, $amount, $description, $tan_code, $user_id, $auth_device='TANs')
 	{
 		$var_res = array (
 			"result"	=> false,
@@ -1259,6 +1341,7 @@ final class DB {
 
 		if ($tanValid == false) {
 			$var_res["message"]	= '[TAN] Invalid or used TAN';
+			$this->handleInvalidTan($user_id);
 			return $var_res ; 
 		}
 	

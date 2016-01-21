@@ -54,7 +54,7 @@ $auth_type = DB::i()->mapAuthenticationDevice($user->auth_device);
 # Process Transaction
 if ( isset($_SESSION["process"]) && $_SESSION["process"] == true
     && isset($_POST["confirmed"]) && $_POST["confirmed"] == "yes") {
-	$trans_res	 = DB::i()->processTransaction($account_id, $dest_code, $amount, $description, $tan_code, $auth_type);
+	$trans_res	 = DB::i()->processTransaction($account_id, $dest_code, $amount, $description, $tan_code, $user_id, $auth_type);
 	if ($trans_res == false){
 		die ("Unkonwn Transaction error, please connect our bros for help!");
 	}
@@ -104,6 +104,7 @@ else
         $timestamp = verifyAppGeneratedTAN($tan_code,$user->pin,$dest_code,$amount);
         if ($timestamp == null || $timestamp <= $account->last_tan_time) {
 			$error = 5;
+			DB::i()->handleInvalidTan($user_id);
         }
         else {
             $account->last_tan_time = $timestamp;
@@ -113,7 +114,7 @@ else
 	//If we found any errors so far, we should print them
 	if (!isset($error)) {
 		# Verify Operation
-		$transaction_res = DB::i()->verifyTransaction($account_id, $dest_code, $amount , $description , $tan_code, $auth_type ) ;
+		$transaction_res = DB::i()->verifyTransaction($account_id, $dest_code, $amount , $description , $tan_code, $user_id, $auth_type ) ;
 		if ($transaction_res["result"] == true ) {
 
 			# Setting the summary line

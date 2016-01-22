@@ -47,8 +47,16 @@ table.usecase-table {
     font-size: 23px;
 }
 
+td.smallusecase {
+    width:780px;
+}
+
 span.working {
 	color: lime;
+}
+
+td.center, th.center {
+  text-align: center !important;
 }
 
 span.not-working {

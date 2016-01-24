@@ -20,8 +20,8 @@
 
 	RedirectMatch 404 ^/tmp(/|$)
 	RedirectMatch 404 ^/lib(/|$)
-	ErrorDocument 403 /errorPage.php
-	ErrorDocument 404 /errorPage.php
+	ErrorDocument 403 /error_page.php
+	ErrorDocument 404 /error_page.php
 
 	# Possible values include: debug, info, notice, warn, error, crit,
 	# alert, emerg.

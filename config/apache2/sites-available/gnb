@@ -18,8 +18,11 @@
 		Allow from all
 	</Directory>
 
-	RedirectMatch 404 ^/tmp(/|$)
+	RedirectMatch 404 ^/accounts(/|$)
 	RedirectMatch 404 ^/lib(/|$)
+	RedirectMatch 404 ^/models(/|$)
+	RedirectMatch 404 ^/tmp(/|$)
+
 	ErrorDocument 403 /error_page.php
 	ErrorDocument 404 /error_page.php
 

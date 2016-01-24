@@ -103,8 +103,6 @@ $logo_svg = getMedia('logo_svg');
 						</a>
 					</label>
                 </div>
-                
-                
             </div>
 
 

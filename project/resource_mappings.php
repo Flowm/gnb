@@ -23,7 +23,6 @@ $pages["home"] 				= "index.php";
 $pages["login"] 			= "login.php";
 $pages["logout"] 			= "logout.php";
 $pages["db_functions"] 		= "db.php";
-$pages["mail"] 				= "gnbmailer.php";
 $pages["awesome"] 			= "awesome_data.php";
 $pages["error"] 			= "errorPage.php";
 $pages["util"] 				= "genericfunctions.php";
@@ -55,6 +54,7 @@ $pages["gnb_style"] 	= "style/gnb.css";
 
 $pages["scs"] 			= "resources/SmartCardSimulator.jar";
 
+$pages["mail"] 				= "lib/gnbmailer/gnbmailer.php";
 $pages["fpdf"] 				= "lib/fpdf/fpdf.php";
 $pages["fpdf_protection"] 	= "lib/fpdf/fpdf_protection.php";
 $pages["phpmailer"] 		= "lib/phpmailer/PHPMailerAutoload.php";

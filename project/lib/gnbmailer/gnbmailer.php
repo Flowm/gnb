@@ -1,6 +1,6 @@
 <?php
 
-require_once "resource_mappings.php";
+require_once __DIR__."/../../resource_mappings.php";
 require_once getPageAbsolute("phpmailer");
 
 class GNBMailer {
@@ -66,18 +66,18 @@ class GNBMailer {
 		$subject = "Welcome to GNB!";
 		$body_txt = $this->getTemplate_Approval($cust_name, $cust_balance );
 		$body_html = $this->getHTMLMail($body_txt);
-		
+
 		$this->sendMail($cust_addr, $cust_name, $subject, $body_txt, $body_html, $tans_pdf);
 		if (!empty($tans_pdf)){
 			unlink($tans_pdf) ;
 		}
 	}
-	
-	public function sendMail_PasswordReset($cust_addr,$cust_name, $cust_resetlink) {
+
+	public function sendMail_PasswordReset($cust_addr, $cust_name, $cust_resetlink) {
 		$subject = "GNB Password Reset";
-		$body_txt = $this->getTemplate_PasswordReset($cust_name,$cust_resetlink);
+		$body_txt = $this->getTemplate_PasswordReset($cust_name, $cust_resetlink);
 		$body_html = $this->getHTMLMail($body_txt);
-		
+
 		$this->sendMail($cust_addr, $cust_name, $subject, $body_txt, $body_html );
 	}
 
@@ -96,7 +96,7 @@ class GNBMailer {
 		return $template;
 	}
 
-	private function getTemplate_PasswordReset($cust_name,$cust_resetlink) {
+	private function getTemplate_PasswordReset($cust_name, $cust_resetlink) {
 		ob_start();
 		include "templates/mail_pwrecovery.template";
 		$template = ob_get_clean();
@@ -104,7 +104,7 @@ class GNBMailer {
 	}
 
 	private function getHTMLMail($body_txt) {
-		$logo_path = realpath(dirname(__FILE__)) . '/media/gnb_logo.png';
+		$logo_path = getMediaAbsolute('logo_png');
 		$logo_type = pathinfo($logo_path, PATHINFO_EXTENSION);
 		$logo_data = file_get_contents($logo_path);
 		$logo_base64 = 'data:image/' . $logo_type . ';base64,' . base64_encode($logo_data);
@@ -117,7 +117,5 @@ class GNBMailer {
 }
 
 #$gnbmailer = new GNBMailer();
-#$gnbmailer->sendMail_Approval('mahmoud.shadid@gmail.com', 'Mahmoud Naser',150,'/var/www/gnb/project/holder/gnb_5.pdf');
-#$gnbmailer->sendMail_Approval('mahmoud.shadid@gmail.com', 'Mahmoud Naser',150,'');
-#$gnbmailer->sendMail_Approval('florian.mauracher@tum.de', 'Florian Mauracher',150,'/var/www/gnb/project/accounts/GNB_unencrupted.pdf');
-//$gnbmailer->sendMail_Approval('alexander.lill@tum.de', 'Alexander Lill');
+#$gnbmailer->sendMail_Approval('mahmoud.shadid@gmail.com', 'Mahmoud Naser',150,'/var/www/gnb/project/tmp/holder/test.pdf');
+#$gnbmailer->sendMail_Approval('florian.mauracher@tum.de', 'Florian Mauracher',150,'/var/www/gnb/project/tmp/holder/test.pdf');

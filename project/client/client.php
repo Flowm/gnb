@@ -16,6 +16,13 @@ if ($role != "client") {
     include(getPageAbsolute('error'));
     exit();
 }
+if (!isset($_SESSION["timeout"])) {
+    $_SESSION['timeout'] = time();
+} elseif (time() > $_SESSION['timeout'] + 60 * 20){
+    include(getPageAbsolute('logout'));
+    exit();
+}
+
 
 $logo_svg = getMedia('logo_svg'); //GNB logo
 

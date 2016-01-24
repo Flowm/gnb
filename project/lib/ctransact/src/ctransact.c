@@ -110,6 +110,11 @@ int process_transaction(char* src, char* tan, char* time, struct transactstr tra
 		printf("\t--> SRC and DST can not be the same\n\n");
 		return 1;
 	}
+	if (!strncmp(t.dst, "10000001", 8)) {
+		printf("\t--> Sending money to the bank account is not supported\n\n");
+		return 1;
+	}
+
 	// Check numerical fields for validity
 	if (parse_number(t.src, 0) < 10000000) {
 		printf("\t--> SRC account invalid\n\n");

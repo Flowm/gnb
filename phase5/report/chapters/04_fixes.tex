@@ -42,4 +42,18 @@ Sample table
 \section{Business Logic Testing}
 \simpleVulntitle{OTG-BUSLOG-001}{Test Business Logic Data Validation}
 \vulntitle{OTG-BUSLOG-006}{Testing for the Circumvention of Work Flows}
+\fixtable{%
+	The application was generating plain error messages upon a login attempt with an empty password field. This would normally have returned a proper error message on the login page, but because the web server was sanitizing the input of an empty string first, the application would exit unexpectedly and return only the error message returned by the input sanitization function.
+}{%
+	\cvssBaseScorePretty{N}{L}{L}{R}{U}{N}{N}{L}
+}{%
+	/gnb/project/genericfunctions.php, /gnb/project/authentication.php, /gnb/project/login.php
+}{%
+	Added lines 10-15 inside \texttt{genericfunctions.php} and accordingly edited lines 15-21 inside \texttt{authentication.php}, as well as lines 60-69 inside \texttt{login.php}.
+}{%
+	The \gnb{} application returns custom error messages when submitting forms with user input. As of phase 3, user input was sanitized using a custom \texttt{sanitize\_input} function. This function would simply exit, returning a generic error message, in case an input wasn't sanitized correctly. This function returning upon a bad input on the login page was due to a faulty error message handling, which was later on discovered on other pages as well.
+	We modified the input sanitization function (the \texttt{check\_post\_input} function was also added) to return a value in case an input wasn't sanitized correctly (instead of exiting), allowing to generate more specific errors, depending on the page. Furthermore, by slightly changing the input checks inside other pages, we implemented a simpler logic for displaying error messages. More details about this can be found at \fixref{OTG-ERR-001}.\newline
+	The application does not cause the user to reach blank pages containing only error messages anymore.
+}
+
 \vulntitle{OTG-BUSLOG-007}{Test Defenses Against Application Mis-use}

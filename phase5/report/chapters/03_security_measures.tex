@@ -2,6 +2,15 @@
 \todoin{Short intro text here}
 \todoin{Description: Enumerate the security features your application uses and which attacks each feature defends against (specify which features you implemented and which you borrowed/use from other libraries)}
 
+%Sample table
+\securityMeasure{%
+	%description
+}{
+	%implementation
+}{
+	%safe against
+}
+
 
 \subsection{HTTPS with HSTS}
 
@@ -20,15 +29,43 @@ SSL ciphers are configured to the latest standards. As visible in \autoref{figur
 	\label{figure:ciphers2}
 \end{figure}
 
-
+\clearpage
 \subsection{CSRF Tokens}
+\securityMeasure{
+	The application automatically creates anti-CSRF cryptographic nonces (tokens) on all pages with forms that could be exploited to perform operations using the profile of a user. These tokens are validated once the form is submitted by the user, ensuring that the application can't be forced to perform actions via cross-site requests.
+}{
+	This feature was implemented manually, by creating a 256-bit random token (obtained via the PHP builtin \texttt{openssl\_random\_pseudo\_bytes} function) and encoding it base64. This token is then saved as a session variable and sent to the user as a hidden field inside a form, as can be seen in the figure below. Once the form is submitted by the user, the the token contained inside the form is compared against the one already existing on the server.
+}{
+	This particular security feature protects against XSRF attacks, as described in OTG-SESS-005.
+}
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/csrf_token.png}
+	\caption{CSRF token generated in the transaction page}
+	\label{figure:csrf}
+\end{figure}
 
+\clearpage
 \subsection{Password reset with second factor}
 
+\clearpage
 \subsection{Lockout mechanism after failed password entries}
 
-\subsection{Captcha}
+\clearpage
+\subsection{CAPTCHA}
+\securityMeasure{%
+	During the registration process users are required to enter a CAPTCHA code in order to prevent malicious attackers from automating registrations. This CAPTCHA is entirely random and requires the user to read an image an input the alphanumeric code manually.
+}{
+	For the creation of the CAPTCHA we resort to the \texttt{secureimage} library (see \ref{chapter:application_architecture} for further info).
+}{
+	This security feature protects the application from attackers who try to automate registrations (see OTG-IDENT-002), which could lead to a database saturation or even to a DOS.
+}
 
+\clearpage
 \subsection{Balance calculated in database (Realtime concurrent transactions)}
 
+\clearpage
 \subsection{TANs in password protected PDFs}
+
+\clearpage
+\subsection{Time-based TANs generated via SCS}

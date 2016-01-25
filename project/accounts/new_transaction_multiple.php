@@ -39,7 +39,7 @@ function verifySCSTAN($tan, $pin, $file) {
 		while (($line = fgets($handle)) !== false) {
 			$elements = explode(",", $line);
 			if (isset($elements[0]) && isset($elements[1])) {
-				$filestr .= '$elements[0]' . '$elements[1]';
+				$filestr .= $elements[0] . $elements[1];
 			} else {
 				return 2;
 			}

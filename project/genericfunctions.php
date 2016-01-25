@@ -120,12 +120,12 @@ function base64ToBase10($base64Str) {
 	return $result;
 }
 
-function verifyAppGeneratedTANData($tan, $pin, $input) {
+function verifyAppGeneratedTANData($tan, $input, $pin) {
     $salt = substr($tan,-5);
 
     $timestamp = base64ToBase10($salt);
 
-    $data = $pin . $input . $salt;
+    $data = $input . $pin . $salt;
     $hash = hash('sha256', $data, true);
 
     $hash = base64_encode($hash);

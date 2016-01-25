@@ -24,13 +24,6 @@ $error_types = array(0=>'Invalid input!',
 	3=>'ERROR: Unknown file error',
 	4=>'ERROR: Invalid TAN');
 
-$token = "";
-if (!isset($_SESSION['token'])) {
-    $token = md5(uniqid(rand(), TRUE));
-    $_SESSION['token'] = $token;
-} else {
-    $token = $_SESSION['token'];
-}
 
 function verifySCSTAN($tan, $pin, $file) {
 	$account_id = $_SESSION["account_id"];
@@ -70,13 +63,12 @@ $account_id = $_SESSION["account_id"];
 
 //Executed in case a transaction was started
 if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
-	$token = "";
-	if (isset($_POST['token']) && isset($_SESSION['token'])) {
-	    if ($_POST['token'] != $_SESSION['token']) {
-	        die("CSRF detected!");
-	    } else {
-	        $token = $_SESSION['token'];
-	    }
+	if (!isset($_POST['token']) || $_POST['token'] != $_SESSION['token']) {
+		die("CSRF detected!");
+	}
+	else {
+		$token = "";
+		unset($_SESSION['token']);
 	}
 
 	//If no TAN was entered by the user, we want a proper error message
@@ -131,6 +123,12 @@ if (isset($_FILES["transactionsCSV"]) && isset($_POST["tan"])) {
 	else {
 		$error = 0;
 	}
+}
+//Transaction hasn't started yet
+else {
+	$crypto = true;
+	$token = base64_encode(openssl_random_pseudo_bytes(32, $crypto));
+	$_SESSION['token'] = $token;
 }
 
 ?>

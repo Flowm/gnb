@@ -13,13 +13,10 @@ else if (!isset($frame)) {
     exit();
 }
 
-$token = "";
-if (!isset($_SESSION['token'])) {
-    $token = md5(uniqid(rand(), TRUE));
-    $_SESSION['token'] = $token;
-} else {
-    $token = $_SESSION['token'];
-}
+//CSRF token creation
+$crypto = true;
+$token = base64_encode(openssl_random_pseudo_bytes(32, $crypto));
+$_SESSION['token'] = $token;
 
 require_once getpageabsolute("db_functions");
 require_once getPageAbsolute("user");

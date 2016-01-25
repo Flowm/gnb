@@ -14,7 +14,7 @@ else if (!isset($frame)) {
 }
 
 $token = "";
-if ($_POST['token'] != $_SESSION['token']) {
+if (!isset($_POST['token']) || $_POST['token'] != $_SESSION['token']) {
     die("CSRF detected!");
 } else {
     $token = $_SESSION['token'];
@@ -63,9 +63,9 @@ if ( isset($_SESSION["process"]) && $_SESSION["process"] == true
 		.	'<input type="hidden" name="frame" value="account_overview">'
 		.	'<input type="hidden" name="section" value="my_accounts">'
 		.	'<input type="submit" value="Awesome!" class="simpleButton">'
-		.	'<input type="hidden" name="token" value="' . $token . '">'
 		.	'</form">' ;
     unset($_SESSION["process"]);
+	unset($_SESSION['token']);
 	exit();
 }
 # Otherwise confirm transaction parameters

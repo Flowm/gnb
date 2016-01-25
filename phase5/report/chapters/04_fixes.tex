@@ -31,7 +31,7 @@ Sample table
 \fixtable{%
 	The registration process was available to anyone, allowing to register countless users as long as a valid email was provided. Although a user would need to be manually approved by an employee of the bank, it was possible to generate DOS attacks by creating robot accounts (or at least saturating the database with dummy data).
 }{%
-	\cvssBaseScorePretty{N}{L}{L}{N}{U}{N}{N}{L}
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{N}{N}{L}
 }{%
 	/gnb/project/registration/registration.php, /gnb/project/registration/registration\_request.php
 }{%
@@ -41,6 +41,18 @@ Sample table
 }
 
 \vulntitle{OTG-IDENT-003}{Test Account Provisioning Process}
+\fixtable{%
+	Provisioning clients is an easy process with no effective mechanisms to verify or vet clients besides a manual approval process, provisioning employees is set up in a similar matter.
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{N}{N}{L}
+}{%
+	\na
+}{%
+	\na
+}{%
+	Only employees/admins are allowed to approve or reject user registrations. Since this application in only web-based and cannot provide any out of bound verification (e.g. the personal ID of a client, his tax code or similar), we must presume this can only happen physically at the Bank. Also the assumption is that users (both clients and employees) will only be approved by employees after a meeting in person at the bank, during which an employee has verified the personal data of said user.\newline
+	Given this argument, we decided to treat the account provisioning process as secure.
+}
 
 \clearpage
 \section{Error Handling}

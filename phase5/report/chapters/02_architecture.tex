@@ -1,6 +1,14 @@
 \chapter{Application Architecture}\label{chapter:application_architecture}
 \todoin{Next few pages should describe the architecture of your solution including UML diagrams, interaction with other systems and dependencies on external libraries}
+The \gnb{} application was built using a PHP backend and a web-based (HTML + Javascript) frontend. Also, the solution may provide the clients of \gnb{} with an additional SCS (short for Smart-Card-Simulator) software, which is needed to provide 2-step authentication during transactions and can be used on any system that supports Java 1.7+.\newline
+The application was almost entirely developed without the aid of external libraries, preferring the use of builtin APIs and a custom architecture. Here is a list of the used libraries, which will be later on described more in details, along with their interaction with the system:
+\begin{itemize}
+	\item PHPMailer (see \texttt{https://github.com/PHPMailer/PHPMailer})
+	\item fpdf (see \texttt{http://www.fpdf.org/en/script/script37.php})
+	\item secureimage (see \texttt{https://github.com/dapphp/securimage})
+\end{itemize}
 
+In the following section we will discuss the architecture of the whole web application; we will also provide dedicated sections for a more detailed analysis of the Entity-Relationship model used in the database as well as the architecture of the Smart Card Simulator.
 \section{Architecture}
 
 \section{Database Schema}

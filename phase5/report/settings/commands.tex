@@ -91,6 +91,19 @@
 	\end{table}
 }
 
+\newcommand{\securityMeasure}[3]{%
+	\begin{table}[h!tpb]
+		\centering
+		\begin{tabularx}{\textwidth}{l | X}
+			\toprule
+			\textbf{Description} & #1 \\
+			\textbf{Implementation} & #2 \\
+			\textbf{Secure against} & #3 \\
+			\bottomrule
+		\end{tabularx}
+	\end{table}
+}
+
 % CVSS calculation
 % Documentation see https://github.com/AlexanderLill/cvss3tex
 \input{settings/cvss3tex/cvss}

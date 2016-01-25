@@ -109,6 +109,17 @@ Sample table
 \clearpage
 \section{Cryptography}
 \simpleVulntitle{OTG-CRYPST-001}{Testing for Weak SSL/TSL Ciphers, Insufficient Transport Layer Protection}
+\fixtable{%
+	The web server configuration offered SSL ciphers which were vulnerable against POODLE and RC4.
+}{%
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{N}{N}
+}{%
+	We updated the apache2 webserver configuration to disable all insecure ciphers. The current configuration is documented \autoref{sec:ssl_ciphers}
+}{%
+	/config/apache2/httpd.conf
+}{%
+	Changed lines 1-7 of \texttt{httpd.conf}
+}
 
 
 \clearpage

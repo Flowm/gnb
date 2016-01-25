@@ -15,15 +15,16 @@ Sample table
 }{%
 	%Cvss score
 }{%
+	%Countermeasures (description)
+}{%
 	%Modified files (paths)
 }{%
 	%Modified line numbers
-}{%
-	%Countermeasures (description)
 }
 
 \section{Configuration and Deploy Management Testing}
 \simpleVulntitle{OTG-CONFIG-001}{Test File Extensions Handling for Sensitive Information}
+
 
 \clearpage
 \section{Identity Management Testing}
@@ -33,26 +34,29 @@ Sample table
 }{%
 	\cvssBaseScorePretty{N}{L}{N}{N}{U}{N}{N}{L}
 }{%
-	/gnb/project/registration/registration.php, /gnb/project/registration/registration\_request.php
+	To prevent attackers to register countless users using automated scripts we added a CAPTCHA functionality.
+}{%
+	/project/registration/registration.php, /project/registration/registration\_request.php
 }{%
 	Added lines 13, 96-106 inside \texttt{registration.php}, and added lines 25, 35, 56-61 inside \texttt{registration\_request.php}.
-}{%
-	To prevent attackers to register countless users using automated scripts we added a CAPTCHA functionality.
 }
 
+
+\clearpage
 \vulntitle{OTG-IDENT-003}{Test Account Provisioning Process}
 \fixtable{%
 	Provisioning clients is an easy process with no effective mechanisms to verify or vet clients besides a manual approval process, provisioning employees is set up in a similar matter.
 }{%
 	\cvssBaseScorePretty{N}{L}{N}{N}{U}{N}{N}{L}
 }{%
-	\na
-}{%
-	\na
-}{%
 	Only employees/admins are allowed to approve or reject user registrations. Since this application is only web-based and cannot provide any out of bound verification (e.g. the personal ID of a client, his tax code or similar), we must presume this can only happen physically at the Bank. Also the assumption is that users (both clients and employees) will only be approved by employees after a meeting in person at the bank, during which an employee has verified the personal data of said user.\newline
 	Given this argument, we decided to treat the account provisioning process as secure.
+}{%
+	None
+}{%
+	\na
 }
+
 
 \clearpage
 \section{Error Handling}
@@ -62,16 +66,18 @@ Sample table
 }{%
 	\cvssBaseScorePretty{P}{L}{L}{R}{U}{L}{N}{N}
 }{%
-	/gnb/project/lib/ctransact/src/ctransact.c
+	The vulnerability was due to the application displaying all messages returned from the C parser to the client. We simply changed the output of the parser to display a custom error, containing the line of the batch file in which the error occurred, instead of an error code.
+}{%
+	/project/lib/ctransact/src/ctransact.c
 }{%
 	Modified line 65 inside \texttt{ctransact.c}
-}{%
-	The vulnerability was due to the application displaying all messages returned from the C parser to the client. We simply changed the output of the parser to display a custom error, containing the line of the batch file in which the error occurred, instead of an error code.
 }
+
 
 \clearpage
 \section{Cryptography}
 \simpleVulntitle{OTG-CRYPST-001}{Testing for Weak SSL/TSL Ciphers, Insufficient Transport Layer Protection}
+
 
 \clearpage
 \section{Business Logic Testing}
@@ -82,13 +88,14 @@ Sample table
 }{%
 	\cvssBaseScorePretty{N}{L}{L}{R}{U}{N}{N}{L}
 }{%
-	/gnb/project/genericfunctions.php, /gnb/project/authentication.php, /gnb/project/login.php
-}{%
-	Added lines 10-15 inside \texttt{genericfunctions.php} and accordingly edited lines 15-21 inside \texttt{authentication.php}, as well as lines 60-69 inside \texttt{login.php}.
-}{%
 	The \gnb{} application returns custom error messages when submitting forms with user input. As of phase 3, user input was sanitized using a custom \texttt{sanitize\_input} function. This function would simply exit, returning a generic error message (without html formatting), in case an input wasn't sanitized correctly. This was due to a faulty error message handling, which was later on discovered on other pages as well.
 	We modified the input sanitization function (the \texttt{check\_post\_input} function was also added) to return a value in case an input wasn't sanitized correctly (instead of exiting). This allowed to generate more specific errors, depending on the page. Furthermore, by slightly changing the input checks inside other pages, we implemented a simpler logic for displaying error messages. \newline
 	For uniformity in error reporting, we applied minor changes to the following files as well: \texttt{new\_transaction.php, verify\_transaction.php, new\_transaction\_multiple.php, registration.php, registration\_request.php}.
+}{%
+	/project/genericfunctions.php, /project/authentication.php, /project/login.php
+}{%
+	Added lines 10-15 inside \texttt{genericfunctions.php} and accordingly edited lines 15-21 inside \texttt{authentication.php}, as well as lines 60-69 inside \texttt{login.php}.
 }
+
 
 \vulntitle{OTG-BUSLOG-007}{Test Defenses Against Application Mis-use}

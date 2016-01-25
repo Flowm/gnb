@@ -24,6 +24,38 @@ Sample table
 
 \section{Configuration and Deploy Management Testing}
 \simpleVulntitle{OTG-CONFIG-001}{Test File Extensions Handling for Sensitive Information}
+\fixtable{%
+	When performing batch transactions, the transaction file uploaded by the
+	user was accessible by everyone who could guess the filename until the
+	transaction was processed.
+}{%
+	\cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{N}{N}
+}{%
+	To prevent attackers from accessing sensitive information we now prevent
+	all access to the lib and tmp folders by denying access to them in the
+	apache2 site configuration.
+	PHP files that shouldn't be accessed directly by the user are now located
+	in the lib folder.
+	The newly created tmp folder now contains the previously mentioned uploads
+	folder for temporary batch transaction files and the holder folder for
+	temporary password protected tan lists of new users.
+	Additionally we now display the same error page for "not found (404)" and
+	"permission denied (403)" errors to prevent disclosing the internal folder
+	structure.
+}{%
+	/config/apache2/site-available/gnb \newline
+	/project/resource\_mappings.php \newline
+	Moved files/directories:
+	\begin{itemize}
+		\item /project/uploads/ -> /project/tmp/uploads/
+		\item /project/holder/ -> /project/tmp/holder/
+		\item /project/gnbmailer.php -> /project/lib/gnbmailer/gnbmailer.php
+		\item /project/templates/ -> /project/lib/gnbmailer/templates/
+	\end{itemize}
+}{%
+	Added/changed lines 21-34 in the apache2 site configuration \texttt{gnb} \newline
+	Updated lines 33,34,56,63,64 in the resource\_mappings.php to reflect the changed paths
+}
 
 
 \clearpage

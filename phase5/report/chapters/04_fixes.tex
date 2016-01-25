@@ -114,6 +114,18 @@ Sample table
 \clearpage
 \section{Business Logic Testing}
 \simpleVulntitle{OTG-BUSLOG-001}{Test Business Logic Data Validation}
+\fixtable{%
+	The application allowed transaction to the account \texttt{10000001} which belongs to Barney Stinson, who is the admin of our bank system. As defined in our database (see \autoref{section:db}) Barney always has an account balance of \texttt{1.000.000.000}. Due to this fact transactions to barney decrease the balance of the source account while not affecting the destination account. This also leads to mysterious "loss" of money because the bank start page shows the total amount of money on all our accounts - excluding barneys account.
+}{%
+	\cvssBaseScorePretty{N}{L}{L}{R}{U}{N}{H}{N}
+}{%
+	/project/accounts/verify\_transaction.php, /project/lib/ctransact/src/ctransact.c
+}{%
+	Added/changed lines 147, 1213-1216, 1319-1323 and 1344 in \texttt{verify\_transaction.php} and lines 113-117 in \texttt{ctransact.c}
+}{%
+	To avoid this issue it is no longer possible to execute transaction to account number \texttt{10000001}. This has been implemented using simple checks for the account number in both the single transactions process as well as the batch transactions parser.
+}
+
 \vulntitle{OTG-BUSLOG-006}{Testing for the Circumvention of Work Flows}
 \fixtable{%
 	The application was generating plain error messages upon a login attempt with an empty password field, preventing the user from returning to the login page via graphical means, and providing some insight about the application's error handling policy.
@@ -129,5 +141,21 @@ Sample table
 	Added lines 10-15 inside \texttt{genericfunctions.php} and accordingly edited lines 15-21 inside \texttt{authentication.php}, as well as lines 60-69 inside \texttt{login.php}.
 }
 
-
 \vulntitle{OTG-BUSLOG-007}{Test Defenses Against Application Mis-use}
+\fixtable{%
+	The application did not implement any mechanisms to prevent against application mis-use except the Lockout-Mechanism in face of too many failed login attempts. This enabled attackers to brute-force TANs for single as well as multiple transactions.
+}{%
+	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L}
+}{%
+	/project/accounts/verify\_transaction.php, /project/db.php, /project/logout.php, project/accounts/new\_transaction\_multiple.php, config/database/gnbdb\_create.sql
+}{%
+	Added/changed lines 57, 107 and 117 in \texttt{verify\_transaction.php} 
+	Added/changed lines 80, 176-187, 284, 316-430, 744-746, 945-946, 1204, 1250, 1295, 1303 and 1344 in \texttt{db.php}
+	Added line 10 in \texttt{logout.php}
+	Added/changed lines 102, 105 and 110-117  in \texttt{new\_transaction\_multiple.php} 
+	Added/changed lines 2, 143, 145, 148, 150 and 152 in \texttt{gnbdb\_create.sql}
+}{%
+	The application now keeps track of failed login attempts as well as invalid transaction numbers (TANs). This is realized using a table that can flexibly count all kinds of failed attempts associated with an user ID. That means that this mechanism can easily be extended to keep track of additional mis-uses of the application.
+
+Too many invalid TANs now lead to a logout of the user and blocking of the account. The account then has to be unblocked by an employee.
+}

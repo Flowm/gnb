@@ -1,27 +1,5 @@
 \chapter{Fixes}\label{chapter:fixes}
-
-For each vulnerability discovered in Phase 4 by your team or the team that tested your
-application, you should summarize the fix (security measure) that you implemented:
-\begin{itemize}
-	\item Path(s) of file(s) which were modified for the fix
-	\item Line number(s) which were modified in each file 
-	\item NOTE: You can use a diff utility but you should only report the changes relevant for one particular fix per vulnerability (not just a diff of all changes to phase 3).
-	\item Textual description of your countermeasures and why it fixes the problem (i.e. the effect that the modifications have against attack).
-\end{itemize}
-
-Sample table
-\fixtable{%
-	%Description of the vulnerability
-}{%
-	%Cvss score
-}{%
-	%Countermeasures (description)
-}{%
-	%Modified files (paths)
-}{%
-	%Modified line numbers
-}
-
+\clearpage
 \section{Configuration and Deploy Management Testing}
 \simpleVulntitle{OTG-CONFIG-001}{Test File Extensions Handling for Sensitive Information}
 \fixtable{%
@@ -53,8 +31,8 @@ Sample table
 		\item /project/templates/ -> /project/lib/gnbmailer/templates/
 	\end{itemize}
 }{%
-	Added/changed lines 21-34 in the apache2 site configuration \texttt{gnb} \newline
-	Updated lines 33,34,56,63,64 in the resource\_mappings.php to reflect the changed paths
+	Added/changed lines 21-34 in the \texttt{gnb} apache2 config \newline
+	Updated lines 33, 34, 56, 63, 64 in the resource\_mappings.php to reflect the changed paths
 }
 
 
@@ -137,6 +115,8 @@ Sample table
 	To avoid this issue it is no longer possible to execute transaction to account number \texttt{10000001}. This has been implemented using simple checks for the account number in both the single transactions process as well as the batch transactions parser.
 }
 
+
+\clearpage
 \vulntitle{OTG-BUSLOG-006}{Testing for the Circumvention of Work Flows}
 \fixtable{%
 	The application was generating plain error messages upon a login attempt with an empty password field, preventing the user from returning to the login page via graphical means, and providing some insight about the application's error handling policy.
@@ -152,6 +132,8 @@ Sample table
 	Added lines 10-15 inside \texttt{genericfunctions.php} and accordingly edited lines 15-21 inside \texttt{authentication.php}, as well as lines 60-69 inside \texttt{login.php}.
 }
 
+
+\clearpage
 \vulntitle{OTG-BUSLOG-007}{Test Defenses Against Application Mis-use}
 \fixtable{%
 	The application did not implement any mechanisms to prevent against application mis-use except the Lockout-Mechanism in face of too many failed login attempts. This enabled attackers to brute-force TANs for single as well as multiple transactions.

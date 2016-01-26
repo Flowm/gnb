@@ -17,13 +17,14 @@
 	The newly created tmp folder now contains the previously mentioned uploads
 	folder for temporary batch transaction files and the holder folder for
 	temporary password protected tan lists of new users.
-	Additionally we now display the same error page for "not found (404)" and
+	Additionally the same error page is shown for "not found (404)" and
 	"permission denied (403)" errors to prevent disclosing the internal folder
 	structure.
 }{%
 	/config/apache2/site-available/gnb \newline
 	/project/resource\_mappings.php \newline
 	Moved files/directories:
+	\vspace{-1mm}
 	\begin{itemize}
 		\setlength\itemsep{0pt}
 		\item /project/uploads/ -> /project/tmp/uploads/

@@ -25,10 +25,11 @@
 	/project/resource\_mappings.php \newline
 	Moved files/directories:
 	\begin{itemize}
+		\setlength\itemsep{0pt}
 		\item /project/uploads/ -> /project/tmp/uploads/
 		\item /project/holder/ -> /project/tmp/holder/
-		\item /project/gnbmailer.php -> /project/lib/gnbmailer/gnbmailer.php
-		\item /project/templates/ -> /project/lib/gnbmailer/templates/
+		\item /project/gnbmailer.php ->\newline/project/lib/gnbmailer/gnbmailer.php
+		\item /project/templates/ ->\newline/project/lib/gnbmailer/templates/
 	\end{itemize}
 }{%
 	Added/changed lines 21-34 in the \texttt{gnb} apache2 config \newline
@@ -108,11 +109,11 @@
 }{%
 	\cvssBaseScorePretty{N}{L}{L}{R}{U}{N}{H}{N}
 }{%
+	To avoid this issue it is no longer possible to execute transaction to account number \texttt{10000001}. This has been implemented using simple checks for the account number in both the single transactions process as well as the batch transactions parser.
+}{%
 	/project/accounts/verify\_transaction.php, /project/lib/ctransact/src/ctransact.c
 }{%
 	Added/changed lines 147, 1213-1216, 1319-1323 and 1344 in \texttt{verify\_transaction.php} and lines 113-117 in \texttt{ctransact.c}
-}{%
-	To avoid this issue it is no longer possible to execute transaction to account number \texttt{10000001}. This has been implemented using simple checks for the account number in both the single transactions process as well as the batch transactions parser.
 }
 
 
@@ -140,6 +141,10 @@
 }{%
 	\cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L}
 }{%
+	The application now keeps track of failed login attempts as well as invalid transaction numbers (TANs). This is realized using a table that can flexibly count all kinds of failed attempts associated with an user ID. That means that this mechanism can easily be extended to keep track of additional mis-uses of the application.
+
+Too many invalid TANs now lead to a logout of the user and blocking of the account. The account then has to be unblocked by an employee.
+}{%
 	/project/accounts/verify\_transaction.php, /project/db.php, /project/logout.php, project/accounts/new\_transaction\_multiple.php, config/database/gnbdb\_create.sql
 }{%
 	Added/changed lines 57, 107 and 117 in \texttt{verify\_transaction.php} 
@@ -147,8 +152,4 @@
 	Added line 10 in \texttt{logout.php}
 	Added/changed lines 102, 105 and 110-117  in \texttt{new\_transaction\_multiple.php} 
 	Added/changed lines 2, 143, 145, 148, 150 and 152 in \texttt{gnbdb\_create.sql}
-}{%
-	The application now keeps track of failed login attempts as well as invalid transaction numbers (TANs). This is realized using a table that can flexibly count all kinds of failed attempts associated with an user ID. That means that this mechanism can easily be extended to keep track of additional mis-uses of the application.
-
-Too many invalid TANs now lead to a logout of the user and blocking of the account. The account then has to be unblocked by an employee.
 }

@@ -79,11 +79,21 @@ SSL ciphers are configured to the latest standards. As visible in \autoref{figur
 
 \clearpage
 \subsection{Lockout mechanism after failed password entries}
+\securityMeasure{%
+	In order to use our website users are required to log in. For a successful login the right username (which is the users mail address) and the correct password are required. To prevent brute force attacks given an already known mail address a lockout mechanism has been implemented. This mechanism blocks the user account if the wrong password has been entered 5 times in a row. The user has to be unblocked by an employee afterwards.
+
+The same functionality was implemented to prevent brute force attacks on TANs for transactions.
+}{
+	This feature was implemented by adding the table \texttt{failed\_attempts} to the database (see \autoref{section:db}). This table stores all failed attempts (e.g. login or an invalid TAN) with the timestamp of the attempt and the ID of the user that executed the action. Every time an invalid password or TAN is observed a failed attempt is added the database and the sum of all failed attempts is checked. Once a valid password or TAN is entered all failed attempts are reset.
+}{
+	This feature protects against Application Mis-Use (OTG-BUSLOGIC-007) and brute force attacks on the login functinoality (OTG-AUTHN-003).
+}
+
 
 \clearpage
 \subsection{CAPTCHA}
 \securityMeasure{%
-	During the registration process users are required to enter a CAPTCHA code in order to prevent malicious attackers from automating registrations. This CAPTCHA is entirely random and requires the user to read an image an input the alphanumeric code manually.
+	During the registration process users are required to enter a CAPTCHA code in order to prevent malicious attackers from automating registrations. This CAPTCHA is entirely random and requires the user to read an image and input the alphanumeric code manually.
 }{
 	For the creation of the CAPTCHA we resort to the \texttt{secureimage} library (see \ref{chapter:application_architecture} for further info).
 }{

@@ -166,6 +166,36 @@ img.logo {
   background: none !important;
 }
 
+img#barney-img1-portrait {
+    width: 450px;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: none !important;
+}
+
+img#barney-img2-landscape {
+    width: 1000px;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: none !important;
+}
+
+img.img-landscape {
+    width: 900px;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: none !important;
+}
+
+.float-left {
+    margin: 0 auto !important;
+    float: left !important;
+}
+
+.float-right {
+    float: right !important;
+}
+
 tr.smallText {
     font-size: 16px;
 }

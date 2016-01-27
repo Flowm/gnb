@@ -106,6 +106,13 @@
 
 \clearpage
 \subsection{Password reset with two-factor authentication}
+\securityMeasure{%
+	The user has the possibility to reset his password in case he does not remember it. A password reset requires the users mail address and access to the used mail account. Additionally the user has to enter his PIN to complete the process of resetting his password. This prevents attackers that already have access to the users mail address from resetting the password.
+}{
+	This has been implemented using the columns \texttt{pw\_reset\_hash}, \texttt{pw\_reset\_hash\_timestamp} and \texttt{pin} in the table \texttt{user}. When a password reset is requested a mail is sent to the user with a randomly generated token which is also stored in the database with the current timestamp. The user then has to use this token before it is invalidated by clicking on the link in the email, and providing a new password and the current PIN in the form.
+}{
+	This security feature protects users from attackers that already have access to their mail account, physical access to their device(s) or started the password reset process through social engineering.
+}
 
 \clearpage
 \subsection{Lockout mechanism after failed password entries}

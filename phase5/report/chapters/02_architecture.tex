@@ -5,12 +5,15 @@ The application was almost entirely developed without the aid of external librar
 \begin{itemize}
 	\item PHPMailer (see \texttt{https://github.com/PHPMailer/PHPMailer})
 	\item fpdf (see \texttt{http://www.fpdf.org/})
-	\item pdf encryption script using fpdf (see \texttt{http://www.fpdf.org/en/script/script37.php})
+	\item pdf encryption script (see \texttt{http://www.fpdf.org/en/script/script37.php})
 	\item secureimage (see \texttt{https://github.com/dapphp/securimage})
 \end{itemize}
 
-In the following section we will discuss the architecture of the whole web application; we will also provide dedicated sections for a more detailed analysis of the Entity-Relationship model used in the database as well as the architecture of the Smart Card Simulator.
-\section{Architecture}
+
+In the following sections we will discuss the architecture of the whole web application (\autoref{section:architecture}); we will also provide dedicated sections for a more detailed analysis of the Entity-Relationship model used in the database (\autoref{section:db}) as well as the architecture of the Smart Card Simulator (\autoref{section:scs}).
+
+\clearpage
+\section{Architecture}\label{section:architecture}
 
 \section{Database Schema}\label{section:db}
 \begin{figure}[h!tbp]
@@ -19,6 +22,8 @@ In the following section we will discuss the architecture of the whole web appli
 	\caption{Database model}
 	\label{figure:dbmodel}
 \end{figure}
+
+\clearpage
 
 The database schema was created using the \emph{MySQL Workbench}. The database schema is shown in \autoref{figure:dbmodel} and describes the following 6 entities:
 \begin{description}
@@ -49,6 +54,7 @@ The database schema was created using the \emph{MySQL Workbench}. The database s
 
 \end{description}
 
+\clearpage
 \section{Smart Card Simulator}\label{section:scs}
 The SCS is a stand-alone Java application that can be downloaded as a \texttt{.jar} file via the web application without having to be logged in as a user, i.e. the SCS is free for anyone, although only clients of the bank can make use of it. This is because the SCS allows users to generate TANs on the fly when performing transactions, instead of reading pre-generated TANs from a finite list. \newline
 The \gnb{} Smart Card Simulator does not require any kind of direct interaction with the PHP backend when used, hence clients can even run it from a machine disconnected from the internet and/or different than the one they are performing the transaction from. Also, the executable file is not bound to a specific account and could, therefore, be used by multiple clients as well (or for multiple accounts).

@@ -13,9 +13,39 @@
 
 
 \subsection{HTTPS with HSTS}
+\securityMeasure{%
+	The site is only reachable over HTTPS and employs HSTS (HTTP Strict
+	Transport Security) to protect against a downgrade of future connection
+	attempts to HTTP.
+}{%
+	The apache2 server was configured in a way that only allows connections via
+	HTTPS and always appends the \texttt{Strict-Transport-Security} header to
+	replys to enable HSTS in the clients browser.
+}{%
+	\begin{itemize}
+		\item Capturing of the communication between the client and the server
+			by an third party.
+		\item Modification of the communication between the client and the
+			server by a man-in-the-middle attacker.
+		\item Downgrade of a new connection to the server to HTTP by a
+			man-in-the-middle attacker (after an initial connection to the correct
+			site)
+	\end{itemize}
+}
 
 \subsection{SSL secure ciphers}\label{sec:ssl_ciphers}
-SSL ciphers are configured to the latest standards. As visible in \autoref{figure:ciphers1} and \autoref{figure:ciphers2}.
+\securityMeasure{%
+	The SSL ciphers offered by the webserver for HTTPS connections are
+	configured to confirm the latest standards.
+}{%
+	The apache2 server was configured to only offer ciphers that are
+	known secure.
+	As visible in \autoref{figure:ciphers1} and \autoref{figure:ciphers2},
+	current SSL testing tools give the site a perfect score.
+}{%
+	Save against SSL vulnerabilities. E.g.\ Heartbleed, POODLE, FREAK.
+	Prevents eavesdropping and man-in-the-middle attacks caused by weak ciphers.
+}
 \begin{figure}[h!tbp]
 	\centering
 	\includegraphics[width=\textwidth]{figures/ciphers1.png}

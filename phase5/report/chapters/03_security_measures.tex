@@ -158,6 +158,17 @@ The same functionality was implemented to prevent brute force attacks on TANs fo
 
 \clearpage
 \subsection{TANs in password protected PDFs}
+\securityMeasure{%
+	The TAN list sent out to new users upon approval is encrypted with a
+	password which gets sent to the user over a separate channel.
+}{
+	We encrypt the TAN list PDF with a password derived from the user pin. The
+	user gets this password displayed in the webinterface when he successfully
+	logs in.
+}{
+	Interception of the TAN list as it's sent over an unencrypted channel
+	(email).
+}
 
 \clearpage
 \subsection{Time-based TANs generated via SCS}

@@ -100,7 +100,7 @@
 }{
 	The algorithm used for hashing these values together is the SHA-512. A salt is generated for every user via the builtin PHP \texttt{openssl\_random\_pseudo\_bytes} function. The salt and the hashed password are both stored on the database (see \autoref{section:db}). No additional libraries were used to implement this feature.
 }{
-	Secure passwords protect the users in case the database is compromised in any way. An attacker is not able to determine which users are using the same passowrd and cannot retrieve the original password, starting from the hashed one.
+	Secure passwords protect the users in case the database is compromised in any way. An attacker is not able to determine which users are using the same password and cannot retrieve the original password, starting from the hashed one.
 }
 
 
@@ -116,9 +116,25 @@ The same functionality was implemented to prevent brute force attacks on TANs fo
 }{
 	This feature was implemented by adding the table \texttt{failed\_attempts} to the database (see \autoref{section:db}). This table stores all failed attempts (e.g. login or an invalid TAN) with the timestamp of the attempt and the ID of the user that executed the action. Every time an invalid password or TAN is observed a failed attempt is added the database and the sum of all failed attempts is checked. Once a valid password or TAN is entered all failed attempts are reset.
 }{
-	This feature protects against Application Mis-Use (OTG-BUSLOGIC-007) and brute force attacks on the login functinoality (OTG-AUTHN-003).
+	This feature protects against Application Mis-Use (OTG-BUSLOGIC-007) and brute force attacks on the login functionality (OTG-AUTHN-003).
 }
 
+
+\clearpage
+\subsection{Automatic logout after inactivity}
+\securityMeasure{%
+	The application automatically logs out users who have been inactive for 30
+	minutes.
+}{%
+	This was implemented on two different levels. The
+	\texttt{session.gc\_maxlifetime} setting in the php configuration allows
+	sessions to be removed after 1440 seconds. Additionally the user is logged
+	out by a check in the php code if it latest activity lies more than 30
+	minutes in the past.
+}{%
+	Prevents stealing of the user session from the clients computer after the
+	timeout.
+}
 
 \clearpage
 \subsection{CAPTCHA}

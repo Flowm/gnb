@@ -1,5 +1,4 @@
 \chapter{Application Architecture}\label{chapter:application_architecture}
-\todoin{Next few pages should describe the architecture of your solution including UML diagrams, interaction with other systems and dependencies on external libraries}
 The \gnb{} application was built using a PHP backend and a web-based (HTML + Javascript) frontend. Also, the solution may provide the clients of \gnb{} with an additional SCS (short for SmartCardSimulator) software, which is needed to provide 2-step authentication during transactions and can be used on any system that supports Java 1.7+.\newline
 The application was almost entirely developed without the aid of external libraries, preferring the use of builtin APIs and a custom architecture. Here is a list of the used libraries, which will be later on described more in details, along with their interaction with the system:
 \begin{itemize}
@@ -9,11 +8,55 @@ The application was almost entirely developed without the aid of external librar
 	\item secureimage (see \texttt{https://github.com/dapphp/securimage})
 \end{itemize}
 
+In the following section we will discuss the architecture of the whole web application; we will also provide dedicated sections for a more detailed analysis of the Entity-Relationship model used in the database as well as the architecture of the Smart Card Simulator.
 
-In the following sections we will discuss the architecture of the whole web application (\autoref{section:architecture}); we will also provide dedicated sections for a more detailed analysis of the Entity-Relationship model used in the database (\autoref{section:db}) as well as the architecture of the Smart Card Simulator (\autoref{section:scs}).
-
-\clearpage
 \section{Architecture}\label{section:architecture}
+The architecture is based on an Apache web server, running the \gnb{} website, and a MySQL database, both hosted on the same machine and directly communicating with each other. The web server contains the whole business logic of the application and communicates with the client's Browser via HTTP, where the GUI is shown. No frameworks are used on the backend or on the frontend, since the web application was developed from scratch.\newline
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/gnb_architecture.png}
+	\caption{Architecture of the solution}
+	\label{figure:architecture}
+\end{figure}
+We will now analyze the design of the solution in more detail, paying attention both to the backend and the frontend.\newline
+The design is based on a simple model and multiple views, each of which is made up of a controller for that specific view and the view itself, which is generated dynamically in some cases.
+The idea behind the whole design is to split different parts of each resulting webpage into logical subviews, making them independent from each other and allowing us to reuse them for different purposes.\newline
+All resources are divided into packages, according to their scope and category.
+
+\subsection{Resource Mapper}
+In order to provide a more fine-grained granularity, a \texttt{resource\_mappings.php} component was implemented, allowing to query all resources via a single API. This file contains the mappings to all resources which views or pages may need to include: pages, classes, media and so on. By simply querying a logical name, a resource is returned, regardless of the package it is contained in. This way, different pages can be included at runtime, without having to resort to static paths. Also, no direct paths are ever used by other PHP classes, but always queried on \texttt{resource\_mappings} using logical names, thus avoiding inclusion attacks.
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=0.7\textwidth]{figures/resource_mappings.png}
+	\caption{Example of resource inclusion inside \texttt{new\_transaction.php}}
+	\label{figure:resmappings}
+\end{figure}
+
+\subsection{Model}
+The model used for the \gnb{} solution is made up of three main classes (see \autoref{figure:model}):
+\begin{itemize}
+	\item the \textbf{user}, in which all data relevant to the user is stored, i.e. ID, email, name, pin, preferred banking method and so on. This class also allows to approve/reject/block a user directly, using the related methods;
+	\item each user can be associated to N accounts, each of which is identified by a unique ID and contains the current balance of the user as well as a reference to all past transactions;
+	\item a \textbf{transaction} contains all the details concerning a specific transaction, including the ID, the source and destination account and so on.
+\end{itemize}
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/model_uml.png}
+	\caption{Model UML}
+	\label{figure:model}
+\end{figure}
+All model objects reflect the data stored on the database: after a successful query, the array containing the data read from the database is passed to the constructor of the an object, which will populate the fields of that object with the values passed in the array.
+
+\subsection{Views}
+The application tries to reuse as many view components as possible, by building pages dynamically as shown in \autoref{figure:gui_design}. 
+While the \texttt{index.php}, \texttt{login.php} and \texttt{registration.php} pages follow an ad-hoc design, once logged in, all users refer directly to either the \texttt{employee.php} or the \texttt{client.php} page, depending on their role: whatever the operation, the requested page will always be one of these two; any direct request to another page will either redirect the user to the homepage or to a 404 error page. Both employees and clients have a similar GUI, with different sections (and site functionalities) that can be directly chosen from the navigation bar on top.\newline
+Depending on the parameters passed by the client inside a POST request, the server will handle the request in order to generate the appropriate content for the page, which is achieved by simply including the correct pages (i.e. resources). The main parameters include:
+\begin{itemize}
+	\item a \textbf{section}, which is chosen by the user via the navigation bar. There are only a few possible sections, each one generating a different GUI. The server queries the resource mapper with a logical name for the requested section, then includes it inside the container view (being either the employee or the client page);
+	\item a \textbf{frame}, which is chosen by the user via a menu found on the left isde of each section. The server queries the resource mapper with a logical name for the requested frame, then includes it inside the container view, in this case being the section.
+\end{itemize}
+Using this "hierarchical" inclusion mechanism, we can generate complex pages by keeping the structure of the respective container views intact.
+All PHP pages that provide HTML output perform strict access controls to avoid malicious attackers from accessing arbitrary pages or circumventing the application work-flow.
 
 \section{Database Schema}\label{section:db}
 \begin{figure}[h!tbp]
@@ -68,8 +111,8 @@ When using the SCS, users are required to insert their personal PIN and all deta
 	\label{figure:scs_gui}
 \end{figure}
 
-\subsection{Architecture}
-The solution includes the minimal amount of features required for the functionality to work. By doing so, we kept a clean and simple design, based on an MVP pattern (the architecture can be seen in \autoref{figure:scs_uml}). We will now briefly describe the architecture and the involved components.\newline
+\subsection{Class Design}
+The solution includes the minimal amount of features required for the functionality to work. By doing so, we kept a clean and simple design, based on an MVP pattern (the architecture can be seen in \autoref{figure:scs_uml}). We will now briefly describe the solution and the involved components.\newline
 $\bullet$ The \textbf{MainView} class captures user actions callbacks and dispatches them to the Presenter class, which acts as the controller of the whole application. The view was created via a GUI Builder, using Java Swing graphical components.\newline
 Event listeners are created inline inside the \texttt{initComponents} private method and associated to some objects, like the \texttt{generateButton}. When choosing to generate a TAN, the \texttt{performGenerateTan} method is automatically called within the MainView, which will retrieve the user's input and call the appropriate method inside the presenter component, depending whether the user wants to perform a batch transaction or a single transaction.\newline
 Upon a successful operation, the generated TAN will be displayed by the MainView, otherwise an error will be shown to the user.\newline

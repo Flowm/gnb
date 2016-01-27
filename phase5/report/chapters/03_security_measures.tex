@@ -11,7 +11,7 @@
 	%safe against
 }
 
-
+\clearpage
 \subsection{HTTPS with HSTS}
 \securityMeasure{%
 	The site is only reachable over HTTPS and employs HSTS (HTTP Strict
@@ -33,6 +33,8 @@
 	\end{itemize}
 }
 
+
+\clearpage
 \subsection{SSL secure ciphers}\label{sec:ssl_ciphers}
 \securityMeasure{%
 	The SSL ciphers offered by the webserver for HTTPS connections are
@@ -59,8 +61,9 @@
 	\label{figure:ciphers2}
 \end{figure}
 
+
 \clearpage
-\subsection{CSRF Tokens}
+\subsection{CSRF tokens}
 \securityMeasure{
 	The application automatically creates anti-CSRF cryptographic nonces (tokens) on all pages with forms that could be exploited to perform operations using the profile of a user. These tokens are validated once the form is submitted by the user, ensuring that the application can't be forced to perform actions via cross-site requests.
 }{
@@ -75,8 +78,9 @@
 	\label{figure:csrf}
 \end{figure}
 
+
 \clearpage
-\subsection{Password Strength}
+\subsection{Password strength}
 %Sample table
 \securityMeasure{%
 	We enforce strong passwords by forcing the users to respect the following criteria:
@@ -93,8 +97,9 @@
 	Strong password prevent attackers from guessing them, as described in OTG-AUTHN-007.
 }
 
+
 \clearpage
-\subsection{Secure Passwords}
+\subsection{Secure passwords}
 \securityMeasure{%
 	User passwords are stored inside the database after a successful registration. Passwords are never stored in plaintext, but are hashed using a random salt, unique for every user, together with an additional static salt, known only to the backend server. 	
 }{
@@ -113,6 +118,7 @@
 }{
 	This security feature protects users from attackers that already have access to their mail account, physical access to their device(s) or started the password reset process through social engineering.
 }
+
 
 \clearpage
 \subsection{Lockout mechanism after failed password entries}
@@ -143,8 +149,9 @@ The same functionality was implemented to prevent brute force attacks on TANs fo
 	timeout.
 }
 
+
 \clearpage
-\subsection{CAPTCHA}
+\subsection{CAPTCHAs}
 \securityMeasure{%
 	During the registration process users are required to enter a CAPTCHA code in order to prevent malicious attackers from automating registrations. This CAPTCHA is entirely random and requires the user to read an image and input the alphanumeric code manually.
 }{
@@ -152,6 +159,7 @@ The same functionality was implemented to prevent brute force attacks on TANs fo
 }{
 	This security feature protects the application from attackers who try to automate registrations (see OTG-IDENT-002), which could lead to a database saturation or even to a DOS.
 }
+
 
 \clearpage
 \subsection{Balance calculated in database (Realtime concurrent transactions)}
@@ -163,8 +171,9 @@ The same functionality was implemented to prevent brute force attacks on TANs fo
 	This security feature protects against flaws in the business logic data validation (OTG-BUSLOGIC-001) e.g. if actions are not completed successfully without taking necessary rollback steps. This also prevents exploiting a possible Circumvention of Work Flow (OTG-BUSLOGIC-006) as one transaction is an atomar operation. Summed up this feature ensures that the database is always consistent and no money can get lost due to incompletely handled transactions.
 }
 
+
 \clearpage
-\subsection{TANs in password protected PDFs}
+\subsection{Password protected PDFs for TAN lists}
 \securityMeasure{%
 	The TAN list sent out to new users upon approval is encrypted with a
 	password which gets sent to the user over a separate channel.
@@ -177,5 +186,48 @@ The same functionality was implemented to prevent brute force attacks on TANs fo
 	(email).
 }
 
+
 \clearpage
 \subsection{Time-based TANs generated via SCS}
+
+\clearpage
+\subsection{Secure cookies}
+\securityMeasure{%
+	%description
+}{
+	%implementation
+}{
+	%safe against
+}
+
+\clearpage
+\subsection{Input sanitization}
+prevents XSS, command injection and sql injection
+\securityMeasure{%
+	%description
+}{
+	%implementation
+}{
+	%safe against
+}
+
+\clearpage
+\subsection{Prepared statements}
+\securityMeasure{%
+	%description
+}{
+	%implementation
+}{
+	%safe against
+}
+
+\clearpage
+\subsection{Clickjacking prevention}
+X-Frame-Options
+\securityMeasure{%
+	%description
+}{
+	%implementation
+}{
+	%safe against
+}

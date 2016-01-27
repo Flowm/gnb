@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__."/../resource_mappings.php";
-require_once getpageabsolute("utilityfunctions");
+require_once getpageabsolute("util");
 
 //Worst case, an unauthenticated user is trying to access this page directly
 if (!isset($_SESSION["username"]) || !isset($_SESSION["role"])) {

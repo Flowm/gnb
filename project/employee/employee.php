@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__."/../resource_mappings.php";
-require_once getpageabsolute("utilityfunctions");
+require_once getpageabsolute("util");
 
 session_start();
 
@@ -20,7 +20,6 @@ if (!isset($_SESSION["timeout"])) {
     include(getPageAbsolute('logout'));
     exit();
 }
-
 
 $logo_svg = getMedia('logo_svg'); //GNB logo
 

@@ -33,6 +33,11 @@ table.time-table-right {
     font-size: 20px;
 }
 
+tr.header-row {
+    font-size: 30px;
+    font-weight: 600;
+}
+
 tr.time-total {
     font-weight: bold;
 }
@@ -49,7 +54,8 @@ table.usecase-table {
 
 table.security-table {
     width: 900px;
-    font-size: 23px;
+    font-size: 24px;
+    font-weight: 200;
 }
 
 td.smallusecase {
@@ -83,7 +89,7 @@ html.vulns body {
 }
 
 html.features body {
-    background:url("pictures/doom-1.jpeg");
+    background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url('pictures/doom-1.jpeg');
     background-position:center;
     background-size: 100%;
 }

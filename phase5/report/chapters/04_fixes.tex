@@ -53,8 +53,6 @@
 	Added lines 13, 96-106 inside \texttt{registration.php}, and added lines 25, 35, 56-61 inside \texttt{registration\_request.php}.
 }
 
-
-\clearpage
 \vulntitle{OTG-IDENT-003}{Test Account Provisioning Process}
 \fixtable{%
 	Provisioning clients is an easy process with no effective mechanisms to verify or vet clients besides a manual approval process, provisioning employees is set up in a similar matter.
@@ -69,6 +67,22 @@
 	\na
 }
 
+\clearpage
+\section{Session Management Testing}
+\simpleVulntitle{OTG-SESS-005}{Testing for Cross Site Request Forgery}
+\fixtable{%
+	This was not a vulnerability in phase 4.
+}{%
+	\secure
+}{%
+	The original implementation used to hash (using the md5 algorithm) a number provided by the
+	builtin \texttt{rand} function. Since this random function does not guarantee the same randomness provided by the \texttt{openssl\_random\_pseudo\_bytes} function, we decided to replace the old XSRF token generation mechanism for security purposes.
+}{%
+	/project/accounts/new\_transaction.php
+	/project/accounts/new\_transaction\_multiple.php
+}{%
+	Modified lines 16-22 inside \texttt{new\_transaction.php}; deleted lines 27-33 and added lines 127-132 inside \texttt{new\_transaction\_multiple.php} instead.
+}
 
 \clearpage
 \section{Error Handling}

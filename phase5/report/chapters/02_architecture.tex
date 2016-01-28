@@ -14,7 +14,7 @@ In the following section we will discuss the architecture of the whole web appli
 The architecture is based on an Apache web server, running the \gnb{} website, and a MySQL database, both hosted on the same machine and directly communicating with each other. The web server contains the whole business logic of the application and communicates with the client's Browser via HTTP, where the GUI is shown. No frameworks are used on the backend or on the frontend, since the web application was developed from scratch.\newline
 \begin{figure}[h!tbp]
 	\centering
-	\includegraphics[width=\textwidth]{figures/gnb_architecture.png}
+	\includegraphics[width=\textwidth]{figures/gnb_architecture}
 	\caption{Architecture of the solution}
 	\label{figure:architecture}
 \end{figure}
@@ -27,7 +27,7 @@ All resources are divided into packages, according to their scope and category.
 In order to provide a more fine-grained granularity, a \texttt{resource\_mappings.php} component was implemented, allowing to query all resources via a single API. This file contains the mappings to all resources which views or pages may need to include: pages, classes, media and so on. By simply querying a logical name, a resource is returned, regardless of the package it is contained in. This way, different pages can be included at runtime, without having to resort to static paths. Also, no direct paths are ever used by other PHP classes, but always queried on \texttt{resource\_mappings} using logical names, thus avoiding inclusion attacks.
 \begin{figure}[h!tbp]
 	\centering
-	\includegraphics[width=0.7\textwidth]{figures/resource_mappings.png}
+	\includegraphics[width=0.7\textwidth]{figures/resource_mappings}
 	\caption{Example of resource inclusion inside \texttt{new\_transaction.php}}
 	\label{figure:resmappings}
 \end{figure}
@@ -41,7 +41,7 @@ The model used for the \gnb{} solution is made up of three main classes (see \au
 \end{itemize}
 \begin{figure}[h!tbp]
 	\centering
-	\includegraphics[width=\textwidth]{figures/model_uml.png}
+	\includegraphics[width=\textwidth]{figures/model_uml}
 	\caption{Model UML}
 	\label{figure:model}
 \end{figure}
@@ -110,7 +110,7 @@ When using the SCS, users are required to insert their personal PIN and all deta
 
 \begin{figure}[h!tbp]
 	\centering
-	\includegraphics[width=0.6\textwidth]{figures/scs_gui.png}
+	\includegraphics[width=0.6\textwidth]{figures/scs_gui}
 	\caption{Graphical User Interface of the SmartCard Simulator}
 	\label{figure:scs_gui}
 \end{figure}
@@ -126,7 +126,7 @@ $\bullet$ \textbf{CustomTanGenerator} is accessed statically by the presenter, a
 
 \begin{figure}[h!tbp]
 	\centering
-	\includegraphics[width=\textwidth]{figures/scs_uml.png}
+	\includegraphics[width=\textwidth]{figures/scs_uml}
 	\caption{Architecture of the SmartCard Simulator}
 	\label{figure:scs_uml}
 \end{figure}

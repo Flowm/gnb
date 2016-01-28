@@ -293,13 +293,68 @@
                     </section-->
 
                     <section>
-                        <ul>
-                            <li>Protection against CSRF</li>
-                            <li class="fragment">Unaccessible resources</li>
-                            <li class="fragment">Secure password</li>
-                            <li class="fragment">SSL</li>
-                            <li class="fragment">Secure cookies</li>
-                        </ul>
+                        <table class="security-table">
+                            <tr>
+                                <th>Feature</th>
+                                <th>Secure against</th>
+                            </tr>
+                            <tr>
+                                <td>Proper environment configuration</td>
+                                <td>Information leakage</td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>HTTPS</td>
+                                <td>Man-In-The-Middle attacks</td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>Strong password</td>
+                                <td>Brute-force attacks</td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>Secure password</td>
+                                <td>SQL dumps</td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>CSRF Tokens</td>
+                                <td>Cross Site attacks</td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>Password Reset with two-factor authentication</td>
+                                <td>Account theft</td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>Lockout mechanism</td>
+                                <td>Burte-force attacks</td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>CAPTCHAs</td>
+                                <td>Fake user registration</td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>Resource Mapper</td>
+                                <td>File inclusion attacks</td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>Balance calculated in database</td>
+                                <td>Circumvention of work flows</td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>Password protected TANs</td>
+                                <td>MITM attempt to intercept emails</td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>Secure cookies</td>
+                                <td>Session hijacking</td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>Input sanitization</td>
+                                <td>XSS, Command injection</td>
+                            </tr>
+                            <tr class="fragment">
+                                <td>Prepared SQL statements</td>
+                                <td>SQL injection</td>
+                            </tr>
+                        </table>
                     </section>
                 </section>
 
@@ -321,14 +376,37 @@
                         <img src="pictures/cmd_injection.png" class="img-landscape">
                     </section>
                     <section>
-                        <h2>Software Design from the beginning!</h2>
+                        <h2>Project Management</h2>
+                        <h4>Applications like Trello (virtual Kanban board) make life easier</h4>
+                        <h4>Agile programming FTW</h4>
+                    </section>
+                    <section>
+                        <h2>Apply Software Design principles from the beginning!</h2>
                     </section>
                     <section>
                         <h2>Time management</h2>
                         <img src="pictures/git_punchcard.png" class="img-landscape">
                     </section>
                     <section>
-                        <h2>Best results when working together</h2>
+                        <h2>Teamwork</h2>
+                        <img src="pictures/pizza.jpg" class="img-pizza">
+                    </section>
+                    <section>
+                        <h2>Some numbers...</h2>
+                        <table>
+                            <tr>
+                                <td>Party Pizza & Indian food orders</td>
+                                <td>360&euro;</td>
+                            </tr>
+                            <tr>
+                                <td>Total amount of commits</td>
+                                <td>450</td>
+                            </tr>
+                            <tr>
+                                <td>Average hours of work per phase</td>
+                                <td>120</td>
+                            </tr>
+                        </table>
                     </section>
                 </section>
 

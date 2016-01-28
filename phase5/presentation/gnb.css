@@ -47,6 +47,11 @@ table.usecase-table {
     font-size: 23px;
 }
 
+table.security-table {
+    width: 900px;
+    font-size: 23px;
+}
+
 td.smallusecase {
     width:780px;
 }
@@ -75,6 +80,12 @@ html.vulns body {
 	background:url("pictures/doom-1.jpeg");
 	background-position:center;
 	background-size: 100%;
+}
+
+html.features body {
+    background:url("pictures/doom-1.jpeg");
+    background-position:center;
+    background-size: 100%;
 }
 
 html.onedoesnotsimply body {
@@ -182,6 +193,13 @@ img#barney-img2-landscape {
 
 img.img-landscape {
     width: 900px;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: none !important;
+}
+
+img.img-pizza {
+    width: 700px;
     border: 0 !important;
     box-shadow: none !important;
     background: none !important;

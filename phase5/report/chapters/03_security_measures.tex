@@ -1,6 +1,15 @@
 \chapter{Security Measures}\label{chapter:security_measures}
 
 This section describes all security features of the \gnb{} application, while discussing the details of each measure, how the feature was Implemented and what security threat(s) this measure protects from.
+\clearpage
+\subsection{Proper server configuration}
+\securityMeasure{%
+	The web server environment was configured appropriately, in order to protect the server and the web application itself from malicious attackers.
+}{%
+	The apache2 server was manually configured to disable all directory listing, as well as to prevent all access to files contained in directories that should not be directly accessible via browser (such as the contents of the \texttt{/project/lib} folder). Only PHP, Javascript and CSS files residing in specific folders of the web application can be referenced directly via browser. In this particular case, this was handled with a black-list.
+}{%
+	A valid server configuration prevents information leakage, usually caused by enabled directory listing or direct access to sensitive information (refer to OTG-CONFIG-001).
+}
 
 \clearpage
 \subsection{HTTPS with HSTS}

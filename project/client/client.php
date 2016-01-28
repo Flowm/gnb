@@ -22,6 +22,7 @@ if (!isset($_SESSION["timeout"])) {
     include(getPageAbsolute('logout'));
     exit();
 }
+$_SESSION['timeout'] = time();
 
 
 $logo_svg = getMedia('logo_svg'); //GNB logo

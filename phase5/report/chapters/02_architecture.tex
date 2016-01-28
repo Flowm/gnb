@@ -53,10 +53,14 @@ While the \texttt{index.php}, \texttt{login.php} and \texttt{registration.php} p
 Depending on the parameters passed by the client inside a POST request, the server will handle the request in order to generate the appropriate content for the page, which is achieved by simply including the correct pages (i.e. resources). The main parameters include:
 \begin{itemize}
 	\item a \textbf{section}, which is chosen by the user via the navigation bar. There are only a few possible sections, each one generating a different GUI. The server queries the resource mapper with a logical name for the requested section, then includes it inside the container view (being either the employee or the client page);
-	\item a \textbf{frame}, which is chosen by the user via a menu found on the left isde of each section. The server queries the resource mapper with a logical name for the requested frame, then includes it inside the container view, in this case being the section.
+	\item a \textbf{frame}, which is chosen by the user via a menu found on the left isde of each section. The server queries the resource mapper with a logical name for the requested frame, then includes it inside the container view, in this case being the section;
+	\item other case-specific parameters that are usually handled by the target section or frame.
 \end{itemize}
 Using this "hierarchical" inclusion mechanism, we can generate complex pages by keeping the structure of the respective container views intact.
 All PHP pages that provide HTML output perform strict access controls to avoid malicious attackers from accessing arbitrary pages or circumventing the application work-flow.
+
+\subsection{Application Control Flow}
+
 
 \section{Database Schema}\label{section:db}
 \begin{figure}[h!tbp]
@@ -106,7 +110,7 @@ When using the SCS, users are required to insert their personal PIN and all deta
 
 \begin{figure}[h!tbp]
 	\centering
-	\includegraphics[width=\textwidth]{figures/scs_gui.png}
+	\includegraphics[width=0.6\textwidth]{figures/scs_gui.png}
 	\caption{Graphical User Interface of the SmartCard Simulator}
 	\label{figure:scs_gui}
 \end{figure}

@@ -162,6 +162,16 @@ The same functionality was implemented to prevent brute force attacks on TANs fo
 
 
 \clearpage
+\subsection{Resource Mapper}
+\securityMeasure{%
+	When including any resource, be it PHP files, images or else, the application exploits a key-value store, in which all resources are kept. Each resource is defined by a logical name (the key), which can be used to query the resource mapper to obtain an absolute path to a specific resource (the value).
+}{
+	This feature was implemented via the \texttt{/project/resource\_mappings.php} file, in which all key-value pairs to identify resources are stored. Whenever a PHP file needs to include another resource, this resource is looked up using the API offered by the resource mapper. If a mapping to the queried logical name was found, the resource is then returned and included. More details can be found in \autoref{subsection:resmapper}.
+}{
+	By avoiding to directly include files specified by request parameters (or even user input), this feature protects the web application against file inclusion attacks (see OTG-AUTHZ-001).
+}
+
+\clearpage
 \subsection{Balance calculated in database (Realtime concurrent transactions)}
 \securityMeasure{%
 	As described in \autoref{section:db} the balance for each given account is always calculated in realtime in the database. The \texttt{VIEW} \texttt{account\_overview} uses all existing transactions and determines its value for the given account using the transaction status, the destination account and source account. This not only ensures an always consistent database because it is not possible to remove the balance for one account and "forget" to update the balance for the other account, but also enables realtime concurrent transactions, because no locking is necessary when new transactions are added.

@@ -203,41 +203,43 @@ The same functionality was implemented to prevent brute force attacks on TANs fo
 \clearpage
 \subsection{Secure cookies}
 \securityMeasure{%
-	%description
+	A secure cookie is a cookie that contains a special \lq{} HttpOnly \rq{} flag included in the http cookie header that ensures cookies will only be used when transmitting HTTP (or HTTPS) requests.
+	Combined the Secure setting and HttpOnly flag help to introduce a more robust cookie that is less prone to attacks. 
 }{
-	%implementation
+	This is done by setting the \textbf{session.cookie\_secure} and \textbf{session.cookie\_httponly} in the \textbf{php.ini} to \textbf{1}
 }{
-	%safe against
+	This allows the browser to restrict access to secure cookie data from scripts within the web browser. This limits the potential damage many cross site script attacks can cause -specifically-, the attacks that target cookie data.
 }
 
 \clearpage
 \subsection{Input sanitization}
-prevents XSS, command injection and sql injection
+
 \securityMeasure{%
-	%description
+	Input sanitization is processing user input by removing  any malicious code that the user may have inserted in the input fields and converting any special characters to HTML friendly representations, before passing it on to other parts of the application such as SQL, HTML or PHP.
 }{
-	%implementation
+	Functions were created to sanitize inputs based on the type of the input field, the functions exist in the  \textbf{project/genericfunctions.php} file.
 }{
-	%safe against
+	This prevents against XSS, Command Injection and SQL injections.
 }
 
 \clearpage
 \subsection{Prepared statements}
 \securityMeasure{%
-	%description
+	Prepared statements are SQL statements that are pre-written and only missing one or more variables, the DB then parses, compiles and performs query optimization on the SQL template and stores the result without execution, The application at a later time binds the values to the parameters and executes the statement.
 }{
-	%implementation
+	This was implemented using the PHP Data Objects (PDO) Extension. 
 }{
-	%safe against
+	Prepared statements are very useful against SQL injections, because parameter values, which are transmitted later using a different protocol, need not be correctly escaped. If the original statement template is not derived from external input, SQL injection cannot occur.
 }
 
 \clearpage
 \subsection{Clickjacking prevention}
-X-Frame-Options
 \securityMeasure{%
-	%description
+	This prevents the Clickjacking attack which is the malicious practice of manipulating a website user\textsc{\char13}s activity by concealing hyperlinks beneath legitimate clickable content, thereby causing the user to perform actions of which they are unaware.
 }{
-	%implementation
+	This was accomplished by denying X-Frame-Options, which was done by adding \newline
+	\textbf{Header always set X-Frame-Options DENY} \newline
+	in the \textbf{httpd.conf}.
 }{
-	%safe against
+	Clickjacking.
 }

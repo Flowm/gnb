@@ -23,7 +23,7 @@ The design is based on a simple model and multiple views, each of which is made 
 The idea behind the whole design is to split different parts of each resulting webpage into logical subviews, making them independent from each other and allowing us to reuse them for different purposes.\newline
 All resources are divided into packages, according to their scope and category.
 
-\subsection{Resource Mapper}
+\subsection{Resource Mapper}\label{subsection:resmapper}
 In order to provide a more fine-grained granularity, a \texttt{resource\_mappings.php} component was implemented, allowing to query all resources via a single API. This file contains the mappings to all resources which views or pages may need to include: pages, classes, media and so on. By simply querying a logical name, a resource is returned, regardless of the package it is contained in. This way, different pages can be included at runtime, without having to resort to static paths. Also, no direct paths are ever used by other PHP classes, but always queried on \texttt{resource\_mappings} using logical names, thus avoiding inclusion attacks.
 \begin{figure}[h!tbp]
 	\centering
@@ -47,8 +47,14 @@ The model used for the \gnb{} solution is made up of three main classes (see \au
 \end{figure}
 All model objects reflect the data stored on the database: after a successful query, the array containing the data read from the database is passed to the constructor of the an object, which will populate the fields of that object with the values passed in the array.
 
-\subsection{Views}
-The application tries to reuse as many view components as possible, by building pages dynamically as shown in \autoref{figure:gui_design}. 
+\subsection{Views}\label{subsection:views}
+The application tries to reuse as many view components as possible, by building pages dynamically as shown in \autoref{figure:gui_design}.
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/gui_design}
+	\caption{Example of a page including a section and a frame}
+	\label{figure:gui_design}
+\end{figure}
 While the \texttt{index.php}, \texttt{login.php} and \texttt{registration.php} pages follow an ad-hoc design, once logged in, all users refer directly to either the \texttt{employee.php} or the \texttt{client.php} page, depending on their role: whatever the operation, the requested page will always be one of these two; any direct request to another page will either redirect the user to the homepage or to a 404 error page. Both employees and clients have a similar GUI, with different sections (and site functionalities) that can be directly chosen from the navigation bar on top.\newline
 Depending on the parameters passed by the client inside a POST request, the server will handle the request in order to generate the appropriate content for the page, which is achieved by simply including the correct pages (i.e. resources). The main parameters include:
 \begin{itemize}
@@ -57,9 +63,32 @@ Depending on the parameters passed by the client inside a POST request, the serv
 	\item other case-specific parameters that are usually handled by the target section or frame.
 \end{itemize}
 Using this "hierarchical" inclusion mechanism, we can generate complex pages by keeping the structure of the respective container views intact.
-All PHP pages that provide HTML output perform strict access controls to avoid malicious attackers from accessing arbitrary pages or circumventing the application work-flow.
+All PHP pages that provide HTML output perform strict access controls to avoid malicious attackers from accessing arbitrary pages or circumventing the application work-flow. Hence, while a user/attacker could manually request a page including a specific section and frame, this will return the desired page only if allowed by the current control flow, otherwise an error page will be displayed.
 
 \subsection{Application Control Flow}
+The adopted solution does not provide a centralized controller, but rather distributes the control of the application, along with the business logic, among the involved components, namely the views. The basic control flow of the application can be seen in \autoref{figure:view_graph}: blue arrows represent the possible inclusion of a section inside the container page, while red arrows represent the possible inclusion of a frame inside the container section. This flow can be directly controller by user via graphical buttons in the GUI.
+
+\begin{figure}[h!tbp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/view_graph}
+	\caption{Control flow of the web application}
+	\label{figure:view_graph}
+\end{figure}
+The main controllers for the employees and the clients can be found respectively inside the \texttt{employee.php} and \texttt{client.php} files. These controllers include some basic logic, such as: username and role checks, timeout check and most importantly the inclusion of currently requested section.\newline
+Each section, when included in the parent page, performs further checks depending on the specific business logic of that section. The main sections that the \gnb{} application offers, in which the users spend most of their time, are the \texttt{employee\_area.php} and the \texttt{my\_accounts.php} sections. Each of these offers several operations to the user, each of which is connected to a specific frame, where that operation is then carried out.\newline
+Each frame, when included in the parent section, handles the business logic for a specific user operation. This includes verifying possible user inputs, then performing the required database queries and building the respective model objects. All the data displayed to the user is directly computed inside the frame. Some frames can only be displayed after performing a specific sequence of operations, resulting in a clean and fluid navigation, while interacting with the web application.\newline
+
+\subsection{Client-side behaviour}
+The navigation on the browser is handled by custom Javascript functions, contained in the following files:
+\begin{itemize}
+	\item \texttt{account.js}
+	\item \texttt{client.js}
+	\item \texttt{employee.js}
+	\item \texttt{index.js}
+	\item \texttt{registration.js}
+\end{itemize}
+Each of these files is loaded by the respective HTML page. When clicking on buttons on the GUI, a javascript function is called, depending on the operation that is being performed by the user. The called function may check if the user input is correct (displaying messages in case errors occured) and eventually perform a POST request to the server exploiting the \texttt{performPostRequest} function contained inside the \texttt{postRequest.js} file (this script is loaded automatically on every page). Following the control flow of the application, each call to this function usually involves passing a section and a frame parameter, as described in \autoref{subsection:views}.\newline
+For some specific user operations, like an employee searching for a client, we decided to perform AJAX requests to the server. This allows us to dynamically load some content into the current page, instead of making the user reload the whole page.
 
 
 \section{Database Schema}\label{section:db}

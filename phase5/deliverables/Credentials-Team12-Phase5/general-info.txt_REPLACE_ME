@@ -1,8 +1,0 @@
- file should contain the following information:
-- the username and password of the OS user
-- the username and password of the MySQL database
-- with the username and passwords of all the existing users.
-- the username and password of the admin/employee user for your web-application
-- the URL to access your web application
-- the location and structure of the folder(s) where you have the source files of your web application.
-- the name and location of any third party libraries that you have used in phase 5.

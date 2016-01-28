@@ -1,29 +1,50 @@
+KEY 
+
+
+
 In a time filled with uncertainty, inconsistency and insecurity
+>> Visual : displaying Hacking themes, code generation and images of insecurity  <<
 
 Four knowledge seekers brought together by a hidden hand of destiny ( i.e
 Secure Coding Lectures ) decided to take on the challenge of building and
 securing an online banking system.
-
-** GNB LOGO FADING IN **
+>> Visual : More images of insecurity  <<
+>> Visual : GNB Logo fading in  <<
 
 Together they battled...
 - Cross site scripting
+>> Visual : XSS video  <<
+
 - SQL Injections
+>> Visual : SQL video  <<
 
 Failure was not their agenda ...
+>> Visual : People working hard .. Maybe Pizza pictures   <<
+
 - HTTPS
+>> Visual : video with a green lock  <<
 - strong passwords
+>> Visual : Strong PW video  <<
 - secure password reset
+>> Visual : PW reset video  <<
 - Brute force prevention
+>> Visual : Lockout video  <<
 - Completely Automated Public Turing Test to tell computers and humans apart ... CAPTCHA
+>> Visual : CAPTCHA  <<
 - Password protected PDFs
+>> Visual : PW Protected PDF  <<
 - and many more
+>> Visual : List of unmentioned security features as text popping up <<
 
-Countless hackers tried to stop them, but in vain.
-
+---> Choose one of the following lines 
+ - Countless hackers tried to stop them, but in vain.
+ - Hackers trying tirelessly to bring their application to its knees ... but all in vain
+ - Hackers, Crackers and Attackers tried in vain to bring their application down
+ 
+ 
 Starring  ....
 
-Flo			The logistic control guy
+Flo		The logistic control guy
 Lorenzo		The Italian guy
 Mahmoud		The exchange kid
 Alex 		The cool one ... or so he thinks
